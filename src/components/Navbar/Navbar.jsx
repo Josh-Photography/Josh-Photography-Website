@@ -20,6 +20,8 @@ const DARK_HERO_ROUTES = [
   '/mothers-day',
   '/fathers-day',
   '/portfolio',
+  '/photography',
+  '/services',
   '/films',
   '/testimonials',
   '/about',
@@ -30,7 +32,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState(null)
-  const [mobileExpanded, setMobileExpanded] = useState({ '/celebrations': false, '/portfolio': false })
+  const [mobileExpanded, setMobileExpanded] = useState({ '/celebrations': false, '/portfolio': false, '/photography': false })
   const location = useLocation()
   const navContainerRef = useRef(null)
 

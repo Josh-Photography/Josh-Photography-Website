@@ -37,7 +37,7 @@ export const navigation = [
   { label: 'About', path: '/about' },
   {
     label: 'Photography',
-    path: '/portfolio',
+    path: '/photography',
     children: [
       { label: 'Wedding Photography', path: '/weddings' },
       { label: 'Birthday Celebrations', path: '/birthday-photography' },

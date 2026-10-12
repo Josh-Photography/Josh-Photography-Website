@@ -183,7 +183,7 @@ export default function ServicesSection() {
           className="text-center mt-24 pt-12 border-t border-[#D8B77A]/30"
         >
           <Link
-            to="/services"
+            to="/photography"
             className="inline-flex items-center gap-3 px-10 py-4 bg-deep-charcoal text-ivory font-nav text-xs uppercase tracking-[0.16em] font-semibold hover:bg-muted-gold hover:text-deep-black transition-all duration-300 shadow-md"
           >
             <span>View All Services & Collections</span>

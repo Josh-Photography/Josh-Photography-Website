@@ -12,7 +12,7 @@ export default function Footer() {
   const quickLinks = [
     { label: 'Home', path: '/' },
     { label: 'About', path: '/about' },
-    { label: 'Photography', path: '/portfolio' },
+    { label: 'Photography', path: '/photography' },
     { label: 'Weddings', path: '/weddings' },
     { label: 'Client Testimonials', path: '/testimonials' },
     { label: 'Contact', path: '/contact' },

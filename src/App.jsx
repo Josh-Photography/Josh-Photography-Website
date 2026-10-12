@@ -49,6 +49,8 @@ function App() {
           <Route path="family" element={<Family />} />
           <Route path="maternity" element={<Maternity />} />
           <Route path="portfolio" element={<Portfolio />} />
+          <Route path="photography" element={<Portfolio />} />
+          <Route path="services" element={<Portfolio />} />
           <Route path="films" element={<Films />} />
           <Route path="about" element={<About />} />
           <Route path="testimonials" element={<TestimonialsPage />} />
