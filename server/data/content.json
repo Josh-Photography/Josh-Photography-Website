@@ -1,0 +1,179 @@
+{
+  "studio": {
+    "name": "Joshy Photography",
+    "tagline": "Stories Worth Remembering",
+    "description": "Crafting visual stories that transcend time. Every frame, a masterpiece.",
+    "founded": 2018,
+    "location": "Greater London, United Kingdom",
+    "address": "Greater London, United Kingdom",
+    "email": "hello@joshyphotography.co.uk",
+    "phone": "+44 7700 900123",
+    "whatsapp": "+447700900123"
+  },
+  "social": {
+    "instagram": "https://instagram.com/joshyphotography.uk",
+    "twitter": "https://twitter.com/joshyphoto",
+    "behance": "https://behance.net/joshyphoto",
+    "linkedin": "https://linkedin.com/company/joshyphotography"
+  },
+  "mission": "At Joshy Photography, we believe photography is more than capturing images—it's about freezing emotions, preserving stories, and creating art that resonates across generations. Our passion lies in the details: the subtle glance, the fleeting smile, the perfect light. We blend technical mastery with artistic vision to deliver photographs that aren't just seen, but felt.",
+  "stats": [
+    {
+      "value": 750,
+      "suffix": "+",
+      "label": "Projects Completed"
+    },
+    {
+      "value": 500,
+      "suffix": "+",
+      "label": "Happy Clients"
+    },
+    {
+      "value": 15,
+      "suffix": "",
+      "label": "Awards Won"
+    },
+    {
+      "value": 25,
+      "suffix": "+",
+      "label": "Countries Served"
+    }
+  ],
+  "services": [
+    {
+      "id": 1,
+      "title": "Wedding Photograph",
+      "description": "Capturing your love story with cinematic elegance. Every moment, every emotion, preserved forever.",
+      "icon": "wedding",
+      "features": [
+        "Full Day Coverage",
+        "Engagement Session",
+        "Premium Album",
+        "Highlight Film"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Portrait Sessions",
+      "description": "Revealing your authentic beauty through artistic vision and masterful lighting.",
+      "icon": "portrait",
+      "features": [
+        "Professional Studio",
+        "Multiple Looks",
+        "Retouching Included",
+        "Digital Gallery"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Commercial Projects",
+      "description": "Elevating brands with stunning imagery that speaks volumes and drives results.",
+      "icon": "commercial",
+      "features": [
+        "Product Photography",
+        "Brand Campaigns",
+        "Lifestyle Shoots",
+        "Social Content"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Event Coverage",
+      "description": "Documenting special occasions with discretion and an eye for unforgettable moments.",
+      "icon": "event",
+      "features": [
+        "Corporate Events",
+        "Private Parties",
+        "Same-Day Edits",
+        "Photo Booth"
+      ]
+    }
+  ],
+  "testimonials": [
+    {
+      "id": 1,
+      "name": "Sarah Johnson",
+      "role": "Bride",
+      "content": "Fused Lens Studio captured our wedding day perfectly. Every photo tells a story, and we couldn't be happier with the results.",
+      "rating": 5,
+      "image": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&q=90"
+    },
+    {
+      "id": 2,
+      "name": "Michael Chen",
+      "role": "Corporate Client",
+      "content": "Professional, creative, and reliable. Their commercial photography exceeded our expectations for our brand campaign.",
+      "rating": 5,
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=90"
+    },
+    {
+      "id": 3,
+      "name": "Emma Rodriguez",
+      "role": "Portrait Client",
+      "content": "The attention to detail and artistic vision is incredible. My portraits are absolutely stunning.",
+      "rating": 5,
+      "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&q=90"
+    }
+  ],
+  "heroSlides": [
+    {
+      "id": 1,
+      "image": "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=1920&q=90",
+      "title": "Timeless",
+      "subtitle": "Memories"
+    },
+    {
+      "id": 2,
+      "image": "https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=90",
+      "title": "Your Story",
+      "subtitle": "Beautifully Told"
+    },
+    {
+      "id": 3,
+      "image": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1920&q=90",
+      "title": "Every Frame",
+      "subtitle": "A Masterpiece"
+    },
+    {
+      "id": 4,
+      "image": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1920&q=90",
+      "title": "Love",
+      "subtitle": "Captured Forever"
+    }
+  ],
+  "collaborators": [
+    {
+      "id": 1,
+      "name": "Jane Doe",
+      "role": "Lead Photographer",
+      "bio": "With over 10 years of experience, Jane specializes in wedding and portrait photography.",
+      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=90",
+      "social": {
+        "instagram": "https://instagram.com/janedoe",
+        "linkedin": "https://linkedin.com/in/janedoe"
+      }
+    },
+    {
+      "id": 2,
+      "name": "John Smith",
+      "role": "Video Specialist",
+      "bio": "John brings stories to life through cinematic videography and editing.",
+      "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=90",
+      "social": {
+        "instagram": "https://instagram.com/johnsmith",
+        "behance": "https://behance.net/johnsmith"
+      }
+    }
+  ],
+  "about": {
+    "title": "About Fused Lens Studio",
+    "content": "Founded in 2018, Fused Lens Studio has been at the forefront of creative photography, blending traditional techniques with modern innovation. Our team of passionate photographers and videographers work tirelessly to capture the essence of every moment, creating timeless memories that last a lifetime.",
+    "story": "What started as a small passion project has grown into a full-service creative studio serving clients across Kenya and beyond. We believe in the power of visual storytelling and the impact it has on connecting people, preserving memories, and building brands.",
+    "values": [
+      "Excellence in every frame",
+      "Authentic storytelling",
+      "Client-centered approach",
+      "Continuous innovation"
+    ]
+  }
+}

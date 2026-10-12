@@ -1,0 +1,357 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ivory: #F8F3EA;
+  --cream: #F5EEE3;
+  --soft-rose: #D8B8B5;
+  --dusty-rose: #C99E9B;
+  --champagne: #D8B77A;
+  --muted-gold: #B9975B;
+  --sandal: #CBB49A;
+  --deep-charcoal: #292522;
+  --warm-brown: #51443A;
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-ivory text-charcoal font-body;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    @apply bg-gold/20 text-charcoal;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif font-medium;
+  }
+
+  img {
+    @apply max-w-full h-auto;
+  }
+
+  a {
+    @apply transition-colors duration-300;
+  }
+}
+
+/* ============================================================
+   COMPONENT STYLES
+   ============================================================ */
+@layer components {
+  /* ── Section Layout ──────────────────────────────── */
+  .section-padding {
+    @apply py-20 md:py-28 lg:py-32 px-6 md:px-12 lg:px-20;
+  }
+
+  .section-padding-sm {
+    @apply py-12 md:py-16 lg:py-20 px-6 md:px-12 lg:px-20;
+  }
+
+  .container-luxury {
+    @apply max-w-7xl mx-auto;
+  }
+
+  .container-narrow {
+    @apply max-w-4xl mx-auto;
+  }
+
+  .container-wide {
+    @apply max-w-[1400px] mx-auto;
+  }
+
+  /* ── Typography ──────────────────────────────────── */
+  .text-section-label {
+    @apply text-caption uppercase tracking-[0.2em] text-gold font-sans font-medium mb-4;
+  }
+
+  .text-section-title {
+    @apply text-display-sm md:text-display-md lg:text-display-lg font-serif text-charcoal;
+  }
+
+  .text-section-subtitle {
+    @apply text-body-lg text-warm-brown/80 font-light max-w-2xl leading-relaxed;
+  }
+
+  /* ── Buttons ─────────────────────────────────────── */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-8 py-4 bg-charcoal text-ivory font-sans text-body-sm font-medium
+           tracking-wider uppercase transition-all duration-500 ease-luxury
+           hover:bg-deep-black hover:shadow-luxury-lg hover:tracking-[0.15em]
+           focus:outline-none focus:ring-2 focus:ring-gold/50 focus:ring-offset-2 focus:ring-offset-ivory;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-8 py-4 border border-charcoal text-charcoal font-sans text-body-sm font-medium
+           tracking-wider uppercase transition-all duration-500 ease-luxury
+           hover:bg-charcoal hover:text-ivory hover:tracking-[0.15em]
+           focus:outline-none focus:ring-2 focus:ring-gold/50 focus:ring-offset-2 focus:ring-offset-ivory;
+  }
+
+  .btn-gold {
+    @apply inline-flex items-center gap-2 px-8 py-4 bg-gradient-gold text-deep-black font-sans text-body-sm font-medium
+           tracking-wider uppercase transition-all duration-500 ease-luxury shadow-gold
+           hover:shadow-lg hover:tracking-[0.15em] hover:brightness-110
+           focus:outline-none focus:ring-2 focus:ring-gold/50 focus:ring-offset-2 focus:ring-offset-ivory;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 px-6 py-3 text-charcoal font-sans text-body-sm font-medium
+           tracking-wider uppercase transition-all duration-400 ease-luxury
+           hover:text-gold hover:tracking-[0.12em]
+           focus:outline-none;
+  }
+
+  /* ── Cards ───────────────────────────────────────── */
+  .card-luxury {
+    @apply bg-cream/50 backdrop-blur-sm border border-champagne/30 transition-all duration-600 ease-luxury;
+  }
+
+  .card-luxury:hover {
+    @apply shadow-luxury border-gold/20;
+  }
+
+  /* ── Image Containers ────────────────────────────── */
+  .image-reveal {
+    @apply overflow-hidden;
+  }
+
+  .image-reveal img {
+    @apply w-full h-full object-cover transition-transform duration-[1.2s] ease-luxury;
+  }
+
+  .image-reveal:hover img {
+    @apply scale-105;
+  }
+
+  /* ── Gold Accent Line ────────────────────────────── */
+  .gold-line {
+    @apply w-16 h-[1px] bg-gradient-to-r from-gold to-gold-light;
+  }
+
+  .gold-line-center {
+    @apply w-16 h-[1px] bg-gradient-to-r from-gold to-gold-light mx-auto;
+  }
+
+  /* ── Form Inputs ─────────────────────────────────── */
+  .input-luxury {
+    @apply w-full bg-transparent border-0 border-b border-champagne/60 px-0 py-3
+           text-charcoal font-body text-body-md placeholder:text-warm-brown/40
+           transition-all duration-400 ease-luxury
+           focus:border-gold focus:ring-0 focus:outline-none;
+  }
+
+  .textarea-luxury {
+    @apply w-full bg-transparent border border-champagne/60 p-4
+           text-charcoal font-body text-body-md placeholder:text-warm-brown/40
+           transition-all duration-400 ease-luxury resize-none
+           focus:border-gold focus:ring-0 focus:outline-none;
+  }
+}
+
+/* ============================================================
+   UTILITY STYLES
+   ============================================================ */
+@layer utilities {
+  .text-gradient-gold {
+    @apply bg-gradient-gold bg-clip-text text-transparent;
+  }
+
+  .mask-gradient-b {
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  }
+}
+
+/* ============================================================
+   CUSTOM SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FAF6F0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C8A96E;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B8954F;
+}
+
+/* ============================================================
+   LOADING SCREEN
+   ============================================================ */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #1A1A1A;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.loading-screen.loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loading-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: #FFFEF7;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+}
+
+.loading-tagline {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: #C8A96E;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+}
+
+.loading-bar-container {
+  width: 200px;
+  height: 1px;
+  background: rgba(200, 169, 110, 0.15);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.loading-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #C8A96E, #D4BA85);
+  border-radius: 1px;
+  animation: loadingProgress 2s ease-in-out forwards;
+}
+
+@keyframes loadingProgress {
+  0% { width: 0%; }
+  30% { width: 40%; }
+  60% { width: 70%; }
+  80% { width: 85%; }
+  100% { width: 100%; }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .loading-bar {
+    animation: none;
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   LIGHTBOX OVERLAY
+   ============================================================ */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(26, 26, 26, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-image {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+}
+
+/* ============================================================
+   WHATSAPP FLOATING BUTTON
+   ============================================================ */
+.whatsapp-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 900;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.25);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .whatsapp-float {
+    bottom: 18px;
+    right: 18px;
+    width: 48px;
+    height: 48px;
+  }
+  .whatsapp-float svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
+}
+
+.whatsapp-float svg {
+  width: 26px;
+  height: 26px;
+  fill: white;
+}
+
+/* ============================================================
+   HIDE SCROLLBAR UTILITY
+   ============================================================ */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
