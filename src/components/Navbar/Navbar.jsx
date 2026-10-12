@@ -121,17 +121,22 @@ export default function Navbar() {
           <div className="flex-1 flex items-center justify-start min-w-0">
             <Link
               to="/"
-              className="group flex items-center"
+              className="group flex items-center gap-2.5 sm:gap-3"
               aria-label={`${siteConfig.studioName} - Home`}
             >
+              <img
+                src="/logo.png"
+                alt={siteConfig.studioName}
+                className="h-8 sm:h-9 lg:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
               <span
-                className={`font-serif text-2xl sm:text-3xl lg:text-[1.85rem] tracking-[0.06em] whitespace-nowrap transition-colors duration-300 font-normal ${
+                className={`font-serif text-xl sm:text-2xl lg:text-[1.65rem] tracking-[0.08em] uppercase whitespace-nowrap transition-colors duration-300 font-normal ${
                   isLightMode
                     ? 'text-charcoal'
-                    : 'text-ivory drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]'
+                    : 'text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'
                 }`}
               >
-                {siteConfig.studioName}
+                JOSH PHOTOGRAPHY
               </span>
             </Link>
           </div>
@@ -268,9 +273,16 @@ export default function Navbar() {
           >
             {/* Mobile Header Bar */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-[#D8B77A]/30">
-              <span className="font-serif text-2xl text-charcoal font-medium tracking-[0.06em]">
-                {siteConfig.studioName}
-              </span>
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <img
+                  src="/logo.png"
+                  alt={siteConfig.studioName}
+                  className="h-8 w-auto object-contain"
+                />
+                <span className="font-serif text-xl text-charcoal font-medium tracking-[0.08em] uppercase">
+                  JOSH PHOTOGRAPHY
+                </span>
+              </div>
               <button
                 onClick={() => setIsMobileOpen(false)}
                 className="p-2 text-charcoal hover:text-gold"
