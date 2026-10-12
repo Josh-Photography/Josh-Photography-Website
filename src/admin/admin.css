@@ -17,8 +17,7 @@
   box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -59,25 +58,18 @@ body {
 }
 
 .admin-login__icon {
-  height: 65px;
-  max-width: 180px;
+  height: 50px;
   width: auto;
-  margin: 0 auto 0.75rem;
+  margin: 0 auto 1rem;
   display: block;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.4));
 }
 
-.admin-login__title,
 .admin-login__header h1 {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.5rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-weight: 400;
   margin: 0 0 0.5rem;
-  color: #FFFFFF !important;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  color: var(--admin-text);
 }
 
 .admin-login__header p {
@@ -218,9 +210,7 @@ body {
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  to { transform: rotate(360deg); }
 }
 
 /* Dashboard Layout */
@@ -243,32 +233,22 @@ body {
 }
 
 .admin-sidebar__header {
-  padding: 1.25rem 1rem;
+  padding: 1.5rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   border-bottom: 1px solid var(--admin-border);
-  background: rgba(255, 255, 255, 0.02);
 }
 
 .admin-sidebar__icon {
-  height: 36px;
-  max-width: 50px;
+  height: 28px;
   width: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 1px 6px rgba(255, 255, 255, 0.35));
-  flex-shrink: 0;
 }
 
-.admin-sidebar__title,
 .admin-sidebar__header span {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.05rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #FFFFFF !important;
-  white-space: nowrap;
+  font-size: 1.125rem;
+  color: var(--admin-text);
 }
 
 .admin-nav {
@@ -999,11 +979,11 @@ body {
   .admin-sidebar {
     width: 200px;
   }
-
+  
   .admin-main {
     margin-left: 200px;
   }
-
+  
   .admin-grid,
   .admin-grid-2,
   .admin-grid-3 {
@@ -1016,19 +996,19 @@ body {
     transform: translateX(-100%);
     transition: transform 0.3s;
   }
-
+  
   .admin-sidebar--open {
     transform: translateX(0);
   }
-
+  
   .admin-main {
     margin-left: 0;
   }
-
+  
   .admin-content {
     padding: 1rem;
   }
-
+  
   .admin-header {
     padding: 1rem;
   }
