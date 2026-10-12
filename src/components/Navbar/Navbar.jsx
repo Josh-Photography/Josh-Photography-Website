@@ -115,22 +115,22 @@ export default function Navbar() {
       >
         <div
           ref={navContainerRef}
-          className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-12 flex items-center justify-between"
+          className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 flex items-center justify-between gap-3 lg:gap-4 xl:gap-6"
         >
-          {/* Column 1: Logo (Left Aligned) */}
-          <div className="flex-1 flex items-center justify-start min-w-0">
+          {/* Column 1: Logo & Studio Name (Left Aligned) */}
+          <div className="flex-shrink-0 flex items-center">
             <Link
               to="/"
-              className="group flex items-center gap-2.5 sm:gap-3"
+              className="group flex items-center gap-2 sm:gap-2.5 xl:gap-3"
               aria-label={`${siteConfig.studioName} - Home`}
             >
               <img
                 src="/logo.png"
                 alt={siteConfig.studioName}
-                className="h-8 sm:h-9 lg:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                className="h-8 sm:h-9 lg:h-8 xl:h-9 2xl:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
               <span
-                className={`font-serif text-xl sm:text-2xl lg:text-[1.65rem] tracking-[0.08em] uppercase whitespace-nowrap transition-colors duration-300 font-normal ${
+                className={`font-serif text-lg sm:text-xl lg:text-[1.2rem] xl:text-[1.42rem] 2xl:text-[1.6rem] tracking-[0.06em] sm:tracking-[0.08em] uppercase whitespace-nowrap transition-colors duration-300 font-normal ${
                   isLightMode
                     ? 'text-charcoal'
                     : 'text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'
@@ -141,9 +141,9 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Column 2: Navigation Links (True Center) */}
+          {/* Column 2: Navigation Links (Centered in remaining space) */}
           <nav
-            className="hidden lg:flex items-center justify-center gap-1 xl:gap-3 flex-shrink-0"
+            className="hidden lg:flex items-center justify-center gap-0.5 sm:gap-1 xl:gap-2 2xl:gap-3 flex-1 min-w-0"
             role="navigation"
             aria-label="Main navigation"
           >
@@ -154,7 +154,7 @@ export default function Navbar() {
               return (
                 <div
                   key={item.path}
-                  className="relative"
+                  className="relative flex-shrink-0"
                   onMouseEnter={() => hasChildren && setActiveDropdown(item.path)}
                   onMouseLeave={() => hasChildren && setActiveDropdown(null)}
                 >
@@ -164,7 +164,7 @@ export default function Navbar() {
                       onClick={() => setActiveDropdown(null)}
                       aria-expanded={isOpen}
                       aria-haspopup="true"
-                      className={`px-3.5 py-2 font-nav text-[14px] uppercase tracking-[0.14em] transition-all duration-300 flex items-center gap-1.5 cursor-pointer rounded-sm ${
+                      className={`px-2 py-1.5 lg:px-2.5 xl:px-3.5 xl:py-2 font-nav text-[12px] xl:text-[13.5px] uppercase tracking-[0.08em] xl:tracking-[0.14em] transition-all duration-300 flex items-center gap-1 xl:gap-1.5 cursor-pointer rounded-sm whitespace-nowrap ${
                         isOpen || isActive(item.path)
                           ? isLightMode
                             ? 'text-gold font-bold'
@@ -184,7 +184,7 @@ export default function Navbar() {
                   ) : (
                     <Link
                       to={item.path}
-                      className={`px-3.5 py-2 font-nav text-[14px] uppercase tracking-[0.14em] transition-all duration-300 flex items-center gap-1 rounded-sm ${
+                      className={`px-2 py-1.5 lg:px-2.5 xl:px-3.5 xl:py-2 font-nav text-[12px] xl:text-[13.5px] uppercase tracking-[0.08em] xl:tracking-[0.14em] transition-all duration-300 flex items-center gap-1 rounded-sm whitespace-nowrap ${
                         isActive(item.path)
                           ? isLightMode
                             ? 'text-gold font-bold'
@@ -207,7 +207,7 @@ export default function Navbar() {
                         exit={{ opacity: 0, y: 6, scale: 0.98 }}
                         transition={{ duration: 0.2, ease: 'easeOut' }}
                         style={{ backgroundColor: '#F8F3EA' }}
-                        className="absolute top-full left-1/2 -translate-x-1/2 mt-2 min-w-[300px] bg-ivory border border-[#D8B77A]/60 shadow-[0_16px_40px_rgba(41,37,34,0.18)] py-2.5 z-[70] rounded-sm"
+                        className="absolute top-full left-1/2 -translate-x-1/2 mt-2 min-w-[280px] sm:min-w-[300px] bg-ivory border border-[#D8B77A]/60 shadow-[0_16px_40px_rgba(41,37,34,0.18)] py-2.5 z-[70] rounded-sm"
                       >
                         {item.children.map((child) => (
                           <Link
@@ -232,11 +232,11 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Column 3: Check Availability Button (Right Aligned & Inset with Padding) */}
-          <div className="flex-1 flex items-center justify-end min-w-0">
+          {/* Column 3: Check Availability Button (Right Aligned) */}
+          <div className="flex-shrink-0 flex items-center justify-end gap-2">
             <Link
               to="/check-availability"
-              className={`hidden lg:inline-flex items-center justify-center px-6 py-2.5 font-nav text-[13px] uppercase tracking-[0.16em] font-semibold transition-all duration-300 border shadow-sm rounded-sm ${
+              className={`hidden lg:inline-flex items-center justify-center whitespace-nowrap px-3.5 py-1.5 lg:px-4 lg:py-2 xl:px-6 xl:py-2.5 font-nav text-[11px] lg:text-[12px] xl:text-[13px] uppercase tracking-[0.1em] lg:tracking-[0.14em] xl:tracking-[0.16em] font-semibold transition-all duration-300 border shadow-sm rounded-sm ${
                 isLightMode
                   ? 'border-[#292522] text-[#292522] hover:bg-[#292522] hover:text-[#FAF6EE]'
                   : 'border-[#E5BA78] text-[#E5BA78] hover:bg-[#E5BA78] hover:text-[#1A1715] backdrop-blur-sm bg-black/25'
