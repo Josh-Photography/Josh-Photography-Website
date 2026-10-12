@@ -9,12 +9,12 @@ const API_URL = 'http://localhost:3001/api'
 // Helper function to convert Google Drive link to direct image URL
 const convertGoogleDriveLink = (url) => {
   if (!url) return ''
-  
+
   // If it's already a direct image URL, return as is
   if (url.includes('drive.google.com/uc?') || url.includes('lh3.googleusercontent.com')) {
     return url
   }
-  
+
   // Convert Google Drive sharing link to direct image URL
   // Format: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
   const fileIdMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
@@ -22,14 +22,14 @@ const convertGoogleDriveLink = (url) => {
     const fileId = fileIdMatch[1]
     return `https://drive.google.com/uc?export=view&id=${fileId}`
   }
-  
+
   // Format: https://drive.google.com/open?id=FILE_ID
   const openIdMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/)
   if (openIdMatch) {
     const fileId = openIdMatch[1]
     return `https://drive.google.com/uc?export=view&id=${fileId}`
   }
-  
+
   return url
 }
 
@@ -94,6 +94,7 @@ function Login({ onLogin }) {
       >
         <div className="admin-login__header">
           <img src="/logo.png" alt="Josh Photography" className="admin-login__icon" />
+          <h1 className="admin-login__title">JOSH PHOTOGRAPHY</h1>
           <p>Admin Panel</p>
         </div>
 
@@ -202,79 +203,79 @@ function StudioEditor({ data, onSave, saving }) {
       </div>
       <form onSubmit={handleSubmit}>
         <div className="admin-grid">
-        <div className="admin-input-group">
-          <label>Studio Name</label>
-          <input
-            type="text"
-            value={formData.name || ''}
-            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-            required
-          />
-        </div>
+          <div className="admin-input-group">
+            <label>Studio Name</label>
+            <input
+              type="text"
+              value={formData.name || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              required
+            />
+          </div>
 
-        <div className="admin-input-group">
-          <label>Tagline</label>
-          <input
-            type="text"
-            value={formData.tagline || ''}
-            onChange={(e) => setFormData(prev => ({ ...prev, tagline: e.target.value }))}
-          />
-        </div>
+          <div className="admin-input-group">
+            <label>Tagline</label>
+            <input
+              type="text"
+              value={formData.tagline || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, tagline: e.target.value }))}
+            />
+          </div>
 
-        <div className="admin-input-group admin-input-group--full">
-          <label>Description</label>
-          <textarea
-            value={formData.description || ''}
-            onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-            rows={3}
-          />
-        </div>
+          <div className="admin-input-group admin-input-group--full">
+            <label>Description</label>
+            <textarea
+              value={formData.description || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+              rows={3}
+            />
+          </div>
 
-        <div className="admin-input-group">
-          <label>Location</label>
-          <input
-            type="text"
-            value={formData.location || ''}
-            onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
-          />
-        </div>
+          <div className="admin-input-group">
+            <label>Location</label>
+            <input
+              type="text"
+              value={formData.location || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+            />
+          </div>
 
-        <div className="admin-input-group">
-          <label>Address</label>
-          <input
-            type="text"
-            value={formData.address || ''}
-            onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-          />
-        </div>
+          <div className="admin-input-group">
+            <label>Address</label>
+            <input
+              type="text"
+              value={formData.address || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+            />
+          </div>
 
-        <div className="admin-input-group">
-          <label>Email</label>
-          <input
-            type="email"
-            value={formData.email || ''}
-            onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-          />
-        </div>
+          <div className="admin-input-group">
+            <label>Email</label>
+            <input
+              type="email"
+              value={formData.email || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+            />
+          </div>
 
-        <div className="admin-input-group">
-          <label>Phone</label>
-          <input
-            type="text"
-            value={formData.phone || ''}
-            onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-          />
-        </div>
+          <div className="admin-input-group">
+            <label>Phone</label>
+            <input
+              type="text"
+              value={formData.phone || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+            />
+          </div>
 
-        <div className="admin-input-group">
-          <label>WhatsApp</label>
-          <input
-            type="text"
-            value={formData.whatsapp || ''}
-            onChange={(e) => setFormData(prev => ({ ...prev, whatsapp: e.target.value }))}
-          />
+          <div className="admin-input-group">
+            <label>WhatsApp</label>
+            <input
+              type="text"
+              value={formData.whatsapp || ''}
+              onChange={(e) => setFormData(prev => ({ ...prev, whatsapp: e.target.value }))}
+            />
+          </div>
         </div>
-      </div>
 
         <div className="admin-actions">
           <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
@@ -536,42 +537,42 @@ function ServicesEditor({ data, onSave, saving }) {
       </div>
       <form onSubmit={handleSubmit}>
 
-      {services.map((service, index) => (
-        <div key={service.id} className="admin-card">
-          <div className="admin-card__header">
-            <h4>Service {index + 1}</h4>
-            <button
-              type="button"
-              className="admin-btn admin-btn--danger admin-btn--small"
-              onClick={() => removeService(index)}
-            >
-              Remove
-            </button>
-          </div>
-
-          <div className="admin-grid">
-            <div className="admin-input-group admin-input-group--full">
-              <label>Title</label>
-              <input
-                type="text"
-                value={service.title}
-                onChange={(e) => updateService(index, 'title', e.target.value)}
-                required
-              />
+        {services.map((service, index) => (
+          <div key={service.id} className="admin-card">
+            <div className="admin-card__header">
+              <h4>Service {index + 1}</h4>
+              <button
+                type="button"
+                className="admin-btn admin-btn--danger admin-btn--small"
+                onClick={() => removeService(index)}
+              >
+                Remove
+              </button>
             </div>
 
-            <div className="admin-input-group admin-input-group--full">
-              <label>Description</label>
-              <textarea
-                value={service.description}
-                onChange={(e) => updateService(index, 'description', e.target.value)}
-                rows={3}
-                required
-              />
+            <div className="admin-grid">
+              <div className="admin-input-group admin-input-group--full">
+                <label>Title</label>
+                <input
+                  type="text"
+                  value={service.title}
+                  onChange={(e) => updateService(index, 'title', e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="admin-input-group admin-input-group--full">
+                <label>Description</label>
+                <textarea
+                  value={service.description}
+                  onChange={(e) => updateService(index, 'description', e.target.value)}
+                  rows={3}
+                  required
+                />
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
 
         <div className="admin-actions">
           <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
@@ -632,77 +633,77 @@ function TestimonialsEditor({ data, onSave, saving }) {
       </div>
       <form onSubmit={handleSubmit}>
 
-      {testimonials.map((testimonial, index) => (
-        <div key={testimonial.id} className="admin-card">
-          <div className="admin-card__header">
-            <h4>Testimonial {index + 1}</h4>
-            <button
-              type="button"
-              className="admin-btn admin-btn--danger admin-btn--small"
-              onClick={() => removeTestimonial(index)}
-            >
-              Remove
-            </button>
+        {testimonials.map((testimonial, index) => (
+          <div key={testimonial.id} className="admin-card">
+            <div className="admin-card__header">
+              <h4>Testimonial {index + 1}</h4>
+              <button
+                type="button"
+                className="admin-btn admin-btn--danger admin-btn--small"
+                onClick={() => removeTestimonial(index)}
+              >
+                Remove
+              </button>
+            </div>
+
+            <div className="admin-grid">
+              <div className="admin-input-group">
+                <label>Name</label>
+                <input
+                  type="text"
+                  value={testimonial.name}
+                  onChange={(e) => updateTestimonial(index, 'name', e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="admin-input-group">
+                <label>Role</label>
+                <input
+                  type="text"
+                  value={testimonial.role}
+                  onChange={(e) => updateTestimonial(index, 'role', e.target.value)}
+                />
+              </div>
+
+              <div className="admin-input-group">
+                <label>Rating (1-5)</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="5"
+                  value={testimonial.rating}
+                  onChange={(e) => updateTestimonial(index, 'rating', parseInt(e.target.value))}
+                />
+              </div>
+
+              <div className="admin-input-group">
+                <label>Image URL</label>
+                <input
+                  type="url"
+                  value={testimonial.image}
+                  onChange={(e) => updateTestimonial(index, 'image', e.target.value)}
+                />
+              </div>
+
+              <div className="admin-input-group admin-input-group--full">
+                <label>Content</label>
+                <textarea
+                  value={testimonial.content}
+                  onChange={(e) => updateTestimonial(index, 'content', e.target.value)}
+                  rows={3}
+                  required
+                />
+              </div>
+            </div>
+
+            {testimonial.image && (
+              <div className="admin-image-preview">
+                <img src={testimonial.image} alt={testimonial.name} />
+              </div>
+            )}
           </div>
-
-          <div className="admin-grid">
-            <div className="admin-input-group">
-              <label>Name</label>
-              <input
-                type="text"
-                value={testimonial.name}
-                onChange={(e) => updateTestimonial(index, 'name', e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="admin-input-group">
-              <label>Role</label>
-              <input
-                type="text"
-                value={testimonial.role}
-                onChange={(e) => updateTestimonial(index, 'role', e.target.value)}
-              />
-            </div>
-
-            <div className="admin-input-group">
-              <label>Rating (1-5)</label>
-              <input
-                type="number"
-                min="1"
-                max="5"
-                value={testimonial.rating}
-                onChange={(e) => updateTestimonial(index, 'rating', parseInt(e.target.value))}
-              />
-            </div>
-
-            <div className="admin-input-group">
-              <label>Image URL</label>
-              <input
-                type="url"
-                value={testimonial.image}
-                onChange={(e) => updateTestimonial(index, 'image', e.target.value)}
-              />
-            </div>
-
-            <div className="admin-input-group admin-input-group--full">
-              <label>Content</label>
-              <textarea
-                value={testimonial.content}
-                onChange={(e) => updateTestimonial(index, 'content', e.target.value)}
-                rows={3}
-                required
-              />
-            </div>
-          </div>
-
-          {testimonial.image && (
-            <div className="admin-image-preview">
-              <img src={testimonial.image} alt={testimonial.name} />
-            </div>
-          )}
-        </div>
-      ))}
+        ))}
 
         <div className="admin-actions">
           <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
@@ -776,93 +777,93 @@ function CollaboratorsEditor({ data, onSave, saving }) {
       </div>
       <form onSubmit={handleSubmit}>
 
-      {collaborators.map((collaborator, index) => (
-        <div key={collaborator.id} className="admin-card">
-          <div className="admin-card__header">
-            <h4>Member {index + 1}</h4>
-            <button
-              type="button"
-              className="admin-btn admin-btn--danger admin-btn--small"
-              onClick={() => removeCollaborator(index)}
-            >
-              Remove
-            </button>
+        {collaborators.map((collaborator, index) => (
+          <div key={collaborator.id} className="admin-card">
+            <div className="admin-card__header">
+              <h4>Member {index + 1}</h4>
+              <button
+                type="button"
+                className="admin-btn admin-btn--danger admin-btn--small"
+                onClick={() => removeCollaborator(index)}
+              >
+                Remove
+              </button>
+            </div>
+
+            <div className="admin-grid">
+              <div className="admin-input-group">
+                <label>Name</label>
+                <input
+                  type="text"
+                  value={collaborator.name}
+                  onChange={(e) => updateCollaborator(index, 'name', e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="admin-input-group">
+                <label>Role</label>
+                <input
+                  type="text"
+                  value={collaborator.role}
+                  onChange={(e) => updateCollaborator(index, 'role', e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="admin-input-group">
+                <label>Image URL</label>
+                <input
+                  type="url"
+                  value={collaborator.image}
+                  onChange={(e) => updateCollaborator(index, 'image', e.target.value)}
+                />
+              </div>
+
+              <div className="admin-input-group admin-input-group--full">
+                <label>Bio</label>
+                <textarea
+                  value={collaborator.bio}
+                  onChange={(e) => updateCollaborator(index, 'bio', e.target.value)}
+                  rows={3}
+                />
+              </div>
+
+              <div className="admin-input-group">
+                <label>Instagram</label>
+                <input
+                  type="url"
+                  value={collaborator.social?.instagram || ''}
+                  onChange={(e) => updateSocial(index, 'instagram', e.target.value)}
+                />
+              </div>
+
+              <div className="admin-input-group">
+                <label>LinkedIn</label>
+                <input
+                  type="url"
+                  value={collaborator.social?.linkedin || ''}
+                  onChange={(e) => updateSocial(index, 'linkedin', e.target.value)}
+                />
+              </div>
+
+              <div className="admin-input-group">
+                <label>Behance</label>
+                <input
+                  type="url"
+                  value={collaborator.social?.behance || ''}
+                  onChange={(e) => updateSocial(index, 'behance', e.target.value)}
+                />
+              </div>
+            </div>
+
+            {collaborator.image && (
+              <div className="admin-image-preview">
+                <img src={collaborator.image} alt={collaborator.name} />
+              </div>
+            )}
           </div>
-
-          <div className="admin-grid">
-            <div className="admin-input-group">
-              <label>Name</label>
-              <input
-                type="text"
-                value={collaborator.name}
-                onChange={(e) => updateCollaborator(index, 'name', e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="admin-input-group">
-              <label>Role</label>
-              <input
-                type="text"
-                value={collaborator.role}
-                onChange={(e) => updateCollaborator(index, 'role', e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="admin-input-group">
-              <label>Image URL</label>
-              <input
-                type="url"
-                value={collaborator.image}
-                onChange={(e) => updateCollaborator(index, 'image', e.target.value)}
-              />
-            </div>
-
-            <div className="admin-input-group admin-input-group--full">
-              <label>Bio</label>
-              <textarea
-                value={collaborator.bio}
-                onChange={(e) => updateCollaborator(index, 'bio', e.target.value)}
-                rows={3}
-              />
-            </div>
-
-            <div className="admin-input-group">
-              <label>Instagram</label>
-              <input
-                type="url"
-                value={collaborator.social?.instagram || ''}
-                onChange={(e) => updateSocial(index, 'instagram', e.target.value)}
-              />
-            </div>
-
-            <div className="admin-input-group">
-              <label>LinkedIn</label>
-              <input
-                type="url"
-                value={collaborator.social?.linkedin || ''}
-                onChange={(e) => updateSocial(index, 'linkedin', e.target.value)}
-              />
-            </div>
-
-            <div className="admin-input-group">
-              <label>Behance</label>
-              <input
-                type="url"
-                value={collaborator.social?.behance || ''}
-                onChange={(e) => updateSocial(index, 'behance', e.target.value)}
-              />
-            </div>
-          </div>
-
-          {collaborator.image && (
-            <div className="admin-image-preview">
-              <img src={collaborator.image} alt={collaborator.name} />
-            </div>
-          )}
-        </div>
-      ))}
+        ))}
 
         <div className="admin-actions">
           <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
@@ -1263,7 +1264,7 @@ function Dashboard({ token, onLogout }) {
       try {
         const saved = localStorage.getItem('josh_admin_data')
         if (saved) localSaved = JSON.parse(saved)
-      } catch (e) {}
+      } catch (e) { }
 
       setData({
         content: newData.content || localSaved.content || initialContent,
@@ -1321,7 +1322,7 @@ function Dashboard({ token, onLogout }) {
         }
         try {
           localStorage.setItem('josh_admin_data', JSON.stringify(updated))
-        } catch (e) {}
+        } catch (e) { }
         return updated
       })
 
@@ -1410,6 +1411,7 @@ function Dashboard({ token, onLogout }) {
       <aside className="admin-sidebar">
         <div className="admin-sidebar__header">
           <img src="/logo.png" alt="Josh Photography" className="admin-sidebar__icon" />
+          <span className="admin-sidebar__title">JOSH PHOTOGRAPHY</span>
         </div>
 
         <nav className="admin-nav">

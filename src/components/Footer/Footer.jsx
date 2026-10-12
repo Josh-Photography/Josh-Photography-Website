@@ -29,12 +29,15 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">
             {/* Brand Column */}
             <div className="lg:col-span-1">
-              <Link to="/" className="inline-block mb-5 group">
+              <Link to="/" className="inline-flex items-center gap-3.5 mb-6 group">
                 <img
                   src="/logo.png"
                   alt={siteConfig.studioName}
-                  className="h-14 sm:h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.35)]"
+                  className="h-11 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.35)]"
                 />
+                <h3 className="font-serif text-xl sm:text-2xl font-normal text-white tracking-[0.1em] uppercase">
+                  JOSH PHOTOGRAPHY
+                </h3>
               </Link>
               <p className="text-body-sm text-ivory/50 leading-relaxed mb-6">
                 {siteConfig.shortDescription}. We preserve the emotions, the laughter,

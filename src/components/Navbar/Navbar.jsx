@@ -104,36 +104,32 @@ export default function Navbar() {
       <ScrollProgress />
 
       <header
-        style={{
-          backgroundColor: isLightMode ? '#F8F3EA' : undefined,
-        }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ease-luxury ${
-          isLightMode
-            ? 'bg-ivory border-b border-[#D8B77A]/35 shadow-[0_4px_24px_rgba(41,37,34,0.06)] py-4'
-            : 'bg-gradient-to-b from-[#181310]/90 via-[#181310]/40 to-transparent py-5'
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ease-luxury ${isScrolled
+            ? 'bg-[#140F0C]/95 backdrop-blur-md border-b border-[#D8B77A]/35 shadow-[0_4px_24px_rgba(0,0,0,0.5)] py-3.5'
+            : 'bg-gradient-to-b from-[#140F0C]/95 via-[#140F0C]/60 to-transparent py-5'
+          }`}
       >
         <div
           ref={navContainerRef}
-          className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-12 flex items-center justify-between"
+          className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 flex items-center justify-between"
         >
-          {/* Column 1: Logo (Left Aligned) */}
-          <div className="flex-1 flex items-center justify-start min-w-0">
+          {/* Column 1: Logo & Brand (Left Aligned) */}
+          <div className="flex-shrink-0 flex items-center justify-start mr-4 sm:mr-6 lg:mr-8">
             <Link
               to="/"
-              className="group flex items-center py-1"
+              className="group flex items-center gap-2.5 sm:gap-3.5"
               aria-label={`${siteConfig.studioName} - Home`}
             >
               <img
                 src="/logo.png"
                 alt={siteConfig.studioName}
-                className={`h-11 sm:h-14 lg:h-16 w-auto object-contain transition-all duration-300 group-hover:scale-105 ${
-                  isLightMode
-                    ? 'drop-shadow-[0_1px_3px_rgba(0,0,0,0.12)]'
-                    : 'drop-shadow-[0_2px_8px_rgba(255,255,255,0.45)] drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]'
-                }`}
+                className="h-10 sm:h-12 lg:h-13 w-auto object-contain transition-transform duration-300 group-hover:scale-105 filter drop-shadow-[0_2px_8px_rgba(255,255,255,0.45)]"
               />
-              <span className="sr-only">{siteConfig.studioName}</span>
+              <span
+                className="font-serif text-lg sm:text-xl lg:text-[1.5rem] tracking-[0.1em] uppercase whitespace-nowrap font-medium text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]"
+              >
+                JOSH PHOTOGRAPHY
+              </span>
             </Link>
           </div>
 
@@ -160,35 +156,32 @@ export default function Navbar() {
                       onClick={() => setActiveDropdown(null)}
                       aria-expanded={isOpen}
                       aria-haspopup="true"
-                      className={`px-3.5 py-2 font-nav text-[14px] uppercase tracking-[0.14em] transition-all duration-300 flex items-center gap-1.5 cursor-pointer rounded-sm ${
-                        isOpen || isActive(item.path)
+                      className={`px-3.5 py-2 font-nav text-[14px] uppercase tracking-[0.14em] transition-all duration-300 flex items-center gap-1.5 cursor-pointer rounded-sm ${isOpen || isActive(item.path)
                           ? isLightMode
                             ? 'text-gold font-bold'
                             : 'text-[#E5BA78] font-bold drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
                           : isLightMode
                             ? 'text-charcoal font-semibold hover:text-gold'
                             : 'text-ivory font-medium hover:text-[#E5BA78] drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
-                      }`}
+                        }`}
                     >
                       <span>{item.label}</span>
                       <ChevronDown
-                        className={`w-3.5 h-3.5 transition-transform duration-300 ${
-                          isOpen ? 'rotate-180 text-gold' : 'opacity-80'
-                        }`}
+                        className={`w-3.5 h-3.5 transition-transform duration-300 ${isOpen ? 'rotate-180 text-gold' : 'opacity-80'
+                          }`}
                       />
                     </Link>
                   ) : (
                     <Link
                       to={item.path}
-                      className={`px-3.5 py-2 font-nav text-[14px] uppercase tracking-[0.14em] transition-all duration-300 flex items-center gap-1 rounded-sm ${
-                        isActive(item.path)
+                      className={`px-3.5 py-2 font-nav text-[14px] uppercase tracking-[0.14em] transition-all duration-300 flex items-center gap-1 rounded-sm ${isActive(item.path)
                           ? isLightMode
                             ? 'text-gold font-bold'
                             : 'text-[#E5BA78] font-bold drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
                           : isLightMode
                             ? 'text-charcoal font-semibold hover:text-gold'
                             : 'text-ivory font-medium hover:text-[#E5BA78] drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
-                      }`}
+                        }`}
                     >
                       <span>{item.label}</span>
                     </Link>
@@ -210,11 +203,10 @@ export default function Navbar() {
                             key={child.path}
                             to={child.path}
                             onClick={() => setActiveDropdown(null)}
-                            className={`flex items-center justify-between px-5 py-3 font-nav text-[14px] tracking-[0.04em] font-medium transition-all duration-200 border-l-2 group ${
-                              isActive(child.path)
+                            className={`flex items-center justify-between px-5 py-3 font-nav text-[14px] tracking-[0.04em] font-medium transition-all duration-200 border-l-2 group ${isActive(child.path)
                                 ? 'border-gold text-gold bg-[#F3ECE0]'
                                 : 'border-transparent text-charcoal/90 hover:text-charcoal hover:bg-[#F3ECE0] hover:border-gold/80 hover:pl-6'
-                            }`}
+                              }`}
                           >
                             <span>{child.label}</span>
                             <ChevronDown className="w-3.5 h-3.5 -rotate-90 opacity-0 group-hover:opacity-100 transition-opacity text-gold shrink-0 ml-2" />
@@ -232,11 +224,10 @@ export default function Navbar() {
           <div className="flex-1 flex items-center justify-end min-w-0">
             <Link
               to="/check-availability"
-              className={`hidden lg:inline-flex items-center justify-center px-6 py-2.5 font-nav text-[13px] uppercase tracking-[0.16em] font-semibold transition-all duration-300 border shadow-sm rounded-sm ${
-                isLightMode
+              className={`hidden lg:inline-flex items-center justify-center px-6 py-2.5 font-nav text-[13px] uppercase tracking-[0.16em] font-semibold transition-all duration-300 border shadow-sm rounded-sm ${isLightMode
                   ? 'border-[#292522] text-[#292522] hover:bg-[#292522] hover:text-[#FAF6EE]'
                   : 'border-[#E5BA78] text-[#E5BA78] hover:bg-[#E5BA78] hover:text-[#1A1715] backdrop-blur-sm bg-black/25'
-              }`}
+                }`}
             >
               Check Availability
             </Link>
@@ -244,9 +235,8 @@ export default function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileOpen(!isMobileOpen)}
-              className={`lg:hidden p-2.5 transition-colors duration-300 rounded ${
-                isLightMode ? 'text-charcoal' : 'text-ivory'
-              }`}
+              className={`lg:hidden p-2.5 transition-colors duration-300 rounded ${isLightMode ? 'text-charcoal' : 'text-ivory'
+                }`}
               aria-label={isMobileOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isMobileOpen}
             >
@@ -268,22 +258,20 @@ export default function Navbar() {
             className="fixed inset-0 z-[60] bg-ivory flex flex-col"
           >
             {/* Mobile Header Bar */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-[#D8B77A]/30">
-              <Link
-                to="/"
-                onClick={() => setIsMobileOpen(false)}
-                className="flex items-center"
-                aria-label={siteConfig.studioName}
-              >
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#D8B77A]/30 bg-[#140F0C]">
+              <div className="flex items-center gap-2.5 sm:gap-3">
                 <img
                   src="/logo.png"
                   alt={siteConfig.studioName}
-                  className="h-10 sm:h-12 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.15)]"
+                  className="h-8 sm:h-9 w-auto object-contain filter drop-shadow-[0_1px_6px_rgba(255,255,255,0.4)]"
                 />
-              </Link>
+                <span className="font-serif text-lg sm:text-xl text-white font-medium tracking-[0.1em] uppercase">
+                  JOSH PHOTOGRAPHY
+                </span>
+              </div>
               <button
                 onClick={() => setIsMobileOpen(false)}
-                className="p-2 text-charcoal hover:text-gold"
+                className="p-2 text-white/90 hover:text-[#E5BA78]"
                 aria-label="Close menu"
               >
                 <X className="w-6 h-6" />
@@ -304,9 +292,8 @@ export default function Navbar() {
                           <Link
                             to={item.path}
                             onClick={() => setIsMobileOpen(false)}
-                            className={`font-serif text-2xl font-light tracking-wide transition-colors ${
-                              isActive(item.path) ? 'text-gold font-medium' : 'text-charcoal hover:text-gold'
-                            }`}
+                            className={`font-serif text-2xl font-light tracking-wide transition-colors ${isActive(item.path) ? 'text-gold font-medium' : 'text-charcoal hover:text-gold'
+                              }`}
                           >
                             {item.label}
                           </Link>
@@ -323,9 +310,8 @@ export default function Navbar() {
                             aria-label={`Toggle ${item.label} submenu`}
                           >
                             <ChevronDown
-                              className={`w-5 h-5 transition-transform duration-300 ${
-                                isExpanded ? 'rotate-180 text-gold' : ''
-                              }`}
+                              className={`w-5 h-5 transition-transform duration-300 ${isExpanded ? 'rotate-180 text-gold' : ''
+                                }`}
                             />
                           </button>
                         </div>
@@ -344,8 +330,8 @@ export default function Navbar() {
                                   to={child.path}
                                   onClick={() => setIsMobileOpen(false)}
                                   className={`block font-nav text-[13.5px] tracking-wider py-2 transition-colors ${isActive(child.path)
-                                      ? 'text-gold font-semibold'
-                                      : 'text-charcoal/85 hover:text-charcoal'
+                                    ? 'text-gold font-semibold'
+                                    : 'text-charcoal/85 hover:text-charcoal'
                                     }`}
                                 >
                                   {child.label}
@@ -360,8 +346,8 @@ export default function Navbar() {
                         to={item.path}
                         onClick={() => setIsMobileOpen(false)}
                         className={`block font-serif text-2xl font-light tracking-wide transition-colors py-1 ${isActive(item.path)
-                            ? 'text-gold font-medium'
-                            : 'text-charcoal hover:text-gold'
+                          ? 'text-gold font-medium'
+                          : 'text-charcoal hover:text-gold'
                           }`}
                       >
                         {item.label}

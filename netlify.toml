@@ -3,16 +3,6 @@
   publish = "dist"
 
 [[redirects]]
-  from = "/LOGO.png"
-  to = "/logo.png"
-  status = 200
-
-[[redirects]]
-  from = "/camlogo.png"
-  to = "/logo.png"
-  status = 200
-
-[[redirects]]
   from = "/admin"
   to = "/admin.html"
   status = 200

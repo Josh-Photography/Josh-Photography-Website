@@ -14,31 +14,31 @@ export function Navigation() {
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
-      
+
       // Determine active section and theme based on scroll position
       const sections = navLinks.map(link => document.getElementById(link.id))
       const scrollPos = window.scrollY + window.innerHeight / 3
-      
+
       sections.forEach((section, index) => {
         if (section) {
           const top = section.offsetTop
           const height = section.offsetHeight
-          
+
           if (scrollPos >= top && scrollPos < top + height) {
             setActiveSection(navLinks[index].id)
-            
+
             // Check if section has dark background
-            const isDarkSection = section.classList.contains('section--dark') || 
-                                  navLinks[index].id === 'home'
+            const isDarkSection = section.classList.contains('section--dark') ||
+              navLinks[index].id === 'home'
             setIsDark(isDarkSection)
           }
         }
       })
     }
-    
+
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
-    
+
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -48,7 +48,7 @@ export function Navigation() {
       const headerOffset = 80
       const elementPosition = element.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.scrollY - headerOffset
-      
+
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth'
@@ -76,11 +76,12 @@ export function Navigation() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <img 
-              src="/logo.png" 
+            <img
+              src="/logo.png"
               alt={studioInfo.name}
               className="nav__logo-image"
             />
+            <span className="nav__logo-text" style={{ color: '#FFFFFF' }}>JOSH PHOTOGRAPHY</span>
           </motion.a>
 
           <nav className="nav__links">
@@ -167,7 +168,7 @@ export function Navigation() {
                 </motion.a>
               ))}
             </nav>
-            
+
             <motion.div
               className="mobile-menu__footer"
               initial={{ opacity: 0 }}
