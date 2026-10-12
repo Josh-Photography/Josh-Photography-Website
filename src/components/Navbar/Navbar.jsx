@@ -125,9 +125,9 @@ export default function Navbar() {
               aria-label={`${siteConfig.studioName} - Home`}
             >
               <img
-                src="/logo.png"
+                src={isLightMode ? "/logo-black.png" : "/logo.png"}
                 alt={siteConfig.studioName}
-                className="h-8 sm:h-9 lg:h-8 xl:h-9 2xl:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                className="h-8 sm:h-9 lg:h-8 xl:h-9 2xl:h-10 w-auto object-contain transition-all duration-300 group-hover:scale-105"
               />
               <span
                 className={`font-serif text-lg sm:text-xl lg:text-[1.2rem] xl:text-[1.42rem] 2xl:text-[1.6rem] tracking-[0.06em] sm:tracking-[0.08em] uppercase whitespace-nowrap transition-colors duration-300 font-normal ${
@@ -275,7 +275,7 @@ export default function Navbar() {
             <div className="flex items-center justify-between px-6 py-5 border-b border-[#D8B77A]/30">
               <div className="flex items-center gap-2.5 sm:gap-3">
                 <img
-                  src="/logo.png"
+                  src="/logo-black.png"
                   alt={siteConfig.studioName}
                   className="h-8 w-auto object-contain"
                 />
