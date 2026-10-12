@@ -121,9 +121,14 @@ export default function Navbar() {
           <div className="flex-1 flex items-center justify-start min-w-0">
             <Link
               to="/"
-              className="group flex items-center"
+              className="group flex items-center gap-3 sm:gap-3.5"
               aria-label={`${siteConfig.studioName} - Home`}
             >
+              <img
+                src="/LOGO.png"
+                alt={siteConfig.studioName}
+                className="h-9 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
               <span
                 className={`font-serif text-2xl sm:text-3xl lg:text-[1.85rem] tracking-[0.06em] whitespace-nowrap transition-colors duration-300 font-normal ${
                   isLightMode
@@ -268,9 +273,16 @@ export default function Navbar() {
           >
             {/* Mobile Header Bar */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-[#D8B77A]/30">
-              <span className="font-serif text-2xl text-charcoal font-medium tracking-[0.06em]">
-                {siteConfig.studioName}
-              </span>
+              <div className="flex items-center gap-3">
+                <img
+                  src="/LOGO.png"
+                  alt={siteConfig.studioName}
+                  className="h-8 w-auto object-contain"
+                />
+                <span className="font-serif text-2xl text-charcoal font-medium tracking-[0.06em]">
+                  {siteConfig.studioName}
+                </span>
+              </div>
               <button
                 onClick={() => setIsMobileOpen(false)}
                 className="p-2 text-charcoal hover:text-gold"

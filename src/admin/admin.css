@@ -58,10 +58,12 @@ html, body {
 }
 
 .admin-login__icon {
-  height: 50px;
+  height: 52px;
+  max-width: 160px;
   width: auto;
-  margin: 0 auto 1rem;
+  margin: 0 auto 1.25rem;
   display: block;
+  object-fit: contain;
 }
 
 .admin-login__header h1 {
@@ -241,8 +243,10 @@ html, body {
 }
 
 .admin-sidebar__icon {
-  height: 28px;
+  height: 32px;
+  max-width: 100px;
   width: auto;
+  object-fit: contain;
 }
 
 .admin-sidebar__header span {

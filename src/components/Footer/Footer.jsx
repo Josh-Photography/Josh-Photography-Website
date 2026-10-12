@@ -29,7 +29,12 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">
             {/* Brand Column */}
             <div className="lg:col-span-1">
-              <Link to="/" className="inline-block mb-6">
+              <Link to="/" className="inline-flex items-center gap-3 mb-6 group">
+                <img
+                  src="/LOGO.png"
+                  alt={siteConfig.studioName}
+                  className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                />
                 <h3 className="font-serif text-2xl font-light text-ivory tracking-[0.08em]">
                   {siteConfig.studioName}
                 </h3>

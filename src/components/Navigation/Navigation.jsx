@@ -77,7 +77,7 @@ export function Navigation() {
             whileTap={{ scale: 0.98 }}
           >
             <img 
-              src="/camlogo.png" 
+              src="/LOGO.png" 
               alt={studioInfo.name}
               className="nav__logo-image"
             />
