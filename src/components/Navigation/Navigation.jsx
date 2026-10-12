@@ -77,11 +77,10 @@ export function Navigation() {
             whileTap={{ scale: 0.98 }}
           >
             <img 
-              src="/LOGO.png" 
+              src="/logo.png" 
               alt={studioInfo.name}
               className="nav__logo-image"
             />
-            <span className="nav__logo-text">{studioInfo.name}</span>
           </motion.a>
 
           <nav className="nav__links">

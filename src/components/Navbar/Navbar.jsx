@@ -121,23 +121,19 @@ export default function Navbar() {
           <div className="flex-1 flex items-center justify-start min-w-0">
             <Link
               to="/"
-              className="group flex items-center gap-3 sm:gap-3.5"
+              className="group flex items-center py-1"
               aria-label={`${siteConfig.studioName} - Home`}
             >
               <img
-                src="/LOGO.png"
+                src="/logo.png"
                 alt={siteConfig.studioName}
-                className="h-9 sm:h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-              />
-              <span
-                className={`font-serif text-2xl sm:text-3xl lg:text-[1.85rem] tracking-[0.06em] whitespace-nowrap transition-colors duration-300 font-normal ${
+                className={`h-11 sm:h-14 lg:h-16 w-auto object-contain transition-all duration-300 group-hover:scale-105 ${
                   isLightMode
-                    ? 'text-charcoal'
-                    : 'text-ivory drop-shadow-[0_2px_4px_rgba(0,0,0,0.7)]'
+                    ? 'drop-shadow-[0_1px_3px_rgba(0,0,0,0.12)]'
+                    : 'drop-shadow-[0_2px_8px_rgba(255,255,255,0.45)] drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]'
                 }`}
-              >
-                {siteConfig.studioName}
-              </span>
+              />
+              <span className="sr-only">{siteConfig.studioName}</span>
             </Link>
           </div>
 
@@ -272,17 +268,19 @@ export default function Navbar() {
             className="fixed inset-0 z-[60] bg-ivory flex flex-col"
           >
             {/* Mobile Header Bar */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-[#D8B77A]/30">
-              <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#D8B77A]/30">
+              <Link
+                to="/"
+                onClick={() => setIsMobileOpen(false)}
+                className="flex items-center"
+                aria-label={siteConfig.studioName}
+              >
                 <img
-                  src="/LOGO.png"
+                  src="/logo.png"
                   alt={siteConfig.studioName}
-                  className="h-8 w-auto object-contain"
+                  className="h-10 sm:h-12 w-auto object-contain drop-shadow-[0_1px_3px_rgba(0,0,0,0.15)]"
                 />
-                <span className="font-serif text-2xl text-charcoal font-medium tracking-[0.06em]">
-                  {siteConfig.studioName}
-                </span>
-              </div>
+              </Link>
               <button
                 onClick={() => setIsMobileOpen(false)}
                 className="p-2 text-charcoal hover:text-gold"

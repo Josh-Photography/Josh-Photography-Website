@@ -93,8 +93,7 @@ function Login({ onLogin }) {
         animate={{ opacity: 1, y: 0 }}
       >
         <div className="admin-login__header">
-          <img src="/LOGO.png" alt="Josh Photography" className="admin-login__icon" />
-          <h1>Josh Photography</h1>
+          <img src="/logo.png" alt="Josh Photography" className="admin-login__icon" />
           <p>Admin Panel</p>
         </div>
 
@@ -1410,8 +1409,7 @@ function Dashboard({ token, onLogout }) {
       {/* Sidebar */}
       <aside className="admin-sidebar">
         <div className="admin-sidebar__header">
-          <img src="/LOGO.png" alt="Josh Photography" className="admin-sidebar__icon" />
-          <span>Josh Photography</span>
+          <img src="/logo.png" alt="Josh Photography" className="admin-sidebar__icon" />
         </div>
 
         <nav className="admin-nav">
