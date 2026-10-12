@@ -6,11 +6,14 @@ import { siteConfig } from '../data/siteConfig'
 import { getCategoryBySlug } from '../data/categoriesData'
 import { PhotographyCard } from '../components/common/PhotographyCard'
 import ImageLightbox from '../components/common/ImageLightbox'
+import { useWebsiteData } from '../hooks/useWebsiteData'
 
 export default function Weddings() {
   const [selectedImage, setSelectedImage] = useState(null)
+  const { getCategoryCards } = useWebsiteData()
   const categoryData = getCategoryBySlug('weddings')
-  const cards = categoryData?.cards || []
+  const dynamicCards = getCategoryCards('weddings')
+  const cards = dynamicCards.length > 0 ? dynamicCards : (categoryData?.cards || [])
 
   const lightboxImages = cards.map((c, i) => ({
     id: `wedding-${i}`,

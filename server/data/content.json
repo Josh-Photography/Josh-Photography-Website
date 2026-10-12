@@ -3,177 +3,387 @@
     "name": "Josh Photography",
     "tagline": "Stories Worth Remembering",
     "description": "Crafting visual stories that transcend time. Every frame, a masterpiece.",
-    "founded": 2018,
     "location": "Greater London, United Kingdom",
     "address": "Greater London, United Kingdom",
     "email": "hello@joshphotography.co.uk",
     "phone": "+44 7988 827057",
-    "whatsapp": "+447988827057"
+    "whatsapp": "+447988827057",
+    "openingHours": "Monday – Saturday: 9:00 AM – 6:00 PM | Sunday: By Private Appointment",
+    "announcement": {
+      "badge": "04 — COMING SOON",
+      "title": "Our New Studio Space",
+      "description": "We are delighted to announce that we are preparing to open our dedicated photography studio space next month!",
+      "disclaimer": "Studio Preview Notice: The imagery below represents an illustrative visual concept of our upcoming studio facilities, specialized lighting configurations, and consultation spaces. Actual studio premises photographs will be released upon our grand opening next month. Consultations and commissions are currently available on-location and by private appointment.",
+      "ctaText": "Join Studio Opening Guestlist",
+      "ctaLink": "/contact",
+      "published": true
+    },
+    "previewImages": [
+      {
+        "id": "studio-interior",
+        "title": "Natural Light Studio Space",
+        "subtitle": "Studio Concept · Opening Next Month",
+        "desc": "Spacious, high-ceiling studio area designed for gentle natural light and family comfort.",
+        "src": "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=1000&q=80",
+        "alt": "Illustrative concept of an elegant natural light photography studio interior",
+        "order": 1,
+        "published": true
+      },
+      {
+        "id": "studio-equipment",
+        "title": "Professional Optics & Equipment",
+        "subtitle": "Precision Gear Setup",
+        "desc": "Dual-card full-frame cinema bodies, high-speed prime lenses, and color-calibrated tethering.",
+        "src": "https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?w=1000&q=80",
+        "alt": "Illustrative photography gear setup with professional cameras and prime lenses",
+        "order": 2,
+        "published": true
+      },
+      {
+        "id": "studio-lighting",
+        "title": "Dedicated Portrait Lighting Area",
+        "subtitle": "Sculptural Light Setup",
+        "desc": "Large parabolic softboxes and diffused light modifiers configured for soft, flattering skin tones.",
+        "src": "https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=1000&q=80",
+        "alt": "Illustrative studio portrait lighting equipment and softbox setup",
+        "order": 3,
+        "published": true
+      },
+      {
+        "id": "studio-consultation",
+        "title": "Client Consultation & Lounge",
+        "subtitle": "Welcoming Meeting Space",
+        "desc": "A calm, relaxed space to review heirloom album swatches, screen films, and plan your celebration.",
+        "src": "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1000&q=80",
+        "alt": "Illustrative client consultation and album review lounge space",
+        "order": 4,
+        "published": true
+      }
+    ],
+    "facilities": [
+      "Natural light shooting bay with high ceilings",
+      "Parabolic portrait lighting suite",
+      "Client consultation and album design lounge",
+      "High-speed color-calibrated tethering station"
+    ],
+    "equipment": [
+      "Dual-card full-frame cinema bodies",
+      "High-speed prime lenses (35mm, 50mm, 85mm f/1.2)",
+      "Color-calibrated proofing monitors",
+      "Silent electronic shutter optics for church ceremonies"
+    ]
   },
-  "social": {
-    "instagram": "https://instagram.com/joshphotography.uk",
-    "twitter": "https://twitter.com/joshphoto",
-    "behance": "https://behance.net/joshphoto",
-    "linkedin": "https://linkedin.com/company/joshphotography"
+  "about": {
+    "heroBadge": "BEHIND THE LENS · JOSH PHOTOGRAPHY",
+    "heroTitle": "Preserving the Moments That Make Us Human",
+    "heroDescription": "We believe that photography is an art of quiet observation. It is about being present in the sacred, the joyful, and the tender moments that define a lifetime.",
+    "storyBadge": "01 — OUR STORY",
+    "storyTitle": "Capturing What Cannot Be Replaced",
+    "storyParagraph1": "Josh Photography was founded with a singular conviction: that life’s most precious feelings should never fade with memory. The quiet reverence before wedding vows, the spontaneous burst of laughter during a first birthday cake cutting, the tear on a father’s cheek, and the warmth of hands held over decades.",
+    "storyParagraph2": "We believe that great photography is not about perfection or artificial performance; it is about presence. We observe with quiet reverence and gentle direction, giving couples and families the freedom to be wholly themselves while we capture heirloom imagery they will treasure for a lifetime.",
+    "storyImage": "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=900&q=80",
+    "storyQuote": "Light is fleeting. Emotion is forever.",
+    "stats": [
+      {
+        "value": "450+",
+        "label": "Weddings Captured"
+      },
+      {
+        "value": "1,200+",
+        "label": "Happy Families"
+      },
+      {
+        "value": "1,800+",
+        "label": "Celebrations Covered"
+      },
+      {
+        "value": "20+",
+        "label": "Features & Awards"
+      }
+    ],
+    "photographerBadge": "02 — MEET THE PHOTOGRAPHER",
+    "photographerHeadline": "A Passion for Authentic Storytelling",
+    "photographerName": "Josh",
+    "photographerRole": "Lead Photographer & Founder",
+    "photographerImage": "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=900&q=80",
+    "photographerBio1": "Hello, I am Josh. As a photographer, my goal is simple: to document your most meaningful milestones so faithfully that every time you revisit your photographs, you are instantly transported back to how the moment truly felt.",
+    "photographerBio2": "My approach combines quiet photojournalism with refined, editorial portraiture. Whether documenting a sacred church ceremony in the English countryside, a historic countryside manor celebration, or a joyful family garden gathering, I bring patience, warmth, and keen observation to every commission.",
+    "photographerQuote": "I don't just photograph what things look like — I photograph what they feel like. Your family's unique laughter, sacred vows, and candid joys deserve to be captured with dignity and timeless care.",
+    "pillars": [
+      {
+        "title": "Emotional Authenticity",
+        "desc": "We never force artificial poses or stiff smiles. The truest beauty lives in honest tears, spontaneous laughter, and quiet glances between loved ones."
+      },
+      {
+        "title": "Unobtrusive Documentary Approach",
+        "desc": "We blend seamlessly into your wedding or family celebration, capturing the natural rhythm of your day without interrupting sacred rituals."
+      },
+      {
+        "title": "Timeless Warmth & Elegant Composition",
+        "desc": "Every image is individually color-graded with rich, organic tones that honor true skin tones and fabric textures without fading trends."
+      },
+      {
+        "title": "Archival Heirloom Longevity",
+        "desc": "We design our photographs and handcrafted albums to outlive generations. Fifty years from now, your family will look at these frames with awe."
+      }
+    ],
+    "faqs": [
+      {
+        "q": "How far in advance should we inquire for dates?",
+        "a": "We recommend inquiring 6 to 12 months in advance for peak UK wedding dates and weekend celebrations. For newborn, family, and birthday sessions, 3 to 6 weeks notice is ideal."
+      },
+      {
+        "q": "Which areas do you cover for commissions?",
+        "a": "We regularly photograph weddings and celebrations across regional venues, private countryside estates, and select destination commissions."
+      },
+      {
+        "q": "When will our photography gallery be delivered?",
+        "a": "You will receive a curated preview of 25–30 hand-graded highlight frames within 48 to 72 hours of your celebration. Your full, high-resolution digital gallery is delivered within 3 to 4 weeks."
+      },
+      {
+        "q": "Can we visit your studio for an in-person consultation?",
+        "a": "Our new dedicated studio premises will be officially opening next month! In the meantime, we are delighted to meet with couples and families virtually or by private appointment to review portfolio collections and discuss your plans."
+      }
+    ]
   },
-  "mission": "At Josh Photography, we believe photography is more than capturing images—it's about freezing emotions, preserving stories, and creating art that resonates across generations. Our passion lies in the details: the subtle glance, the fleeting smile, the perfect light. We blend technical mastery with artistic vision to deliver photographs that aren't just seen, but felt.",
-  "stats": [
+  "heroSlides": [
     {
-      "value": 750,
-      "suffix": "+",
-      "label": "Projects Completed"
+      "id": 1,
+      "shortName": "Weddings",
+      "category": "Wedding Photography",
+      "badge": "01 / 12 — THE SACRED COVENANT",
+      "image": "/images/hero-church-wedding.jpg",
+      "title": "Sacred Church Vows",
+      "subtitle": "Timeless British Weddings Chronicled with Quiet Reverence & Artistry",
+      "alt": "Traditional British church wedding ceremony with bride and groom at the altar",
+      "explorePath": "/weddings",
+      "exploreText": "Explore Wedding Photography",
+      "order": 1,
+      "published": true
     },
     {
-      "value": 500,
-      "suffix": "+",
-      "label": "Happy Clients"
+      "id": 2,
+      "shortName": "Birthdays",
+      "category": "Birthday Celebrations",
+      "badge": "02 / 12 — JOYFUL MILESTONES",
+      "image": "/images/birthday_01.png",
+      "title": "Unscripted Laughter & Cake",
+      "subtitle": "From First Milestones to Grand Jubilees, Every Wonder Documented",
+      "alt": "Joyful birthday celebration with children, glowing candles, balloons, and cake",
+      "explorePath": "/birthday-photography",
+      "exploreText": "Explore Birthday Celebrations",
+      "order": 2,
+      "published": true
     },
     {
-      "value": 15,
-      "suffix": "",
-      "label": "Awards Won"
+      "id": 3,
+      "shortName": "Pre-Wedding",
+      "category": "Pre-Wedding Photography",
+      "badge": "03 / 12 — INTIMATE PRELUDES",
+      "image": "/images/pre-wedding-img-1.jpg",
+      "title": "Cinematic Love Stories",
+      "subtitle": "Editorial Newlywed Preludes Captured Across English Countryside Estates",
+      "alt": "Couple enjoying intimate romantic golden hour moments across country estate",
+      "explorePath": "/pre-wedding",
+      "exploreText": "Explore Pre-Wedding",
+      "order": 3,
+      "published": true
     },
     {
-      "value": 25,
-      "suffix": "+",
-      "label": "Countries Served"
+      "id": 4,
+      "shortName": "Family",
+      "category": "Family Photography",
+      "badge": "04 / 12 — GENERATIONS TOGETHER",
+      "image": "/images/family-photography-img-5.jpg",
+      "title": "Authentic Family Bonds",
+      "subtitle": "Documenting Heartfelt Connections & Quiet Joy Across Generations",
+      "alt": "Happy family gathered outdoors in golden evening light",
+      "explorePath": "/family",
+      "exploreText": "Explore Family Photography",
+      "order": 4,
+      "published": true
     }
   ],
   "services": [
     {
       "id": 1,
-      "title": "Wedding Photograph",
-      "description": "Capturing your love story with cinematic elegance. Every moment, every emotion, preserved forever.",
-      "icon": "wedding",
-      "features": [
-        "Full Day Coverage",
-        "Engagement Session",
-        "Premium Album",
-        "Highlight Film"
-      ]
+      "num": "01",
+      "title": "Wedding Photography",
+      "quote": "Every ritual, every glance, every unrepeatable emotion.",
+      "desc": "Full-day documentary coverage of sacred wedding celebrations. From historic British church ceremonies and cathedral aisles to countryside manor receptions, intimate couple portraits, and authentic family tears of joy.",
+      "image": "/images/hero-church-wedding.jpg",
+      "alt": "Traditional British church wedding ceremony with floral arch at altar",
+      "path": "/weddings",
+      "ctaText": "EXPLORE WEDDING STORIES",
+      "order": 1,
+      "published": true
     },
     {
       "id": 2,
-      "title": "Portrait Sessions",
-      "description": "Revealing your authentic beauty through artistic vision and masterful lighting.",
-      "icon": "portrait",
-      "features": [
-        "Professional Studio",
-        "Multiple Looks",
-        "Retouching Included",
-        "Digital Gallery"
-      ]
+      "num": "02",
+      "title": "Birthday Celebrations",
+      "quote": "Every birthday has a story — far beyond the cake cutting.",
+      "desc": "From milestone first birthdays to energetic themed parties, we document the anticipation, bespoke stage decor, joyous games, family embraces, and the quiet moments in between.",
+      "image": "/images/birthday_01.png",
+      "alt": "Joyful birthday celebration with children, glowing candles, balloons, and cake",
+      "path": "/birthday-photography",
+      "ctaText": "EXPLORE BIRTHDAY STORIES",
+      "order": 2,
+      "published": true
     },
     {
       "id": 3,
-      "title": "Commercial Projects",
-      "description": "Elevating brands with stunning imagery that speaks volumes and drives results.",
-      "icon": "commercial",
-      "features": [
-        "Product Photography",
-        "Brand Campaigns",
-        "Lifestyle Shoots",
-        "Social Content"
-      ]
+      "num": "03",
+      "title": "Maternity Photography",
+      "quote": "Carrying life, radiating grace, embracing tomorrow.",
+      "desc": "Gentle, empowering fine-art maternity sessions celebrating the profound beauty of motherhood. Conducted either on-location in tranquil natural light or in private comfort.",
+      "image": "/images/maternity-img-3.jpg",
+      "alt": "Serene expectant mother in flowing ivory gown bathed in warm afternoon sunlight",
+      "path": "/maternity",
+      "ctaText": "EXPLORE MATERNITY STORIES",
+      "order": 3,
+      "published": true
     },
     {
       "id": 4,
-      "title": "Event Coverage",
-      "description": "Documenting special occasions with discretion and an eye for unforgettable moments.",
-      "icon": "event",
-      "features": [
-        "Corporate Events",
-        "Private Parties",
-        "Same-Day Edits",
-        "Photo Booth"
-      ]
+      "num": "04",
+      "title": "Family & Heirloom Portraits",
+      "quote": "A legacy of connection, preserved across generations.",
+      "desc": "Thoughtful, unscripted family portraiture capturing genuine interaction, warm laughter, and the distinctive personalities of children and parents alike.",
+      "image": "/images/family-photography-img-5.jpg",
+      "alt": "Happy family embracing outdoors in gentle natural lighting",
+      "path": "/family",
+      "ctaText": "EXPLORE FAMILY STORIES",
+      "order": 4,
+      "published": true
     }
   ],
   "testimonials": [
     {
       "id": 1,
-      "name": "Sarah Johnson",
-      "role": "Bride",
-      "content": "Fused Lens Studio captured our wedding day perfectly. Every photo tells a story, and we couldn't be happier with the results.",
+      "name": "Eleanor & James",
+      "event": "Church Wedding",
+      "location": "Church & Countryside Manor",
       "rating": 5,
-      "image": "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&q=90"
+      "review": "Josh documented our church ceremony and manor reception with such breathtaking sensitivity. Looking through the gallery feels like reliving every vow, every tear, and every burst of laughter with our family.",
+      "image": "/images/church-wedding-ceremony.jpg",
+      "order": 1,
+      "published": true
     },
     {
       "id": 2,
-      "name": "Michael Chen",
-      "role": "Corporate Client",
-      "content": "Professional, creative, and reliable. Their commercial photography exceeded our expectations for our brand campaign.",
+      "name": "Eleanor & Oliver",
+      "event": "Church Wedding & Countryside Reception",
+      "location": "Cathedral & Country Estate",
       "rating": 5,
-      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=90"
+      "review": "Finding a photographer who understands both fine-art aesthetics and the quiet reverence of a traditional church ceremony was essential. Josh and his team captured every holy moment and candid glance flawlessly.",
+      "image": "/images/church-wedding-ceremony.jpg",
+      "order": 2,
+      "published": true
     },
     {
       "id": 3,
-      "name": "Emma Rodriguez",
-      "role": "Portrait Client",
-      "content": "The attention to detail and artistic vision is incredible. My portraits are absolutely stunning.",
+      "name": "Charlotte & Family",
+      "event": "First Birthday & Cake Smash",
+      "location": "First Milestone Celebration",
       "rating": 5,
-      "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&q=90"
-    }
-  ],
-  "heroSlides": [
-    {
-      "id": 1,
-      "image": "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=1920&q=90",
-      "title": "Timeless",
-      "subtitle": "Memories"
-    },
-    {
-      "id": 2,
-      "image": "https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=90",
-      "title": "Your Story",
-      "subtitle": "Beautifully Told"
-    },
-    {
-      "id": 3,
-      "image": "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=1920&q=90",
-      "title": "Every Frame",
-      "subtitle": "A Masterpiece"
+      "review": "They captured our son’s first birthday with such patience. Not just the cake cutting, but the grandparents laughing, cousins playing on the lawn, and the little expressions we never want to forget.",
+      "image": "/images/birthday_01.png",
+      "order": 3,
+      "published": true
     },
     {
       "id": 4,
-      "image": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1920&q=90",
-      "title": "Love",
-      "subtitle": "Captured Forever"
+      "name": "David & Margaret",
+      "event": "30th Pearl Anniversary",
+      "location": "Anniversary Gathering",
+      "rating": 5,
+      "review": "Our children organized a surprise anniversary lunch and booked Josh to photograph it. The multi-generational family portraits and candid moments now hold pride of place in our home.",
+      "image": "/images/Anniversary-img-2.jpg",
+      "order": 4,
+      "published": true
+    },
+    {
+      "id": 5,
+      "name": "Harrison & Victoria",
+      "event": "Countryside Manor Wedding",
+      "location": "Cotswolds Estate, UK",
+      "rating": 5,
+      "review": "From our morning preparations to the candlelight sparkler exit, Josh captured every fleeting glance and emotion with sheer editorial mastery. The gallery brought our entire family to tears.",
+      "image": "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80",
+      "order": 5,
+      "published": true
     }
   ],
   "collaborators": [
     {
       "id": 1,
-      "name": "Jane Doe",
-      "role": "Lead Photographer",
-      "bio": "With over 10 years of experience, Jane specializes in wedding and portrait photography.",
-      "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=90",
+      "name": "Josh",
+      "role": "Lead Photographer & Founder",
+      "bio": "Over a decade documenting luxury weddings, candid celebrations, and multi-generational heirloom portraits across the United Kingdom.",
+      "image": "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=900&q=80",
       "social": {
-        "instagram": "https://instagram.com/janedoe",
-        "linkedin": "https://linkedin.com/in/janedoe"
-      }
+        "instagram": "https://instagram.com/joshphotography.uk",
+        "whatsapp": "+447988827057"
+      },
+      "order": 1,
+      "published": true
     },
     {
       "id": 2,
-      "name": "John Smith",
-      "role": "Video Specialist",
-      "bio": "John brings stories to life through cinematic videography and editing.",
-      "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=90",
+      "name": "Elena Vance",
+      "role": "Associate Photographer & Lighting Specialist",
+      "bio": "Specialist in candid photojournalism, multi-angle ceremony coverage, and soft ambient light portraits.",
+      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=85",
       "social": {
-        "instagram": "https://instagram.com/johnsmith",
-        "behance": "https://behance.net/johnsmith"
-      }
+        "instagram": "https://instagram.com/joshphotography.uk"
+      },
+      "order": 2,
+      "published": true
     }
   ],
-  "about": {
-    "title": "About Josh Photography",
-    "content": "Founded in 2018, Josh Photography has been at the forefront of creative photography, blending traditional techniques with modern innovation. Our team works tirelessly to capture the essence of every moment, creating timeless memories that last a lifetime.",
-    "story": "What started as a small passion project has grown into a full-service creative studio serving clients across the United Kingdom and beyond. We believe in the power of visual storytelling and the impact it has on connecting people, preserving memories, and building brands.",
-    "values": [
-      "Excellence in every frame",
-      "Authentic storytelling",
-      "Client-centered approach",
-      "Continuous innovation"
-    ]
+  "social": {
+    "instagram": {
+      "url": "https://instagram.com/joshphotography.uk",
+      "name": "Instagram",
+      "enabled": true
+    },
+    "facebook": {
+      "url": "https://facebook.com/joshphotography.uk",
+      "name": "Facebook",
+      "enabled": true
+    },
+    "youtube": {
+      "url": "https://youtube.com/@joshphotography",
+      "name": "YouTube",
+      "enabled": true
+    },
+    "pinterest": {
+      "url": "https://pinterest.com/joshphotography",
+      "name": "Pinterest",
+      "enabled": true
+    },
+    "linkedin": {
+      "url": "https://linkedin.com/company/joshphotography",
+      "name": "LinkedIn",
+      "enabled": true
+    },
+    "whatsapp": {
+      "url": "https://wa.me/447988827057",
+      "name": "WhatsApp",
+      "enabled": true
+    }
+  },
+  "settings": {
+    "siteName": "Josh Photography",
+    "tagline": "Luxury Wedding & Celebration Photography",
+    "logo": "/logo.png",
+    "logoBlack": "/logo-black.png",
+    "ctaButtonText": "Check Availability",
+    "ctaButtonLink": "/check-availability",
+    "copyrightText": "© 2026 Josh Photography. All rights reserved.",
+    "footerDescription": "Josh Photography is an editorial wedding, celebration, and family photography studio serving London and the United Kingdom. We preserve the emotions, the laughter, and the quiet moments that make your celebrations unforgettable.",
+    "seoDefaultTitle": "Josh Photography | Luxury Wedding & Celebration Photography",
+    "seoDescription": "Josh Photography — Elegant, warm, and cinematic wedding and celebration photography in the United Kingdom."
   }
 }

@@ -20,8 +20,6 @@ const DARK_HERO_ROUTES = [
   '/mothers-day',
   '/fathers-day',
   '/portfolio',
-  '/photography',
-  '/services',
   '/films',
   '/testimonials',
   '/about',
@@ -32,7 +30,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState(null)
-  const [mobileExpanded, setMobileExpanded] = useState({ '/celebrations': false, '/portfolio': false, '/photography': false })
+  const [mobileExpanded, setMobileExpanded] = useState({ '/celebrations': false, '/portfolio': false })
   const location = useLocation()
   const navContainerRef = useRef(null)
 
@@ -109,11 +107,10 @@ export default function Navbar() {
         style={{
           backgroundColor: isLightMode ? '#F8F3EA' : undefined,
         }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ease-luxury ${
-          isLightMode
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ease-luxury ${isLightMode
             ? 'bg-ivory border-b border-[#D8B77A]/35 shadow-[0_4px_24px_rgba(41,37,34,0.06)] py-4'
             : 'bg-gradient-to-b from-[#181310]/90 via-[#181310]/40 to-transparent py-5'
-        }`}
+          }`}
       >
         <div
           ref={navContainerRef}
@@ -132,11 +129,10 @@ export default function Navbar() {
                 className="h-8 sm:h-9 lg:h-8 xl:h-9 2xl:h-10 w-auto object-contain transition-all duration-300 group-hover:scale-105"
               />
               <span
-                className={`font-serif text-lg sm:text-xl lg:text-[1.2rem] xl:text-[1.42rem] 2xl:text-[1.6rem] tracking-[0.06em] sm:tracking-[0.08em] uppercase whitespace-nowrap transition-colors duration-300 font-normal ${
-                  isLightMode
+                className={`font-serif text-lg sm:text-xl lg:text-[1.2rem] xl:text-[1.42rem] 2xl:text-[1.6rem] tracking-[0.06em] sm:tracking-[0.08em] uppercase whitespace-nowrap transition-colors duration-300 font-normal ${isLightMode
                     ? 'text-charcoal'
                     : 'text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'
-                }`}
+                  }`}
               >
                 JOSH PHOTOGRAPHY
               </span>
@@ -166,35 +162,32 @@ export default function Navbar() {
                       onClick={() => setActiveDropdown(null)}
                       aria-expanded={isOpen}
                       aria-haspopup="true"
-                      className={`px-2 py-1.5 lg:px-2.5 xl:px-3.5 xl:py-2 font-nav text-[12px] xl:text-[13.5px] uppercase tracking-[0.08em] xl:tracking-[0.14em] transition-all duration-300 flex items-center gap-1 xl:gap-1.5 cursor-pointer rounded-sm whitespace-nowrap ${
-                        isOpen || isActive(item.path)
+                      className={`px-2 py-1.5 lg:px-2.5 xl:px-3.5 xl:py-2 font-nav text-[12px] xl:text-[13.5px] uppercase tracking-[0.08em] xl:tracking-[0.14em] transition-all duration-300 flex items-center gap-1 xl:gap-1.5 cursor-pointer rounded-sm whitespace-nowrap ${isOpen || isActive(item.path)
                           ? isLightMode
                             ? 'text-gold font-bold'
                             : 'text-[#E5BA78] font-bold drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
                           : isLightMode
                             ? 'text-charcoal font-semibold hover:text-gold'
                             : 'text-ivory font-medium hover:text-[#E5BA78] drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
-                      }`}
+                        }`}
                     >
                       <span>{item.label}</span>
                       <ChevronDown
-                        className={`w-3.5 h-3.5 transition-transform duration-300 ${
-                          isOpen ? 'rotate-180 text-gold' : 'opacity-80'
-                        }`}
+                        className={`w-3.5 h-3.5 transition-transform duration-300 ${isOpen ? 'rotate-180 text-gold' : 'opacity-80'
+                          }`}
                       />
                     </Link>
                   ) : (
                     <Link
                       to={item.path}
-                      className={`px-2 py-1.5 lg:px-2.5 xl:px-3.5 xl:py-2 font-nav text-[12px] xl:text-[13.5px] uppercase tracking-[0.08em] xl:tracking-[0.14em] transition-all duration-300 flex items-center gap-1 rounded-sm whitespace-nowrap ${
-                        isActive(item.path)
+                      className={`px-2 py-1.5 lg:px-2.5 xl:px-3.5 xl:py-2 font-nav text-[12px] xl:text-[13.5px] uppercase tracking-[0.08em] xl:tracking-[0.14em] transition-all duration-300 flex items-center gap-1 rounded-sm whitespace-nowrap ${isActive(item.path)
                           ? isLightMode
                             ? 'text-gold font-bold'
                             : 'text-[#E5BA78] font-bold drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
                           : isLightMode
                             ? 'text-charcoal font-semibold hover:text-gold'
                             : 'text-ivory font-medium hover:text-[#E5BA78] drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
-                      }`}
+                        }`}
                     >
                       <span>{item.label}</span>
                     </Link>
@@ -216,11 +209,10 @@ export default function Navbar() {
                             key={child.path}
                             to={child.path}
                             onClick={() => setActiveDropdown(null)}
-                            className={`flex items-center justify-between px-5 py-3 font-nav text-[14px] tracking-[0.04em] font-medium transition-all duration-200 border-l-2 group ${
-                              isActive(child.path)
+                            className={`flex items-center justify-between px-5 py-3 font-nav text-[14px] tracking-[0.04em] font-medium transition-all duration-200 border-l-2 group ${isActive(child.path)
                                 ? 'border-gold text-gold bg-[#F3ECE0]'
                                 : 'border-transparent text-charcoal/90 hover:text-charcoal hover:bg-[#F3ECE0] hover:border-gold/80 hover:pl-6'
-                            }`}
+                              }`}
                           >
                             <span>{child.label}</span>
                             <ChevronDown className="w-3.5 h-3.5 -rotate-90 opacity-0 group-hover:opacity-100 transition-opacity text-gold shrink-0 ml-2" />
@@ -238,11 +230,10 @@ export default function Navbar() {
           <div className="flex-shrink-0 flex items-center justify-end gap-2">
             <Link
               to="/check-availability"
-              className={`hidden lg:inline-flex items-center justify-center whitespace-nowrap px-3.5 py-1.5 lg:px-4 lg:py-2 xl:px-6 xl:py-2.5 font-nav text-[11px] lg:text-[12px] xl:text-[13px] uppercase tracking-[0.1em] lg:tracking-[0.14em] xl:tracking-[0.16em] font-semibold transition-all duration-300 border shadow-sm rounded-sm ${
-                isLightMode
+              className={`hidden lg:inline-flex items-center justify-center whitespace-nowrap px-3.5 py-1.5 lg:px-4 lg:py-2 xl:px-6 xl:py-2.5 font-nav text-[11px] lg:text-[12px] xl:text-[13px] uppercase tracking-[0.1em] lg:tracking-[0.14em] xl:tracking-[0.16em] font-semibold transition-all duration-300 border shadow-sm rounded-sm ${isLightMode
                   ? 'border-[#292522] text-[#292522] hover:bg-[#292522] hover:text-[#FAF6EE]'
                   : 'border-[#E5BA78] text-[#E5BA78] hover:bg-[#E5BA78] hover:text-[#1A1715] backdrop-blur-sm bg-black/25'
-              }`}
+                }`}
             >
               Check Availability
             </Link>
@@ -250,9 +241,8 @@ export default function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileOpen(!isMobileOpen)}
-              className={`lg:hidden p-2.5 transition-colors duration-300 rounded ${
-                isLightMode ? 'text-charcoal' : 'text-ivory'
-              }`}
+              className={`lg:hidden p-2.5 transition-colors duration-300 rounded ${isLightMode ? 'text-charcoal' : 'text-ivory'
+                }`}
               aria-label={isMobileOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isMobileOpen}
             >
@@ -308,9 +298,8 @@ export default function Navbar() {
                           <Link
                             to={item.path}
                             onClick={() => setIsMobileOpen(false)}
-                            className={`font-serif text-2xl font-light tracking-wide transition-colors ${
-                              isActive(item.path) ? 'text-gold font-medium' : 'text-charcoal hover:text-gold'
-                            }`}
+                            className={`font-serif text-2xl font-light tracking-wide transition-colors ${isActive(item.path) ? 'text-gold font-medium' : 'text-charcoal hover:text-gold'
+                              }`}
                           >
                             {item.label}
                           </Link>
@@ -327,9 +316,8 @@ export default function Navbar() {
                             aria-label={`Toggle ${item.label} submenu`}
                           >
                             <ChevronDown
-                              className={`w-5 h-5 transition-transform duration-300 ${
-                                isExpanded ? 'rotate-180 text-gold' : ''
-                              }`}
+                              className={`w-5 h-5 transition-transform duration-300 ${isExpanded ? 'rotate-180 text-gold' : ''
+                                }`}
                             />
                           </button>
                         </div>
@@ -348,8 +336,8 @@ export default function Navbar() {
                                   to={child.path}
                                   onClick={() => setIsMobileOpen(false)}
                                   className={`block font-nav text-[13.5px] tracking-wider py-2 transition-colors ${isActive(child.path)
-                                      ? 'text-gold font-semibold'
-                                      : 'text-charcoal/85 hover:text-charcoal'
+                                    ? 'text-gold font-semibold'
+                                    : 'text-charcoal/85 hover:text-charcoal'
                                     }`}
                                 >
                                   {child.label}
@@ -364,8 +352,8 @@ export default function Navbar() {
                         to={item.path}
                         onClick={() => setIsMobileOpen(false)}
                         className={`block font-serif text-2xl font-light tracking-wide transition-colors py-1 ${isActive(item.path)
-                            ? 'text-gold font-medium'
-                            : 'text-charcoal hover:text-gold'
+                          ? 'text-gold font-medium'
+                          : 'text-charcoal hover:text-gold'
                           }`}
                       >
                         {item.label}

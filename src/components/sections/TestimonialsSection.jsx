@@ -1,27 +1,34 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Star, ChevronLeft, ChevronRight, Quote } from 'lucide-react'
-import { testimonials } from '../../data/testimonials'
+import { testimonials as fallbackTestimonials } from '../../data/testimonials'
+import { useWebsiteData } from '../../hooks/useWebsiteData'
 
 export default function TestimonialsSection() {
+  const { testimonials: dynamicTestimonials } = useWebsiteData()
+  const list = (dynamicTestimonials && dynamicTestimonials.length > 0) ? dynamicTestimonials : fallbackTestimonials
   const [current, setCurrent] = useState(0)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
 
+  // Ensure current index is within bounds
+  const safeCurrent = current >= list.length ? 0 : current
+
   const next = useCallback(() => {
-    setCurrent((prev) => (prev + 1) % testimonials.length)
-  }, [])
+    setCurrent((prev) => (prev + 1) % list.length)
+  }, [list.length])
 
   const prev = useCallback(() => {
-    setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length)
-  }, [])
+    setCurrent((prev) => (prev - 1 + list.length) % list.length)
+  }, [list.length])
 
   useEffect(() => {
+    if (list.length <= 1) return
     const timer = setInterval(next, 5000)
     return () => clearInterval(timer)
-  }, [next])
+  }, [next, list.length])
 
-  const testimonial = testimonials[current]
+  const testimonial = list[safeCurrent] || list[0]
 
   return (
     <section

@@ -2,11 +2,14 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, ArrowRight, Sparkles } from 'lucide-react'
-import { heroSlides } from '../../data/stories'
+import { heroSlides as staticHeroSlides } from '../../data/stories'
+import { useWebsiteData } from '../../hooks/useWebsiteData'
 
 const SLIDE_DURATION = 4500 // Automatically changes every 4.5 seconds
 
 export default function Hero() {
+  const { heroSlides: dynamicSlides } = useWebsiteData()
+  const heroSlides = dynamicSlides && dynamicSlides.length > 0 ? dynamicSlides : staticHeroSlides
   const [current, setCurrent] = useState(0)
   const touchStartX = useRef(null)
 

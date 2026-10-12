@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Star, Quote, Sparkles, Heart, MessageSquare, ArrowRight, Calendar, CheckCircle2 } from 'lucide-react'
-import { testimonials } from '../data/testimonials'
+import { testimonials as fallbackTestimonials } from '../data/testimonials'
+import { useWebsiteData } from '../hooks/useWebsiteData'
 
 const additionalTestimonials = [
   {
@@ -40,10 +41,13 @@ const additionalTestimonials = [
   },
 ]
 
-const allTestimonialsList = [...testimonials, ...additionalTestimonials]
+const fallbackAll = [...fallbackTestimonials, ...additionalTestimonials]
 
 export default function TestimonialsPage() {
-  const filteredTestimonials = allTestimonialsList
+  const { testimonials: dynamicTestimonials } = useWebsiteData()
+  const filteredTestimonials = (dynamicTestimonials && dynamicTestimonials.length > 0)
+    ? dynamicTestimonials
+    : fallbackAll
 
   return (
     <div className="bg-[#F8F3EA] min-h-screen">

@@ -6,6 +6,7 @@ import { siteConfig } from '../../data/siteConfig'
 import { getCategoryBySlug } from '../../data/categoriesData'
 import { PhotographyCard } from './PhotographyCard'
 import ImageLightbox from './ImageLightbox'
+import { useWebsiteData } from '../../hooks/useWebsiteData'
 
 export default function CategoryTemplate({
   categoryId,
@@ -19,10 +20,12 @@ export default function CategoryTemplate({
   quoteImage,
 }) {
   const [selectedImage, setSelectedImage] = useState(null)
+  const { getCategoryCards } = useWebsiteData()
 
-  // Retrieve rich card data from categoriesData
+  // Retrieve dynamic cards from CMS / database, fallback to categoriesData
   const categoryData = getCategoryBySlug(categoryId)
-  const categoryCards = categoryData?.cards || []
+  const dynamicCards = getCategoryCards(categoryId)
+  const categoryCards = dynamicCards.length > 0 ? dynamicCards : (categoryData?.cards || [])
 
   const heroImg = categoryData?.heroImage || quoteImage || '/images/hero-church-wedding.jpg'
 

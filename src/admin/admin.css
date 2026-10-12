@@ -1013,3 +1013,316 @@ html, body {
     padding: 1rem;
   }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Enhanced CMS Styles: Toolbar, Filters, Modals, Uploader & Portfolio Grid
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius);
+}
+
+.admin-toolbar__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-search-input {
+  min-width: 240px;
+  padding: 0.65rem 1rem;
+  background: var(--admin-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 6px;
+  color: var(--admin-text);
+  font-size: 0.875rem;
+}
+
+.admin-search-input:focus {
+  outline: none;
+  border-color: var(--admin-accent);
+}
+
+.admin-sort-select {
+  padding: 0.65rem 1rem;
+  background: var(--admin-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 6px;
+  color: var(--admin-text);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+/* Pill category filters */
+.admin-pill-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-pill {
+  padding: 0.4rem 0.85rem;
+  background: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  border-radius: 20px;
+  color: var(--admin-text-muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.admin-pill:hover {
+  border-color: var(--admin-accent);
+  color: var(--admin-text);
+}
+
+.admin-pill--active {
+  background: var(--admin-accent);
+  color: #1a1a1a;
+  border-color: var(--admin-accent);
+  font-weight: 600;
+}
+
+/* Upload zone */
+.admin-upload-zone {
+  border: 2px dashed var(--admin-border);
+  border-radius: var(--admin-radius);
+  padding: 2rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.2s;
+  cursor: pointer;
+  position: relative;
+}
+
+.admin-upload-zone:hover {
+  border-color: var(--admin-accent);
+  background: rgba(201, 169, 98, 0.04);
+}
+
+.admin-upload-zone input[type="file"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.admin-upload-zone__icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.admin-upload-zone__title {
+  font-size: 0.95rem;
+  color: var(--admin-text);
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.admin-upload-zone__subtitle {
+  font-size: 0.8rem;
+  color: var(--admin-text-muted);
+}
+
+/* Portfolio Card Grid */
+.admin-portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.admin-portfolio-card {
+  background: var(--admin-card);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.admin-portfolio-card:hover {
+  border-color: rgba(201, 169, 98, 0.5);
+}
+
+.admin-portfolio-card__img-wrap {
+  aspect-ratio: 16/10;
+  width: 100%;
+  background: #111;
+  overflow: hidden;
+  position: relative;
+}
+
+.admin-portfolio-card__img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-portfolio-card__badges {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.admin-badge {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-badge--published {
+  background: rgba(74, 222, 128, 0.9);
+  color: #052e16;
+}
+
+.admin-badge--draft {
+  background: rgba(248, 113, 113, 0.9);
+  color: #450a0a;
+}
+
+.admin-badge--cat {
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--admin-accent);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(201, 169, 98, 0.4);
+}
+
+.admin-portfolio-card__body {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.admin-portfolio-card__num {
+  font-size: 0.8rem;
+  color: var(--admin-accent);
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.admin-portfolio-card__title {
+  font-size: 1rem;
+  color: var(--admin-text);
+  margin: 0 0 0.4rem;
+  font-weight: 500;
+}
+
+.admin-portfolio-card__desc {
+  font-size: 0.8rem;
+  color: var(--admin-text-muted);
+  line-height: 1.4;
+  margin: 0 0 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.admin-portfolio-card__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--admin-border);
+  gap: 0.5rem;
+}
+
+/* Modals */
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.admin-modal {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--admin-radius);
+  max-width: 650px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+}
+
+.admin-modal__header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--admin-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-modal__header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--admin-text);
+}
+
+.admin-modal__close {
+  background: none;
+  border: none;
+  color: var(--admin-text-muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.admin-modal__close:hover {
+  color: var(--admin-text);
+}
+
+.admin-modal__body {
+  padding: 1.5rem;
+}
+
+.admin-modal__footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--admin-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.admin-nav__badge {
+  background: var(--admin-accent);
+  color: #1a1a1a;
+  border-radius: 10px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-left: auto;
+}

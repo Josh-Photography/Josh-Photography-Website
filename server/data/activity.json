@@ -1,0 +1,44 @@
+[
+  {
+    "id": "act-1791839323729",
+    "action": "Deleted photo \"Test Cathedral Wedding Vows\" from weddings",
+    "user": "Admin",
+    "timestamp": "2026-10-12T21:08:43.729Z"
+  },
+  {
+    "id": "act-1791839323721",
+    "action": "Unpublished photo \"Test Cathedral Wedding Vows\"",
+    "user": "Admin",
+    "timestamp": "2026-10-12T21:08:43.721Z"
+  },
+  {
+    "id": "act-1791839323708",
+    "action": "Uploaded 1 photograph(s) to weddings",
+    "user": "Admin",
+    "timestamp": "2026-10-12T21:08:43.708Z"
+  },
+  {
+    "id": "act-1791839310347",
+    "action": "New inquiry received from Sarah & Thomas (Wedding Ceremony & Reception)",
+    "user": "System",
+    "timestamp": "2026-10-12T21:08:30.347Z"
+  },
+  {
+    "id": "act-1",
+    "action": "System initialized: Dynamic Josh Photography CMS",
+    "user": "Admin",
+    "timestamp": "2026-10-12T20:48:19.972Z"
+  },
+  {
+    "id": "act-2",
+    "action": "Seeded 72 portfolio photographs across all 12 photography collections",
+    "user": "Admin",
+    "timestamp": "2026-10-12T19:48:19.972Z"
+  },
+  {
+    "id": "act-3",
+    "action": "Studio announcement and preview spaces configured",
+    "user": "Admin",
+    "timestamp": "2026-10-12T18:48:19.972Z"
+  }
+]

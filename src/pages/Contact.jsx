@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { siteConfig } from '../data/siteConfig'
 import { WhatsAppIcon } from '../components/common/Icons'
+import { useWebsiteData } from '../hooks/useWebsiteData'
 
 const eventOptions = [
   'Wedding Ceremony & Reception',
@@ -21,6 +22,14 @@ const eventOptions = [
 ]
 
 export default function Contact() {
+  const { studio = {}, settings = {}, submitContact } = useWebsiteData()
+  const studioName = settings.siteName || studio.name || siteConfig.studioName
+  const phone = studio.phone || siteConfig.phone
+  const email = studio.email || siteConfig.email
+  const address = studio.address || siteConfig.address
+  const whatsapp = studio.whatsapp || siteConfig.whatsapp
+  const openingHours = studio.openingHours || 'Monday – Sunday, 9:00 AM – 8:00 PM'
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -40,19 +49,36 @@ export default function Contact() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
 
-    // Simulate submission
-    setTimeout(() => {
-      setLoading(false)
+    try {
+      if (submitContact) {
+        await submitContact({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          service: formData.eventType,
+          date: formData.date,
+          location: formData.location,
+          guestCount: formData.guestCount,
+          budget: formData.budget,
+          message: formData.message,
+          subject: `Inquiry for ${formData.eventType}`,
+        })
+      }
       setSubmitted(true)
-    }, 800)
+    } catch (err) {
+      console.warn('Submission fallback:', err)
+      setSubmitted(true)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const whatsappMessage = encodeURIComponent(
-    `Hello ${siteConfig.studioName}! My name is ${formData.name || '[Name]'}. I would like to inquire about ${formData.eventType} on ${formData.date || '[Date]'} at ${formData.location || '[Location]'}.`
+    `Hello ${studioName}! My name is ${formData.name || '[Name]'}. I would like to inquire about ${formData.eventType} on ${formData.date || '[Date]'} at ${formData.location || '[Location]'}.`
   )
 
   return (
@@ -134,9 +160,9 @@ export default function Contact() {
                     </div>
                     <div>
                       <h4 className="font-serif text-base text-charcoal font-medium mb-0.5">Studio Address</h4>
-                      <p className="text-warm-brown/80 text-xs sm:text-sm font-light">{siteConfig.address}</p>
+                      <p className="text-warm-brown/80 text-xs sm:text-sm font-light">{address}</p>
                       <a
-                        href={siteConfig.mapUrl}
+                        href={studio.mapUrl || siteConfig.mapUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-[11px] text-gold hover:underline uppercase tracking-wider font-sans mt-1 inline-block"
@@ -153,12 +179,12 @@ export default function Contact() {
                     <div>
                       <h4 className="font-serif text-base text-charcoal font-medium mb-0.5">Direct Call</h4>
                       <a
-                        href={`tel:${siteConfig.phone.replace(/\s+/g, '')}`}
+                        href={`tel:${phone.replace(/\s+/g, '')}`}
                         className="text-warm-brown/80 text-xs sm:text-sm font-light hover:text-gold transition-colors"
                       >
-                        {siteConfig.phone}
+                        {phone}
                       </a>
-                      <p className="text-[11px] text-warm-brown/60 font-sans mt-0.5">Mon – Sun, 9:00 AM – 8:00 PM</p>
+                      <p className="text-[11px] text-warm-brown/60 font-sans mt-0.5">{openingHours}</p>
                     </div>
                   </div>
 
@@ -169,10 +195,10 @@ export default function Contact() {
                     <div>
                       <h4 className="font-serif text-base text-charcoal font-medium mb-0.5">Email Inquiries</h4>
                       <a
-                        href={`mailto:${siteConfig.email}`}
+                        href={`mailto:${email}`}
                         className="text-warm-brown/80 text-xs sm:text-sm font-light hover:text-gold transition-colors"
                       >
-                        {siteConfig.email}
+                        {email}
                       </a>
                     </div>
                   </div>
@@ -189,7 +215,7 @@ export default function Contact() {
                   For last-minute date checks or urgent inquiries, message our lead team directly on WhatsApp.
                 </p>
                 <a
-                  href={`https://wa.me/${siteConfig.whatsapp}?text=${whatsappMessage}`}
+                  href={`https://wa.me/${whatsapp}?text=${whatsappMessage}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full inline-flex items-center justify-center gap-2 py-3 bg-[#25D366] text-[#1A1715] text-xs uppercase tracking-widest font-sans font-semibold hover:bg-[#20ba5a] transition-all rounded-sm"

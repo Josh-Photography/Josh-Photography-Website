@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Check, Calendar, Sparkles } from 'lucide-react'
 import ImageLightbox from './ImageLightbox'
+import { useWebsiteData } from '../../hooks/useWebsiteData'
 
 /**
  * PhotographyCard component
@@ -75,8 +76,9 @@ export function EditorialCollectionSection({
 }) {
   const [selectedImage, setSelectedImage] = useState(null)
   const isEven = index % 2 === 0
-
-  const cards = category.cards || []
+  const { getCategoryCards } = useWebsiteData()
+  const dynamicCards = getCategoryCards(category.id || category.slug)
+  const cards = (dynamicCards && dynamicCards.length > 0) ? dynamicCards : (category.cards || [])
   const lightboxImages = cards.map((c, i) => ({
     id: `${category.id}-${i}`,
     src: c.image,

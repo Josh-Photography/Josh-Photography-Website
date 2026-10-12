@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Calendar, CheckCircle2, Send, Clock, MapPin, Sparkles, AlertCircle } from 'lucide-react'
 import { siteConfig } from '../data/siteConfig'
 import { WhatsAppIcon } from '../components/common/Icons'
+import dataService from '../services/dataService'
 
 const eventTypeOptions = [
   'Wedding',
@@ -87,7 +88,7 @@ export default function CheckAvailability() {
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!formData.date) {
       setErrorMsg('Please select an event date.')
@@ -109,10 +110,24 @@ export default function CheckAvailability() {
       // ignore storage error
     }
 
-    setTimeout(() => {
-      setLoading(false)
-      setSubmitted(true)
-    }, 700)
+    try {
+      await dataService.submitContact({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        service: formData.eventType,
+        date: formData.date,
+        location: formData.location,
+        guestCount: formData.guestCount,
+        subject: `Date Availability Check: ${formData.eventType} (${formData.date})`,
+        message: `Package: ${formData.packagePreference}\nRequirements: ${formData.requirements.join(', ')}\nMessage: ${formData.message || 'None'}`
+      })
+    } catch (err) {
+      console.warn('Backend availability submit error:', err)
+    }
+
+    setLoading(false)
+    setSubmitted(true)
   }
 
   const whatsappMessage = encodeURIComponent(

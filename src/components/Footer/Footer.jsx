@@ -6,13 +6,27 @@ import {
 import { InstagramIcon, FacebookIcon, YoutubeIcon } from '../common/Icons'
 import { siteConfig } from '../../data/siteConfig'
 import { eventCategories } from '../../data/events'
+import { useWebsiteData } from '../../hooks/useWebsiteData'
 
 export default function Footer() {
+  const { studio = {}, social = {}, settings = {} } = useWebsiteData()
   const currentYear = new Date().getFullYear()
+
+  const studioName = settings.siteName || studio.name || siteConfig.studioName
+  const phone = studio.phone || siteConfig.phone
+  const email = studio.email || siteConfig.email
+  const address = studio.address || siteConfig.address
+  const whatsapp = studio.whatsapp || siteConfig.whatsapp
+  const copyrightText = settings.copyrightText || `© ${currentYear} ${studioName}. All rights reserved.`
+  const description = studio.description || siteConfig.shortDescription
+  const instagram = typeof social.instagram === 'object' ? social.instagram.url : (social.instagram || siteConfig.social.instagram)
+  const facebook = typeof social.facebook === 'object' ? social.facebook.url : (social.facebook || siteConfig.social.facebook)
+  const youtube = typeof social.youtube === 'object' ? social.youtube.url : (social.youtube || siteConfig.social.youtube)
+
   const quickLinks = [
     { label: 'Home', path: '/' },
     { label: 'About', path: '/about' },
-    { label: 'Photography', path: '/photography' },
+    { label: 'Photography', path: '/portfolio' },
     { label: 'Weddings', path: '/weddings' },
     { label: 'Client Testimonials', path: '/testimonials' },
     { label: 'Contact', path: '/contact' },
@@ -31,22 +45,22 @@ export default function Footer() {
             <div className="lg:col-span-1">
               <Link to="/" className="inline-flex items-center gap-3 mb-6 group">
                 <img
-                  src="/logo.png"
-                  alt={siteConfig.studioName}
+                  src={settings.logo || "/logo.png"}
+                  alt={studioName}
                   className="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                 />
                 <h3 className="font-serif text-2xl font-light text-ivory tracking-[0.08em] uppercase">
-                  JOSH PHOTOGRAPHY
+                  {studioName.toUpperCase()}
                 </h3>
               </Link>
               <p className="text-body-sm text-ivory/50 leading-relaxed mb-6">
-                {siteConfig.shortDescription}. We preserve the emotions, the laughter,
+                {description}. We preserve the emotions, the laughter,
                 and the quiet moments that make your celebrations unforgettable.
               </p>
               <div className="flex items-center gap-4">
-                {siteConfig.social.instagram && (
+                {instagram && (
                   <a
-                    href={siteConfig.social.instagram}
+                    href={instagram}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 border border-ivory/20 flex items-center justify-center transition-all duration-400 hover:border-gold hover:text-gold"
@@ -55,9 +69,9 @@ export default function Footer() {
                     <InstagramIcon className="w-4 h-4" />
                   </a>
                 )}
-                {siteConfig.social.facebook && (
+                {facebook && (
                   <a
-                    href={siteConfig.social.facebook}
+                    href={facebook}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 border border-ivory/20 flex items-center justify-center transition-all duration-400 hover:border-gold hover:text-gold"
@@ -66,9 +80,9 @@ export default function Footer() {
                     <FacebookIcon className="w-4 h-4" />
                   </a>
                 )}
-                {siteConfig.social.youtube && (
+                {youtube && (
                   <a
-                    href={siteConfig.social.youtube}
+                    href={youtube}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 border border-ivory/20 flex items-center justify-center transition-all duration-400 hover:border-gold hover:text-gold"
@@ -127,26 +141,26 @@ export default function Footer() {
               </h4>
               <div className="space-y-4">
                 <a
-                  href={`tel:${siteConfig.phone}`}
+                  href={`tel:${phone}`}
                   className="flex items-start gap-3 text-body-sm text-ivory/50 hover:text-ivory transition-colors duration-300"
                 >
                   <Phone className="w-4 h-4 mt-0.5 text-gold/60 flex-shrink-0" />
-                  {siteConfig.phone}
+                  {phone}
                 </a>
                 <a
-                  href={`mailto:${siteConfig.email}`}
+                  href={`mailto:${email}`}
                   className="flex items-start gap-3 text-body-sm text-ivory/50 hover:text-ivory transition-colors duration-300"
                 >
                   <Mail className="w-4 h-4 mt-0.5 text-gold/60 flex-shrink-0" />
-                  {siteConfig.email}
+                  {email}
                 </a>
                 <div className="flex items-start gap-3 text-body-sm text-ivory/50">
                   <MapPin className="w-4 h-4 mt-0.5 text-gold/60 flex-shrink-0" />
-                  {siteConfig.address}
+                  {address}
                 </div>
 
                 <a
-                  href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
+                  href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(
                     'Hi, I would like to enquire about photography services.'
                   )}`}
                   target="_blank"
@@ -168,7 +182,7 @@ export default function Footer() {
       <div className="border-t border-ivory/10 py-6 px-6 lg:px-10">
         <div className="container-luxury flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-[0.7rem] text-ivory/30 tracking-wider uppercase">
-            © {currentYear} {siteConfig.studioName}. All rights reserved.
+            {copyrightText}
           </p>
           <div className="flex items-center gap-6">
             <Link to="/contact" className="text-[0.7rem] text-ivory/30 hover:text-ivory/60 tracking-wider uppercase transition-colors">

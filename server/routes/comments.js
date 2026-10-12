@@ -2,73 +2,82 @@ import express from 'express'
 import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import { v4 as uuidv4 } from 'uuid'
 import { authenticateToken } from '../middleware/auth.js'
+import { logActivity } from '../utils/activity.js'
 
 const router = express.Router()
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const commentsPath = join(__dirname, '../data/comments.json')
 
-// Initialize comments file if not exists
-function initComments() {
+function readComments() {
   if (!existsSync(commentsPath)) {
-    writeFileSync(commentsPath, JSON.stringify([], null, 2))
+    return []
+  }
+  try {
+    return JSON.parse(readFileSync(commentsPath, 'utf8'))
+  } catch (e) {
+    return []
   }
 }
 
-// Get all comments (public for viewing)
+function writeComments(data) {
+  writeFileSync(commentsPath, JSON.stringify(data, null, 2))
+}
+
+// Get all comments (admin auth or public approved)
 router.get('/', (req, res) => {
   try {
-    initComments()
-    const comments = JSON.parse(readFileSync(commentsPath, 'utf8'))
-    res.json(comments)
+    const comments = readComments()
+    // If not authenticated, return only approved
+    const isPublic = !req.headers.authorization
+    const result = isPublic ? comments.filter((c) => c.approved) : comments
+    result.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+    res.json(result)
   } catch (error) {
     console.error('Error reading comments:', error)
     res.status(500).json({ error: 'Failed to load comments' })
   }
 })
 
-// Get comments for a specific photo
-router.get('/:photoId', (req, res) => {
+// Get comments for specific photo
+router.get('/photo/:photoId', (req, res) => {
   try {
-    initComments()
-    const comments = JSON.parse(readFileSync(commentsPath, 'utf8'))
-    const photoComments = comments.filter(c => c.photoId === req.params.photoId)
+    const comments = readComments()
+    const photoComments = comments.filter(
+      (c) => c.photoId === req.params.photoId && c.approved
+    )
     res.json(photoComments)
   } catch (error) {
-    console.error('Error reading comments:', error)
     res.status(500).json({ error: 'Failed to load comments' })
   }
 })
 
-// Add a comment (public)
-router.post('/:photoId', (req, res) => {
+// Add comment (public)
+router.post('/', (req, res) => {
   try {
-    const { name, email, comment } = req.body
+    const { photoId, name, email, comment } = req.body
 
-    if (!name || !email || !comment) {
-      return res.status(400).json({ error: 'Name, email, and comment are required' })
+    if (!name || !comment) {
+      return res.status(400).json({ error: 'Name and comment are required' })
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return res.status(400).json({ error: 'Invalid email format' })
-    }
-
-    initComments()
-    const comments = JSON.parse(readFileSync(commentsPath, 'utf8'))
+    const comments = readComments()
 
     const newComment = {
-      id: Date.now().toString(),
-      photoId: req.params.photoId,
+      id: uuidv4(),
+      photoId: photoId || 'general',
       name: name.trim(),
-      email: email.trim(),
+      email: email ? email.trim() : '',
       comment: comment.trim(),
-      approved: false,
-      createdAt: new Date().toISOString()
+      approved: false, // Moderated by default
+      createdAt: new Date().toISOString(),
     }
 
-    comments.push(newComment)
-    writeFileSync(commentsPath, JSON.stringify(comments, null, 2))
+    comments.unshift(newComment)
+    writeComments(comments)
+    logActivity(`New comment submitted by ${newComment.name} (pending approval)`, 'System')
 
     res.status(201).json(newComment)
   } catch (error) {
@@ -77,43 +86,43 @@ router.post('/:photoId', (req, res) => {
   }
 })
 
-// Approve/reject comment (admin only)
-router.put('/:commentId', authenticateToken, (req, res) => {
+// Approve / moderate comment (protected)
+router.put('/:id', authenticateToken, (req, res) => {
   try {
-    const { approved } = req.body
-    initComments()
-    const comments = JSON.parse(readFileSync(commentsPath, 'utf8'))
-    const commentIndex = comments.findIndex(c => c.id === req.params.commentId)
+    const comments = readComments()
+    const { id } = req.params
+    const index = comments.findIndex((c) => c.id === id)
 
-    if (commentIndex === -1) {
+    if (index === -1) {
       return res.status(404).json({ error: 'Comment not found' })
     }
 
-    comments[commentIndex].approved = approved
-    writeFileSync(commentsPath, JSON.stringify(comments, null, 2))
+    const { approved } = req.body
+    comments[index].approved = approved !== undefined ? approved : !comments[index].approved
+    writeComments(comments)
+    logActivity(`${comments[index].approved ? 'Approved' : 'Unapproved'} comment #${id}`)
 
-    res.json(comments[commentIndex])
+    res.json(comments[index])
   } catch (error) {
-    console.error('Error updating comment:', error)
     res.status(500).json({ error: 'Failed to update comment' })
   }
 })
 
-// Delete comment (admin only)
-router.delete('/:commentId', authenticateToken, (req, res) => {
+// Delete comment (protected)
+router.delete('/:id', authenticateToken, (req, res) => {
   try {
-    initComments()
-    const comments = JSON.parse(readFileSync(commentsPath, 'utf8'))
-    const filteredComments = comments.filter(c => c.id !== req.params.commentId)
+    const comments = readComments()
+    const { id } = req.params
+    const filtered = comments.filter((c) => c.id !== id)
 
-    if (filteredComments.length === comments.length) {
+    if (filtered.length === comments.length) {
       return res.status(404).json({ error: 'Comment not found' })
     }
 
-    writeFileSync(commentsPath, JSON.stringify(filteredComments, null, 2))
-    res.json({ message: 'Comment deleted' })
+    writeComments(filtered)
+    logActivity(`Deleted comment #${id}`)
+    res.json({ message: 'Comment deleted successfully', id })
   } catch (error) {
-    console.error('Error deleting comment:', error)
     res.status(500).json({ error: 'Failed to delete comment' })
   }
 })

@@ -1,39 +1,75 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import './admin.css'
+import dataService from '../services/dataService'
 import initialContent from '../../server/data/content.json'
 import initialPhotos from '../../server/data/photos.json'
 
-const API_URL = 'http://localhost:3001/api'
+const API_URL = '/api'
 
-// Helper function to convert Google Drive link to direct image URL
+export const PHOTOGRAPHY_CATEGORIES = [
+  { id: 'weddings', label: 'Wedding Photography' },
+  { id: 'birthdays', label: 'Birthday Celebrations' },
+  { id: 'engagement', label: 'Engagement Photography' },
+  { id: 'anniversary', label: 'Anniversary Photography' },
+  { id: 'baby-family', label: 'Baby & Newborn Photography' },
+  { id: 'festivals', label: 'Festival & Cultural Celebrations' },
+  { id: 'mothers-day', label: "Mother's Day Photography" },
+  { id: 'fathers-day', label: "Father's Day Photography" },
+  { id: 'corporate-events', label: 'Corporate Event Photography' },
+  { id: 'family', label: 'Family Photography' },
+  { id: 'maternity', label: 'Maternity Photography' },
+  { id: 'graduations', label: 'Graduation Photography' },
+]
+
+// Convert Google Drive sharing links to direct embed URLs
 const convertGoogleDriveLink = (url) => {
   if (!url) return ''
-
-  // If it's already a direct image URL, return as is
   if (url.includes('drive.google.com/uc?') || url.includes('lh3.googleusercontent.com')) {
     return url
   }
-
-  // Convert Google Drive sharing link to direct image URL
-  // Format: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
   const fileIdMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
   if (fileIdMatch) {
-    const fileId = fileIdMatch[1]
-    return `https://drive.google.com/uc?export=view&id=${fileId}`
+    return `https://drive.google.com/uc?export=view&id=${fileIdMatch[1]}`
   }
-
-  // Format: https://drive.google.com/open?id=FILE_ID
   const openIdMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/)
   if (openIdMatch) {
-    const fileId = openIdMatch[1]
-    return `https://drive.google.com/uc?export=view&id=${fileId}`
+    return `https://drive.google.com/uc?export=view&id=${openIdMatch[1]}`
   }
-
   return url
 }
 
-// Login Component
+// Upload a single file to backend with base64 data URL fallback
+async function uploadImageFile(file, token) {
+  if (!file) return null
+  try {
+    const formData = new FormData()
+    formData.append('image', file)
+    const res = await fetch(`${API_URL}/content/upload`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body: formData
+    })
+    if (res.ok) {
+      const data = await res.json()
+      if (data.url) return data.url
+    }
+  } catch (err) {
+    console.warn('Backend upload unavailable, using base64 fallback:', err)
+  }
+
+  return new Promise((resolve) => {
+    const reader = new FileReader()
+    reader.onload = (e) => resolve(e.target.result)
+    reader.readAsDataURL(file)
+  })
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 1. Login Component
+// ─────────────────────────────────────────────────────────────────────────────
 function Login({ onLogin }) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -46,7 +82,6 @@ function Login({ onLogin }) {
     setError('')
 
     try {
-      // 1. Attempt to authenticate with backend if reachable
       try {
         const res = await fetch(`${API_URL}/auth/login`, {
           method: 'POST',
@@ -55,21 +90,17 @@ function Login({ onLogin }) {
         })
 
         if (res.ok) {
-          const text = await res.text()
-          if (text) {
-            const data = JSON.parse(text)
-            if (data.token) {
-              localStorage.setItem('adminToken', data.token)
-              onLogin(data.token)
-              return
-            }
+          const data = await res.json()
+          if (data.token) {
+            localStorage.setItem('adminToken', data.token)
+            onLogin(data.token)
+            return
           }
         }
       } catch (networkErr) {
-        // Backend not running locally or deployed on Netlify without local API
+        // Fallback for Netlify standalone deployment
       }
 
-      // 2. Direct authentication fallback for admin / admin123 (works on Netlify standalone)
       if (username === 'admin' && password === 'admin123') {
         const fallbackToken = 'josh-admin-token-' + Date.now()
         localStorage.setItem('adminToken', fallbackToken)
@@ -77,7 +108,7 @@ function Login({ onLogin }) {
         return
       }
 
-      throw new Error('Invalid credentials')
+      throw new Error('Invalid username or password')
     } catch (err) {
       setError(err.message || 'Login failed')
     } finally {
@@ -95,7 +126,7 @@ function Login({ onLogin }) {
         <div className="admin-login__header">
           <img src="/logo.png" alt="Josh Photography" className="admin-login__icon" />
           <h1>Josh Photography</h1>
-          <p>Admin Panel</p>
+          <p>Admin Content Management System</p>
         </div>
 
         <form onSubmit={handleSubmit} className="admin-login__form">
@@ -105,7 +136,7 @@ function Login({ onLogin }) {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter username"
+              placeholder="admin"
               required
             />
           </div>
@@ -116,7 +147,7 @@ function Login({ onLogin }) {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password"
+              placeholder="••••••••"
               required
             />
           </div>
@@ -124,91 +155,214 @@ function Login({ onLogin }) {
           {error && <div className="admin-error">{error}</div>}
 
           <button type="submit" className="admin-btn admin-btn--primary" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Authenticating...' : 'Sign In to Admin CMS'}
           </button>
         </form>
 
-        <p className="admin-login__hint">Default: admin / admin123</p>
+        <p className="admin-login__hint">Default Credentials: admin / admin123</p>
       </motion.div>
     </div>
   )
 }
 
-// Overview Component
-function Overview({ data }) {
+// ─────────────────────────────────────────────────────────────────────────────
+// 2. Overview Component
+// ─────────────────────────────────────────────────────────────────────────────
+function Overview({ data, overviewLive, onNavigateTab }) {
+  const allPhotos = data.photos?.photos || data.photos || []
+  const publishedPhotos = allPhotos.filter((p) => p.published !== false).length
+  const draftPhotos = allPhotos.length - publishedPhotos
+
+  const contacts = data.contacts || []
+  const unreadContacts = contacts.filter((c) => c.status === 'unread' || c.status === 'new').length
+
+  const comments = data.comments || []
+  const pendingComments = comments.filter((c) => !c.approved).length
+
+  const testimonials = data.testimonials || data.content?.testimonials || []
+  const services = data.content?.services || []
+  const team = data.collaborators || data.content?.collaborators || []
+
+  const stats = overviewLive?.stats || {
+    totalPhotos: allPhotos.length,
+    publishedPhotos,
+    draftPhotos,
+    totalMessages: contacts.length,
+    unreadMessages: unreadContacts,
+    totalComments: comments.length,
+    pendingComments,
+    totalTestimonials: testimonials.length,
+    totalServices: services.length,
+    totalTeam: team.length
+  }
+
+  const recentActivity = overviewLive?.recentActivity || []
+
   return (
     <div className="admin-overview">
       <div className="admin-stats-grid">
-        <div className="admin-stat-card">
-          <h3>{data.contacts?.length || 0}</h3>
+        <div className="admin-stat-card" onClick={() => onNavigateTab('messages')} style={{ cursor: 'pointer' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3>{stats.totalMessages}</h3>
+            {stats.unreadMessages > 0 && (
+              <span className="admin-badge admin-badge--draft">{stats.unreadMessages} New</span>
+            )}
+          </div>
           <p>Contact Messages</p>
+          <small style={{ color: 'var(--admin-text-muted)', fontSize: '0.75rem' }}>
+            {stats.unreadMessages} unread inquiries
+          </small>
         </div>
-        <div className="admin-stat-card">
-          <h3>{data.comments?.length || 0}</h3>
+
+        <div className="admin-stat-card" onClick={() => onNavigateTab('photos')} style={{ cursor: 'pointer' }}>
+          <h3>{stats.totalPhotos}</h3>
+          <p>Portfolio Photographs</p>
+          <small style={{ color: 'var(--admin-text-muted)', fontSize: '0.75rem' }}>
+            {stats.publishedPhotos} published · {stats.draftPhotos} draft
+          </small>
+        </div>
+
+        <div className="admin-stat-card" onClick={() => onNavigateTab('comments')} style={{ cursor: 'pointer' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3>{stats.totalComments}</h3>
+            {stats.pendingComments > 0 && (
+              <span className="admin-badge admin-badge--draft">{stats.pendingComments} Pending</span>
+            )}
+          </div>
           <p>Photo Comments</p>
+          <small style={{ color: 'var(--admin-text-muted)', fontSize: '0.75rem' }}>
+            {stats.pendingComments} awaiting review
+          </small>
         </div>
-        <div className="admin-stat-card">
-          <h3>{data.photos?.photos?.length || 0}</h3>
-          <p>Portfolio Photos</p>
+
+        <div className="admin-stat-card" onClick={() => onNavigateTab('testimonials')} style={{ cursor: 'pointer' }}>
+          <h3>{stats.totalTestimonials}</h3>
+          <p>Client Testimonials</p>
+          <small style={{ color: 'var(--admin-text-muted)', fontSize: '0.75rem' }}>
+            100% verified 5-star ratings
+          </small>
         </div>
-        <div className="admin-stat-card">
-          <h3>{data.testimonials?.length || 0}</h3>
-          <p>Testimonials</p>
+
+        <div className="admin-stat-card" onClick={() => onNavigateTab('services')} style={{ cursor: 'pointer' }}>
+          <h3>{stats.totalServices}</h3>
+          <p>Active Services</p>
+          <small style={{ color: 'var(--admin-text-muted)', fontSize: '0.75rem' }}>
+            Editorial collections displayed
+          </small>
         </div>
-        <div className="admin-stat-card">
-          <h3>{data.collaborators?.length || 0}</h3>
+
+        <div className="admin-stat-card" onClick={() => onNavigateTab('collaborators')} style={{ cursor: 'pointer' }}>
+          <h3>{stats.totalTeam}</h3>
           <p>Team Members</p>
-        </div>
-        <div className="admin-stat-card">
-          <h3>{data.content?.services?.length || 0}</h3>
-          <p>Services</p>
+          <small style={{ color: 'var(--admin-text-muted)', fontSize: '0.75rem' }}>
+            Photographers & Creatives
+          </small>
         </div>
       </div>
 
-      <div className="admin-recent-activity">
-        <h2>Recent Activity</h2>
+      <div className="admin-recent-activity" style={{ marginTop: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h2 style={{ margin: 0, fontFamily: "'Cormorant Garamond', serif", fontSize: '1.4rem' }}>
+            Recent Administrative Activity
+          </h2>
+          <span style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)' }}>
+            Live Audit Feed
+          </span>
+        </div>
+
         <div className="admin-activity-list">
-          {data.contacts?.slice(0, 5).map(contact => (
-            <div key={contact.id} className="admin-activity-item">
-              <span>New contact from {contact.name}</span>
-              <time>{new Date(contact.submittedAt).toLocaleDateString()}</time>
+          {recentActivity.length === 0 ? (
+            <div className="admin-empty" style={{ padding: '2rem' }}>
+              <span>📋</span>
+              <p>No recent activity recorded yet.</p>
             </div>
-          ))}
+          ) : (
+            recentActivity.slice(0, 8).map((act, idx) => (
+              <div
+                key={act.id || idx}
+                className="admin-activity-item"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '0.85rem 1rem',
+                  background: 'var(--admin-card)',
+                  border: '1px solid var(--admin-border)',
+                  borderRadius: '6px',
+                  marginBottom: '0.5rem'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <span style={{ color: 'var(--admin-accent)' }}>•</span>
+                  <span style={{ fontSize: '0.875rem' }}>{act.action}</span>
+                </div>
+                <time style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)' }}>
+                  {act.timestamp ? new Date(act.timestamp).toLocaleString() : 'Just now'}
+                </time>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
   )
 }
 
-// Studio Editor Component
-function StudioEditor({ data, onSave, saving }) {
+// ─────────────────────────────────────────────────────────────────────────────
+// 3. Studio Information & Space Editor Component
+// ─────────────────────────────────────────────────────────────────────────────
+function StudioEditor({ data, onSave, saving, token }) {
   const [formData, setFormData] = useState(data || {})
+  const [announcement, setAnnouncement] = useState(data?.announcement || {})
+  const [previewImages, setPreviewImages] = useState(data?.previewImages || [])
 
   useEffect(() => {
     setFormData(data || {})
+    setAnnouncement(data?.announcement || {})
+    setPreviewImages(data?.previewImages || [])
   }, [data])
+
+  const handlePreviewImageChange = (index, field, value) => {
+    setPreviewImages((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+    )
+  }
+
+  const handlePreviewFileUpload = async (index, file) => {
+    if (!file) return
+    const url = await uploadImageFile(file, token)
+    if (url) {
+      handlePreviewImageChange(index, 'src', url)
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSave(formData)
+    onSave({
+      ...formData,
+      announcement,
+      previewImages
+    })
   }
 
   return (
     <div className="admin-section">
       <div className="admin-section__header">
-        <div>
-          <h2>Studio Information</h2>
-          <p>Update your studio details and contact information</p>
-        </div>
+        <h2>Studio Information & Announcement</h2>
+        <p>Manage studio details, contact info, facilities, and the upcoming studio space preview cards</p>
       </div>
+
       <form onSubmit={handleSubmit}>
+        <h3 style={{ fontSize: '1rem', color: 'var(--admin-accent)', marginBottom: '1rem' }}>
+          General Studio Information
+        </h3>
         <div className="admin-grid">
           <div className="admin-input-group">
             <label>Studio Name</label>
             <input
               type="text"
               value={formData.name || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+              onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
               required
             />
           </div>
@@ -218,7 +372,7 @@ function StudioEditor({ data, onSave, saving }) {
             <input
               type="text"
               value={formData.tagline || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, tagline: e.target.value }))}
+              onChange={(e) => setFormData((p) => ({ ...p, tagline: e.target.value }))}
             />
           </div>
 
@@ -226,60 +380,192 @@ function StudioEditor({ data, onSave, saving }) {
             <label>Description</label>
             <textarea
               value={formData.description || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+              onChange={(e) => setFormData((p) => ({ ...p, description: e.target.value }))}
+              rows={2}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Studio Address / Region</label>
+            <input
+              type="text"
+              value={formData.address || ''}
+              onChange={(e) => setFormData((p) => ({ ...p, address: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Email Address</label>
+            <input
+              type="email"
+              value={formData.email || ''}
+              onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Phone Number</label>
+            <input
+              type="text"
+              value={formData.phone || ''}
+              onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>WhatsApp Number</label>
+            <input
+              type="text"
+              value={formData.whatsapp || ''}
+              onChange={(e) => setFormData((p) => ({ ...p, whatsapp: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group admin-input-group--full">
+            <label>Opening Hours</label>
+            <input
+              type="text"
+              value={formData.openingHours || ''}
+              onChange={(e) => setFormData((p) => ({ ...p, openingHours: e.target.value }))}
+            />
+          </div>
+        </div>
+
+        {/* Studio Announcement */}
+        <h3 style={{ fontSize: '1rem', color: 'var(--admin-accent)', marginTop: '2rem', marginBottom: '1rem' }}>
+          Upcoming Studio Announcement Banner & Disclaimer
+        </h3>
+        <div className="admin-grid">
+          <div className="admin-input-group">
+            <label>Announcement Badge</label>
+            <input
+              type="text"
+              value={announcement.badge || ''}
+              onChange={(e) => setAnnouncement((p) => ({ ...p, badge: e.target.value }))}
+              placeholder="04 — COMING SOON"
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Announcement Headline</label>
+            <input
+              type="text"
+              value={announcement.title || ''}
+              onChange={(e) => setAnnouncement((p) => ({ ...p, title: e.target.value }))}
+              placeholder="Our New Studio Space"
+            />
+          </div>
+
+          <div className="admin-input-group admin-input-group--full">
+            <label>Announcement Description</label>
+            <textarea
+              value={announcement.description || ''}
+              onChange={(e) => setAnnouncement((p) => ({ ...p, description: e.target.value }))}
+              rows={2}
+            />
+          </div>
+
+          <div className="admin-input-group admin-input-group--full">
+            <label>Disclaimer Notice Box Text</label>
+            <textarea
+              value={announcement.disclaimer || ''}
+              onChange={(e) => setAnnouncement((p) => ({ ...p, disclaimer: e.target.value }))}
               rows={3}
             />
           </div>
 
           <div className="admin-input-group">
-            <label>Location</label>
+            <label>CTA Button Text</label>
             <input
               type="text"
-              value={formData.location || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+              value={announcement.ctaText || ''}
+              onChange={(e) => setAnnouncement((p) => ({ ...p, ctaText: e.target.value }))}
             />
           </div>
 
           <div className="admin-input-group">
-            <label>Address</label>
-            <input
-              type="text"
-              value={formData.address || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-            />
+            <label>Section Visibility</label>
+            <select
+              value={announcement.published !== false ? 'true' : 'false'}
+              onChange={(e) => setAnnouncement((p) => ({ ...p, published: e.target.value === 'true' }))}
+            >
+              <option value="true">Published (Visible on About Page)</option>
+              <option value="false">Hidden</option>
+            </select>
           </div>
+        </div>
 
-          <div className="admin-input-group">
-            <label>Email</label>
-            <input
-              type="email"
-              value={formData.email || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-            />
-          </div>
+        {/* Studio Concept Preview Cards */}
+        <h3 style={{ fontSize: '1rem', color: 'var(--admin-accent)', marginTop: '2.5rem', marginBottom: '1rem' }}>
+          Studio Concept Preview Cards (4 Facilities Showcases)
+        </h3>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          {previewImages.map((card, idx) => (
+            <div key={card.id || idx} className="admin-card">
+              <div className="admin-card__header">
+                <h4>Card {idx + 1}: {card.title || 'Studio Facility'}</h4>
+              </div>
 
-          <div className="admin-input-group">
-            <label>Phone</label>
-            <input
-              type="text"
-              value={formData.phone || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-            />
-          </div>
+              <div className="admin-grid">
+                <div className="admin-input-group">
+                  <label>Card Title</label>
+                  <input
+                    type="text"
+                    value={card.title || ''}
+                    onChange={(e) => handlePreviewImageChange(idx, 'title', e.target.value)}
+                    required
+                  />
+                </div>
 
-          <div className="admin-input-group">
-            <label>WhatsApp</label>
-            <input
-              type="text"
-              value={formData.whatsapp || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, whatsapp: e.target.value }))}
-            />
-          </div>
+                <div className="admin-input-group">
+                  <label>Subtitle / Badge</label>
+                  <input
+                    type="text"
+                    value={card.subtitle || ''}
+                    onChange={(e) => handlePreviewImageChange(idx, 'subtitle', e.target.value)}
+                  />
+                </div>
+
+                <div className="admin-input-group admin-input-group--full">
+                  <label>Description</label>
+                  <textarea
+                    value={card.desc || ''}
+                    onChange={(e) => handlePreviewImageChange(idx, 'desc', e.target.value)}
+                    rows={2}
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Image URL / Path</label>
+                  <input
+                    type="text"
+                    value={card.src || ''}
+                    onChange={(e) => handlePreviewImageChange(idx, 'src', convertGoogleDriveLink(e.target.value))}
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Or Upload New Image</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handlePreviewFileUpload(idx, e.target.files?.[0])}
+                  />
+                </div>
+              </div>
+
+              {card.src && (
+                <div className="admin-image-preview" style={{ marginTop: '1rem' }}>
+                  <img src={card.src} alt={card.title} style={{ maxHeight: '140px', objectFit: 'cover' }} />
+                </div>
+              )}
+            </div>
+          ))}
         </div>
 
         <div className="admin-actions">
           <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
-            {saving ? 'Saving...' : 'Save Studio Info'}
+            {saving ? 'Saving...' : 'Save Studio Information'}
           </button>
         </div>
       </form>
@@ -287,8 +573,10 @@ function StudioEditor({ data, onSave, saving }) {
   )
 }
 
-// Hero Editor Component
-function HeroEditor({ data, onSave, saving }) {
+// ─────────────────────────────────────────────────────────────────────────────
+// 4. Hero Section Slides Editor Component
+// ─────────────────────────────────────────────────────────────────────────────
+function HeroEditor({ data, onSave, saving, token }) {
   const [slides, setSlides] = useState(data || [])
 
   useEffect(() => {
@@ -296,30 +584,51 @@ function HeroEditor({ data, onSave, saving }) {
   }, [data])
 
   const addSlide = () => {
-    setSlides(prev => [...prev, {
-      id: Date.now(),
-      title: '',
-      subtitle: '',
-      image: ''
-    }])
+    setSlides((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        shortName: 'New Slide',
+        category: 'Wedding Photography',
+        badge: '01 / 12 — EDITORIAL STORY',
+        title: 'New Story Title',
+        subtitle: 'Bespoke moments captured with artful precision',
+        image: '/images/hero-church-wedding.jpg',
+        alt: 'Photograph showcase',
+        explorePath: '/weddings',
+        exploreText: 'Explore Collection',
+        published: true
+      }
+    ])
   }
 
   const updateSlide = (index, field, value) => {
-    setSlides(prev => prev.map((slide, i) => {
-      if (i === index) {
-        const updated = { ...slide, [field]: value }
-        // Auto-convert Google Drive links when pasted
-        if (field === 'image' && value.includes('drive.google.com')) {
-          updated.image = convertGoogleDriveLink(value)
+    setSlides((prev) =>
+      prev.map((slide, i) => {
+        if (i === index) {
+          const updated = { ...slide, [field]: value }
+          if (field === 'image' && value.includes('drive.google.com')) {
+            updated.image = convertGoogleDriveLink(value)
+          }
+          return updated
         }
-        return updated
-      }
-      return slide
-    }))
+        return slide
+      })
+    )
+  }
+
+  const handleSlideUpload = async (index, file) => {
+    if (!file) return
+    const url = await uploadImageFile(file, token)
+    if (url) {
+      updateSlide(index, 'image', url)
+    }
   }
 
   const removeSlide = (index) => {
-    setSlides(prev => prev.filter((_, i) => i !== index))
+    if (window.confirm('Are you sure you want to remove this hero slide?')) {
+      setSlides((prev) => prev.filter((_, i) => i !== index))
+    }
   }
 
   const handleSubmit = (e) => {
@@ -332,8 +641,8 @@ function HeroEditor({ data, onSave, saving }) {
       <div className="admin-section__header">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <h2>Hero Slides</h2>
-            <p>Add slides for the homepage hero section</p>
+            <h2>Hero Section Slides</h2>
+            <p>Manage the large visual slideshow on the homepage with high-impact editorial imagery</p>
           </div>
           <button type="button" className="admin-btn admin-btn--secondary" onClick={addSlide}>
             + Add Slide
@@ -341,17 +650,12 @@ function HeroEditor({ data, onSave, saving }) {
         </div>
       </div>
 
-      {slides.length === 0 ? (
-        <div className="admin-empty">
-          <span>🎬</span>
-          <p>No slides yet. Click "Add Slide" to get started.</p>
-        </div>
-      ) : (
+      <form onSubmit={handleSubmit}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {slides.map((slide, index) => (
-            <div key={slide.id} className="admin-card">
+            <div key={slide.id || index} className="admin-card">
               <div className="admin-card__header">
-                <h4>Slide {index + 1}</h4>
+                <h4>Slide {index + 1}: {slide.title || 'Untitled'}</h4>
                 <button
                   type="button"
                   className="admin-btn admin-btn--danger admin-btn--small"
@@ -366,124 +670,89 @@ function HeroEditor({ data, onSave, saving }) {
                   <label>Title</label>
                   <input
                     type="text"
-                    value={slide.title}
+                    value={slide.title || ''}
                     onChange={(e) => updateSlide(index, 'title', e.target.value)}
                     required
                   />
                 </div>
 
                 <div className="admin-input-group">
-                  <label>Subtitle</label>
+                  <label>Subtitle / Description</label>
                   <input
                     type="text"
-                    value={slide.subtitle}
+                    value={slide.subtitle || ''}
                     onChange={(e) => updateSlide(index, 'subtitle', e.target.value)}
                   />
                 </div>
 
-                <div className="admin-input-group admin-input-group--full">
-                  <label>Google Drive Link or Image URL</label>
+                <div className="admin-input-group">
+                  <label>Category Label</label>
                   <input
-                    type="url"
-                    value={slide.image}
+                    type="text"
+                    value={slide.category || ''}
+                    onChange={(e) => updateSlide(index, 'category', e.target.value)}
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Badge (e.g. 01 / 12 — COVENANT)</label>
+                  <input
+                    type="text"
+                    value={slide.badge || ''}
+                    onChange={(e) => updateSlide(index, 'badge', e.target.value)}
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Image URL / Drive Link</label>
+                  <input
+                    type="text"
+                    value={slide.image || ''}
                     onChange={(e) => updateSlide(index, 'image', e.target.value)}
-                    placeholder="Paste Google Drive link or image URL"
                     required
                   />
-                  <small style={{ color: 'var(--admin-text-muted)', fontSize: '0.75rem', marginTop: '0.25rem' }}>
-                    Paste your Google Drive sharing link - it will be converted automatically
-                  </small>
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Or Upload Slide File</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleSlideUpload(index, e.target.files?.[0])}
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>CTA Button Text</label>
+                  <input
+                    type="text"
+                    value={slide.exploreText || ''}
+                    onChange={(e) => updateSlide(index, 'exploreText', e.target.value)}
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>CTA Destination Link</label>
+                  <input
+                    type="text"
+                    value={slide.explorePath || ''}
+                    onChange={(e) => updateSlide(index, 'explorePath', e.target.value)}
+                  />
                 </div>
               </div>
 
               {slide.image && (
-                <div className="admin-image-preview">
-                  <img src={slide.image} alt={slide.title} onError={(e) => {
-                    e.target.style.opacity = '0.5'
-                  }} />
+                <div className="admin-image-preview" style={{ marginTop: '1rem' }}>
+                  <img src={slide.image} alt={slide.title} style={{ maxHeight: '160px', objectFit: 'cover' }} />
                 </div>
               )}
             </div>
           ))}
         </div>
-      )}
-
-      <div className="admin-actions">
-        <button type="button" className="admin-btn admin-btn--primary" onClick={handleSubmit} disabled={saving}>
-          {saving ? 'Saving...' : 'Save Hero Slides'}
-        </button>
-      </div>
-    </div>
-  )
-}
-
-// About Editor Component
-function AboutEditor({ data, onSave, saving }) {
-  const [formData, setFormData] = useState(data || {})
-
-  useEffect(() => {
-    setFormData(data || {})
-  }, [data])
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    onSave(formData)
-  }
-
-  return (
-    <div className="admin-section">
-      <div className="admin-section__header">
-        <div>
-          <h2>About Page Content</h2>
-          <p>Update the about section content</p>
-        </div>
-      </div>
-      <form onSubmit={handleSubmit}>
-        <div className="admin-grid">
-          <div className="admin-input-group admin-input-group--full">
-            <label>Title</label>
-            <input
-              type="text"
-              value={formData.title || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-            />
-          </div>
-
-          <div className="admin-input-group admin-input-group--full">
-            <label>Content</label>
-            <textarea
-              value={formData.content || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-              rows={6}
-            />
-          </div>
-
-          <div className="admin-input-group admin-input-group--full">
-            <label>Story</label>
-            <textarea
-              value={formData.story || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, story: e.target.value }))}
-              rows={6}
-            />
-          </div>
-
-          <div className="admin-input-group admin-input-group--full">
-            <label>Values (one per line)</label>
-            <textarea
-              value={formData.values?.join('\n') || ''}
-              onChange={(e) => setFormData(prev => ({
-                ...prev,
-                values: e.target.value.split('\n').filter(v => v.trim())
-              }))}
-              rows={4}
-              placeholder="Creativity&#10;Excellence&#10;Innovation"
-            />
-          </div>
-        </div>
 
         <div className="admin-actions">
           <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
-            {saving ? 'Saving...' : 'Save About Content'}
+            {saving ? 'Saving...' : 'Save Hero Slides'}
           </button>
         </div>
       </form>
@@ -491,8 +760,278 @@ function AboutEditor({ data, onSave, saving }) {
   )
 }
 
-// Services Editor Component
-function ServicesEditor({ data, onSave, saving }) {
+// ─────────────────────────────────────────────────────────────────────────────
+// 5. About Page Editor Component
+// ─────────────────────────────────────────────────────────────────────────────
+function AboutEditor({ data, onSave, saving, token }) {
+  const [about, setAbout] = useState(data || {})
+
+  useEffect(() => {
+    setAbout(data || {})
+  }, [data])
+
+  const handleStatChange = (index, field, value) => {
+    const updatedStats = [...(about.stats || [])]
+    if (!updatedStats[index]) updatedStats[index] = {}
+    updatedStats[index][field] = value
+    setAbout((p) => ({ ...p, stats: updatedStats }))
+  }
+
+  const handlePhotographerUpload = async (file) => {
+    if (!file) return
+    const url = await uploadImageFile(file, token)
+    if (url) {
+      setAbout((p) => ({ ...p, photographerImage: url }))
+    }
+  }
+
+  const handleStoryImageUpload = async (file) => {
+    if (!file) return
+    const url = await uploadImageFile(file, token)
+    if (url) {
+      setAbout((p) => ({ ...p, storyImage: url }))
+    }
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    onSave(about)
+  }
+
+  return (
+    <div className="admin-section">
+      <div className="admin-section__header">
+        <h2>About Page Management</h2>
+        <p>Edit photographer portrait, biography, studio story, experience statistics, and brand values</p>
+      </div>
+
+      <form onSubmit={handleSubmit}>
+        {/* Hero Banner Details */}
+        <h3 style={{ fontSize: '1rem', color: 'var(--admin-accent)', marginBottom: '1rem' }}>
+          About Hero Section
+        </h3>
+        <div className="admin-grid">
+          <div className="admin-input-group">
+            <label>Hero Badge</label>
+            <input
+              type="text"
+              value={about.heroBadge || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, heroBadge: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Hero Title</label>
+            <input
+              type="text"
+              value={about.heroTitle || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, heroTitle: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group admin-input-group--full">
+            <label>Hero Subtitle / Description</label>
+            <textarea
+              value={about.heroDescription || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, heroDescription: e.target.value }))}
+              rows={2}
+            />
+          </div>
+        </div>
+
+        {/* 01: Studio Story */}
+        <h3 style={{ fontSize: '1rem', color: 'var(--admin-accent)', marginTop: '2rem', marginBottom: '1rem' }}>
+          01 — Studio Story & Brand Narrative
+        </h3>
+        <div className="admin-grid">
+          <div className="admin-input-group">
+            <label>Story Badge</label>
+            <input
+              type="text"
+              value={about.storyBadge || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, storyBadge: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Story Title</label>
+            <input
+              type="text"
+              value={about.storyTitle || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, storyTitle: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group admin-input-group--full">
+            <label>Story Paragraph 1</label>
+            <textarea
+              value={about.storyParagraph1 || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, storyParagraph1: e.target.value }))}
+              rows={3}
+            />
+          </div>
+
+          <div className="admin-input-group admin-input-group--full">
+            <label>Story Paragraph 2</label>
+            <textarea
+              value={about.storyParagraph2 || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, storyParagraph2: e.target.value }))}
+              rows={3}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Story Image URL</label>
+            <input
+              type="text"
+              value={about.storyImage || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, storyImage: convertGoogleDriveLink(e.target.value) }))}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Or Upload Story Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleStoryImageUpload(e.target.files?.[0])}
+            />
+          </div>
+
+          <div className="admin-input-group admin-input-group--full">
+            <label>Story Accent Quote</label>
+            <input
+              type="text"
+              value={about.storyQuote || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, storyQuote: e.target.value }))}
+            />
+          </div>
+        </div>
+
+        {/* 4 Experience Stats */}
+        <h3 style={{ fontSize: '1rem', color: 'var(--admin-accent)', marginTop: '2rem', marginBottom: '1rem' }}>
+          Experience Statistics (Displayed under Story)
+        </h3>
+        <div className="admin-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+          {[0, 1, 2, 3].map((idx) => {
+            const stat = (about.stats && about.stats[idx]) || { value: '', label: '' }
+            return (
+              <div key={idx} className="admin-card" style={{ padding: '0.85rem' }}>
+                <div className="admin-input-group" style={{ marginBottom: '0.5rem' }}>
+                  <label>Stat {idx + 1} Value</label>
+                  <input
+                    type="text"
+                    value={stat.value || ''}
+                    onChange={(e) => handleStatChange(idx, 'value', e.target.value)}
+                    placeholder="450+"
+                  />
+                </div>
+                <div className="admin-input-group">
+                  <label>Label</label>
+                  <input
+                    type="text"
+                    value={stat.label || ''}
+                    onChange={(e) => handleStatChange(idx, 'label', e.target.value)}
+                    placeholder="Weddings Captured"
+                  />
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* 02: Meet the Photographer */}
+        <h3 style={{ fontSize: '1rem', color: 'var(--admin-accent)', marginTop: '2rem', marginBottom: '1rem' }}>
+          02 — Meet the Photographer (Josh)
+        </h3>
+        <div className="admin-grid">
+          <div className="admin-input-group">
+            <label>Photographer Name</label>
+            <input
+              type="text"
+              value={about.photographerName || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, photographerName: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Role / Professional Title</label>
+            <input
+              type="text"
+              value={about.photographerRole || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, photographerRole: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group admin-input-group--full">
+            <label>Headline</label>
+            <input
+              type="text"
+              value={about.photographerHeadline || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, photographerHeadline: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Photographer Portrait URL</label>
+            <input
+              type="text"
+              value={about.photographerImage || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, photographerImage: convertGoogleDriveLink(e.target.value) }))}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Or Upload New Portrait</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handlePhotographerUpload(e.target.files?.[0])}
+            />
+          </div>
+
+          <div className="admin-input-group admin-input-group--full">
+            <label>Biography Paragraph 1</label>
+            <textarea
+              value={about.photographerBio1 || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, photographerBio1: e.target.value }))}
+              rows={3}
+            />
+          </div>
+
+          <div className="admin-input-group admin-input-group--full">
+            <label>Biography Paragraph 2</label>
+            <textarea
+              value={about.photographerBio2 || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, photographerBio2: e.target.value }))}
+              rows={3}
+            />
+          </div>
+
+          <div className="admin-input-group admin-input-group--full">
+            <label>Personal Quote</label>
+            <textarea
+              value={about.photographerQuote || ''}
+              onChange={(e) => setAbout((p) => ({ ...p, photographerQuote: e.target.value }))}
+              rows={2}
+            />
+          </div>
+        </div>
+
+        <div className="admin-actions">
+          <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
+            {saving ? 'Saving...' : 'Save About Page'}
+          </button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 6. Services Editor Component
+// ─────────────────────────────────────────────────────────────────────────────
+function ServicesEditor({ data, onSave, saving, token }) {
   const [services, setServices] = useState(data || [])
 
   useEffect(() => {
@@ -500,21 +1039,43 @@ function ServicesEditor({ data, onSave, saving }) {
   }, [data])
 
   const addService = () => {
-    setServices(prev => [...prev, {
-      id: Date.now(),
-      title: '',
-      description: ''
-    }])
+    const num = String(services.length + 1).padStart(2, '0')
+    setServices((prev) => [
+      ...prev,
+      {
+        id: `service-${Date.now()}`,
+        num,
+        title: 'New Service',
+        quote: 'A distinctive celebration tailored with artistry.',
+        desc: 'Comprehensive photographic coverage with unobtrusive storytelling.',
+        image: '/images/hero-church-wedding.jpg',
+        alt: 'Service showcase',
+        path: '/portfolio',
+        ctaText: 'EXPLORE SERVICE',
+        order: prev.length + 1,
+        published: true
+      }
+    ])
   }
 
   const updateService = (index, field, value) => {
-    setServices(prev => prev.map((service, i) =>
-      i === index ? { ...service, [field]: value } : service
-    ))
+    setServices((prev) =>
+      prev.map((s, i) => (i === index ? { ...s, [field]: value } : s))
+    )
+  }
+
+  const handleServiceImageUpload = async (index, file) => {
+    if (!file) return
+    const url = await uploadImageFile(file, token)
+    if (url) {
+      updateService(index, 'image', url)
+    }
   }
 
   const removeService = (index) => {
-    setServices(prev => prev.filter((_, i) => i !== index))
+    if (window.confirm('Delete this photography service?')) {
+      setServices((prev) => prev.filter((_, i) => i !== index))
+    }
   }
 
   const handleSubmit = (e) => {
@@ -527,52 +1088,127 @@ function ServicesEditor({ data, onSave, saving }) {
       <div className="admin-section__header">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <h2>Services</h2>
-            <p>Manage your photography services</p>
+            <h2>Editorial Photography Services</h2>
+            <p>Manage the editorial showcase services featured on the homepage and services section</p>
           </div>
           <button type="button" className="admin-btn admin-btn--secondary" onClick={addService}>
             + Add Service
           </button>
         </div>
       </div>
+
       <form onSubmit={handleSubmit}>
-
-        {services.map((service, index) => (
-          <div key={service.id} className="admin-card">
-            <div className="admin-card__header">
-              <h4>Service {index + 1}</h4>
-              <button
-                type="button"
-                className="admin-btn admin-btn--danger admin-btn--small"
-                onClick={() => removeService(index)}
-              >
-                Remove
-              </button>
-            </div>
-
-            <div className="admin-grid">
-              <div className="admin-input-group admin-input-group--full">
-                <label>Title</label>
-                <input
-                  type="text"
-                  value={service.title}
-                  onChange={(e) => updateService(index, 'title', e.target.value)}
-                  required
-                />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          {services.map((service, index) => (
+            <div key={service.id || index} className="admin-card">
+              <div className="admin-card__header">
+                <h4>
+                  {service.num || `0${index + 1}`} — {service.title}
+                </h4>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <label style={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={service.published !== false}
+                      onChange={(e) => updateService(index, 'published', e.target.checked)}
+                    />
+                    Published
+                  </label>
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn--danger admin-btn--small"
+                    onClick={() => removeService(index)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
 
-              <div className="admin-input-group admin-input-group--full">
-                <label>Description</label>
-                <textarea
-                  value={service.description}
-                  onChange={(e) => updateService(index, 'description', e.target.value)}
-                  rows={3}
-                  required
-                />
+              <div className="admin-grid">
+                <div className="admin-input-group">
+                  <label>Service Number (e.g. 01, 02)</label>
+                  <input
+                    type="text"
+                    value={service.num || ''}
+                    onChange={(e) => updateService(index, 'num', e.target.value)}
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Service Title</label>
+                  <input
+                    type="text"
+                    value={service.title || ''}
+                    onChange={(e) => updateService(index, 'title', e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="admin-input-group admin-input-group--full">
+                  <label>Poetic Accent Quote</label>
+                  <input
+                    type="text"
+                    value={service.quote || ''}
+                    onChange={(e) => updateService(index, 'quote', e.target.value)}
+                  />
+                </div>
+
+                <div className="admin-input-group admin-input-group--full">
+                  <label>Full Editorial Description</label>
+                  <textarea
+                    value={service.desc || service.description || ''}
+                    onChange={(e) => updateService(index, 'desc', e.target.value)}
+                    rows={3}
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Image URL / Path</label>
+                  <input
+                    type="text"
+                    value={service.image || ''}
+                    onChange={(e) => updateService(index, 'image', convertGoogleDriveLink(e.target.value))}
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Or Upload Service Image</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleServiceImageUpload(index, e.target.files?.[0])}
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Destination Route</label>
+                  <input
+                    type="text"
+                    value={service.path || ''}
+                    onChange={(e) => updateService(index, 'path', e.target.value)}
+                    placeholder="/weddings"
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>CTA Button Text</label>
+                  <input
+                    type="text"
+                    value={service.ctaText || ''}
+                    onChange={(e) => updateService(index, 'ctaText', e.target.value)}
+                    placeholder="EXPLORE WEDDING STORIES"
+                  />
+                </div>
               </div>
+
+              {service.image && (
+                <div className="admin-image-preview" style={{ marginTop: '1rem' }}>
+                  <img src={service.image} alt={service.title} style={{ maxHeight: '140px', objectFit: 'cover' }} />
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
 
         <div className="admin-actions">
           <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
@@ -584,8 +1220,10 @@ function ServicesEditor({ data, onSave, saving }) {
   )
 }
 
-// Testimonials Editor Component
-function TestimonialsEditor({ data, onSave, saving }) {
+// ─────────────────────────────────────────────────────────────────────────────
+// 7. Testimonials Editor Component
+// ─────────────────────────────────────────────────────────────────────────────
+function TestimonialsEditor({ data, onSave, saving, token }) {
   const [testimonials, setTestimonials] = useState(data || [])
 
   useEffect(() => {
@@ -593,24 +1231,40 @@ function TestimonialsEditor({ data, onSave, saving }) {
   }, [data])
 
   const addTestimonial = () => {
-    setTestimonials(prev => [...prev, {
-      id: Date.now(),
-      name: '',
-      role: '',
-      content: '',
-      image: '',
-      rating: 5
-    }])
+    setTestimonials((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        name: 'Client Name',
+        event: 'Wedding Celebration',
+        location: 'London, UK',
+        rating: 5,
+        review: 'Josh captured every emotion with sheer editorial mastery.',
+        image: '',
+        date: 'Recent Celebration',
+        published: true
+      }
+    ])
   }
 
   const updateTestimonial = (index, field, value) => {
-    setTestimonials(prev => prev.map((testimonial, i) =>
-      i === index ? { ...testimonial, [field]: value } : testimonial
-    ))
+    setTestimonials((prev) =>
+      prev.map((t, i) => (i === index ? { ...t, [field]: value } : t))
+    )
+  }
+
+  const handleTestimonialUpload = async (index, file) => {
+    if (!file) return
+    const url = await uploadImageFile(file, token)
+    if (url) {
+      updateTestimonial(index, 'image', url)
+    }
   }
 
   const removeTestimonial = (index) => {
-    setTestimonials(prev => prev.filter((_, i) => i !== index))
+    if (window.confirm('Delete this client testimonial?')) {
+      setTestimonials((prev) => prev.filter((_, i) => i !== index))
+    }
   }
 
   const handleSubmit = (e) => {
@@ -623,87 +1277,119 @@ function TestimonialsEditor({ data, onSave, saving }) {
       <div className="admin-section__header">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <h2>Testimonials</h2>
-            <p>Manage client testimonials</p>
+            <h2>Client Testimonials & Kind Words</h2>
+            <p>Manage genuine feedback and reviews from couples and families</p>
           </div>
           <button type="button" className="admin-btn admin-btn--secondary" onClick={addTestimonial}>
             + Add Testimonial
           </button>
         </div>
       </div>
+
       <form onSubmit={handleSubmit}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          {testimonials.map((t, index) => (
+            <div key={t.id || index} className="admin-card">
+              <div className="admin-card__header">
+                <h4>{t.name} — {t.event}</h4>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <label style={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={t.published !== false}
+                      onChange={(e) => updateTestimonial(index, 'published', e.target.checked)}
+                    />
+                    Published
+                  </label>
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn--danger admin-btn--small"
+                    onClick={() => removeTestimonial(index)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
 
-        {testimonials.map((testimonial, index) => (
-          <div key={testimonial.id} className="admin-card">
-            <div className="admin-card__header">
-              <h4>Testimonial {index + 1}</h4>
-              <button
-                type="button"
-                className="admin-btn admin-btn--danger admin-btn--small"
-                onClick={() => removeTestimonial(index)}
-              >
-                Remove
-              </button>
+              <div className="admin-grid">
+                <div className="admin-input-group">
+                  <label>Client Name</label>
+                  <input
+                    type="text"
+                    value={t.name || ''}
+                    onChange={(e) => updateTestimonial(index, 'name', e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Event Type</label>
+                  <input
+                    type="text"
+                    value={t.event || t.role || ''}
+                    onChange={(e) => updateTestimonial(index, 'event', e.target.value)}
+                    placeholder="Church Wedding"
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Location / Venue</label>
+                  <input
+                    type="text"
+                    value={t.location || ''}
+                    onChange={(e) => updateTestimonial(index, 'location', e.target.value)}
+                    placeholder="Cotswolds, UK"
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Star Rating (1 - 5)</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="5"
+                    value={t.rating || 5}
+                    onChange={(e) => updateTestimonial(index, 'rating', parseInt(e.target.value, 10))}
+                  />
+                </div>
+
+                <div className="admin-input-group admin-input-group--full">
+                  <label>Review Text</label>
+                  <textarea
+                    value={t.review || t.content || ''}
+                    onChange={(e) => updateTestimonial(index, 'review', e.target.value)}
+                    rows={3}
+                    required
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Client Photo URL (Optional)</label>
+                  <input
+                    type="text"
+                    value={t.image || ''}
+                    onChange={(e) => updateTestimonial(index, 'image', convertGoogleDriveLink(e.target.value))}
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Or Upload Photo</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleTestimonialUpload(index, e.target.files?.[0])}
+                  />
+                </div>
+              </div>
+
+              {t.image && (
+                <div className="admin-image-preview" style={{ marginTop: '0.75rem' }}>
+                  <img src={t.image} alt={t.name} style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover' }} />
+                </div>
+              )}
             </div>
-
-            <div className="admin-grid">
-              <div className="admin-input-group">
-                <label>Name</label>
-                <input
-                  type="text"
-                  value={testimonial.name}
-                  onChange={(e) => updateTestimonial(index, 'name', e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="admin-input-group">
-                <label>Role</label>
-                <input
-                  type="text"
-                  value={testimonial.role}
-                  onChange={(e) => updateTestimonial(index, 'role', e.target.value)}
-                />
-              </div>
-
-              <div className="admin-input-group">
-                <label>Rating (1-5)</label>
-                <input
-                  type="number"
-                  min="1"
-                  max="5"
-                  value={testimonial.rating}
-                  onChange={(e) => updateTestimonial(index, 'rating', parseInt(e.target.value))}
-                />
-              </div>
-
-              <div className="admin-input-group">
-                <label>Image URL</label>
-                <input
-                  type="url"
-                  value={testimonial.image}
-                  onChange={(e) => updateTestimonial(index, 'image', e.target.value)}
-                />
-              </div>
-
-              <div className="admin-input-group admin-input-group--full">
-                <label>Content</label>
-                <textarea
-                  value={testimonial.content}
-                  onChange={(e) => updateTestimonial(index, 'content', e.target.value)}
-                  rows={3}
-                  required
-                />
-              </div>
-            </div>
-
-            {testimonial.image && (
-              <div className="admin-image-preview">
-                <img src={testimonial.image} alt={testimonial.name} />
-              </div>
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
 
         <div className="admin-actions">
           <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
@@ -715,51 +1401,54 @@ function TestimonialsEditor({ data, onSave, saving }) {
   )
 }
 
-// Collaborators Editor Component
-function CollaboratorsEditor({ data, onSave, saving }) {
-  const [collaborators, setCollaborators] = useState(data || [])
+// ─────────────────────────────────────────────────────────────────────────────
+// 8. Team Management Component
+// ─────────────────────────────────────────────────────────────────────────────
+function CollaboratorsEditor({ data, onSave, saving, token }) {
+  const [team, setTeam] = useState(data || [])
 
   useEffect(() => {
-    setCollaborators(data || [])
+    setTeam(data || [])
   }, [data])
 
-  const addCollaborator = () => {
-    setCollaborators(prev => [...prev, {
-      id: Date.now(),
-      name: '',
-      role: '',
-      bio: '',
-      image: '',
-      social: {
-        instagram: '',
-        linkedin: '',
-        behance: ''
+  const addMember = () => {
+    setTeam((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        name: 'New Member',
+        role: 'Assistant Photographer',
+        bio: 'Passionate about documentary capturing and authentic emotional candid frames.',
+        image: '',
+        social: { instagram: '', linkedin: '', behance: '' },
+        published: true
       }
-    }])
+    ])
   }
 
-  const updateCollaborator = (index, field, value) => {
-    setCollaborators(prev => prev.map((collaborator, i) =>
-      i === index ? { ...collaborator, [field]: value } : collaborator
-    ))
+  const updateMember = (index, field, value) => {
+    setTeam((prev) =>
+      prev.map((m, i) => (i === index ? { ...m, [field]: value } : m))
+    )
   }
 
-  const updateSocial = (index, platform, value) => {
-    setCollaborators(prev => prev.map((collaborator, i) =>
-      i === index ? {
-        ...collaborator,
-        social: { ...collaborator.social, [platform]: value }
-      } : collaborator
-    ))
+  const handleMemberUpload = async (index, file) => {
+    if (!file) return
+    const url = await uploadImageFile(file, token)
+    if (url) {
+      updateMember(index, 'image', url)
+    }
   }
 
-  const removeCollaborator = (index) => {
-    setCollaborators(prev => prev.filter((_, i) => i !== index))
+  const removeMember = (index) => {
+    if (window.confirm('Delete this team member?')) {
+      setTeam((prev) => prev.filter((_, i) => i !== index))
+    }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSave(collaborators)
+    onSave(team)
   }
 
   return (
@@ -767,107 +1456,101 @@ function CollaboratorsEditor({ data, onSave, saving }) {
       <div className="admin-section__header">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <h2>Team Members</h2>
-            <p>Manage your team and collaborators</p>
+            <h2>Team & Collaborators</h2>
+            <p>Manage studio photographers, assistants, and creative collaborators</p>
           </div>
-          <button type="button" className="admin-btn admin-btn--secondary" onClick={addCollaborator}>
+          <button type="button" className="admin-btn admin-btn--secondary" onClick={addMember}>
             + Add Member
           </button>
         </div>
       </div>
+
       <form onSubmit={handleSubmit}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          {team.map((member, index) => (
+            <div key={member.id || index} className="admin-card">
+              <div className="admin-card__header">
+                <h4>{member.name} ({member.role})</h4>
+                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <label style={{ fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={member.published !== false}
+                      onChange={(e) => updateMember(index, 'published', e.target.checked)}
+                    />
+                    Published
+                  </label>
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn--danger admin-btn--small"
+                    onClick={() => removeMember(index)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
 
-        {collaborators.map((collaborator, index) => (
-          <div key={collaborator.id} className="admin-card">
-            <div className="admin-card__header">
-              <h4>Member {index + 1}</h4>
-              <button
-                type="button"
-                className="admin-btn admin-btn--danger admin-btn--small"
-                onClick={() => removeCollaborator(index)}
-              >
-                Remove
-              </button>
+              <div className="admin-grid">
+                <div className="admin-input-group">
+                  <label>Full Name</label>
+                  <input
+                    type="text"
+                    value={member.name || ''}
+                    onChange={(e) => updateMember(index, 'name', e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Role / Specialty</label>
+                  <input
+                    type="text"
+                    value={member.role || ''}
+                    onChange={(e) => updateMember(index, 'role', e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="admin-input-group admin-input-group--full">
+                  <label>Short Biography</label>
+                  <textarea
+                    value={member.bio || ''}
+                    onChange={(e) => updateMember(index, 'bio', e.target.value)}
+                    rows={2}
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Profile Image URL</label>
+                  <input
+                    type="text"
+                    value={member.image || ''}
+                    onChange={(e) => updateMember(index, 'image', convertGoogleDriveLink(e.target.value))}
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Or Upload Profile Image</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleMemberUpload(index, e.target.files?.[0])}
+                  />
+                </div>
+              </div>
+
+              {member.image && (
+                <div className="admin-image-preview" style={{ marginTop: '0.75rem' }}>
+                  <img src={member.image} alt={member.name} style={{ width: '65px', height: '65px', borderRadius: '50%', objectFit: 'cover' }} />
+                </div>
+              )}
             </div>
-
-            <div className="admin-grid">
-              <div className="admin-input-group">
-                <label>Name</label>
-                <input
-                  type="text"
-                  value={collaborator.name}
-                  onChange={(e) => updateCollaborator(index, 'name', e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="admin-input-group">
-                <label>Role</label>
-                <input
-                  type="text"
-                  value={collaborator.role}
-                  onChange={(e) => updateCollaborator(index, 'role', e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="admin-input-group">
-                <label>Image URL</label>
-                <input
-                  type="url"
-                  value={collaborator.image}
-                  onChange={(e) => updateCollaborator(index, 'image', e.target.value)}
-                />
-              </div>
-
-              <div className="admin-input-group admin-input-group--full">
-                <label>Bio</label>
-                <textarea
-                  value={collaborator.bio}
-                  onChange={(e) => updateCollaborator(index, 'bio', e.target.value)}
-                  rows={3}
-                />
-              </div>
-
-              <div className="admin-input-group">
-                <label>Instagram</label>
-                <input
-                  type="url"
-                  value={collaborator.social?.instagram || ''}
-                  onChange={(e) => updateSocial(index, 'instagram', e.target.value)}
-                />
-              </div>
-
-              <div className="admin-input-group">
-                <label>LinkedIn</label>
-                <input
-                  type="url"
-                  value={collaborator.social?.linkedin || ''}
-                  onChange={(e) => updateSocial(index, 'linkedin', e.target.value)}
-                />
-              </div>
-
-              <div className="admin-input-group">
-                <label>Behance</label>
-                <input
-                  type="url"
-                  value={collaborator.social?.behance || ''}
-                  onChange={(e) => updateSocial(index, 'behance', e.target.value)}
-                />
-              </div>
-            </div>
-
-            {collaborator.image && (
-              <div className="admin-image-preview">
-                <img src={collaborator.image} alt={collaborator.name} />
-              </div>
-            )}
-          </div>
-        ))}
+          ))}
+        </div>
 
         <div className="admin-actions">
           <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
-            {saving ? 'Saving...' : 'Save Team Members'}
+            {saving ? 'Saving...' : 'Save Team'}
           </button>
         </div>
       </form>
@@ -875,144 +1558,372 @@ function CollaboratorsEditor({ data, onSave, saving }) {
   )
 }
 
-// Photos Editor Component
-function PhotosEditor({ data, onSave, saving }) {
+// ─────────────────────────────────────────────────────────────────────────────
+// 9. Fully Dynamic Portfolio Photos Manager (Requirements #1 & #14)
+// ─────────────────────────────────────────────────────────────────────────────
+function PhotosEditor({ data, onSave, saving, token, onReload }) {
   const [photos, setPhotos] = useState(data || [])
+  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [sortBy, setSortBy] = useState('order')
+  const [uploadCategory, setUploadCategory] = useState('weddings')
+  const [editingPhoto, setEditingPhoto] = useState(null)
+  const [isUploading, setIsUploading] = useState(false)
+  const [uploadStatus, setUploadStatus] = useState('')
+
+  // New photo modal state
+  const [newPhotoModal, setNewPhotoModal] = useState(false)
+  const [newPhotoData, setNewPhotoData] = useState({
+    title: '',
+    category: 'weddings',
+    desc: '',
+    alt: '',
+    src: '',
+    published: true
+  })
 
   useEffect(() => {
     setPhotos(data || [])
   }, [data])
 
-  const addPhoto = () => {
-    setPhotos(prev => [...prev, {
-      id: Date.now(),
-      title: '',
-      category: '',
-      src: '',
-      description: ''
-    }])
-  }
+  // Filter & sort logic
+  const filteredPhotos = useMemo(() => {
+    let result = [...photos]
 
-  const updatePhoto = (index, field, value) => {
-    setPhotos(prev => prev.map((photo, i) => {
-      if (i === index) {
-        const updated = { ...photo, [field]: value }
-        // Auto-convert Google Drive links when pasted
-        if (field === 'src' && value.includes('drive.google.com')) {
-          updated.src = convertGoogleDriveLink(value)
-        }
-        return updated
+    // Category filter
+    if (selectedCategory !== 'all') {
+      result = result.filter(
+        (p) =>
+          p.category === selectedCategory ||
+          p.categorySlug === selectedCategory ||
+          (selectedCategory === 'birthdays' && p.category === 'birthday-photography') ||
+          (selectedCategory === 'birthday-photography' && p.category === 'birthdays')
+      )
+    }
+
+    // Search query
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase()
+      result = result.filter(
+        (p) =>
+          (p.title && p.title.toLowerCase().includes(q)) ||
+          (p.desc && p.desc.toLowerCase().includes(q)) ||
+          (p.alt && p.alt.toLowerCase().includes(q))
+      )
+    }
+
+    // Sort
+    if (sortBy === 'newest') {
+      result.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+    } else if (sortBy === 'title') {
+      result.sort((a, b) => (a.title || '').localeCompare(b.title || ''))
+    } else {
+      result.sort((a, b) => (a.order || 0) - (b.order || 0))
+    }
+
+    return result
+  }, [photos, selectedCategory, searchQuery, sortBy])
+
+  // Multi-file upload handler
+  const handleMultiFileUpload = async (files) => {
+    if (!files || files.length === 0) return
+    setIsUploading(true)
+    setUploadStatus(`Uploading ${files.length} photograph(s) to ${uploadCategory}...`)
+
+    const addedList = []
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      setUploadStatus(`Uploading photo ${i + 1} of ${files.length}: ${file.name}...`)
+      try {
+        const url = await uploadImageFile(file, token)
+        const cleanTitle = file.name
+          .replace(/\.[^/.]+$/, '')
+          .replace(/[-_]/g, ' ')
+          .replace(/\b\w/g, (l) => l.toUpperCase())
+
+        addedList.push({
+          id: `photo-${Date.now()}-${i}`,
+          num: String(photos.filter((p) => p.category === uploadCategory).length + i + 1).padStart(2, '0'),
+          category: uploadCategory,
+          title: cleanTitle,
+          desc: `Documentary capture celebrating authentic emotional moments.`,
+          alt: cleanTitle,
+          src: url,
+          image: url,
+          srcLarge: url,
+          order: photos.length + i + 1,
+          published: true,
+          createdAt: new Date().toISOString()
+        })
+      } catch (err) {
+        console.error('File upload failed:', err)
       }
-      return photo
-    }))
+    }
+
+    const updated = [...photos, ...addedList]
+    setPhotos(updated)
+    await onSave(updated)
+    setIsUploading(false)
+    setUploadStatus(`Successfully uploaded ${addedList.length} photograph(s)!`)
+    setTimeout(() => setUploadStatus(''), 4000)
   }
 
-  const removePhoto = (index) => {
-    setPhotos(prev => prev.filter((_, i) => i !== index))
+  // Toggle Publish
+  const handleTogglePublish = async (photoId) => {
+    const updated = photos.map((p) =>
+      p.id === photoId ? { ...p, published: !p.published } : p
+    )
+    setPhotos(updated)
+    await onSave(updated)
   }
 
-  const handleSubmit = (e) => {
+  // Delete photo with confirmation
+  const handleDeletePhoto = async (photoId) => {
+    const photo = photos.find((p) => p.id === photoId)
+    if (!window.confirm(`Are you sure you want to delete "${photo?.title || 'this photograph'}"? This action cannot be undone.`)) {
+      return
+    }
+
+    const updated = photos.filter((p) => p.id !== photoId)
+    setPhotos(updated)
+    await onSave(updated)
+  }
+
+  // Save edited photo modal
+  const handleSaveEdit = async () => {
+    if (!editingPhoto) return
+    const updated = photos.map((p) => (p.id === editingPhoto.id ? editingPhoto : p))
+    setPhotos(updated)
+    await onSave(updated)
+    setEditingPhoto(null)
+  }
+
+  // Add single photo modal submit
+  const handleCreatePhoto = async (e) => {
     e.preventDefault()
-    onSave(photos)
+    if (!newPhotoData.src) {
+      alert('Please provide an image URL or upload a file')
+      return
+    }
+
+    const newPhoto = {
+      id: `photo-${Date.now()}`,
+      num: String(photos.filter((p) => p.category === newPhotoData.category).length + 1).padStart(2, '0'),
+      title: newPhotoData.title || 'Untitled Photograph',
+      category: newPhotoData.category,
+      desc: newPhotoData.desc || '',
+      alt: newPhotoData.alt || newPhotoData.title || 'Josh Photography showcase',
+      src: newPhotoData.src,
+      image: newPhotoData.src,
+      srcLarge: newPhotoData.src,
+      order: photos.length + 1,
+      published: newPhotoData.published !== false,
+      createdAt: new Date().toISOString()
+    }
+
+    const updated = [...photos, newPhoto]
+    setPhotos(updated)
+    await onSave(updated)
+    setNewPhotoModal(false)
+    setNewPhotoData({
+      title: '',
+      category: 'weddings',
+      desc: '',
+      alt: '',
+      src: '',
+      published: true
+    })
   }
 
   return (
     <div className="admin-section">
       <div className="admin-section__header">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <h2>Portfolio Photos</h2>
-            <p>Add photos by pasting Google Drive links or direct image URLs</p>
+            <h2>Dynamic Photography Portfolio Management</h2>
+            <p>Upload, organize, edit, and publish photographs across all 12 photography categories</p>
           </div>
-          <button type="button" className="admin-btn admin-btn--secondary" onClick={addPhoto}>
-            + Add Photo
-          </button>
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <button
+              type="button"
+              className="admin-btn admin-btn--primary"
+              onClick={() => setNewPhotoModal(true)}
+            >
+              + Add Single Photo
+            </button>
+          </div>
         </div>
       </div>
 
-      {photos.length === 0 ? (
+      {/* Multi-photo Uploader Dropzone with Category Selection */}
+      <div className="admin-card" style={{ marginBottom: '1.5rem', background: '#1c1c1c' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <h3 style={{ margin: 0, fontSize: '1rem', color: 'var(--admin-accent)' }}>
+            Bulk / Multi-Photo Uploader
+          </h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>Target Category:</span>
+            <select
+              value={uploadCategory}
+              onChange={(e) => setUploadCategory(e.target.value)}
+              style={{ padding: '0.4rem 0.75rem', background: '#111', border: '1px solid var(--admin-border)', color: '#fff', borderRadius: '4px' }}
+            >
+              {PHOTOGRAPHY_CATEGORIES.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="admin-upload-zone">
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            disabled={isUploading}
+            onChange={(e) => handleMultiFileUpload(e.target.files)}
+          />
+          <span className="admin-upload-zone__icon">📤</span>
+          <div className="admin-upload-zone__title">
+            {isUploading ? 'Uploading in progress...' : 'Drag & Drop or Click to Select Multiple Photographs'}
+          </div>
+          <div className="admin-upload-zone__subtitle">
+            Targeting: <strong>{PHOTOGRAPHY_CATEGORIES.find((c) => c.id === uploadCategory)?.label}</strong>. Supports JPEG, PNG, WebP (up to 15MB each).
+          </div>
+        </div>
+
+        {uploadStatus && (
+          <div style={{ marginTop: '0.75rem', padding: '0.5rem 0.75rem', background: 'rgba(201, 169, 98, 0.1)', border: '1px solid var(--admin-accent)', borderRadius: '4px', fontSize: '0.8rem', color: 'var(--admin-accent)' }}>
+            {uploadStatus}
+          </div>
+        )}
+      </div>
+
+      {/* Category Filter Pills Bar */}
+      <div className="admin-pill-bar">
+        <button
+          type="button"
+          className={`admin-pill ${selectedCategory === 'all' ? 'admin-pill--active' : ''}`}
+          onClick={() => setSelectedCategory('all')}
+        >
+          All Categories ({photos.length})
+        </button>
+        {PHOTOGRAPHY_CATEGORIES.map((cat) => {
+          const count = photos.filter(
+            (p) =>
+              p.category === cat.id ||
+              p.categorySlug === cat.id ||
+              (cat.id === 'birthdays' && p.category === 'birthday-photography') ||
+              (cat.id === 'birthday-photography' && p.category === 'birthdays')
+          ).length
+          return (
+            <button
+              key={cat.id}
+              type="button"
+              className={`admin-pill ${selectedCategory === cat.id ? 'admin-pill--active' : ''}`}
+              onClick={() => setSelectedCategory(cat.id)}
+            >
+              {cat.label} ({count})
+            </button>
+          )
+        })}
+      </div>
+
+      {/* Search & Sort Toolbar */}
+      <div className="admin-toolbar">
+        <div className="admin-toolbar__group">
+          <input
+            type="text"
+            className="admin-search-input"
+            placeholder="Search photographs by title or description..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <span style={{ fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>
+            Showing {filteredPhotos.length} of {photos.length}
+          </span>
+        </div>
+
+        <div className="admin-toolbar__group">
+          <label style={{ fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>Sort by:</label>
+          <select
+            className="admin-sort-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+          >
+            <option value="order">Display Order (Default)</option>
+            <option value="newest">Newest First</option>
+            <option value="title">Title (A – Z)</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Photographs Grid */}
+      {filteredPhotos.length === 0 ? (
         <div className="admin-empty">
           <span>📷</span>
-          <p>No photos yet. Click "Add Photo" to get started.</p>
+          <p>No photographs found matching your filter criteria.</p>
         </div>
       ) : (
-        <div className="admin-photos-list">
-          {photos.map((photo, index) => (
-            <div key={photo.id} className="admin-photo-item">
-              <div className="admin-photo-item__preview">
-                {photo.src ? (
-                  <>
-                    <img src={photo.src} alt={photo.title || 'Photo'} onError={(e) => {
-                      e.target.style.display = 'none'
-                      e.target.nextSibling.style.display = 'flex'
-                    }} />
-                    <div className="admin-photo-item__error" style={{ display: 'none' }}>
-                      <span>⚠️</span>
-                      <p>Image failed to load</p>
-                    </div>
-                  </>
-                ) : (
-                  <div className="admin-photo-item__placeholder">
-                    <span>📷</span>
-                    <p>No image</p>
-                  </div>
-                )}
+        <div className="admin-portfolio-grid">
+          {filteredPhotos.map((photo, idx) => (
+            <div key={photo.id || idx} className="admin-portfolio-card">
+              <div className="admin-portfolio-card__img-wrap">
+                <img
+                  src={photo.image || photo.src}
+                  alt={photo.alt || photo.title}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.target.src = 'https://images.unsplash.com/photo-1519741497674-611481863552?w=500&q=80'
+                  }}
+                />
+                <div className="admin-portfolio-card__badges">
+                  <span className={`admin-badge ${photo.published !== false ? 'admin-badge--published' : 'admin-badge--draft'}`}>
+                    {photo.published !== false ? 'Published' : 'Draft'}
+                  </span>
+                  <span className="admin-badge admin-badge--cat">
+                    {PHOTOGRAPHY_CATEGORIES.find((c) => c.id === photo.category)?.label || photo.category}
+                  </span>
+                </div>
               </div>
 
-              <div className="admin-photo-item__form">
-                <div className="admin-grid">
-                  <div className="admin-input-group">
-                    <label>Title</label>
-                    <input
-                      type="text"
-                      value={photo.title}
-                      onChange={(e) => updatePhoto(index, 'title', e.target.value)}
-                      placeholder="Photo title"
-                    />
-                  </div>
-
-                  <div className="admin-input-group">
-                    <label>Category</label>
-                    <input
-                      type="text"
-                      value={photo.category}
-                      onChange={(e) => updatePhoto(index, 'category', e.target.value)}
-                      placeholder="e.g., Wedding, Portrait"
-                    />
-                  </div>
-
-                  <div className="admin-input-group admin-input-group--full">
-                    <label>Google Drive Link or Image URL</label>
-                    <input
-                      type="url"
-                      value={photo.src}
-                      onChange={(e) => updatePhoto(index, 'src', e.target.value)}
-                      placeholder="Paste Google Drive link or image URL"
-                    />
-                    <small style={{ color: 'var(--admin-text-muted)', fontSize: '0.75rem', marginTop: '0.25rem' }}>
-                      Paste your Google Drive sharing link - it will be converted automatically
-                    </small>
-                  </div>
-
-                  <div className="admin-input-group admin-input-group--full">
-                    <label>Description (Optional)</label>
-                    <textarea
-                      value={photo.description}
-                      onChange={(e) => updatePhoto(index, 'description', e.target.value)}
-                      rows={3}
-                      placeholder="Photo description"
-                    />
-                  </div>
+              <div className="admin-portfolio-card__body">
+                <div>
+                  <span className="admin-portfolio-card__num">
+                    #{photo.num || String(idx + 1).padStart(2, '0')} · Order {photo.order || idx + 1}
+                  </span>
+                  <h4 className="admin-portfolio-card__title">{photo.title || 'Untitled'}</h4>
+                  <p className="admin-portfolio-card__desc">{photo.desc || 'No description provided.'}</p>
                 </div>
 
-                <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'flex-end' }}>
+                <div className="admin-portfolio-card__actions">
                   <button
                     type="button"
-                    className="admin-btn admin-btn--danger admin-btn--small"
-                    onClick={() => removePhoto(index)}
+                    className="admin-btn admin-btn--secondary admin-btn--small"
+                    onClick={() => handleTogglePublish(photo.id)}
                   >
-                    Remove Photo
+                    {photo.published !== false ? 'Unpublish' : 'Publish'}
                   </button>
+
+                  <div style={{ display: 'flex', gap: '0.4rem' }}>
+                    <button
+                      type="button"
+                      className="admin-btn admin-btn--secondary admin-btn--small"
+                      onClick={() => setEditingPhoto({ ...photo })}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-btn admin-btn--danger admin-btn--small"
+                      onClick={() => handleDeletePhoto(photo.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1020,19 +1931,274 @@ function PhotosEditor({ data, onSave, saving }) {
         </div>
       )}
 
-      <div className="admin-actions">
-        <button type="button" className="admin-btn admin-btn--secondary" onClick={() => setPhotos([])}>
-          Clear All
-        </button>
-        <button type="button" className="admin-btn admin-btn--primary" onClick={handleSubmit} disabled={saving}>
-          {saving ? 'Saving...' : 'Save Photos'}
-        </button>
-      </div>
+      {/* Edit Photo Modal */}
+      {editingPhoto && (
+        <div className="admin-modal-overlay" onClick={() => setEditingPhoto(null)}>
+          <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal__header">
+              <h3>Edit Photograph: {editingPhoto.title}</h3>
+              <button className="admin-modal__close" onClick={() => setEditingPhoto(null)}>
+                ×
+              </button>
+            </div>
+
+            <div className="admin-modal__body">
+              <div className="admin-grid">
+                <div className="admin-input-group">
+                  <label>Category</label>
+                  <select
+                    value={editingPhoto.category || 'weddings'}
+                    onChange={(e) => setEditingPhoto({ ...editingPhoto, category: e.target.value })}
+                  >
+                    {PHOTOGRAPHY_CATEGORIES.map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Display Order</label>
+                  <input
+                    type="number"
+                    value={editingPhoto.order || 1}
+                    onChange={(e) => setEditingPhoto({ ...editingPhoto, order: parseInt(e.target.value, 10) || 1 })}
+                  />
+                </div>
+
+                <div className="admin-input-group admin-input-group--full">
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    value={editingPhoto.title || ''}
+                    onChange={(e) => setEditingPhoto({ ...editingPhoto, title: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="admin-input-group admin-input-group--full">
+                  <label>Description</label>
+                  <textarea
+                    value={editingPhoto.desc || ''}
+                    onChange={(e) => setEditingPhoto({ ...editingPhoto, desc: e.target.value })}
+                    rows={3}
+                  />
+                </div>
+
+                <div className="admin-input-group admin-input-group--full">
+                  <label>Alt Text (SEO & Accessibility)</label>
+                  <input
+                    type="text"
+                    value={editingPhoto.alt || ''}
+                    onChange={(e) => setEditingPhoto({ ...editingPhoto, alt: e.target.value })}
+                  />
+                </div>
+
+                <div className="admin-input-group admin-input-group--full">
+                  <label>Image URL / Path</label>
+                  <input
+                    type="text"
+                    value={editingPhoto.src || editingPhoto.image || ''}
+                    onChange={(e) => {
+                      const val = convertGoogleDriveLink(e.target.value)
+                      setEditingPhoto({ ...editingPhoto, src: val, image: val, srcLarge: val })
+                    }}
+                  />
+                </div>
+
+                <div className="admin-input-group admin-input-group--full">
+                  <label>Replace Image (Upload New File)</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0]
+                      if (file) {
+                        const url = await uploadImageFile(file, token)
+                        if (url) {
+                          setEditingPhoto({ ...editingPhoto, src: url, image: url, srcLarge: url })
+                        }
+                      }
+                    }}
+                  />
+                </div>
+
+                <div className="admin-input-group">
+                  <label>Publish Status</label>
+                  <select
+                    value={editingPhoto.published !== false ? 'true' : 'false'}
+                    onChange={(e) => setEditingPhoto({ ...editingPhoto, published: e.target.value === 'true' })}
+                  >
+                    <option value="true">Published (Visible in portfolio)</option>
+                    <option value="false">Draft / Unpublished</option>
+                  </select>
+                </div>
+              </div>
+
+              {(editingPhoto.src || editingPhoto.image) && (
+                <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+                  <img
+                    src={editingPhoto.src || editingPhoto.image}
+                    alt={editingPhoto.title}
+                    style={{ maxHeight: '180px', borderRadius: '4px', objectFit: 'cover' }}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="admin-modal__footer">
+              <button
+                type="button"
+                className="admin-btn admin-btn--secondary"
+                onClick={() => setEditingPhoto(null)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="admin-btn admin-btn--primary"
+                onClick={handleSaveEdit}
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Single Photo Modal */}
+      {newPhotoModal && (
+        <div className="admin-modal-overlay" onClick={() => setNewPhotoModal(false)}>
+          <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal__header">
+              <h3>Add Single Photograph</h3>
+              <button className="admin-modal__close" onClick={() => setNewPhotoModal(false)}>
+                ×
+              </button>
+            </div>
+
+            <form onSubmit={handleCreatePhoto}>
+              <div className="admin-modal__body">
+                <div className="admin-grid">
+                  <div className="admin-input-group">
+                    <label>Category</label>
+                    <select
+                      value={newPhotoData.category}
+                      onChange={(e) => setNewPhotoData({ ...newPhotoData, category: e.target.value })}
+                    >
+                      {PHOTOGRAPHY_CATEGORIES.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                          {cat.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="admin-input-group">
+                    <label>Publish Status</label>
+                    <select
+                      value={newPhotoData.published ? 'true' : 'false'}
+                      onChange={(e) => setNewPhotoData({ ...newPhotoData, published: e.target.value === 'true' })}
+                    >
+                      <option value="true">Published</option>
+                      <option value="false">Draft</option>
+                    </select>
+                  </div>
+
+                  <div className="admin-input-group admin-input-group--full">
+                    <label>Photo Title</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Traditional Church Vows & Altar"
+                      value={newPhotoData.title}
+                      onChange={(e) => setNewPhotoData({ ...newPhotoData, title: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  <div className="admin-input-group admin-input-group--full">
+                    <label>Description</label>
+                    <textarea
+                      placeholder="Brief descriptive context for this photograph..."
+                      value={newPhotoData.desc}
+                      onChange={(e) => setNewPhotoData({ ...newPhotoData, desc: e.target.value })}
+                      rows={2}
+                    />
+                  </div>
+
+                  <div className="admin-input-group admin-input-group--full">
+                    <label>Alt Text</label>
+                    <input
+                      type="text"
+                      placeholder="Accessibility description"
+                      value={newPhotoData.alt}
+                      onChange={(e) => setNewPhotoData({ ...newPhotoData, alt: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="admin-input-group admin-input-group--full">
+                    <label>Upload Photograph File</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={async (e) => {
+                        const file = e.target.files?.[0]
+                        if (file) {
+                          const url = await uploadImageFile(file, token)
+                          if (url) {
+                            setNewPhotoData((p) => ({ ...p, src: url }))
+                          }
+                        }
+                      }}
+                    />
+                  </div>
+
+                  <div className="admin-input-group admin-input-group--full">
+                    <label>Or Paste Image URL / Google Drive Link</label>
+                    <input
+                      type="text"
+                      placeholder="https://..."
+                      value={newPhotoData.src}
+                      onChange={(e) => setNewPhotoData({ ...newPhotoData, src: convertGoogleDriveLink(e.target.value) })}
+                    />
+                  </div>
+                </div>
+
+                {newPhotoData.src && (
+                  <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+                    <img
+                      src={newPhotoData.src}
+                      alt="Preview"
+                      style={{ maxHeight: '160px', borderRadius: '4px', objectFit: 'cover' }}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="admin-modal__footer">
+                <button
+                  type="button"
+                  className="admin-btn admin-btn--secondary"
+                  onClick={() => setNewPhotoModal(false)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="admin-btn admin-btn--primary">
+                  Publish to Portfolio
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
 
-// Social Editor Component
+// ─────────────────────────────────────────────────────────────────────────────
+// 10. Social Media Links Management Component
+// ─────────────────────────────────────────────────────────────────────────────
 function SocialEditor({ data, onSave, saving }) {
   const [social, setSocial] = useState(data || {})
 
@@ -1040,46 +2206,55 @@ function SocialEditor({ data, onSave, saving }) {
     setSocial(data || {})
   }, [data])
 
+  const platforms = [
+    { key: 'instagram', label: 'Instagram', icon: '📷', defaultPlaceholder: 'https://instagram.com/joshphotography' },
+    { key: 'facebook', label: 'Facebook', icon: '👥', defaultPlaceholder: 'https://facebook.com/joshphotography' },
+    { key: 'youtube', label: 'YouTube', icon: '📺', defaultPlaceholder: 'https://youtube.com/@joshphotography' },
+    { key: 'pinterest', label: 'Pinterest', icon: '📌', defaultPlaceholder: 'https://pinterest.com/joshphotography' },
+    { key: 'linkedin', label: 'LinkedIn', icon: '💼', defaultPlaceholder: 'https://linkedin.com/company/joshphotography' },
+    { key: 'whatsapp', label: 'WhatsApp', icon: '💬', defaultPlaceholder: '+447988827057' },
+    { key: 'tiktok', label: 'TikTok', icon: '🎵', defaultPlaceholder: 'https://tiktok.com/@joshphotography' }
+  ]
+
+  const handleChange = (key, value) => {
+    setSocial((prev) => ({
+      ...prev,
+      [key]: value
+    }))
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     onSave(social)
   }
 
-  const platforms = [
-    { key: 'instagram', label: 'Instagram', icon: '📷' },
-    { key: 'facebook', label: 'Facebook', icon: '👥' },
-    { key: 'twitter', label: 'Twitter/X', icon: '🐦' },
-    { key: 'linkedin', label: 'LinkedIn', icon: '💼' },
-    { key: 'behance', label: 'Behance', icon: '🎨' },
-    { key: 'youtube', label: 'YouTube', icon: '📺' },
-    { key: 'tiktok', label: 'TikTok', icon: '🎵' },
-    { key: 'website', label: 'Website', icon: '🌐' }
-  ]
-
   return (
     <div className="admin-section">
       <div className="admin-section__header">
-        <div>
-          <h2>Social Media Links</h2>
-          <p>Add your social media profiles</p>
-        </div>
+        <h2>Social Media Links Management</h2>
+        <p>Configure links for all official studio social media channels used in navbar and footer</p>
       </div>
+
       <form onSubmit={handleSubmit}>
         <div className="admin-grid">
-          {platforms.map(platform => (
-            <div key={platform.key} className="admin-input-group">
-              <label>
-                <span>{platform.icon}</span>
-                {platform.label}
-              </label>
-              <input
-                type="url"
-                value={social[platform.key] || ''}
-                onChange={(e) => setSocial(prev => ({ ...prev, [platform.key]: e.target.value }))}
-                placeholder={`https://${platform.key}.com/...`}
-              />
-            </div>
-          ))}
+          {platforms.map((p) => {
+            const rawVal = social[p.key]
+            const val = typeof rawVal === 'object' ? rawVal.url : rawVal || ''
+            return (
+              <div key={p.key} className="admin-input-group">
+                <label>
+                  <span style={{ marginRight: '0.4rem' }}>{p.icon}</span>
+                  {p.label}
+                </label>
+                <input
+                  type="text"
+                  value={val}
+                  placeholder={p.defaultPlaceholder}
+                  onChange={(e) => handleChange(p.key, e.target.value)}
+                />
+              </div>
+            )
+          })}
         </div>
 
         <div className="admin-actions">
@@ -1092,53 +2267,230 @@ function SocialEditor({ data, onSave, saving }) {
   )
 }
 
-// Contact Editor Component
-function ContactEditor({ data, onSave, saving }) {
-  return <StudioEditor data={data} onSave={onSave} saving={saving} />
-}
+// ─────────────────────────────────────────────────────────────────────────────
+// 11. Website Settings & SEO Editor Component
+// ─────────────────────────────────────────────────────────────────────────────
+function SettingsEditor({ data, onSave, saving, token }) {
+  const [settings, setSettings] = useState(data || {})
 
-// Messages Viewer Component
-function MessagesViewer({ data }) {
+  useEffect(() => {
+    setSettings(data || {})
+  }, [data])
+
+  const handleLogoUpload = async (file) => {
+    if (!file) return
+    const url = await uploadImageFile(file, token)
+    if (url) {
+      setSettings((p) => ({ ...p, logo: url }))
+    }
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    onSave(settings)
+  }
+
   return (
     <div className="admin-section">
       <div className="admin-section__header">
-        <div>
-          <h2>Contact Messages</h2>
-          <p>View and manage contact form submissions</p>
+        <h2>Website Settings & SEO</h2>
+        <p>Manage brand logo, copyright notice, booking button behavior, and global SEO meta tags</p>
+      </div>
+
+      <form onSubmit={handleSubmit}>
+        <div className="admin-grid">
+          <div className="admin-input-group">
+            <label>Website / Brand Name</label>
+            <input
+              type="text"
+              value={settings.siteName || 'Josh Photography'}
+              onChange={(e) => setSettings((p) => ({ ...p, siteName: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Brand Logo Path / URL</label>
+            <input
+              type="text"
+              value={settings.logo || '/logo.png'}
+              onChange={(e) => setSettings((p) => ({ ...p, logo: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Or Upload New Logo</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleLogoUpload(e.target.files?.[0])}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Booking Button Text</label>
+            <input
+              type="text"
+              value={settings.bookingButtonText || 'Check Availability'}
+              onChange={(e) => setSettings((p) => ({ ...p, bookingButtonText: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label>Booking Button Destination URL</label>
+            <input
+              type="text"
+              value={settings.bookingButtonLink || '/check-availability'}
+              onChange={(e) => setSettings((p) => ({ ...p, bookingButtonLink: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group admin-input-group--full">
+            <label>Footer Copyright Text</label>
+            <input
+              type="text"
+              value={settings.copyrightText || `© ${new Date().getFullYear()} Josh Photography. All rights reserved.`}
+              onChange={(e) => setSettings((p) => ({ ...p, copyrightText: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group admin-input-group--full">
+            <label>SEO Meta Page Title</label>
+            <input
+              type="text"
+              value={settings.seoTitle || 'Josh Photography | Timeless Luxury Wedding & Celebration Photography UK'}
+              onChange={(e) => setSettings((p) => ({ ...p, seoTitle: e.target.value }))}
+            />
+          </div>
+
+          <div className="admin-input-group admin-input-group--full">
+            <label>SEO Meta Description</label>
+            <textarea
+              value={settings.seoDescription || 'Fine-art documentary wedding, birthday, family and celebration photography across the United Kingdom.'}
+              onChange={(e) => setSettings((p) => ({ ...p, seoDescription: e.target.value }))}
+              rows={3}
+            />
+          </div>
+        </div>
+
+        <div className="admin-actions">
+          <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
+            {saving ? 'Saving...' : 'Save Settings'}
+          </button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 12. Messages Inbox Component
+// ─────────────────────────────────────────────────────────────────────────────
+function MessagesViewer({ data, onToggleStatus, onDeleteMessage }) {
+  const [filter, setFilter] = useState('all')
+
+  const messages = data || []
+  const filtered = messages.filter((m) => {
+    if (filter === 'unread') return m.status === 'unread' || m.status === 'new'
+    if (filter === 'read') return m.status === 'read'
+    return true
+  })
+
+  return (
+    <div className="admin-section">
+      <div className="admin-section__header">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+          <div>
+            <h2>Contact Messages & Inquiry Inbox</h2>
+            <p>Review customer booking inquiries and contact submissions</p>
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button
+              className={`admin-pill ${filter === 'all' ? 'admin-pill--active' : ''}`}
+              onClick={() => setFilter('all')}
+            >
+              All ({messages.length})
+            </button>
+            <button
+              className={`admin-pill ${filter === 'unread' ? 'admin-pill--active' : ''}`}
+              onClick={() => setFilter('unread')}
+            >
+              Unread ({messages.filter((m) => m.status === 'unread' || m.status === 'new').length})
+            </button>
+            <button
+              className={`admin-pill ${filter === 'read' ? 'admin-pill--active' : ''}`}
+              onClick={() => setFilter('read')}
+            >
+              Read ({messages.filter((m) => m.status === 'read').length})
+            </button>
+          </div>
         </div>
       </div>
+
       <div className="admin-messages">
-        {data?.length === 0 ? (
+        {filtered.length === 0 ? (
           <div className="admin-empty">
             <span>📭</span>
-            <p>No contact messages yet</p>
+            <p>No messages found in this view.</p>
           </div>
         ) : (
-          data?.map(contact => (
+          filtered.map((contact) => (
             <div key={contact.id} className="admin-message-card">
               <div className="admin-message__header">
                 <div className="admin-message__info">
-                  <h3>{contact.name}</h3>
-                  <p>{contact.email}</p>
-                  {contact.phone && <p>{contact.phone}</p>}
+                  <h3>{contact.name || 'Anonymous Inquirer'}</h3>
+                  <p>
+                    <strong>Email:</strong> {contact.email || 'None'}
+                  </p>
+                  {contact.phone && (
+                    <p>
+                      <strong>Phone:</strong> {contact.phone}
+                    </p>
+                  )}
+                  {contact.location && (
+                    <p>
+                      <strong>Location:</strong> {contact.location}
+                    </p>
+                  )}
+                  {contact.date && (
+                    <p>
+                      <strong>Target Date:</strong> {contact.date}
+                    </p>
+                  )}
                 </div>
+
                 <div className="admin-message__meta">
-                  <span className={`admin-status admin-status--${contact.status || 'new'}`}>
-                    {contact.status || 'New'}
+                  <span
+                    className={`admin-status admin-status--${contact.status === 'read' ? 'approved' : 'new'}`}
+                  >
+                    {contact.status === 'read' ? 'Read' : 'Unread'}
                   </span>
-                  <time>{new Date(contact.submittedAt).toLocaleString()}</time>
+                  <time>{contact.submittedAt ? new Date(contact.submittedAt).toLocaleString() : 'Recently'}</time>
+                  <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.5rem' }}>
+                    <button
+                      className="admin-btn admin-btn--secondary admin-btn--small"
+                      onClick={() => onToggleStatus(contact.id, contact.status === 'read' ? 'unread' : 'read')}
+                    >
+                      Mark as {contact.status === 'read' ? 'Unread' : 'Read'}
+                    </button>
+                    <button
+                      className="admin-btn admin-btn--danger admin-btn--small"
+                      onClick={() => onDeleteMessage(contact.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              {contact.service && (
+              {(contact.service || contact.subject) && (
                 <div className="admin-message__service">
-                  <strong>Service:</strong> {contact.service}
+                  <strong>Service / Subject:</strong> {contact.service || contact.subject}
                 </div>
               )}
 
               <div className="admin-message__content">
-                <strong>Message:</strong>
-                <p>{contact.message}</p>
+                <strong>Inquiry Message:</strong>
+                <p style={{ whiteSpace: 'pre-wrap' }}>{contact.message || 'No additional message text provided.'}</p>
               </div>
             </div>
           ))
@@ -1148,34 +2500,37 @@ function MessagesViewer({ data }) {
   )
 }
 
-// Comments Manager Component
+// ─────────────────────────────────────────────────────────────────────────────
+// 13. Comments Manager Component
+// ─────────────────────────────────────────────────────────────────────────────
 function CommentsManager({ data, onApprove, onDelete }) {
   return (
     <div className="admin-section">
       <div className="admin-section__header">
-        <div>
-          <h2>Photo Comments</h2>
-          <p>Manage comments on portfolio photos</p>
-        </div>
+        <h2>Photo Comments & Moderation</h2>
+        <p>Review, approve, or remove client comments on portfolio photographs</p>
       </div>
+
       <div className="admin-comments">
-        {data?.length === 0 ? (
+        {(!data || data.length === 0) ? (
           <div className="admin-empty">
             <span>💭</span>
-            <p>No comments yet</p>
+            <p>No comments received yet.</p>
           </div>
         ) : (
-          data?.map(comment => (
+          data.map((comment) => (
             <div key={comment.id} className="admin-comment-card">
               <div className="admin-comment__header">
                 <div className="admin-comment__info">
                   <h4>{comment.name}</h4>
                   <p>{comment.email}</p>
-                  <small>Photo ID: {comment.photoId}</small>
+                  <small style={{ color: 'var(--admin-accent)' }}>Photo Reference: {comment.photoId}</small>
                 </div>
                 <div className="admin-comment__status">
-                  <span className={`admin-status ${comment.approved ? 'admin-status--approved' : 'admin-status--pending'}`}>
-                    {comment.approved ? 'Approved' : 'Pending'}
+                  <span
+                    className={`admin-status ${comment.approved ? 'admin-status--approved' : 'admin-status--pending'}`}
+                  >
+                    {comment.approved ? 'Approved (Public)' : 'Pending Review'}
                   </span>
                 </div>
               </div>
@@ -1187,17 +2542,17 @@ function CommentsManager({ data, onApprove, onDelete }) {
               <div className="admin-comment__actions">
                 {!comment.approved && (
                   <button
-                    className="admin-btn admin-btn--success admin-btn--small"
+                    className="admin-btn admin-btn--primary admin-btn--small"
                     onClick={() => onApprove(comment.id)}
                   >
-                    Approve
+                    Approve & Publish
                   </button>
                 )}
                 <button
                   className="admin-btn admin-btn--danger admin-btn--small"
                   onClick={() => onDelete(comment.id)}
                 >
-                  Delete
+                  Delete Comment
                 </button>
               </div>
             </div>
@@ -1208,17 +2563,20 @@ function CommentsManager({ data, onApprove, onDelete }) {
   )
 }
 
-// Main Dashboard Component
+// ─────────────────────────────────────────────────────────────────────────────
+// 14. Main Admin Dashboard
+// ─────────────────────────────────────────────────────────────────────────────
 function Dashboard({ token, onLogout }) {
   const [activeTab, setActiveTab] = useState('overview')
-  const [data, setData] = useState({})
+  const [data, setData] = useState(() => dataService.getAllDataSync())
+  const [overviewLive, setOverviewLive] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState(null)
 
   const authHeaders = {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
+    Authorization: `Bearer ${token}`
   }
 
   useEffect(() => {
@@ -1227,183 +2585,216 @@ function Dashboard({ token, onLogout }) {
 
   const loadAllData = async () => {
     try {
-      const newData = {}
-
+      const live = {}
       try {
         const [
           contentRes,
           photosRes,
           contactsRes,
-          testimonialsRes,
-          collaboratorsRes,
-          aboutRes,
-          commentsRes
+          commentsRes,
+          overviewRes
         ] = await Promise.all([
           fetch(`${API_URL}/content`).catch(() => null),
           fetch(`${API_URL}/photos`).catch(() => null),
           fetch(`${API_URL}/contact`, { headers: authHeaders }).catch(() => null),
-          fetch(`${API_URL}/content/testimonials`).catch(() => null),
-          fetch(`${API_URL}/content/collaborators`).catch(() => null),
-          fetch(`${API_URL}/content/about`).catch(() => null),
-          fetch(`${API_URL}/comments`, { headers: authHeaders }).catch(() => null)
+          fetch(`${API_URL}/comments`, { headers: authHeaders }).catch(() => null),
+          fetch(`${API_URL}/overview`, { headers: authHeaders }).catch(() => null)
         ])
 
-        if (contentRes && contentRes.ok) newData.content = await contentRes.json()
-        if (photosRes && photosRes.ok) newData.photos = await photosRes.json()
-        if (contactsRes && contactsRes.ok) newData.contacts = await contactsRes.json()
-        if (testimonialsRes && testimonialsRes.ok) newData.testimonials = await testimonialsRes.json()
-        if (collaboratorsRes && collaboratorsRes.ok) newData.collaborators = await collaboratorsRes.json()
-        if (aboutRes && aboutRes.ok) newData.about = await aboutRes.json()
-        if (commentsRes && commentsRes.ok) newData.comments = await commentsRes.json()
-      } catch (e) {
-        console.warn('Backend unavailable, falling back to local data', e)
+        if (contentRes && contentRes.ok) live.content = await contentRes.json()
+        if (photosRes && photosRes.ok) live.photos = await photosRes.json()
+        if (contactsRes && contactsRes.ok) live.contacts = await contactsRes.json()
+        if (commentsRes && commentsRes.ok) live.comments = await commentsRes.json()
+        if (overviewRes && overviewRes.ok) {
+          const ov = await overviewRes.json()
+          setOverviewLive(ov)
+        }
+      } catch (err) {
+        console.warn('API refresh error:', err)
       }
 
-      // Check localStorage for any edits saved in browser session
-      let localSaved = {}
-      try {
-        const saved = localStorage.getItem('josh_admin_data')
-        if (saved) localSaved = JSON.parse(saved)
-      } catch (e) { }
+      const syncData = dataService.getAllDataSync()
+      const merged = {
+        content: live.content || syncData.content || initialContent,
+        photos: live.photos || syncData.photos || initialPhotos,
+        contacts: live.contacts || [],
+        comments: live.comments || []
+      }
 
-      setData({
-        content: newData.content || localSaved.content || initialContent,
-        photos: newData.photos || localSaved.photos || initialPhotos,
-        contacts: newData.contacts || localSaved.contacts || [],
-        testimonials: newData.testimonials || localSaved.testimonials || initialContent.testimonials || [],
-        collaborators: newData.collaborators || localSaved.collaborators || initialContent.collaborators || [],
-        about: newData.about || localSaved.about || initialContent.about,
-        comments: newData.comments || localSaved.comments || []
-      })
-    } catch (error) {
-      console.error('Failed to load data:', error)
-      setData({
-        content: initialContent,
-        photos: initialPhotos,
-        contacts: [],
-        testimonials: initialContent.testimonials || [],
-        collaborators: initialContent.collaborators || [],
-        about: initialContent.about,
-        comments: []
-      })
+      setData(merged)
+    } catch (err) {
+      console.error('Error loading data:', err)
     } finally {
       setLoading(false)
     }
   }
 
-  const showMessage = (text, type = 'success') => {
+  const showToast = (text, type = 'success') => {
     setMessage({ text, type })
-    setTimeout(() => setMessage(null), 3000)
+    setTimeout(() => setMessage(null), 3500)
   }
 
-  const saveSection = async (section, endpoint, dataToSave) => {
+  // Save content section handler
+  const saveSection = async (sectionName, endpoint, sectionKey, payload) => {
     setSaving(true)
     try {
-      // Update local state and persist to localStorage
-      setData(prev => {
-        const updated = { ...prev }
-        if (endpoint.includes('/content/studio')) {
-          updated.content = { ...updated.content, studio: { ...updated.content?.studio, ...dataToSave } }
-        } else if (endpoint.includes('/content/hero')) {
-          updated.content = { ...updated.content, heroSlides: dataToSave.slides }
-        } else if (endpoint.includes('/content/about')) {
-          updated.about = dataToSave.about
-          updated.content = { ...updated.content, about: dataToSave.about }
-        } else if (endpoint.includes('/content/services')) {
-          updated.content = { ...updated.content, services: dataToSave.services }
-        } else if (endpoint.includes('/content/testimonials')) {
-          updated.testimonials = dataToSave.testimonials
-        } else if (endpoint.includes('/content/collaborators')) {
-          updated.collaborators = dataToSave.collaborators
-        } else if (endpoint.includes('/photos')) {
-          updated.photos = { ...updated.photos, photos: dataToSave.photos }
-        } else if (endpoint.includes('/content/social')) {
-          updated.content = { ...updated.content, social: dataToSave }
+      // 1. Update dataService & localStorage immediately (live synchronizing all public pages)
+      await dataService.updateContentSection(sectionKey, endpoint, payload, authHeaders)
+
+      // 2. Update local state
+      setData((prev) => ({
+        ...prev,
+        content: {
+          ...prev.content,
+          [sectionKey]: payload
         }
-        try {
-          localStorage.setItem('josh_admin_data', JSON.stringify(updated))
-        } catch (e) { }
-        return updated
-      })
+      }))
 
-      // Also sync to backend API if reachable
-      try {
-        await fetch(`${API_URL}${endpoint}`, {
-          method: 'PUT',
-          headers: authHeaders,
-          body: JSON.stringify(dataToSave)
-        })
-      } catch (backendErr) {
-        // Backend not available (Netlify standalone mode)
-      }
-
-      showMessage(`${section} saved successfully!`)
-    } catch (error) {
-      showMessage(`Failed to save ${section}`, 'error')
+      showToast(`${sectionName} saved and published successfully!`)
+      loadAllData()
+    } catch (err) {
+      console.error(err)
+      showToast(`Failed to save ${sectionName}`, 'error')
     } finally {
       setSaving(false)
     }
   }
 
-  const handleApproveComment = async (commentId) => {
+  // Save photos handler
+  const savePhotos = async (updatedPhotosList) => {
+    setSaving(true)
     try {
-      const res = await fetch(`${API_URL}/comments/${commentId}`, {
+      await dataService.updatePhotos(updatedPhotosList)
+      setData((prev) => ({
+        ...prev,
+        photos: {
+          ...prev.photos,
+          photos: updatedPhotosList
+        }
+      }))
+
+      // Sync to backend if accessible
+      try {
+        await fetch(`${API_URL}/photos`, {
+          method: 'PUT',
+          headers: authHeaders,
+          body: JSON.stringify({ photos: updatedPhotosList })
+        })
+      } catch (e) {}
+
+      showToast('Portfolio photographs updated successfully!')
+      loadAllData()
+    } catch (err) {
+      console.error(err)
+      showToast('Failed to update portfolio photographs', 'error')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  // Toggle Message Status
+  const handleToggleMessageStatus = async (id, newStatus) => {
+    try {
+      await fetch(`${API_URL}/contact/${id}/status`, {
+        method: 'PATCH',
+        headers: authHeaders,
+        body: JSON.stringify({ status: newStatus })
+      })
+      setData((prev) => ({
+        ...prev,
+        contacts: prev.contacts.map((c) => (c.id === id ? { ...c, status: newStatus } : c))
+      }))
+      showToast(`Message marked as ${newStatus}`)
+    } catch (err) {
+      showToast('Failed to update message status', 'error')
+    }
+  }
+
+  // Delete Message
+  const handleDeleteMessage = async (id) => {
+    if (!window.confirm('Delete this contact message permanently?')) return
+    try {
+      await fetch(`${API_URL}/contact/${id}`, {
+        method: 'DELETE',
+        headers: authHeaders
+      })
+      setData((prev) => ({
+        ...prev,
+        contacts: prev.contacts.filter((c) => c.id !== id)
+      }))
+      showToast('Message deleted successfully')
+    } catch (err) {
+      showToast('Failed to delete message', 'error')
+    }
+  }
+
+  // Approve Comment
+  const handleApproveComment = async (id) => {
+    try {
+      await fetch(`${API_URL}/comments/${id}`, {
         method: 'PUT',
         headers: authHeaders,
         body: JSON.stringify({ approved: true })
       })
-      if (res.ok) {
-        showMessage('Comment approved!')
-        loadAllData()
-      } else {
-        showMessage('Failed to approve comment', 'error')
-      }
-    } catch (error) {
-      showMessage('Failed to approve comment', 'error')
+      setData((prev) => ({
+        ...prev,
+        comments: prev.comments.map((c) => (c.id === id ? { ...c, approved: true } : c))
+      }))
+      showToast('Comment approved and published!')
+    } catch (err) {
+      showToast('Failed to approve comment', 'error')
     }
   }
 
-  const handleDeleteComment = async (commentId) => {
-    if (!confirm('Are you sure you want to delete this comment?')) return
+  // Delete Comment
+  const handleDeleteComment = async (id) => {
+    if (!window.confirm('Delete this comment permanently?')) return
     try {
-      const res = await fetch(`${API_URL}/comments/${commentId}`, {
+      await fetch(`${API_URL}/comments/${id}`, {
         method: 'DELETE',
         headers: authHeaders
       })
-      if (res.ok) {
-        showMessage('Comment deleted!')
-        loadAllData()
-      } else {
-        showMessage('Failed to delete comment', 'error')
-      }
-    } catch (error) {
-      showMessage('Failed to delete comment', 'error')
+      setData((prev) => ({
+        ...prev,
+        comments: prev.comments.filter((c) => c.id !== id)
+      }))
+      showToast('Comment deleted')
+    } catch (err) {
+      showToast('Failed to delete comment', 'error')
     }
   }
 
+  const unreadMessagesCount = (data.contacts || []).filter(
+    (c) => c.status === 'unread' || c.status === 'new'
+  ).length
+
+  const pendingCommentsCount = (data.comments || []).filter((c) => !c.approved).length
+
   const tabs = [
     { id: 'overview', label: 'Overview', icon: '📊' },
+    { id: 'photos', label: 'Portfolio', icon: '📷', count: (data.photos?.photos || data.photos || []).length },
     { id: 'studio', label: 'Studio Info', icon: '🏠' },
     { id: 'hero', label: 'Hero Section', icon: '🎬' },
     { id: 'about', label: 'About Page', icon: '📖' },
     { id: 'services', label: 'Services', icon: '💼' },
     { id: 'testimonials', label: 'Testimonials', icon: '💬' },
     { id: 'collaborators', label: 'Team', icon: '👥' },
-    { id: 'photos', label: 'Portfolio', icon: '📷' },
     { id: 'social', label: 'Social Links', icon: '🔗' },
-    { id: 'contact', label: 'Contact Info', icon: '📞' },
-    { id: 'messages', label: 'Messages', icon: '💌' },
-    { id: 'comments', label: 'Comments', icon: '💭' }
+    { id: 'settings', label: 'Website Settings', icon: '⚙️' },
+    { id: 'messages', label: 'Messages', icon: '💌', badge: unreadMessagesCount },
+    { id: 'comments', label: 'Comments', icon: '💭', badge: pendingCommentsCount }
   ]
 
   if (loading) {
     return (
       <div className="admin-loading">
-        <div className="admin-loading__spinner"></div>
-        <p>Loading admin panel...</p>
+        <div className="admin-loading__spinner" />
+        <p>Loading Josh Photography CMS...</p>
       </div>
     )
   }
+
+  const rawPhotos = data.photos?.photos || data.photos || []
 
   return (
     <div className="admin-dashboard">
@@ -1415,7 +2806,7 @@ function Dashboard({ token, onLogout }) {
         </div>
 
         <nav className="admin-nav">
-          {tabs.map(tab => (
+          {tabs.map((tab) => (
             <button
               key={tab.id}
               className={`admin-nav__item ${activeTab === tab.id ? 'admin-nav__item--active' : ''}`}
@@ -1423,23 +2814,42 @@ function Dashboard({ token, onLogout }) {
             >
               <span>{tab.icon}</span>
               {tab.label}
+              {Boolean(tab.badge) && (
+                <span className="admin-nav__badge">{tab.badge}</span>
+              )}
             </button>
           ))}
         </nav>
 
         <button className="admin-logout" onClick={onLogout}>
-          Logout
+          Sign Out
         </button>
       </aside>
 
-      {/* Main Content */}
+      {/* Main Panel */}
       <main className="admin-main">
         <header className="admin-header">
-          <h1>{tabs.find(t => t.id === activeTab)?.label}</h1>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h1>{tabs.find((t) => t.id === activeTab)?.label}</h1>
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                fontSize: '0.8rem',
+                color: 'var(--admin-accent)',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.35rem'
+              }}
+            >
+              View Public Website ↗
+            </a>
+          </div>
         </header>
 
         <div className="admin-content">
-          {/* Message */}
           <AnimatePresence>
             {message && (
               <motion.div
@@ -1453,99 +2863,118 @@ function Dashboard({ token, onLogout }) {
             )}
           </AnimatePresence>
 
-          {/* Overview Tab */}
-          {activeTab === 'overview' && <Overview data={data} />}
-
-          {/* Studio Info Tab */}
-          {activeTab === 'studio' && data.content && (
-            <StudioEditor
-              data={data.content.studio}
-              onSave={(studioData) => saveSection('Studio Info', '/content/studio', studioData)}
-              saving={saving}
+          {/* Overview */}
+          {activeTab === 'overview' && (
+            <Overview
+              data={data}
+              overviewLive={overviewLive}
+              onNavigateTab={(tabId) => setActiveTab(tabId)}
             />
           )}
 
-          {/* Hero Section Tab */}
-          {activeTab === 'hero' && data.content && (
-            <HeroEditor
-              data={data.content.heroSlides}
-              onSave={(slides) => saveSection('Hero', '/content/hero', { slides })}
-              saving={saving}
-            />
-          )}
-
-          {/* About Tab */}
-          {activeTab === 'about' && data.about && (
-            <AboutEditor
-              data={data.about}
-              onSave={(aboutData) => saveSection('About', '/content/about', { about: aboutData })}
-              saving={saving}
-            />
-          )}
-
-          {/* Services Tab */}
-          {activeTab === 'services' && data.content && (
-            <ServicesEditor
-              data={data.content.services}
-              onSave={(services) => saveSection('Services', '/content/services', { services })}
-              saving={saving}
-            />
-          )}
-
-          {/* Testimonials Tab */}
-          {activeTab === 'testimonials' && data.testimonials && (
-            <TestimonialsEditor
-              data={data.testimonials}
-              onSave={(testimonials) => saveSection('Testimonials', '/content/testimonials', { testimonials })}
-              saving={saving}
-            />
-          )}
-
-          {/* Collaborators Tab */}
-          {activeTab === 'collaborators' && data.collaborators && (
-            <CollaboratorsEditor
-              data={data.collaborators}
-              onSave={(collaborators) => saveSection('Collaborators', '/content/collaborators', { collaborators })}
-              saving={saving}
-            />
-          )}
-
-          {/* Photos Tab */}
-          {activeTab === 'photos' && data.photos && (
+          {/* Portfolio Photos */}
+          {activeTab === 'photos' && (
             <PhotosEditor
-              data={data.photos.photos}
-              onSave={(photos) => saveSection('Photos', '/photos', { photos })}
+              data={rawPhotos}
+              onSave={savePhotos}
               saving={saving}
+              token={token}
+              onReload={loadAllData}
             />
           )}
 
-          {/* Social Links Tab */}
-          {activeTab === 'social' && data.content && (
+          {/* Studio Info */}
+          {activeTab === 'studio' && (
+            <StudioEditor
+              data={data.content?.studio || initialContent.studio}
+              onSave={(studioData) => saveSection('Studio Information', '/content/studio', 'studio', studioData)}
+              saving={saving}
+              token={token}
+            />
+          )}
+
+          {/* Hero Section */}
+          {activeTab === 'hero' && (
+            <HeroEditor
+              data={data.content?.heroSlides || initialContent.heroSlides}
+              onSave={(slides) => saveSection('Hero Section', '/content/hero', 'heroSlides', slides)}
+              saving={saving}
+              token={token}
+            />
+          )}
+
+          {/* About Page */}
+          {activeTab === 'about' && (
+            <AboutEditor
+              data={data.content?.about || initialContent.about}
+              onSave={(aboutData) => saveSection('About Page', '/content/about', 'about', aboutData)}
+              saving={saving}
+              token={token}
+            />
+          )}
+
+          {/* Services */}
+          {activeTab === 'services' && (
+            <ServicesEditor
+              data={data.content?.services || initialContent.services}
+              onSave={(servicesList) => saveSection('Services', '/content/services', 'services', servicesList)}
+              saving={saving}
+              token={token}
+            />
+          )}
+
+          {/* Testimonials */}
+          {activeTab === 'testimonials' && (
+            <TestimonialsEditor
+              data={data.content?.testimonials || initialContent.testimonials}
+              onSave={(tList) => saveSection('Testimonials', '/content/testimonials', 'testimonials', tList)}
+              saving={saving}
+              token={token}
+            />
+          )}
+
+          {/* Team */}
+          {activeTab === 'collaborators' && (
+            <CollaboratorsEditor
+              data={data.content?.collaborators || initialContent.collaborators}
+              onSave={(teamList) => saveSection('Team', '/content/collaborators', 'collaborators', teamList)}
+              saving={saving}
+              token={token}
+            />
+          )}
+
+          {/* Social Links */}
+          {activeTab === 'social' && (
             <SocialEditor
-              data={data.content.social}
-              onSave={(social) => saveSection('Social Links', '/content/social', social)}
+              data={data.content?.social || initialContent.social}
+              onSave={(socialData) => saveSection('Social Media Links', '/content/social', 'social', socialData)}
               saving={saving}
             />
           )}
 
-          {/* Contact Info Tab */}
-          {activeTab === 'contact' && data.content && (
-            <ContactEditor
-              data={data.content.studio}
-              onSave={(studioData) => saveSection('Contact Info', '/content/studio', studioData)}
+          {/* Settings */}
+          {activeTab === 'settings' && (
+            <SettingsEditor
+              data={data.content?.settings || initialContent.settings}
+              onSave={(settingsData) => saveSection('Website Settings', '/content/settings', 'settings', settingsData)}
               saving={saving}
+              token={token}
             />
           )}
 
-          {/* Messages Tab */}
-          {activeTab === 'messages' && data.contacts && (
-            <MessagesViewer data={data.contacts} />
+          {/* Messages */}
+          {activeTab === 'messages' && (
+            <MessagesViewer
+              data={data.contacts || []}
+              onToggleStatus={handleToggleMessageStatus}
+              onDeleteMessage={handleDeleteMessage}
+            />
           )}
 
-          {/* Comments Tab */}
-          {activeTab === 'comments' && data.comments && (
+          {/* Comments */}
+          {activeTab === 'comments' && (
             <CommentsManager
-              data={data.comments}
+              data={data.comments || []}
               onApprove={handleApproveComment}
               onDelete={handleDeleteComment}
             />
@@ -1556,7 +2985,9 @@ function Dashboard({ token, onLogout }) {
   )
 }
 
-// Main Admin App
+// ─────────────────────────────────────────────────────────────────────────────
+// 15. Main Export
+// ─────────────────────────────────────────────────────────────────────────────
 export default function AdminApp() {
   const [token, setToken] = useState(localStorage.getItem('adminToken'))
 

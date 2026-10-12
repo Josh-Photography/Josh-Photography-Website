@@ -2,8 +2,9 @@ import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight, Sparkles } from 'lucide-react'
+import { useWebsiteData } from '../../hooks/useWebsiteData'
 
-const editorialServices = [
+const defaultEditorialServices = [
   {
     num: '01',
     title: 'Wedding Photography',
@@ -57,6 +58,8 @@ const editorialServices = [
 ]
 
 export default function ServicesSection() {
+  const { services } = useWebsiteData()
+  const activeServices = (services && services.length > 0) ? services : defaultEditorialServices
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
 
@@ -103,7 +106,7 @@ export default function ServicesSection() {
 
         {/* Alternating Editorial Showcase Rows — IMAGES > CARDS */}
         <div className="space-y-24 md:space-y-32">
-          {editorialServices.map((service, index) => {
+          {activeServices.map((service, index) => {
             const isImageLeft = index % 2 === 0
             return (
               <motion.div
@@ -111,15 +114,13 @@ export default function ServicesSection() {
                 initial={{ opacity: 0, y: 40 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: index * 0.15 + 0.2, duration: 0.8 }}
-                className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center ${
-                  !isImageLeft ? 'lg:flex-row-reverse' : ''
-                }`}
+                className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center ${!isImageLeft ? 'lg:flex-row-reverse' : ''
+                  }`}
               >
                 {/* Large Visual Hero Image */}
                 <div
-                  className={`lg:col-span-7 ${
-                    !isImageLeft ? 'lg:order-2' : 'lg:order-1'
-                  }`}
+                  className={`lg:col-span-7 ${!isImageLeft ? 'lg:order-2' : 'lg:order-1'
+                    }`}
                 >
                   <Link
                     to={service.path}
@@ -143,9 +144,8 @@ export default function ServicesSection() {
 
                 {/* Editorial Text Content */}
                 <div
-                  className={`lg:col-span-5 flex flex-col justify-center ${
-                    !isImageLeft ? 'lg:order-1' : 'lg:order-2'
-                  }`}
+                  className={`lg:col-span-5 flex flex-col justify-center ${!isImageLeft ? 'lg:order-1' : 'lg:order-2'
+                    }`}
                 >
                   <span className="font-serif text-5xl sm:text-6xl text-muted-gold/40 font-light block mb-2">
                     {service.num}
@@ -183,7 +183,7 @@ export default function ServicesSection() {
           className="text-center mt-24 pt-12 border-t border-[#D8B77A]/30"
         >
           <Link
-            to="/photography"
+            to="/services"
             className="inline-flex items-center gap-3 px-10 py-4 bg-deep-charcoal text-ivory font-nav text-xs uppercase tracking-[0.16em] font-semibold hover:bg-muted-gold hover:text-deep-black transition-all duration-300 shadow-md"
           >
             <span>View All Services & Collections</span>

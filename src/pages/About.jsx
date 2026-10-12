@@ -4,12 +4,12 @@ import {
   Camera, Heart, Shield, Award, Sparkles, MapPin,
   Calendar, Check, ArrowRight, Eye, Info
 } from 'lucide-react'
-import { stats } from '../data/stories'
+import { stats as fallbackStats } from '../data/stories'
 import { siteConfig } from '../data/siteConfig'
+import { useWebsiteData } from '../hooks/useWebsiteData'
 
-// Temporary studio visual placeholders (Opening next month in Greater London)
-// Replace these with actual studio photographs once the space opens.
-const studioPreviewImages = [
+// Fallback studio visual placeholders (Opening next month in Greater London)
+const fallbackStudioPreviewImages = [
   {
     id: 'studio-interior',
     title: 'Natural Light Studio Space',
@@ -48,7 +48,7 @@ const studioPreviewImages = [
   },
 ]
 
-const photographyPillars = [
+const fallbackPhotographyPillars = [
   {
     icon: Heart,
     title: 'Emotional Authenticity',
@@ -71,7 +71,7 @@ const photographyPillars = [
   },
 ]
 
-const faqs = [
+const fallbackFaqs = [
   {
     q: 'How far in advance should we inquire for dates?',
     a: 'We recommend inquiring 6 to 12 months in advance for peak UK wedding dates and weekend celebrations. For newborn, family, and birthday sessions, 3 to 6 weeks notice is ideal.',
@@ -91,6 +91,45 @@ const faqs = [
 ]
 
 export default function About() {
+  const { about = {}, studio = {} } = useWebsiteData()
+
+  const studioPreviewImages = (studio.previewImages && studio.previewImages.length > 0)
+    ? studio.previewImages.filter(p => p.published !== false)
+    : fallbackStudioPreviewImages
+
+  const stats = (about.stats && about.stats.length > 0) ? about.stats : fallbackStats
+  const pillars = (about.pillars && about.pillars.length > 0) ? about.pillars : fallbackPhotographyPillars
+  const faqs = (about.faqs && about.faqs.length > 0) ? about.faqs : fallbackFaqs
+
+  const announcement = studio.announcement || {
+    badge: '04 — COMING SOON',
+    title: 'Our New Studio Space',
+    description: 'We are delighted to announce that we are preparing to open our dedicated photography studio space next month!',
+    disclaimer: 'Studio Preview Notice: The imagery below represents an illustrative visual concept of our upcoming studio facilities, specialized lighting configurations, and consultation spaces. Actual studio premises photographs will be released upon our grand opening next month. Consultations and commissions are currently available on-location and by private appointment.',
+    ctaText: 'Join Studio Opening Guestlist',
+    ctaLink: '/contact',
+    published: true,
+  }
+
+  const heroBadge = about.heroBadge || 'BEHIND THE LENS · JOSH PHOTOGRAPHY'
+  const heroTitle = about.heroTitle || 'Preserving the Moments That Make Us Human'
+  const heroDescription = about.heroDescription || 'Dedicated to chronicling weddings, milestone celebrations, and family connections with timeless artistry.'
+
+  const storyBadge = about.storyBadge || '01 — OUR STORY'
+  const storyTitle = about.storyTitle || 'Capturing What Cannot Be Replaced'
+  const storyP1 = about.storyParagraph1 || `${studio.name || siteConfig.studioName} was founded with a singular conviction: that life’s most precious feelings should never fade with memory. The quiet reverence before wedding vows, the spontaneous burst of laughter during a first birthday cake cutting, the tear on a father’s cheek, and the warmth of hands held over decades.`
+  const storyP2 = about.storyParagraph2 || 'We believe that great photography is not about perfection or artificial performance; it is about presence. We observe with quiet reverence and gentle direction, giving couples and families the freedom to be wholly themselves while we capture heirloom imagery they will treasure for a lifetime.'
+  const storyImage = about.storyImage || 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=900&q=80'
+  const storyQuote = about.storyQuote || 'Light is fleeting. Emotion is forever.'
+
+  const photographerBadge = about.photographerBadge || '02 — MEET THE PHOTOGRAPHER'
+  const photographerHeadline = about.photographerHeadline || 'A Passion for Authentic Storytelling'
+  const photographerName = about.photographerName || 'Josh'
+  const photographerRole = about.photographerRole || 'Lead Photographer & Founder'
+  const photographerImage = about.photographerImage || 'https://images.unsplash.com/photo-1556157382-97eda2d62296?w=900&q=80'
+  const photographerBio1 = about.photographerBio1 || 'Hello, I am Josh. As a photographer, my goal is simple: to document your most meaningful milestones so faithfully that every time you revisit your photographs, you are instantly transported back to how the moment truly felt.'
+  const photographerBio2 = about.photographerBio2 || 'My approach combines quiet photojournalism with refined, editorial portraiture. Whether documenting a sacred church ceremony in the English countryside, a historic countryside manor celebration, or a joyful family garden gathering, I bring patience, warmth, and keen observation to every commission.'
+  const photographerQuote = about.photographerQuote || "I don't just photograph what things look like — I photograph what they feel like. Your family's unique laughter, sacred vows, and candid joys deserve to be captured with dignity and timeless care."
   return (
     <div className="bg-ivory">
       {/* About Hero */}
@@ -113,7 +152,7 @@ export default function About() {
             className="inline-flex items-center gap-2 text-caption uppercase tracking-[0.25em] text-[#E5BA78] font-sans font-semibold mb-3.5 drop-shadow-[0_1px_8px_rgba(229,186,120,0.35)]"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#E5BA78]" />
-            <span>BEHIND THE LENS · JOSH PHOTOGRAPHY</span>
+            <span>{heroBadge}</span>
           </motion.span>
 
           <motion.h1
@@ -122,7 +161,7 @@ export default function About() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-[4rem] text-[#FAF4EA] font-light tracking-wide mb-5 drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)] leading-[1.14]"
           >
-            Preserving the Moments That Make Us Human
+            {heroTitle}
           </motion.h1>
 
           <motion.div
@@ -138,7 +177,7 @@ export default function About() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-[#FAF4EA]/90 text-base sm:text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]"
           >
-            Dedicated to chronicling weddings, milestone celebrations, and family connections with timeless artistry.
+            {heroDescription}
           </motion.p>
         </div>
       </section>
@@ -149,16 +188,16 @@ export default function About() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div>
               <span className="text-caption uppercase tracking-[0.2em] text-muted-gold font-nav font-semibold block mb-3">
-                01 — OUR STORY
+                {storyBadge}
               </span>
               <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-charcoal font-light leading-tight mb-6">
-                Capturing What Cannot Be Replaced
+                {storyTitle}
               </h2>
               <p className="text-warm-brown/85 text-body-md leading-relaxed mb-5 font-light">
-                {siteConfig.studioName} was founded with a singular conviction: that life’s most precious feelings should never fade with memory. The quiet reverence before wedding vows, the spontaneous burst of laughter during a first birthday cake cutting, the tear on a father’s cheek, and the warmth of hands held over decades.
+                {storyP1}
               </p>
               <p className="text-warm-brown/85 text-body-md leading-relaxed mb-8 font-light">
-                We believe that great photography is not about perfection or artificial performance; it is about presence. We observe with quiet reverence and gentle direction, giving couples and families the freedom to be wholly themselves while we capture heirloom imagery they will treasure for a lifetime.
+                {storyP2}
               </p>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-6 border-t border-champagne/60">
@@ -178,17 +217,17 @@ export default function About() {
             <div className="relative">
               <div className="relative z-10 overflow-hidden shadow-luxury border-4 border-ivory">
                 <img
-                  src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=900&q=80"
-                  alt="Fine-art wedding photography moment in English country manor"
+                  src={storyImage}
+                  alt={storyTitle}
                   className="w-full h-[520px] object-cover"
                 />
               </div>
               <div className="absolute -bottom-6 -left-6 z-20 bg-ivory p-6 shadow-luxury max-w-xs border border-champagne/60 hidden sm:block">
                 <p className="font-serif italic text-lg text-charcoal mb-2">
-                  "Light is fleeting. Emotion is forever."
+                  "{storyQuote}"
                 </p>
                 <p className="text-caption text-muted-gold uppercase tracking-widest font-nav font-semibold">
-                  Josh Photography
+                  {studio.name || siteConfig.studioName}
                 </p>
               </div>
             </div>
@@ -203,47 +242,47 @@ export default function About() {
             <div className="order-2 lg:order-1 relative">
               <div className="relative z-10 overflow-hidden shadow-luxury border-4 border-ivory">
                 <img
-                  src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=900&q=80"
-                  alt="Photographer Josh with professional camera"
+                  src={photographerImage}
+                  alt={photographerName}
                   className="w-full h-[520px] object-cover object-top"
                 />
               </div>
               <div className="absolute -bottom-6 -right-6 z-20 bg-deep-charcoal text-ivory p-6 shadow-luxury max-w-xs border border-ivory/10 hidden sm:block">
                 <p className="font-serif text-lg text-champagne mb-1">
-                  Josh
+                  {photographerName}
                 </p>
                 <p className="text-caption text-ivory/60 uppercase tracking-widest font-nav">
-                  Lead Photographer & Founder
+                  {photographerRole}
                 </p>
               </div>
             </div>
 
             <div className="order-1 lg:order-2">
               <span className="text-caption uppercase tracking-[0.2em] text-muted-gold font-nav font-semibold block mb-3">
-                02 — MEET THE PHOTOGRAPHER
+                {photographerBadge}
               </span>
               <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-charcoal font-light leading-tight mb-6">
-                A Passion for Authentic Storytelling
+                {photographerHeadline}
               </h2>
               <p className="text-warm-brown/85 text-body-md leading-relaxed mb-4 font-light">
-                Hello, I am Josh. As a photographer, my goal is simple: to document your most meaningful milestones so faithfully that every time you revisit your photographs, you are instantly transported back to how the moment truly felt.
+                {photographerBio1}
               </p>
               <p className="text-warm-brown/85 text-body-md leading-relaxed mb-4 font-light">
-                My approach combines quiet photojournalism with refined, editorial portraiture. Whether documenting a sacred church ceremony in the English countryside, a historic countryside manor celebration, or a joyful family garden gathering, I bring patience, warmth, and keen observation to every commission.
+                {photographerBio2}
               </p>
               <div className="p-4 bg-ivory border-l-2 border-muted-gold mb-6">
                 <p className="text-charcoal/80 text-body-sm italic font-serif">
-                  "I don't just photograph what things look like — I photograph what they feel like. Your family's unique laughter, sacred vows, and candid joys deserve to be captured with dignity and timeless care."
+                  "{photographerQuote}"
                 </p>
                 <span className="text-caption text-muted-gold uppercase tracking-wider font-nav font-semibold block mt-2">
-                  — Josh, Lead Photographer
+                  — {photographerName}, {photographerRole}
                 </span>
               </div>
               <Link
                 to="/contact"
                 className="inline-flex items-center gap-2 px-7 py-3 bg-muted-gold text-deep-black font-nav text-xs uppercase tracking-[0.16em] font-semibold hover:bg-gold-light transition-all duration-300 shadow-sm"
               >
-                <span>Get In Touch With Josh</span>
+                <span>Get In Touch With {photographerName}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -268,8 +307,8 @@ export default function About() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {photographyPillars.map((pillar, i) => {
-              const Icon = pillar.icon
+            {pillars.map((pillar, i) => {
+              const Icon = pillar.icon || Heart
               return (
                 <div
                   key={i}
@@ -292,74 +331,78 @@ export default function About() {
       </section>
 
       {/* 04: Our Studio (Opening Next Month) */}
-      <section className="section-padding bg-[#F5EEE3]/80 border-b border-[#D8B77A]/30">
-        <div className="container-luxury">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <span className="text-caption uppercase tracking-[0.25em] text-muted-gold font-nav font-semibold block mb-3">
-              04 — COMING SOON
-            </span>
-            <h2 className="font-serif text-3xl md:text-5xl text-charcoal font-light mb-4">
-              Our New Studio Space
-            </h2>
-            <div className="w-16 h-[1px] bg-champagne mx-auto mb-6" />
-            <p className="text-warm-brown/90 text-body-md font-light leading-relaxed">
-              We are delighted to announce that we are preparing to open our dedicated photography studio space next month!
-            </p>
+      {announcement.published !== false && (
+        <section className="section-padding bg-[#F5EEE3]/80 border-b border-[#D8B77A]/30">
+          <div className="container-luxury">
+            <div className="max-w-3xl mx-auto text-center mb-12">
+              <span className="text-caption uppercase tracking-[0.25em] text-muted-gold font-nav font-semibold block mb-3">
+                {announcement.badge || '04 — COMING SOON'}
+              </span>
+              <h2 className="font-serif text-3xl md:text-5xl text-charcoal font-light mb-4">
+                {announcement.title || 'Our New Studio Space'}
+              </h2>
+              <div className="w-16 h-[1px] bg-champagne mx-auto mb-6" />
+              <p className="text-warm-brown/90 text-body-md font-light leading-relaxed">
+                {announcement.description}
+              </p>
 
-            {/* Clear illustrative disclaimer box as requested */}
-            <div className="mt-6 p-4 bg-ivory border border-champagne/80 rounded flex items-start gap-3 text-left">
-              <Info className="w-5 h-5 text-muted-gold flex-shrink-0 mt-0.5" />
-              <div className="text-xs text-warm-brown/80 font-light leading-relaxed">
-                <strong className="font-medium text-charcoal">Studio Preview Notice: </strong>
-                The imagery below represents an illustrative visual concept of our upcoming studio facilities, specialized lighting configurations, and consultation spaces. Actual studio premises photographs will be released upon our grand opening next month. Consultations and commissions are currently available on-location and by private appointment.
-              </div>
+              {/* Clear illustrative disclaimer box as requested */}
+              {announcement.disclaimer && (
+                <div className="mt-6 p-4 bg-ivory border border-champagne/80 rounded flex items-start gap-3 text-left">
+                  <Info className="w-5 h-5 text-muted-gold flex-shrink-0 mt-0.5" />
+                  <div className="text-xs text-warm-brown/80 font-light leading-relaxed">
+                    <strong className="font-medium text-charcoal">Studio Preview Notice: </strong>
+                    {announcement.disclaimer}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* 3-4 Studio Concept Photographs */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {studioPreviewImages.map((img) => (
+                <div
+                  key={img.id || img.title}
+                  className="bg-ivory border border-champagne/70 overflow-hidden shadow-sm group hover:border-muted-gold transition-all duration-300 flex flex-col justify-between"
+                >
+                  <div className="aspect-[4/3] overflow-hidden bg-beige relative">
+                    <img
+                      src={img.src}
+                      alt={img.alt || img.title}
+                      className="w-full h-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute top-2.5 right-2.5 bg-black/65 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] text-champagne uppercase tracking-wider font-nav">
+                      Concept Preview
+                    </div>
+                  </div>
+                  <div className="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                      <span className="text-[10.5px] uppercase tracking-wider text-muted-gold font-nav font-semibold block mb-1">
+                        {img.subtitle}
+                      </span>
+                      <h3 className="font-serif text-lg text-charcoal mb-1.5">{img.title}</h3>
+                      <p className="text-warm-brown/75 text-xs font-light leading-relaxed">
+                        {img.desc}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-12 text-center">
+              <Link
+                to={announcement.ctaLink || '/contact'}
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-muted-gold text-deep-black font-nav font-semibold text-xs tracking-[0.16em] uppercase hover:bg-gold-light transition-all duration-300 shadow-sm"
+              >
+                <span>{announcement.ctaText || 'Join Studio Opening Guestlist'}</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
           </div>
-
-          {/* 3-4 Temporary Studio Concept Photographs */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {studioPreviewImages.map((img) => (
-              <div
-                key={img.id}
-                className="bg-ivory border border-champagne/70 overflow-hidden shadow-sm group hover:border-muted-gold transition-all duration-300 flex flex-col justify-between"
-              >
-                <div className="aspect-[4/3] overflow-hidden bg-beige relative">
-                  <img
-                    src={img.src}
-                    alt={img.alt}
-                    className="w-full h-full object-cover transition-transform duration-700 ease-luxury group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div className="absolute top-2.5 right-2.5 bg-black/65 backdrop-blur-sm px-2 py-0.5 rounded text-[10px] text-champagne uppercase tracking-wider font-nav">
-                    Concept Preview
-                  </div>
-                </div>
-                <div className="p-5 flex-1 flex flex-col justify-between">
-                  <div>
-                    <span className="text-[10.5px] uppercase tracking-wider text-muted-gold font-nav font-semibold block mb-1">
-                      {img.subtitle}
-                    </span>
-                    <h3 className="font-serif text-lg text-charcoal mb-1.5">{img.title}</h3>
-                    <p className="text-warm-brown/75 text-xs font-light leading-relaxed">
-                      {img.desc}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-12 text-center">
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 px-8 py-3.5 bg-muted-gold text-deep-black font-nav font-semibold text-xs tracking-[0.16em] uppercase hover:bg-gold-light transition-all duration-300 shadow-sm"
-            >
-              <span>Join Studio Opening Guestlist</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Frequently Asked Questions */}
       <section className="section-padding bg-ivory border-b border-champagne/40">
