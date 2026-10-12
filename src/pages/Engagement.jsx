@@ -42,7 +42,7 @@ export default function Engagement() {
         'Seamless integration with full wedding photography commissions',
       ]}
       quote={{
-        text: 'Joshy helped coordinate the secret vantage point with absolute discretion. The photos of Sophie’s tearful reaction and our sunset walk are beyond anything we could have dreamed of.',
+        text: 'Josh helped coordinate the secret vantage point with absolute discretion. The photos of Sophie’s tearful reaction and our sunset walk are beyond anything we could have dreamed of.',
         author: 'Sophie & Oliver — Engaged Couple',
       }}
       quoteImage="/images/engagement-img-3.jpg"

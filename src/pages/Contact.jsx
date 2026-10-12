@@ -77,7 +77,7 @@ export default function Contact() {
             className="inline-flex items-center gap-2 text-caption uppercase tracking-[0.25em] text-[#E5BA78] font-sans font-semibold mb-3.5 drop-shadow-[0_1px_8px_rgba(229,186,120,0.35)]"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#E5BA78]" />
-            <span>GET IN TOUCH · JOSHY PHOTOGRAPHY</span>
+            <span>GET IN TOUCH · JOSH PHOTOGRAPHY</span>
           </motion.span>
 
           <motion.h1
@@ -275,7 +275,7 @@ export default function Contact() {
                           required
                           value={formData.phone}
                           onChange={handleChange}
-                          placeholder="+44 7700 900123"
+                          placeholder="+44 7988 827057"
                           className="w-full bg-ivory border border-champagne px-4 py-3 text-charcoal text-sm focus:outline-none focus:border-gold transition-colors"
                         />
                       </div>

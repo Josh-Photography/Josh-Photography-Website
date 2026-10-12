@@ -41,7 +41,7 @@ export default function Maternity() {
         'Seamless maternity-to-newborn collective packages available',
       ]}
       quote={{
-        text: 'I was hesitant about how I would look at 32 weeks, but Joshy made me feel like an editorial goddess. The photos are pure art.',
+        text: 'I was hesitant about how I would look at 32 weeks, but Josh made me feel like an editorial goddess. The photos are pure art.',
         author: 'Charlotte & James — Maternity Commission',
       }}
       quoteImage="/images/Maternity-Photography-img-3.jpg"

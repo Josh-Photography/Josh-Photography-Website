@@ -89,7 +89,7 @@ export default function BrandStory() {
               <div className="image-reveal aspect-[3/4] overflow-hidden">
                 <img
                   src="/images/church-wedding-ceremony.jpg"
-                  alt="Traditional British church wedding ceremony at the altar by Joshy Photography"
+                  alt="Traditional British church wedding ceremony at the altar by Josh Photography"
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />

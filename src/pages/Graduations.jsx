@@ -42,7 +42,7 @@ export default function Graduations() {
         'Handcrafted framed prints and heirloom folio boxes for family gifting',
       ]}
       quote={{
-        text: 'The photographs Joshy captured of our daughter’s graduation are exquisite. He documented the formal pride of the ceremony and the pure laughter of our family celebration afterwards.',
+        text: 'The photographs Josh captured of our daughter’s graduation are exquisite. He documented the formal pride of the ceremony and the pure laughter of our family celebration afterwards.',
         author: 'The Harrison Family — Graduation Celebration',
       }}
       quoteImage="/images/Graduation-Photography-img-4.jpg"

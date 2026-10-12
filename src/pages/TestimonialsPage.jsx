@@ -12,7 +12,7 @@ const additionalTestimonials = [
     location: 'Cotswolds Estate, UK',
     rating: 5,
     review:
-      'From our morning preparations to the candlelight sparkler exit, Joshy captured every fleeting glance and emotion with sheer editorial mastery. The gallery brought our entire family to tears.',
+      'From our morning preparations to the candlelight sparkler exit, Josh captured every fleeting glance and emotion with sheer editorial mastery. The gallery brought our entire family to tears.',
     image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80',
     date: 'Autumn Celebration',
   },
@@ -23,7 +23,7 @@ const additionalTestimonials = [
     location: 'London Luxury Venue',
     rating: 5,
     review:
-      'We wanted energetic documentary coverage for our celebrations without intrusive lights or posing. Joshy and the team were discreet, punctual, and delivered photos that exceeded all our expectations.',
+      'We wanted energetic documentary coverage for our celebrations without intrusive lights or posing. Josh and the team were discreet, punctual, and delivered photos that exceeded all our expectations.',
     image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80',
     date: 'Summer Jubilee',
   },

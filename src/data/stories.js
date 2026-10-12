@@ -1,5 +1,5 @@
 // ============================================================
-// FEATURED STORIES DATA — JOSHY PHOTOGRAPHY
+// FEATURED STORIES DATA — JOSH PHOTOGRAPHY
 // ============================================================
 
 export const featuredStories = [

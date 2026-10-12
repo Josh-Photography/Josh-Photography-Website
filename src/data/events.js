@@ -1,5 +1,5 @@
 // ============================================================
-// EVENT CATEGORIES DATA — JOSHY PHOTOGRAPHY (UK)
+// EVENT CATEGORIES DATA — JOSH PHOTOGRAPHY (UK)
 // ============================================================
 
 export const eventCategories = [

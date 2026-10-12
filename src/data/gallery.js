@@ -1,5 +1,5 @@
 // ============================================================
-// GALLERY IMAGE DATA — JOSHY PHOTOGRAPHY (UNITED KINGDOM)
+// GALLERY IMAGE DATA — JOSH PHOTOGRAPHY (UNITED KINGDOM)
 // Curated high-resolution open-license photography (Unsplash/Pexels)
 // ============================================================
 

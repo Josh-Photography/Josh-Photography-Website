@@ -144,7 +144,7 @@ export function EditorialCollectionSection({
           {/* Narrative & Moments Included Column (approx 45% / 5 cols) */}
           <div className="lg:col-span-5 flex flex-col justify-start">
             <span className="text-caption uppercase tracking-[0.2em] text-[#B9975B] font-nav font-semibold block mb-2 text-xs">
-              What Joshy Photography Captures
+              What Josh Photography Captures
             </span>
             <h3 className="font-serif text-2xl sm:text-3xl text-[#292522] font-normal leading-snug mb-4">
               Artistic Vision & Thoughtful Narrative

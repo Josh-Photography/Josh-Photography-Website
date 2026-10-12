@@ -1,18 +1,18 @@
 export const studioInfo = {
-  name: 'Joshy Photography',
+  name: 'Josh Photography',
   tagline: 'Stories Worth Remembering',
   description: 'Crafting visual stories that transcend time. Every frame, a masterpiece.',
   founded: 2018,
   location: 'Greater London, United Kingdom',
   address: 'Greater London, United Kingdom',
-  email: 'hello@joshyphotography.co.uk',
-  phone: '+44 7700 900123',
-  whatsapp: '+447700900123',
+  email: 'hello@joshphotography.co.uk',
+  phone: '+44 7988 827057',
+  whatsapp: '+447988827057',
   social: {
-    instagram: 'https://instagram.com/joshyphotography.uk',
-    twitter: 'https://twitter.com/joshyphoto',
-    behance: 'https://behance.net/joshyphoto',
-    linkedin: 'https://linkedin.com/company/joshyphotography'
+    instagram: 'https://instagram.com/joshphotography.uk',
+    twitter: 'https://twitter.com/joshphoto',
+    behance: 'https://behance.net/joshphoto',
+    linkedin: 'https://linkedin.com/company/joshphotography'
   }
 }
 
@@ -50,7 +50,7 @@ export const services = [
 export const testimonials = [
   {
     id: 1,
-    quote: 'Joshy Photography captured our wedding with such artistry. Every photo tells our love story beautifully.',
+    quote: 'Josh Photography captured our wedding with such artistry. Every photo tells our love story beautifully.',
     author: 'Eleanor & James',
     role: 'Wedding Clients',
     image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80'
@@ -109,4 +109,4 @@ export const navLinks = [
   { id: 'contact', label: 'Contact' }
 ]
 
-export const missionStatement = `At Joshy Photography, we believe photography is more than capturing images—it's about freezing emotions, preserving stories, and creating art that resonates across generations. Our passion lies in the details: the subtle glance, the fleeting smile, the perfect light. We blend technical mastery with artistic vision to deliver photographs that aren't just seen, but felt.`
+export const missionStatement = `At Josh Photography, we believe photography is more than capturing images—it's about freezing emotions, preserving stories, and creating art that resonates across generations. Our passion lies in the details: the subtle glance, the fleeting smile, the perfect light. We blend technical mastery with artistic vision to deliver photographs that aren't just seen, but felt.`

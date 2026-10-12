@@ -42,7 +42,7 @@ export default function Anniversary() {
         'Handcrafted anniversary photo album design honoring the couple’s life journey',
       ]}
       quote={{
-        text: 'Our children organized a surprise 30th anniversary lunch and booked Joshy to photograph it. The family portraits now hold pride of place in our home.',
+        text: 'Our children organized a surprise 30th anniversary lunch and booked Josh to photograph it. The family portraits now hold pride of place in our home.',
         author: 'David & Margaret — Anniversary Couple',
       }}
       quoteImage="/images/Anniversary-img-2.jpg"

@@ -42,7 +42,7 @@ export default function BabyFamily() {
         'Multi-generational family groupings welcoming grandparents and siblings',
       ]}
       quote={{
-        text: 'From our newborn session to our son’s first birthday, Joshy handled everything with such immense patience and warmth. The photos are pure magic.',
+        text: 'From our newborn session to our son’s first birthday, Josh handled everything with such immense patience and warmth. The photos are pure magic.',
         author: 'Sophie & Mark — Family Clients',
       }}
       quoteImage="/images/baby-family-img-3.jpg"

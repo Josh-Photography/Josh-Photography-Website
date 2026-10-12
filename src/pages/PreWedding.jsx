@@ -43,7 +43,7 @@ export default function PreWedding() {
         'Custom fine-art pre-wedding guestbook album options for wedding day display',
       ]}
       quote={{
-        text: 'Our pre-wedding shoot was an experience in itself. Joshy found the most breathtaking vantage points and made us feel so completely natural in front of the lens.',
+        text: 'Our pre-wedding shoot was an experience in itself. Josh found the most breathtaking vantage points and made us feel so completely natural in front of the lens.',
         author: 'Anjali & Ravi — Couple Portrait',
       }}
       quoteImage="https://images.unsplash.com/photo-1529636798458-92182e662485?w=900&q=80"

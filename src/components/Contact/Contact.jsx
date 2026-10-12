@@ -173,7 +173,7 @@ export function Contact() {
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Joshy Photography Location"
+                  title="Josh Photography Location"
                 ></iframe>
               </div>
               <div className="contact__location">

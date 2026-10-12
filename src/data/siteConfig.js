@@ -1,33 +1,33 @@
 // ============================================================
-// SITE CONFIGURATION — JOSHY PHOTOGRAPHY (UNITED KINGDOM)
+// SITE CONFIGURATION — JOSH PHOTOGRAPHY (UNITED KINGDOM)
 // ============================================================
 
 export const siteConfig = {
-  studioName: 'Joshy Photography',
+  studioName: 'Josh Photography',
   tagline: 'Timeless Artistry & Unforgettable Celebrations',
   shortDescription: 'Luxury Wedding & Celebration Photography',
   fullDescription:
     'We preserve the laughter before the cake is cut, the silence before the vows, the tears of a parent, the excitement of a child, and the little moments nobody planned.',
-  phone: '+44 7700 900123',
-  whatsapp: '+447700900123',
-  email: 'hello@joshyphotography.co.uk',
+  phone: '+44 7988 827057',
+  whatsapp: '+447988827057',
+  email: 'hello@joshphotography.co.uk',
   address: 'By appointment (Studio opening soon)',
   operatingRegion: 'Available for commissions & destination events across the United Kingdom',
   mapUrl: '#',
   foundedYear: 2018,
-  photographerName: 'Joshy',
+  photographerName: 'Josh',
   social: {
-    instagram: 'https://instagram.com/joshyphotography.uk',
-    facebook: 'https://facebook.com/joshyphotography.uk',
-    youtube: 'https://youtube.com/@joshyphotography',
-    pinterest: 'https://pinterest.com/joshyphotography',
+    instagram: 'https://instagram.com/joshphotography.uk',
+    facebook: 'https://facebook.com/joshphotography.uk',
+    youtube: 'https://youtube.com/@joshphotography',
+    pinterest: 'https://pinterest.com/joshphotography',
   },
   seo: {
-    defaultTitle: 'Joshy Photography | Luxury Wedding & Celebration Photography',
-    titleTemplate: '%s | Joshy Photography',
+    defaultTitle: 'Josh Photography | Luxury Wedding & Celebration Photography',
+    titleTemplate: '%s | Josh Photography',
     defaultDescription:
       'Premium wedding, celebration, family, and event photography. Warm cream aesthetics, elegant typography, and authentic storytelling.',
-    siteUrl: 'https://joshyphotography.co.uk',
+    siteUrl: 'https://joshphotography.co.uk',
     ogImage: '/images/hero-church-wedding.jpg',
   },
 }

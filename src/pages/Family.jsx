@@ -41,7 +41,7 @@ export default function Family() {
         'High-resolution archival digital delivery with full printing rights',
       ]}
       quote={{
-        text: 'The portraits Joshy took of our four-generation family reunion brought our grandmother to tears of joy. They now hang proudly in our dining room.',
+        text: 'The portraits Josh took of our four-generation family reunion brought our grandmother to tears of joy. They now hang proudly in our dining room.',
         author: 'The Beaumont Family — Oxfordshire',
       }}
       quoteImage="/images/family-photography-img-2.jpg"

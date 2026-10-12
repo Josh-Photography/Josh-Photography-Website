@@ -144,7 +144,7 @@ export default function BirthdayPhotography() {
 
               <div className="absolute -bottom-6 -left-6 z-20 bg-[#FAF6EE] p-6 shadow-luxury max-w-xs border border-[#D8B77A]/60 hidden sm:block">
                 <p className="font-serif italic text-base text-[#292522] mb-2 leading-relaxed">
-                  "Joshy captured the pure spirit of our son's party. Looking at the photos brings all that joy right back."
+                  "Josh captured the pure spirit of our son's party. Looking at the photos brings all that joy right back."
                 </p>
                 <p className="text-caption text-[#B9975B] uppercase tracking-widest font-nav font-semibold">
                   Emily & James — Birthday Clients

@@ -24,7 +24,7 @@ app.use('/api/photos', photoRoutes)
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Joshy Photography API is running' })
+  res.json({ status: 'ok', message: 'Josh Photography API is running' })
 })
 
 app.listen(PORT, () => {

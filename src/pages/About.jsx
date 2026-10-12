@@ -113,7 +113,7 @@ export default function About() {
             className="inline-flex items-center gap-2 text-caption uppercase tracking-[0.25em] text-[#E5BA78] font-sans font-semibold mb-3.5 drop-shadow-[0_1px_8px_rgba(229,186,120,0.35)]"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#E5BA78]" />
-            <span>BEHIND THE LENS · JOSHY PHOTOGRAPHY</span>
+            <span>BEHIND THE LENS · JOSH PHOTOGRAPHY</span>
           </motion.span>
 
           <motion.h1
@@ -188,7 +188,7 @@ export default function About() {
                   "Light is fleeting. Emotion is forever."
                 </p>
                 <p className="text-caption text-muted-gold uppercase tracking-widest font-nav font-semibold">
-                  Joshy Photography
+                  Josh Photography
                 </p>
               </div>
             </div>
@@ -204,13 +204,13 @@ export default function About() {
               <div className="relative z-10 overflow-hidden shadow-luxury border-4 border-ivory">
                 <img
                   src="https://images.unsplash.com/photo-1556157382-97eda2d62296?w=900&q=80"
-                  alt="Photographer Joshy with professional camera"
+                  alt="Photographer Josh with professional camera"
                   className="w-full h-[520px] object-cover object-top"
                 />
               </div>
               <div className="absolute -bottom-6 -right-6 z-20 bg-deep-charcoal text-ivory p-6 shadow-luxury max-w-xs border border-ivory/10 hidden sm:block">
                 <p className="font-serif text-lg text-champagne mb-1">
-                  Joshy
+                  Josh
                 </p>
                 <p className="text-caption text-ivory/60 uppercase tracking-widest font-nav">
                   Lead Photographer & Founder
@@ -226,7 +226,7 @@ export default function About() {
                 A Passion for Authentic Storytelling
               </h2>
               <p className="text-warm-brown/85 text-body-md leading-relaxed mb-4 font-light">
-                Hello, I am Joshy. As a photographer, my goal is simple: to document your most meaningful milestones so faithfully that every time you revisit your photographs, you are instantly transported back to how the moment truly felt.
+                Hello, I am Josh. As a photographer, my goal is simple: to document your most meaningful milestones so faithfully that every time you revisit your photographs, you are instantly transported back to how the moment truly felt.
               </p>
               <p className="text-warm-brown/85 text-body-md leading-relaxed mb-4 font-light">
                 My approach combines quiet photojournalism with refined, editorial portraiture. Whether documenting a sacred church ceremony in the English countryside, a historic countryside manor celebration, or a joyful family garden gathering, I bring patience, warmth, and keen observation to every commission.
@@ -236,14 +236,14 @@ export default function About() {
                   "I don't just photograph what things look like — I photograph what they feel like. Your family's unique laughter, sacred vows, and candid joys deserve to be captured with dignity and timeless care."
                 </p>
                 <span className="text-caption text-muted-gold uppercase tracking-wider font-nav font-semibold block mt-2">
-                  — Joshy, Lead Photographer
+                  — Josh, Lead Photographer
                 </span>
               </div>
               <Link
                 to="/contact"
                 className="inline-flex items-center gap-2 px-7 py-3 bg-muted-gold text-deep-black font-nav text-xs uppercase tracking-[0.16em] font-semibold hover:bg-gold-light transition-all duration-300 shadow-sm"
               >
-                <span>Get In Touch With Joshy</span>
+                <span>Get In Touch With Josh</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

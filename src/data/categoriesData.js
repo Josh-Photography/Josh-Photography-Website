@@ -1,5 +1,5 @@
 // ============================================================
-// PHOTOGRAPHY CATEGORIES DATA — JOSHY PHOTOGRAPHY
+// PHOTOGRAPHY CATEGORIES DATA — JOSH PHOTOGRAPHY
 // Luxury editorial portfolio data with 12 distinct categories.
 // Each collection features:
 // - Numbered badge (e.g. "01 — THE SACRED COVENANT")

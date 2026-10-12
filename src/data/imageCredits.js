@@ -1,5 +1,5 @@
 // ============================================================
-// IMAGE SOURCES & ATTRIBUTION METADATA — JOSHY PHOTOGRAPHY
+// IMAGE SOURCES & ATTRIBUTION METADATA — JOSH PHOTOGRAPHY
 // Legitimate open-license high-resolution photography assets
 // Sources: Unsplash & Pexels (Free commercial use license)
 // ============================================================
