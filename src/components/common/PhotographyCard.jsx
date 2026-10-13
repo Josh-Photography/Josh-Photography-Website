@@ -71,21 +71,26 @@ export function PhotographyCard({
  * - Dual functional CTAs: "Explore [Category] Photography" and "Enquire About [Category] Photography"
  */
 export function EditorialCollectionSection({
-  category,
+  category = {},
+  cards: propCards,
   index = 0,
 }) {
   const [selectedImage, setSelectedImage] = useState(null)
   const isEven = index % 2 === 0
-  const { getCategoryCards } = useWebsiteData()
-  const dynamicCards = getCategoryCards(category.id || category.slug)
-  const cards = (dynamicCards && dynamicCards.length > 0) ? dynamicCards : (category.cards || [])
+  const { getCategoryCards, data } = useWebsiteData()
+  const catKey = category?.id || category?.slug || ''
+  const dynamicCards = (getCategoryCards && catKey) ? getCategoryCards(catKey) : []
+  const hasLoadedData = Boolean(data && Array.isArray(data.photos) && data.photos.length > 0)
+  const cards = (dynamicCards && (dynamicCards.length > 0 || hasLoadedData))
+    ? dynamicCards
+    : (Array.isArray(propCards) && propCards.length > 0 ? propCards : (Array.isArray(category?.cards) ? category.cards : []))
   const lightboxImages = cards.map((c, i) => ({
-    id: `${category.id}-${i}`,
-    src: c.image,
-    srcLarge: c.image,
-    title: `${c.num} — ${c.title}`,
-    alt: c.alt,
-    event: c.desc,
+    id: `${category.id}-${c.id || i}`,
+    src: c.image || c.src,
+    srcLarge: c.srcLarge || c.image || c.src,
+    title: `${c.num || String(i + 1).padStart(2, '0')} — ${c.title}`,
+    alt: c.alt || c.title,
+    event: c.desc || '',
   }))
 
   const enquiryLink = `/check-availability?type=${category.enquiryType || category.id}`
@@ -193,6 +198,23 @@ export function EditorialCollectionSection({
             </div>
           </div>
         </div>
+
+        {/* ── 3. Photography Cards Grid (Dynamic Portfolio Images) ── */}
+        {cards && cards.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-8 mt-12 md:mt-16">
+            {cards.map((card, cardIdx) => (
+              <PhotographyCard
+                key={card.id || card.num || cardIdx}
+                num={card.num || String(cardIdx + 1).padStart(2, '0')}
+                title={card.title}
+                desc={card.desc || card.description}
+                image={card.image || card.src}
+                alt={card.alt || card.title}
+                onImageClick={() => setSelectedImage(lightboxImages[cardIdx])}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Lightbox */}

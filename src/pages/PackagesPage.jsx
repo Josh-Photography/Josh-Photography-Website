@@ -3,8 +3,12 @@ import { motion } from 'framer-motion'
 import { Check, Star, ArrowRight, Plus } from 'lucide-react'
 import { packages, packageAddons } from '../data/packages'
 import { siteConfig } from '../data/siteConfig'
+import { useWebsiteData } from '../hooks/useWebsiteData'
 
 export default function PackagesPage() {
+  const { studio = {} } = useWebsiteData()
+  const rawNumber = studio.whatsapp || siteConfig.whatsapp
+  const cleanWhatsapp = String(rawNumber).replace(/[^0-9]/g, '')
   return (
     <div className="bg-ivory pt-24">
       {/* Packages Hero */}
@@ -193,7 +197,7 @@ export default function PackagesPage() {
               Check Availability & Rates
             </Link>
             <a
-              href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent('Hi, I would like to enquire about a custom photography package.')}`}
+              href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent('Hi, I would like to enquire about a custom photography package.')}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-9 py-4 border border-ivory/40 text-ivory font-nav font-medium text-sm tracking-[0.14em] uppercase hover:bg-ivory/10 hover:border-ivory transition-all duration-300"

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import {
   MapPin, Phone, Mail, ArrowUpRight, Heart
 } from 'lucide-react'
-import { InstagramIcon, FacebookIcon, YoutubeIcon } from '../common/Icons'
+import { InstagramIcon, FacebookIcon, WhatsAppIcon } from '../common/Icons'
 import { siteConfig } from '../../data/siteConfig'
 import { eventCategories } from '../../data/events'
 import { useWebsiteData } from '../../hooks/useWebsiteData'
@@ -21,7 +21,6 @@ export default function Footer() {
   const description = studio.description || siteConfig.shortDescription
   const instagram = typeof social.instagram === 'object' ? social.instagram.url : (social.instagram || siteConfig.social.instagram)
   const facebook = typeof social.facebook === 'object' ? social.facebook.url : (social.facebook || siteConfig.social.facebook)
-  const youtube = typeof social.youtube === 'object' ? social.youtube.url : (social.youtube || siteConfig.social.youtube)
 
   const quickLinks = [
     { label: 'Home', path: '/' },
@@ -50,7 +49,7 @@ export default function Footer() {
                   className="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                 />
                 <h3 className="font-serif text-2xl font-light text-ivory tracking-[0.08em] uppercase">
-                  {studioName.toUpperCase()}
+                  {String(studioName || 'Josh Photography').toUpperCase()}
                 </h3>
               </Link>
               <p className="text-body-sm text-ivory/50 leading-relaxed mb-6">
@@ -80,15 +79,15 @@ export default function Footer() {
                     <FacebookIcon className="w-4 h-4" />
                   </a>
                 )}
-                {youtube && (
+                {whatsapp && (
                   <a
-                    href={youtube}
+                    href={`https://wa.me/${String(whatsapp).replace(/[^0-9]/g, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 border border-ivory/20 flex items-center justify-center transition-all duration-400 hover:border-gold hover:text-gold"
-                    aria-label="YouTube"
+                    aria-label="WhatsApp"
                   >
-                    <YoutubeIcon className="w-4 h-4" />
+                    <WhatsAppIcon className="w-4 h-4 fill-current" />
                   </a>
                 )}
               </div>

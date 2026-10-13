@@ -10,18 +10,22 @@ import { useWebsiteData } from '../hooks/useWebsiteData'
 
 export default function Weddings() {
   const [selectedImage, setSelectedImage] = useState(null)
-  const { getCategoryCards } = useWebsiteData()
+  const { getCategoryCards, data, studio = {} } = useWebsiteData()
+  const rawNumber = studio.whatsapp || siteConfig.whatsapp
+  const cleanWhatsapp = String(rawNumber).replace(/[^0-9]/g, '')
+  const studioName = studio.name || siteConfig.studioName
   const categoryData = getCategoryBySlug('weddings')
-  const dynamicCards = getCategoryCards('weddings')
-  const cards = dynamicCards.length > 0 ? dynamicCards : (categoryData?.cards || [])
+  const dynamicCards = getCategoryCards ? getCategoryCards('weddings') : []
+  const hasLoadedData = Boolean(data && Array.isArray(data.photos) && data.photos.length > 0)
+  const cards = (dynamicCards && (dynamicCards.length > 0 || hasLoadedData)) ? dynamicCards : (categoryData?.cards || [])
 
   const lightboxImages = cards.map((c, i) => ({
-    id: `wedding-${i}`,
-    src: c.image,
-    srcLarge: c.image,
-    title: `${c.num} — ${c.title}`,
-    alt: c.alt,
-    event: c.desc,
+    id: `wedding-${c.id || i}`,
+    src: c.image || c.src,
+    srcLarge: c.srcLarge || c.image || c.src,
+    title: `${c.num || String(i + 1).padStart(2, '0')} — ${c.title}`,
+    alt: c.alt || c.title,
+    event: c.desc || '',
   }))
 
   const highlights = [
@@ -93,8 +97,8 @@ export default function Weddings() {
               Check Wedding Dates
             </Link>
             <a
-              href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
-                `Hi ${siteConfig.studioName}, I would like to check availability for our wedding photography.`
+              href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(
+                `Hi ${studioName}, I would like to check availability for our wedding photography.`
               )}`}
               target="_blank"
               rel="noopener noreferrer"

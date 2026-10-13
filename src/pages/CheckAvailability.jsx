@@ -5,6 +5,7 @@ import { Calendar, CheckCircle2, Send, Clock, MapPin, Sparkles, AlertCircle } fr
 import { siteConfig } from '../data/siteConfig'
 import { WhatsAppIcon } from '../components/common/Icons'
 import dataService from '../services/dataService'
+import { useWebsiteData } from '../hooks/useWebsiteData'
 
 const eventTypeOptions = [
   'Wedding',
@@ -38,6 +39,10 @@ const requirementOptions = [
 ]
 
 export default function CheckAvailability() {
+  const { studio = {}, settings = {} } = useWebsiteData()
+  const studioName = settings.siteName || studio.name || siteConfig.studioName
+  const studioWhatsapp = studio.whatsapp || siteConfig.whatsapp
+  const cleanWhatsapp = String(studioWhatsapp).replace(/[^0-9]/g, '')
   const [searchParams] = useSearchParams()
   const todayDateString = new Date().toISOString().split('T')[0]
 
@@ -131,7 +136,7 @@ export default function CheckAvailability() {
   }
 
   const whatsappMessage = encodeURIComponent(
-    `Hello ${siteConfig.studioName}! I would like to check date availability:\n` +
+    `Hello ${studioName}! I would like to check date availability:\n` +
       `• Name: ${formData.name || 'Inquirer'}\n` +
       `• Event: ${formData.eventType}\n` +
       `• Date: ${formData.date || 'TBD'}\n` +
@@ -197,7 +202,7 @@ export default function CheckAvailability() {
 
               <div className="flex flex-wrap justify-center gap-4">
                 <a
-                  href={`https://wa.me/${siteConfig.whatsapp}?text=${whatsappMessage}`}
+                  href={`https://wa.me/${cleanWhatsapp}?text=${whatsappMessage}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#25D366] text-deep-black font-nav text-xs uppercase tracking-wider font-semibold hover:bg-[#20ba5a] transition-all shadow-sm"
@@ -436,7 +441,7 @@ export default function CheckAvailability() {
                   </button>
 
                   <a
-                    href={`https://wa.me/${siteConfig.whatsapp}?text=${whatsappMessage}`}
+                    href={`https://wa.me/${cleanWhatsapp}?text=${whatsappMessage}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full sm:w-auto px-8 py-4 bg-[#25D366] text-deep-black font-nav text-xs uppercase tracking-[0.14em] font-semibold hover:bg-[#20ba5a] transition-all flex items-center justify-center gap-2 shadow-sm"

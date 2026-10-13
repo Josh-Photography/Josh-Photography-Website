@@ -21,6 +21,7 @@ import Films from './pages/Films'
 import About from './pages/About'
 import TestimonialsPage from './pages/TestimonialsPage'
 import PackagesPage from './pages/PackagesPage'
+import ServicesPage from './pages/ServicesPage'
 import Contact from './pages/Contact'
 import CheckAvailability from './pages/CheckAvailability'
 import NotFound from './pages/NotFound'
@@ -53,6 +54,7 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="testimonials" element={<TestimonialsPage />} />
           <Route path="packages" element={<PackagesPage />} />
+          <Route path="services" element={<ServicesPage />} />
           <Route path="contact" element={<Contact />} />
           <Route path="check-availability" element={<CheckAvailability />} />
           <Route path="*" element={<NotFound />} />

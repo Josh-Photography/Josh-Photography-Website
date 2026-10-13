@@ -8,6 +8,7 @@ import photoRoutes from './routes/photos.js'
 import contactRoutes from './routes/contact.js'
 import commentRoutes from './routes/comments.js'
 import overviewRoutes from './routes/overview.js'
+import chatRoutes from './routes/chat.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -28,6 +29,7 @@ app.use('/api/photos', photoRoutes)
 app.use('/api/contact', contactRoutes)
 app.use('/api/comments', commentRoutes)
 app.use('/api/overview', overviewRoutes)
+app.use('/api/chat', chatRoutes)
 
 // Health check
 app.get('/api/health', (req, res) => {

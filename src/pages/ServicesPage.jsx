@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Check, ArrowRight, Heart, Film, Camera, Cake, Building2, Users } from 'lucide-react'
-import { services } from '../data/services'
+import { services as fallbackServices } from '../data/services'
 import { siteConfig } from '../data/siteConfig'
+import { useWebsiteData } from '../hooks/useWebsiteData'
 
 const processSteps = [
   {
@@ -28,6 +29,8 @@ const processSteps = [
 ]
 
 export default function ServicesPage() {
+  const { services: dynamicServices } = useWebsiteData()
+  const services = (Array.isArray(dynamicServices) && dynamicServices.length > 0) ? dynamicServices : fallbackServices
   return (
     <div className="bg-ivory">
       {/* Services Hero */}
@@ -90,8 +93,13 @@ export default function ServicesPage() {
                     <h2 className="font-serif text-3xl md:text-4xl text-charcoal font-light mb-4">
                       {service.title}
                     </h2>
+                    {service.quote && (
+                      <p className="font-serif italic text-base text-[#9E7D42] mb-3">
+                        "{service.quote}"
+                      </p>
+                    )}
                     <p className="text-warm-brown/80 text-body-md font-light leading-relaxed mb-6">
-                      {service.description || service.shortDescription}
+                      {service.desc || service.description || service.shortDescription}
                     </p>
 
                     {service.includes && (
@@ -112,10 +120,10 @@ export default function ServicesPage() {
 
                     <div className="flex items-center gap-4">
                       <Link
-                        to={service.path}
+                        to={service.path || '/portfolio'}
                         className="inline-flex items-center gap-2 text-sm font-sans uppercase tracking-wider text-gold hover:text-gold-dark transition-colors duration-300 font-medium group"
                       >
-                        <span>Learn More</span>
+                        <span>{service.ctaText || 'Learn More'}</span>
                         <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                       </Link>
                       <span className="text-champagne">|</span>

@@ -8,35 +8,41 @@ import { useWebsiteData } from '../../hooks/useWebsiteData'
 const SLIDE_DURATION = 4500 // Automatically changes every 4.5 seconds
 
 export default function Hero() {
-  const { heroSlides: dynamicSlides } = useWebsiteData()
-  const heroSlides = dynamicSlides && dynamicSlides.length > 0 ? dynamicSlides : staticHeroSlides
+  const { heroSlides: dynamicSlides, settings = {} } = useWebsiteData()
+  const heroSlides = (Array.isArray(dynamicSlides) && dynamicSlides.length > 0) ? dynamicSlides : staticHeroSlides
   const [current, setCurrent] = useState(0)
   const touchStartX = useRef(null)
 
-  // Preload all slideshow images on mount for instant transitions
+  const safeCurrent = (current < heroSlides.length && current >= 0) ? current : 0
+  const slide = heroSlides[safeCurrent] || heroSlides[0] || {}
+
+  // Preload all slideshow images on mount and whenever slides change
   useEffect(() => {
-    heroSlides.forEach((slide) => {
-      const img = new Image()
-      img.src = slide.image
+    heroSlides.forEach((s) => {
+      if (s && s.image) {
+        const img = new Image()
+        img.src = s.image
+      }
     })
-  }, [])
+  }, [heroSlides])
 
   const nextSlide = useCallback(() => {
     setCurrent((prev) => (prev + 1) % heroSlides.length)
-  }, [])
+  }, [heroSlides.length])
 
   const prevSlide = useCallback(() => {
     setCurrent((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)
-  }, [])
+  }, [heroSlides.length])
 
   // Continuous automatic slideshow loop
   useEffect(() => {
+    if (heroSlides.length <= 1) return
     const timer = setInterval(() => {
       nextSlide()
     }, SLIDE_DURATION)
 
     return () => clearInterval(timer)
-  }, [nextSlide, current])
+  }, [nextSlide, heroSlides.length])
 
   // Mobile Touch Swipe Handling
   const handleTouchStart = (e) => {
@@ -57,8 +63,6 @@ export default function Hero() {
     touchStartX.current = null
   }
 
-  const slide = heroSlides[current]
-
   return (
     <section
       id="hero"
@@ -70,10 +74,10 @@ export default function Hero() {
       {/* Background Stack with Continuous Automatic Crossfade */}
       <div className="absolute inset-0 pointer-events-none">
         {heroSlides.map((s, index) => {
-          const isActive = index === current
+          const isActive = index === safeCurrent
           return (
             <motion.div
-              key={s.id}
+              key={s.id || `slide-${index}`}
               initial={false}
               animate={{
                 opacity: isActive ? 1 : 0,
@@ -90,10 +94,9 @@ export default function Hero() {
             >
               <img
                 src={s.image}
-                alt={s.alt}
-                className="w-full h-full object-cover object-[center_35%] md:object-center"
-                loading={index === 0 ? 'eager' : 'lazy'}
-                fetchPriority={index === 0 ? 'high' : 'auto'}
+                alt={s.alt || s.title || 'Josh Photography showcase'}
+                className="w-full h-full object-cover object-center"
+                loading="eager"
               />
             </motion.div>
           )
@@ -105,7 +108,7 @@ export default function Hero() {
         className="absolute inset-0 pointer-events-none z-10"
         style={{
           background:
-            'linear-gradient(180deg, rgba(20, 14, 10, 0.45) 0%, rgba(20, 14, 10, 0.20) 40%, rgba(15, 10, 8, 0.78) 100%)',
+            'linear-gradient(180deg, rgba(20, 14, 10, 0.35) 0%, rgba(20, 14, 10, 0.12) 40%, rgba(15, 10, 8, 0.65) 100%)',
         }}
       />
 
@@ -130,7 +133,7 @@ export default function Hero() {
       <div className="relative h-full flex flex-col items-center justify-center text-center px-6 z-20">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
-            key={`content-${slide.id}`}
+            key={`content-${slide.id || safeCurrent}`}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
@@ -186,10 +189,10 @@ export default function Hero() {
               className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full max-w-md sm:max-w-none mx-auto"
             >
               <Link
-                to="/check-availability"
+                to={slide.primaryButtonLink || settings.ctaButtonLink || settings.bookingButtonLink || '/check-availability'}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 bg-muted-gold text-deep-black font-nav text-xs uppercase tracking-[0.16em] font-semibold hover:bg-gold-light hover:-translate-y-0.5 transition-all duration-300 shadow-md border border-champagne/40"
               >
-                <span>Check Date Availability</span>
+                <span>{slide.primaryButtonText || settings.ctaButtonText || settings.bookingButtonText || 'Check Date Availability'}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link

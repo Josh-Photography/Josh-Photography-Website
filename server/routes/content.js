@@ -100,6 +100,10 @@ router.put('/studio', authenticateToken, (req, res) => {
       ...content.studio,
       ...req.body,
     }
+    if (req.body.name && content.settings) {
+      content.settings.studioName = req.body.name
+      content.settings.siteName = req.body.name
+    }
     writeContent(content)
     logActivity('Updated Studio Information & Facilities')
     res.json(content.studio)
@@ -258,6 +262,19 @@ router.put('/settings', authenticateToken, (req, res) => {
   try {
     const content = readContent()
     content.settings = { ...content.settings, ...req.body }
+    if (req.body.bookingButtonText) {
+      content.settings.ctaButtonText = req.body.bookingButtonText
+    }
+    if (req.body.bookingButtonLink) {
+      content.settings.ctaButtonLink = req.body.bookingButtonLink
+    }
+    if (req.body.seoTitle) {
+      content.settings.seoDefaultTitle = req.body.seoTitle
+    }
+    if (req.body.siteName) {
+      content.settings.studioName = req.body.siteName
+      if (content.studio) content.studio.name = req.body.siteName
+    }
     writeContent(content)
     logActivity('Updated General Website Settings & SEO')
     res.json(content.settings)

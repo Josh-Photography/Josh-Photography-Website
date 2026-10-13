@@ -20,22 +20,26 @@ export default function CategoryTemplate({
   quoteImage,
 }) {
   const [selectedImage, setSelectedImage] = useState(null)
-  const { getCategoryCards } = useWebsiteData()
+  const { getCategoryCards, data, studio = {} } = useWebsiteData()
+  const rawNumber = studio.whatsapp || siteConfig.whatsapp
+  const cleanWhatsapp = String(rawNumber).replace(/[^0-9]/g, '')
+  const studioName = studio.name || siteConfig.studioName
 
   // Retrieve dynamic cards from CMS / database, fallback to categoriesData
-  const categoryData = getCategoryBySlug(categoryId)
-  const dynamicCards = getCategoryCards(categoryId)
-  const categoryCards = dynamicCards.length > 0 ? dynamicCards : (categoryData?.cards || [])
+  const categoryData = getCategoryBySlug(categoryId) || {}
+  const dynamicCards = getCategoryCards ? getCategoryCards(categoryId) : []
+  const hasLoadedData = Boolean(data && Array.isArray(data.photos) && data.photos.length > 0)
+  const categoryCards = (dynamicCards && (dynamicCards.length > 0 || hasLoadedData)) ? dynamicCards : (categoryData?.cards || [])
 
   const heroImg = categoryData?.heroImage || quoteImage || '/images/hero-church-wedding.jpg'
 
   const lightboxImages = categoryCards.map((c, i) => ({
-    id: `${categoryId}-${i}`,
-    src: c.image,
-    srcLarge: c.image,
-    title: `${c.num} — ${c.title}`,
-    alt: c.alt,
-    event: c.desc,
+    id: `${categoryId}-${c.id || i}`,
+    src: c.image || c.src,
+    srcLarge: c.srcLarge || c.image || c.src,
+    title: `${c.num || String(i + 1).padStart(2, '0')} — ${c.title}`,
+    alt: c.alt || c.title,
+    event: c.desc || '',
   }))
 
   return (
@@ -98,8 +102,8 @@ export default function CategoryTemplate({
               Reserve A Date
             </Link>
             <a
-              href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
-                `Hi ${siteConfig.studioName}, I would like to inquire about ${title || categoryData?.name}.`
+              href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(
+                `Hi ${studioName}, I would like to inquire about ${title || categoryData?.name}.`
               )}`}
               target="_blank"
               rel="noopener noreferrer"

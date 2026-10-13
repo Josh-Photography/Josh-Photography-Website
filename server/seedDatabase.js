@@ -411,21 +411,6 @@ const contentData = {
       name: 'Facebook',
       enabled: true,
     },
-    youtube: {
-      url: 'https://youtube.com/@joshphotography',
-      name: 'YouTube',
-      enabled: true,
-    },
-    pinterest: {
-      url: 'https://pinterest.com/joshphotography',
-      name: 'Pinterest',
-      enabled: true,
-    },
-    linkedin: {
-      url: 'https://linkedin.com/company/joshphotography',
-      name: 'LinkedIn',
-      enabled: true,
-    },
     whatsapp: {
       url: 'https://wa.me/447988827057',
       name: 'WhatsApp',

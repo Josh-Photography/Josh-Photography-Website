@@ -6,29 +6,32 @@ import { useWebsiteData } from '../../hooks/useWebsiteData'
 
 export default function TestimonialsSection() {
   const { testimonials: dynamicTestimonials } = useWebsiteData()
-  const list = (dynamicTestimonials && dynamicTestimonials.length > 0) ? dynamicTestimonials : fallbackTestimonials
+  const testimonials = (Array.isArray(dynamicTestimonials) && dynamicTestimonials.length > 0)
+    ? dynamicTestimonials
+    : fallbackTestimonials
+  const list = testimonials
   const [current, setCurrent] = useState(0)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
 
   // Ensure current index is within bounds
-  const safeCurrent = current >= list.length ? 0 : current
+  const safeCurrent = current >= testimonials.length ? 0 : current
 
   const next = useCallback(() => {
-    setCurrent((prev) => (prev + 1) % list.length)
-  }, [list.length])
+    setCurrent((prev) => (prev + 1) % testimonials.length)
+  }, [testimonials.length])
 
   const prev = useCallback(() => {
-    setCurrent((prev) => (prev - 1 + list.length) % list.length)
-  }, [list.length])
+    setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  }, [testimonials.length])
 
   useEffect(() => {
-    if (list.length <= 1) return
+    if (testimonials.length <= 1) return
     const timer = setInterval(next, 5000)
     return () => clearInterval(timer)
-  }, [next, list.length])
+  }, [next, testimonials.length])
 
-  const testimonial = list[safeCurrent] || list[0]
+  const testimonial = testimonials[safeCurrent] || testimonials[0] || {}
 
   return (
     <section
@@ -85,7 +88,7 @@ export default function TestimonialsSection() {
         >
           <AnimatePresence mode="wait">
             <motion.div
-              key={testimonial.id}
+              key={testimonial.id || safeCurrent}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
@@ -97,7 +100,7 @@ export default function TestimonialsSection() {
 
               {/* Stars */}
               <div className="flex items-center justify-center gap-1 mb-6">
-                {Array.from({ length: testimonial.rating }).map((_, i) => (
+                {Array.from({ length: Math.max(1, Math.min(5, Number(testimonial.rating) || 5)) }).map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-gold text-gold" />
                 ))}
               </div>

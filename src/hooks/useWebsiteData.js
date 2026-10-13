@@ -18,18 +18,20 @@ export function useWebsiteData() {
     }
   }, [])
 
+  const content = (data && data.content && typeof data.content === 'object') ? data.content : {}
+
   return {
     data,
-    studio: data.content?.studio || {},
-    about: data.content?.about || {},
-    heroSlides: (data.content?.heroSlides || []).filter((s) => s.published !== false),
-    services: (data.content?.services || []).filter((s) => s.published !== false),
-    testimonials: (data.content?.testimonials || []).filter((t) => t.published !== false),
-    team: (data.content?.collaborators || []).filter((t) => t.published !== false),
-    social: data.content?.social || {},
-    settings: data.content?.settings || {},
-    photos: data.photos || [],
-    categories: data.categories || [],
+    studio: content.studio || {},
+    about: content.about || {},
+    heroSlides: (Array.isArray(content.heroSlides) ? content.heroSlides : []).filter((s) => s && s.published !== false),
+    services: (Array.isArray(content.services) ? content.services : []).filter((s) => s && s.published !== false),
+    testimonials: (Array.isArray(content.testimonials) ? content.testimonials : []).filter((t) => t && t.published !== false),
+    team: (Array.isArray(content.collaborators) ? content.collaborators : []).filter((t) => t && t.published !== false),
+    social: content.social || {},
+    settings: content.settings || {},
+    photos: Array.isArray(data?.photos) ? data.photos : (data?.photos?.photos || []),
+    categories: Array.isArray(data?.categories) ? data.categories : (data?.photos?.categories || []),
     getCategoryCards: (categorySlugOrId) => dataService.getCategoryPhotos(categorySlugOrId),
     submitContact: (formData) => dataService.submitContact(formData),
     submitComment: (photoId, commentData) => dataService.submitComment(photoId, commentData),

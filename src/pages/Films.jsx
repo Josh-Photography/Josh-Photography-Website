@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Play, Film, Sparkles, Volume2, Video, Compass, ArrowRight } from 'lucide-react'
 import { siteConfig } from '../data/siteConfig'
+import { useWebsiteData } from '../hooks/useWebsiteData'
 
 const filmShowcases = [
   {
@@ -68,6 +69,9 @@ const cinemaPillars = [
 
 export default function Films() {
   const [activeFilm, setActiveFilm] = useState(null)
+  const { studio = {} } = useWebsiteData()
+  const rawNumber = studio.whatsapp || siteConfig.whatsapp
+  const cleanWhatsapp = String(rawNumber).replace(/[^0-9]/g, '')
 
   return (
     <div className="bg-ivory">
@@ -129,7 +133,7 @@ export default function Films() {
               Inquire Cinema Package
             </Link>
             <a
-              href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent('Hi, I want to inquire about cinematic film production.')}`}
+              href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent('Hi, I want to inquire about cinematic film production.')}`}
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-3.5 border border-ivory/80 text-ivory font-nav font-semibold text-xs tracking-[0.16em] uppercase hover:bg-ivory/15 hover:border-ivory transition-all duration-300 backdrop-blur-sm"

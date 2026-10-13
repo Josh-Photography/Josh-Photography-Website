@@ -1,5 +1,245 @@
 [
   {
+    "id": "act-1791920426289",
+    "action": "Synchronized 72 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-13T19:40:26.289Z"
+  },
+  {
+    "id": "act-1791920426012",
+    "action": "Synchronized 72 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-13T19:40:26.012Z"
+  },
+  {
+    "id": "act-1791920425758",
+    "action": "Deleted photo \"Candid Family & Generational Legacy\" from weddings",
+    "user": "Admin",
+    "timestamp": "2026-10-13T19:40:25.758Z"
+  },
+  {
+    "id": "act-1791920071419",
+    "action": "Updated Social Media Platforms & Links",
+    "user": "Admin",
+    "timestamp": "2026-10-13T19:34:31.420Z"
+  },
+  {
+    "id": "act-1791919930021",
+    "action": "Deleted message #1767019194375",
+    "user": "Admin",
+    "timestamp": "2026-10-13T19:32:10.021Z"
+  },
+  {
+    "id": "act-1791919928389",
+    "action": "Deleted message #08eea46d-255d-493d-90d0-4ac4bb61bd6d",
+    "user": "Admin",
+    "timestamp": "2026-10-13T19:32:08.389Z"
+  },
+  {
+    "id": "act-1791919895025",
+    "action": "Updated General Website Settings & SEO",
+    "user": "Admin",
+    "timestamp": "2026-10-13T19:31:35.025Z"
+  },
+  {
+    "id": "act-1791919619678",
+    "action": "Updated General Website Settings & SEO",
+    "user": "Admin",
+    "timestamp": "2026-10-13T19:26:59.678Z"
+  },
+  {
+    "id": "act-1791919600056",
+    "action": "Updated Social Media Platforms & Links",
+    "user": "Admin",
+    "timestamp": "2026-10-13T19:26:40.056Z"
+  },
+  {
+    "id": "act-1791919377101",
+    "action": "Updated Social Media Platforms & Links",
+    "user": "Admin",
+    "timestamp": "2026-10-13T19:22:57.101Z"
+  },
+  {
+    "id": "act-1791919377087",
+    "action": "Updated About Page Story, Photographer Profile & Stats",
+    "user": "Admin",
+    "timestamp": "2026-10-13T19:22:57.087Z"
+  },
+  {
+    "id": "act-1791919377072",
+    "action": "Synchronized 73 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-13T19:22:57.072Z"
+  },
+  {
+    "id": "act-1791919377046",
+    "action": "Updated Studio Information & Facilities",
+    "user": "Admin",
+    "timestamp": "2026-10-13T19:22:57.046Z"
+  },
+  {
+    "id": "act-1791913735921",
+    "action": "Updated Studio Information & Facilities",
+    "user": "Admin",
+    "timestamp": "2026-10-13T17:48:55.921Z"
+  },
+  {
+    "id": "act-1791913699506",
+    "action": "Updated Studio Information & Facilities",
+    "user": "Admin",
+    "timestamp": "2026-10-13T17:48:19.506Z"
+  },
+  {
+    "id": "act-1791848190766",
+    "action": "Synchronized 72 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:36:30.766Z"
+  },
+  {
+    "id": "act-1791848190244",
+    "action": "Synchronized 72 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:36:30.244Z"
+  },
+  {
+    "id": "act-1791848190185",
+    "action": "Deleted photo \"test\" from birthdays",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:36:30.185Z"
+  },
+  {
+    "id": "act-1791848177528",
+    "action": "Synchronized 73 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:36:17.528Z"
+  },
+  {
+    "id": "act-1791848177450",
+    "action": "Synchronized 73 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:36:17.450Z"
+  },
+  {
+    "id": "act-1791848162583",
+    "action": "Synchronized 73 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:36:02.584Z"
+  },
+  {
+    "id": "act-1791848162069",
+    "action": "Synchronized 73 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:36:02.069Z"
+  },
+  {
+    "id": "act-1791848101410",
+    "action": "Synchronized 73 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:35:01.410Z"
+  },
+  {
+    "id": "act-1791848101314",
+    "action": "Synchronized 73 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:35:01.314Z"
+  },
+  {
+    "id": "act-1791848096968",
+    "action": "Uploaded content asset: bi.jpg",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:34:56.968Z"
+  },
+  {
+    "id": "act-1791848008836",
+    "action": "Deleted photo \"Temporary Photo To Delete\" from weddings",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:33:28.836Z"
+  },
+  {
+    "id": "act-1791848008801",
+    "action": "Synchronized 73 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:33:28.801Z"
+  },
+  {
+    "id": "act-1791847753188",
+    "action": "Deleted photo \"test\" from weddings",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:29:13.188Z"
+  },
+  {
+    "id": "act-1791847625238",
+    "action": "Synchronized 73 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:27:05.238Z"
+  },
+  {
+    "id": "act-1791847624726",
+    "action": "Synchronized 73 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:27:04.726Z"
+  },
+  {
+    "id": "act-1791847574073",
+    "action": "Synchronized 73 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:26:14.073Z"
+  },
+  {
+    "id": "act-1791847573416",
+    "action": "Synchronized 73 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:26:13.416Z"
+  },
+  {
+    "id": "act-1791847571536",
+    "action": "Uploaded content asset: bi.jpg",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:26:11.536Z"
+  },
+  {
+    "id": "act-1791847478663",
+    "action": "Synchronized 72 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:24:38.663Z"
+  },
+  {
+    "id": "act-1791847478487",
+    "action": "Synchronized 74 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:24:38.487Z"
+  },
+  {
+    "id": "act-1791847478301",
+    "action": "Synchronized 74 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:24:38.301Z"
+  },
+  {
+    "id": "act-1791847478248",
+    "action": "Uploaded content asset: test-upload.png",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:24:38.248Z"
+  },
+  {
+    "id": "act-1791847284983",
+    "action": "Synchronized 73 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:21:24.983Z"
+  },
+  {
+    "id": "act-1791846147275",
+    "action": "Uploaded content asset: bi.jpg",
+    "user": "Admin",
+    "timestamp": "2026-10-12T23:02:27.275Z"
+  },
+  {
+    "id": "act-1791842385021",
+    "action": "Uploaded content asset: bi.jpg",
+    "user": "Admin",
+    "timestamp": "2026-10-12T21:59:45.021Z"
+  },
+  {
     "id": "act-1791839323729",
     "action": "Deleted photo \"Test Cathedral Wedding Vows\" from weddings",
     "user": "Admin",

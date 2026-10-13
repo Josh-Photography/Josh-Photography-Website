@@ -1,11 +1,16 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { stats } from '../../data/stories'
+import { stats as fallbackStats } from '../../data/stories'
 import { siteConfig } from '../../data/siteConfig'
+import { useWebsiteData } from '../../hooks/useWebsiteData'
 
 export default function BrandStory() {
+  const { studio = {}, about = {} } = useWebsiteData()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
+
+  const liveStats = (Array.isArray(about.stats) && about.stats.length > 0) ? about.stats : fallbackStats
+  const description = studio.description || about.storyParagraph1 || siteConfig.fullDescription
 
   return (
     <section ref={ref} className="section-padding bg-ivory" aria-label="Brand Story">
@@ -19,7 +24,7 @@ export default function BrandStory() {
               transition={{ duration: 0.6 }}
               className="text-section-label"
             >
-              Our Philosophy
+              {about.storyBadge || 'Our Philosophy'}
             </motion.span>
 
             <motion.h2
@@ -28,7 +33,11 @@ export default function BrandStory() {
               transition={{ delay: 0.1, duration: 0.7 }}
               className="text-section-title mb-6"
             >
-              More Than <em className="italic text-gold-dark">Photographs</em>
+              {studio.tagline ? (
+                <span>{studio.tagline}</span>
+              ) : (
+                <>More Than <em className="italic text-gold-dark">Photographs</em></>
+              )}
             </motion.h2>
 
             <motion.div
@@ -44,7 +53,7 @@ export default function BrandStory() {
               transition={{ delay: 0.3, duration: 0.7 }}
               className="text-body-lg text-warm-brown/80 font-light leading-[1.9] mb-6"
             >
-              {siteConfig.fullDescription}
+              {description}
             </motion.p>
 
             <motion.p
@@ -53,8 +62,7 @@ export default function BrandStory() {
               transition={{ delay: 0.4, duration: 0.7 }}
               className="text-body-md text-warm-brown/60 font-light leading-relaxed mb-10"
             >
-              Every celebration has a story. We are here to make sure yours is told beautifully,
-              authentically, and with the artistry it deserves.
+              {about.storyParagraph2 || 'Every celebration has a story. We are here to make sure yours is told beautifully, authentically, and with the artistry it deserves.'}
             </motion.p>
 
             {/* Stats */}
@@ -64,8 +72,8 @@ export default function BrandStory() {
               transition={{ delay: 0.5, duration: 0.7 }}
               className="grid grid-cols-2 sm:grid-cols-4 gap-6"
             >
-              {stats.map((stat, index) => (
-                <div key={stat.label} className="text-center lg:text-left">
+              {liveStats.map((stat, index) => (
+                <div key={stat.label || index} className="text-center lg:text-left">
                   <div className="font-serif text-display-sm text-charcoal mb-1">
                     {stat.value}
                   </div>

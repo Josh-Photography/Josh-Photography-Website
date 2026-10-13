@@ -54,6 +54,16 @@ function writePhotos(data) {
   writeFileSync(photosPath, JSON.stringify(data, null, 2))
 }
 
+function normalizeCategory(cat) {
+  const s = String(cat || '').toLowerCase().trim()
+  if (s === 'birthdays' || s === 'birthday-photography') return 'birthdays'
+  if (s === 'engagement' || s === 'pre-wedding') return 'engagement'
+  if (s === 'corporate-events' || s === 'portraits') return 'corporate-events'
+  if (s === 'baby-family' || s === 'baby-and-family') return 'baby-family'
+  if (s === 'festivals' || s === 'cultural-celebrations') return 'festivals'
+  return s
+}
+
 // Get all photos (public or admin with query filters)
 router.get('/', (req, res) => {
   try {
@@ -64,8 +74,11 @@ router.get('/', (req, res) => {
 
     // Filter by category
     if (category && category !== 'all') {
+      const targetCat = normalizeCategory(category)
       photos = photos.filter(
-        (p) => p.category === category || p.categorySlug === category
+        (p) =>
+          normalizeCategory(p.category) === targetCat ||
+          normalizeCategory(p.categorySlug) === targetCat
       )
     }
 
@@ -130,12 +143,14 @@ router.get('/category/:category', (req, res) => {
     const data = readPhotos()
     const { category } = req.params
 
+    const targetCat = normalizeCategory(category)
     const filtered =
       category === 'all'
         ? data.photos.filter((p) => p.published !== false)
         : data.photos.filter(
             (p) =>
-              (p.category === category || p.categorySlug === category) &&
+              (normalizeCategory(p.category) === targetCat ||
+                normalizeCategory(p.categorySlug) === targetCat) &&
               p.published !== false
           )
 
@@ -172,8 +187,8 @@ router.post(
       // Get max order
       let maxOrder = data.photos.reduce((max, p) => Math.max(max, p.order || 0), 0)
 
-      const targetCategory = category || 'weddings'
-      const categoryPhotos = data.photos.filter((p) => p.category === targetCategory)
+      const targetCategory = normalizeCategory(category || 'weddings')
+      const categoryPhotos = data.photos.filter((p) => normalizeCategory(p.category) === targetCategory)
       let nextNum = categoryPhotos.length + 1
 
       const createdPhotos = []
@@ -192,6 +207,7 @@ router.post(
             desc: desc || '',
             alt: alt || photoTitle,
             category: targetCategory,
+            categorySlug: targetCategory,
             image: fileUrl,
             src: fileUrl,
             srcLarge: fileUrl,
@@ -211,6 +227,7 @@ router.post(
           desc: desc || '',
           alt: alt || photoTitle,
           category: targetCategory,
+          categorySlug: targetCategory,
           image: src,
           src: src,
           srcLarge: src,
@@ -240,12 +257,64 @@ router.post(
   }
 )
 
+// Synchronize all portfolio photos in batch (protected)
+router.put('/', authenticateToken, (req, res) => {
+  try {
+    const data = readPhotos()
+    const incomingPhotos = Array.isArray(req.body)
+      ? req.body
+      : (Array.isArray(req.body?.photos) ? req.body.photos : null)
+
+    if (!incomingPhotos) {
+      return res.status(400).json({ error: 'Please provide an array of photos' })
+    }
+
+    // Normalize and sanitize incoming photos
+    const normalizedPhotos = incomingPhotos.map((p, idx) => {
+      const cat = p.category || 'weddings'
+      const normCat = normalizeCategory(cat)
+      const imgSrc = p.image || p.src || p.srcLarge || ''
+      return {
+        id: p.id || `photo-${Date.now()}-${idx}`,
+        title: p.title || `Photograph ${idx + 1}`,
+        desc: p.desc || '',
+        alt: p.alt || p.title || 'Josh Photography showcase',
+        category: normCat,
+        categorySlug: p.categorySlug ? normalizeCategory(p.categorySlug) : normCat,
+        image: imgSrc,
+        src: imgSrc,
+        srcLarge: p.srcLarge || imgSrc,
+        num: p.num || String(idx + 1).padStart(2, '0'),
+        order: p.order !== undefined ? parseInt(p.order, 10) : idx + 1,
+        published: p.published !== false,
+        createdAt: p.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }
+    })
+
+    data.photos = normalizedPhotos
+    writePhotos(data)
+    logActivity(`Synchronized ${normalizedPhotos.length} portfolio photograph(s) across categories`)
+
+    res.json({
+      success: true,
+      message: 'Portfolio photos synchronized successfully',
+      categories: data.categories,
+      photos: data.photos,
+      total: data.photos.length,
+    })
+  } catch (error) {
+    console.error('Error synchronizing photos batch:', error)
+    res.status(500).json({ error: 'Failed to synchronize photos' })
+  }
+})
+
 // Update photo metadata or replace image (protected)
 router.put('/:id', authenticateToken, upload.single('photo'), (req, res) => {
   try {
     const data = readPhotos()
     const { id } = req.params
-    const index = data.photos.findIndex((p) => p.id === id)
+    const index = data.photos.findIndex((p) => String(p.id) === String(id))
 
     if (index === -1) {
       return res.status(404).json({ error: 'Photo not found' })
@@ -277,6 +346,10 @@ router.put('/:id', authenticateToken, upload.single('photo'), (req, res) => {
     if (updates.published !== undefined) {
       updates.published = updates.published === 'true' || updates.published === true
     }
+    if (updates.category) {
+      updates.category = normalizeCategory(updates.category)
+      updates.categorySlug = normalizeCategory(updates.category)
+    }
 
     data.photos[index] = {
       ...existing,
@@ -299,7 +372,7 @@ router.patch('/:id/toggle-publish', authenticateToken, (req, res) => {
   try {
     const data = readPhotos()
     const { id } = req.params
-    const photo = data.photos.find((p) => p.id === id)
+    const photo = data.photos.find((p) => String(p.id) === String(id))
 
     if (!photo) {
       return res.status(404).json({ error: 'Photo not found' })
@@ -322,7 +395,7 @@ router.delete('/:id', authenticateToken, (req, res) => {
   try {
     const data = readPhotos()
     const { id } = req.params
-    const index = data.photos.findIndex((p) => p.id === id)
+    const index = data.photos.findIndex((p) => String(p.id) === String(id))
 
     if (index === -1) {
       return res.status(404).json({ error: 'Photo not found' })

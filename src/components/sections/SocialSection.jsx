@@ -2,16 +2,26 @@ import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
-import { InstagramIcon, YoutubeIcon, FacebookIcon } from '../common/Icons'
+import { InstagramIcon, FacebookIcon, WhatsAppIcon } from '../common/Icons'
 import { siteConfig } from '../../data/siteConfig'
 import { galleryImages } from '../../data/gallery'
+import { useWebsiteData } from '../../hooks/useWebsiteData'
 
 export default function SocialSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
+  const { social = {}, studio = {}, photos = [] } = useWebsiteData()
 
-  // Pick 6 random images for "social feed"
-  const socialImages = galleryImages.filter(img => img.featured).concat(galleryImages.slice(0, 6)).slice(0, 6)
+  const instagramUrl = typeof social.instagram === 'object' ? social.instagram.url : (social.instagram || siteConfig.social.instagram)
+  const facebookUrl = typeof social.facebook === 'object' ? social.facebook.url : (social.facebook || siteConfig.social.facebook)
+  const rawWhatsapp = studio.whatsapp || siteConfig.whatsapp
+  const whatsappUrl = rawWhatsapp ? `https://wa.me/${String(rawWhatsapp).replace(/[^0-9]/g, '')}` : ''
+
+  // Pick 6 images from dynamic photos if available, else fallback galleryImages
+  const availableImages = (Array.isArray(photos) && photos.length >= 6)
+    ? photos.map(p => ({ id: p.id, src: p.image || p.src, alt: p.alt || p.title }))
+    : galleryImages
+  const socialImages = availableImages.slice(0, 6)
 
   return (
     <section ref={ref} className="section-padding bg-ivory" aria-label="Social Media">
@@ -55,7 +65,7 @@ export default function SocialSection() {
           {socialImages.map((img, index) => (
             <motion.a
               key={img.id}
-              href={siteConfig.social.instagram}
+              href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, scale: 0.95 }}
@@ -83,9 +93,9 @@ export default function SocialSection() {
           transition={{ delay: 0.8, duration: 0.7 }}
           className="flex items-center justify-center gap-6"
         >
-          {siteConfig.social.instagram && (
+          {Boolean(instagramUrl) && (
             <a
-              href={siteConfig.social.instagram}
+              href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 text-body-sm text-warm-brown/60 hover:text-gold transition-colors duration-300"
@@ -95,20 +105,21 @@ export default function SocialSection() {
               <ArrowUpRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           )}
-          {siteConfig.social.youtube && (
+          {Boolean(whatsappUrl) && (
             <a
-              href={siteConfig.social.youtube}
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 text-body-sm text-warm-brown/60 hover:text-gold transition-colors duration-300"
             >
-              YouTube
+              <WhatsAppIcon className="w-5 h-5" />
+              WhatsApp
               <ArrowUpRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
           )}
-          {siteConfig.social.facebook && (
+          {Boolean(facebookUrl) && (
             <a
-              href={siteConfig.social.facebook}
+              href={facebookUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 text-body-sm text-warm-brown/60 hover:text-gold transition-colors duration-300"

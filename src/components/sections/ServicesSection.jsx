@@ -59,7 +59,7 @@ const defaultEditorialServices = [
 
 export default function ServicesSection() {
   const { services } = useWebsiteData()
-  const activeServices = (services && services.length > 0) ? services : defaultEditorialServices
+  const activeServices = (Array.isArray(services) && services.length > 0) ? services : defaultEditorialServices
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
 

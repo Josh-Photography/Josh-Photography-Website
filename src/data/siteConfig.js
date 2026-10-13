@@ -19,8 +19,6 @@ export const siteConfig = {
   social: {
     instagram: 'https://instagram.com/joshphotography.uk',
     facebook: 'https://facebook.com/joshphotography.uk',
-    youtube: 'https://youtube.com/@joshphotography',
-    pinterest: 'https://pinterest.com/joshphotography',
   },
   seo: {
     defaultTitle: 'Josh Photography | Luxury Wedding & Celebration Photography',

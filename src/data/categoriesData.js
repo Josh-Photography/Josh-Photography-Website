@@ -875,5 +875,20 @@ export const photographyCategories = [
   },
 ]
 
-export const getCategoryBySlug = (slug) =>
-  photographyCategories.find((cat) => cat.slug === slug || cat.id === slug)
+export const getCategoryBySlug = (slug) => {
+  if (!slug) return null
+  const s = String(slug).toLowerCase().trim()
+  return (
+    photographyCategories.find((cat) => {
+      const cSlug = String(cat.slug || '').toLowerCase().trim()
+      const cId = String(cat.id || '').toLowerCase().trim()
+      if (cSlug === s || cId === s) return true
+      if (s === 'birthdays' && (cSlug === 'birthday-photography' || cId === 'birthdays')) return true
+      if (s === 'birthday-photography' && (cId === 'birthdays' || cSlug === 'birthdays')) return true
+      if (s === 'pre-wedding' && (cId === 'engagement' || cSlug === 'engagement')) return true
+      if (s === 'portraits' && (cId === 'corporate-events' || cSlug === 'corporate-events')) return true
+      return false
+    }) || null
+  )
+}
+

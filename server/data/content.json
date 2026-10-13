@@ -1,13 +1,13 @@
 {
   "studio": {
     "name": "Josh Photography",
-    "tagline": "Stories Worth Remembering",
-    "description": "Crafting visual stories that transcend time. Every frame, a masterpiece.",
+    "tagline": "Timeless Stories Worth Remembering — Masterfully Preserved",
+    "description": "Fine-art documentary storytelling preserving authentic raw emotion and sacred heirlooms across the United Kingdom and Europe.",
     "location": "Greater London, United Kingdom",
     "address": "Greater London, United Kingdom",
     "email": "hello@joshphotography.co.uk",
-    "phone": "+44 7988 827057",
-    "whatsapp": "+447988827057",
+    "phone": "+44 7988 889900",
+    "whatsapp": "+447988889900",
     "openingHours": "Monday – Saturday: 9:00 AM – 6:00 PM | Sunday: By Private Appointment",
     "announcement": {
       "badge": "04 — COMING SOON",
@@ -71,7 +71,36 @@
       "High-speed prime lenses (35mm, 50mm, 85mm f/1.2)",
       "Color-calibrated proofing monitors",
       "Silent electronic shutter optics for church ceremonies"
-    ]
+    ],
+    "social": {
+      "instagram": {
+        "url": "https://instagram.com/joshphotography.uk",
+        "name": "Instagram",
+        "enabled": true
+      },
+      "facebook": {
+        "url": "https://facebook.com/joshphotography.uk",
+        "name": "Facebook",
+        "enabled": true
+      },
+      "whatsapp": {
+        "url": "https://wa.me/447988827057",
+        "name": "WhatsApp",
+        "enabled": true
+      }
+    },
+    "settings": {
+      "siteName": "Josh Photography",
+      "tagline": "Luxury Wedding & Celebration Photography",
+      "logo": "/logo.png",
+      "logoBlack": "/logo-black.png",
+      "ctaButtonText": "Check Availability",
+      "ctaButtonLink": "/check-availability",
+      "copyrightText": "© 2026 Josh Photography. All rights reserved.",
+      "footerDescription": "Josh Photography is an editorial wedding, celebration, and family photography studio serving London and the United Kingdom. We preserve the emotions, the laughter, and the quiet moments that make your celebrations unforgettable.",
+      "seoDefaultTitle": "Josh Photography | Luxury Wedding & Celebration Photography",
+      "seoDescription": "Josh Photography — Elegant, warm, and cinematic wedding and celebration photography in the United Kingdom."
+    }
   },
   "about": {
     "heroBadge": "BEHIND THE LENS · JOSH PHOTOGRAPHY",
@@ -82,7 +111,7 @@
     "storyParagraph1": "Josh Photography was founded with a singular conviction: that life’s most precious feelings should never fade with memory. The quiet reverence before wedding vows, the spontaneous burst of laughter during a first birthday cake cutting, the tear on a father’s cheek, and the warmth of hands held over decades.",
     "storyParagraph2": "We believe that great photography is not about perfection or artificial performance; it is about presence. We observe with quiet reverence and gentle direction, giving couples and families the freedom to be wholly themselves while we capture heirloom imagery they will treasure for a lifetime.",
     "storyImage": "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=900&q=80",
-    "storyQuote": "Light is fleeting. Emotion is forever.",
+    "storyQuote": "Every unspoken breath, preserved forever.",
     "stats": [
       {
         "value": "450+",
@@ -102,10 +131,10 @@
       }
     ],
     "photographerBadge": "02 — MEET THE PHOTOGRAPHER",
-    "photographerHeadline": "A Passion for Authentic Storytelling",
+    "photographerHeadline": "Editorial Mastery & Quiet Presence",
     "photographerName": "Josh",
     "photographerRole": "Lead Photographer & Founder",
-    "photographerImage": "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=900&q=80",
+    "photographerImage": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&q=85",
     "photographerBio1": "Hello, I am Josh. As a photographer, my goal is simple: to document your most meaningful milestones so faithfully that every time you revisit your photographs, you are instantly transported back to how the moment truly felt.",
     "photographerBio2": "My approach combines quiet photojournalism with refined, editorial portraiture. Whether documenting a sacred church ceremony in the English countryside, a historic countryside manor celebration, or a joyful family garden gathering, I bring patience, warmth, and keen observation to every commission.",
     "photographerQuote": "I don't just photograph what things look like — I photograph what they feel like. Your family's unique laughter, sacred vows, and candid joys deserve to be captured with dignity and timeless care.",
@@ -151,13 +180,13 @@
       "id": 1,
       "shortName": "Weddings",
       "category": "Wedding Photography",
-      "badge": "01 / 12 — THE SACRED COVENANT",
+      "badge": "01 / 12 — SACRED VOWS",
       "image": "/images/hero-church-wedding.jpg",
-      "title": "Sacred Church Vows",
-      "subtitle": "Timeless British Weddings Chronicled with Quiet Reverence & Artistry",
+      "title": "Stories Worth Remembering",
+      "subtitle": "Capturing Sacred Vows, Pure Emotion & Timeless Elegance",
       "alt": "Traditional British church wedding ceremony with bride and groom at the altar",
       "explorePath": "/weddings",
-      "exploreText": "Explore Wedding Photography",
+      "exploreText": "Explore Weddings",
       "order": 1,
       "published": true
     },
@@ -167,25 +196,25 @@
       "category": "Birthday Celebrations",
       "badge": "02 / 12 — JOYFUL MILESTONES",
       "image": "/images/birthday_01.png",
-      "title": "Unscripted Laughter & Cake",
-      "subtitle": "From First Milestones to Grand Jubilees, Every Wonder Documented",
-      "alt": "Joyful birthday celebration with children, glowing candles, balloons, and cake",
+      "title": "Every Celebration Deserves Art",
+      "subtitle": "From Milestone First Birthdays to Grand Family Jubilees",
+      "alt": "Joyful birthday celebration with colorful balloons, glowing sparkler candles and celebratory party decor",
       "explorePath": "/birthday-photography",
-      "exploreText": "Explore Birthday Celebrations",
+      "exploreText": "Explore Birthdays",
       "order": 2,
       "published": true
     },
     {
       "id": 3,
-      "shortName": "Pre-Wedding",
-      "category": "Pre-Wedding Photography",
-      "badge": "03 / 12 — INTIMATE PRELUDES",
-      "image": "/images/pre-wedding-img-1.jpg",
-      "title": "Cinematic Love Stories",
-      "subtitle": "Editorial Newlywed Preludes Captured Across English Countryside Estates",
-      "alt": "Couple enjoying intimate romantic golden hour moments across country estate",
-      "explorePath": "/pre-wedding",
-      "exploreText": "Explore Pre-Wedding",
+      "shortName": "Maternity",
+      "category": "Maternity Photography",
+      "badge": "03 / 12 — THE MIRACLE OF LIFE",
+      "image": "/images/maternity-editorial-portrait.jpg",
+      "title": "Elegance & Expecting Wonder",
+      "subtitle": "Poetic Fine-Art Portraits Celebrating the Sacred Anticipation of New Life",
+      "alt": "Expectant mother in flowing couture gown holding baby bump at sunset meadow",
+      "explorePath": "/maternity",
+      "exploreText": "Explore Maternity",
       "order": 3,
       "published": true
     },
@@ -193,14 +222,126 @@
       "id": 4,
       "shortName": "Family",
       "category": "Family Photography",
-      "badge": "04 / 12 — GENERATIONS TOGETHER",
+      "badge": "04 / 12 — GENERATIONS UNITED",
       "image": "/images/family-photography-img-5.jpg",
-      "title": "Authentic Family Bonds",
-      "subtitle": "Documenting Heartfelt Connections & Quiet Joy Across Generations",
-      "alt": "Happy family gathered outdoors in golden evening light",
+      "title": "Timeless Family Legacies",
+      "subtitle": "Natural Lifestyle Portraits & Heirlooms That Outlive Generations",
+      "alt": "Grand estate multi-generational family legacy portrait standing together under ancient trees",
       "explorePath": "/family",
-      "exploreText": "Explore Family Photography",
+      "exploreText": "Explore Family",
       "order": 4,
+      "published": true
+    },
+    {
+      "id": 5,
+      "shortName": "Anniversaries",
+      "category": "Anniversary Photography",
+      "badge": "05 / 12 — ENDURING DEVOTION",
+      "image": "/images/Anniversary-img-2.jpg",
+      "title": "Honoring Years of Love",
+      "subtitle": "Enduring Companionship, Golden Vow Renewals & A Blossoming Legacy",
+      "alt": "Affectionate couple smiling together in open countryside meadow during golden hour vow renewal",
+      "explorePath": "/anniversary",
+      "exploreText": "Explore Anniversaries",
+      "order": 5,
+      "published": true
+    },
+    {
+      "id": 6,
+      "shortName": "Engagement",
+      "category": "Engagement Photography",
+      "badge": "06 / 12 — THE SACRED PROMISE",
+      "image": "/images/engagement-img-1.jpg",
+      "title": "Romantic Vows & The Proposal",
+      "subtitle": "Preserving the Heartbeat of the Question & The Radiance of the Answer",
+      "alt": "Romantic surprise proposal on bended knee with candlelit rooftop terrace setting",
+      "explorePath": "/engagement",
+      "exploreText": "Explore Engagement",
+      "order": 6,
+      "published": true
+    },
+    {
+      "id": 7,
+      "shortName": "Baby & Newborn",
+      "category": "Baby & Newborn Photography",
+      "badge": "07 / 12 — GENTLE BEGINNINGS",
+      "image": "/images/baby-family-img-3.jpg",
+      "title": "Tiny Fingers & Soft Wonder",
+      "subtitle": "Unhurried Sessions Preserving the Delicate Innocence of First Days",
+      "alt": "Parents joyfully holding baby up in blooming spring garden",
+      "explorePath": "/baby-family",
+      "exploreText": "Explore Newborns",
+      "order": 7,
+      "published": true
+    },
+    {
+      "id": 8,
+      "shortName": "Festivals",
+      "category": "Festival & Cultural Celebrations",
+      "badge": "08 / 12 — BRITISH HERITAGE & SEASONS",
+      "image": "/images/christmas-festival.jpg",
+      "title": "Festivals & Seasonal Magic",
+      "subtitle": "Illuminated Christmas Markets, Twilight Glowing Lanterns & Joy",
+      "alt": "Traditional British Christmas market illuminated by warm golden lights",
+      "explorePath": "/festivals",
+      "exploreText": "Explore Festivals",
+      "order": 8,
+      "published": true
+    },
+    {
+      "id": 9,
+      "shortName": "Mother's Day",
+      "category": "Mother's Day Photography",
+      "badge": "09 / 12 — HEART OF THE HOME",
+      "image": "/images/mothersday-img-2.jpg",
+      "title": "Celebrating Unconditional Love",
+      "subtitle": "Tender Multi-Generational Portraits Honoring Mothers & Grandmothers",
+      "alt": "Loving mother with children enjoying tender moments together in soft sunlight",
+      "explorePath": "/mothers-day",
+      "exploreText": "Explore Mother's Day",
+      "order": 9,
+      "published": true
+    },
+    {
+      "id": 10,
+      "shortName": "Father's Day",
+      "category": "Father's Day Photography",
+      "badge": "10 / 12 — PILLARS OF OUR LIVES",
+      "image": "/images/fatherday-img-3.jpg",
+      "title": "Strength, Guidance & Warmth",
+      "subtitle": "Capturing Camaraderie, Quiet Pride & Lifelong Bonds",
+      "alt": "Proud father with children sharing joyful candid moments outdoors",
+      "explorePath": "/fathers-day",
+      "exploreText": "Explore Father's Day",
+      "order": 10,
+      "published": true
+    },
+    {
+      "id": 11,
+      "shortName": "Corporate",
+      "category": "Corporate Event Photography",
+      "badge": "11 / 12 — PRESTIGE & EXCELLENCE",
+      "image": "/images/corporate-img-2.jpg",
+      "title": "Elevating Brand Excellence",
+      "subtitle": "High-Impact Visual Storytelling for Conferences, Galas & Summits",
+      "alt": "Polished corporate gala event and conference session with attendees",
+      "explorePath": "/corporate-events",
+      "exploreText": "Explore Corporate",
+      "order": 11,
+      "published": true
+    },
+    {
+      "id": 12,
+      "shortName": "Graduations",
+      "category": "Graduation Photography",
+      "badge": "12 / 12 — ACADEMIC TRIUMPH",
+      "image": "/images/grad_photo.jpg",
+      "title": "The Pinnacle of Achievement",
+      "subtitle": "Honoring Milestone Degrees, Historic Regalia & Hard-Earned Pride",
+      "alt": "Proud university graduate holding diploma scroll in historic campus regalia",
+      "explorePath": "/graduations",
+      "exploreText": "Explore Graduations",
+      "order": 12,
       "published": true
     }
   ],
@@ -237,7 +378,7 @@
       "title": "Maternity Photography",
       "quote": "Carrying life, radiating grace, embracing tomorrow.",
       "desc": "Gentle, empowering fine-art maternity sessions celebrating the profound beauty of motherhood. Conducted either on-location in tranquil natural light or in private comfort.",
-      "image": "/images/maternity-img-3.jpg",
+      "image": "/images/maternity-editorial-portrait.jpg",
       "alt": "Serene expectant mother in flowing ivory gown bathed in warm afternoon sunlight",
       "path": "/maternity",
       "ctaText": "EXPLORE MATERNITY STORIES",
@@ -255,6 +396,19 @@
       "path": "/family",
       "ctaText": "EXPLORE FAMILY STORIES",
       "order": 4,
+      "published": true
+    },
+    {
+      "id": 5,
+      "num": "05",
+      "title": "Anniversary Photography",
+      "quote": "Honoring years of love, enduring devotion, and a blossoming legacy.",
+      "desc": "From intimate first-year milestones to Silver (25th) and Golden (50th) Jubilees, we document enduring companionship, private vow renewals, and the timeless beauty of love that deepens over time.",
+      "image": "/images/Anniversary-img-2.jpg",
+      "alt": "Affectionate couple smiling together in open countryside meadow during golden hour vow renewal",
+      "path": "/anniversary",
+      "ctaText": "EXPLORE ANNIVERSARY STORIES",
+      "order": 5,
       "published": true
     }
   ],
@@ -343,31 +497,8 @@
     }
   ],
   "social": {
-    "instagram": {
-      "url": "https://instagram.com/joshphotography.uk",
-      "name": "Instagram",
-      "enabled": true
-    },
-    "facebook": {
-      "url": "https://facebook.com/joshphotography.uk",
-      "name": "Facebook",
-      "enabled": true
-    },
-    "youtube": {
-      "url": "https://youtube.com/@joshphotography",
-      "name": "YouTube",
-      "enabled": true
-    },
-    "pinterest": {
-      "url": "https://pinterest.com/joshphotography",
-      "name": "Pinterest",
-      "enabled": true
-    },
-    "linkedin": {
-      "url": "https://linkedin.com/company/joshphotography",
-      "name": "LinkedIn",
-      "enabled": true
-    },
+    "instagram": "https://www.instagram.com/josh.photography87/",
+    "facebook": "",
     "whatsapp": {
       "url": "https://wa.me/447988827057",
       "name": "WhatsApp",
@@ -384,6 +515,11 @@
     "copyrightText": "© 2026 Josh Photography. All rights reserved.",
     "footerDescription": "Josh Photography is an editorial wedding, celebration, and family photography studio serving London and the United Kingdom. We preserve the emotions, the laughter, and the quiet moments that make your celebrations unforgettable.",
     "seoDefaultTitle": "Josh Photography | Luxury Wedding & Celebration Photography",
-    "seoDescription": "Josh Photography — Elegant, warm, and cinematic wedding and celebration photography in the United Kingdom."
+    "seoDescription": "Josh Photography — Elegant, warm, and cinematic wedding and celebration photography in the United Kingdom.",
+    "studioName": "Josh Photography",
+    "lightLogo": "/logo.png",
+    "bookingButtonText": "Check Availability",
+    "bookingButtonLink": "/check-availability",
+    "seoTitle": "Josh Photography | Luxury Wedding & Celebration Photography"
   }
 }

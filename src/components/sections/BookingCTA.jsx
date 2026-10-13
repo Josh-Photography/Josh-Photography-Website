@@ -4,10 +4,18 @@ import { motion, useInView } from 'framer-motion'
 import { ArrowRight, Calendar } from 'lucide-react'
 import { siteConfig } from '../../data/siteConfig'
 import { WhatsAppIcon } from '../common/Icons'
+import { useWebsiteData } from '../../hooks/useWebsiteData'
 
 export default function BookingCTA() {
+  const { studio = {}, settings = {} } = useWebsiteData()
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
+
+  const studioName = settings.siteName || studio.name || siteConfig.studioName
+  const rawNumber = studio.whatsapp || siteConfig.whatsapp
+  const cleanNumber = String(rawNumber).replace(/[^0-9]/g, '')
+  const ctaText = settings.ctaButtonText || settings.bookingButtonText || 'Check Availability'
+  const ctaLink = settings.ctaButtonLink || settings.bookingButtonLink || '/check-availability'
 
   return (
     <section ref={ref} className="relative py-28 md:py-36 overflow-hidden" aria-label="Book Now">
@@ -64,16 +72,16 @@ export default function BookingCTA() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
           <Link
-            to="/check-availability"
+            to={ctaLink}
             className="inline-flex items-center gap-2.5 px-8 py-4 bg-muted-gold text-deep-black font-nav text-xs uppercase tracking-[0.16em] font-semibold hover:bg-gold-light hover:-translate-y-0.5 transition-all duration-300 shadow-sm border border-champagne/40"
           >
             <Calendar className="w-4 h-4" />
-            <span>Check Availability</span>
+            <span>{ctaText}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
           <a
-            href={`https://wa.me/${siteConfig.whatsapp}?text=${encodeURIComponent(
-              `Hi ${siteConfig.studioName}, I would like to check availability for our upcoming celebration.`
+            href={`https://wa.me/${cleanNumber}?text=${encodeURIComponent(
+              `Hi ${studioName}, I would like to check availability for our upcoming celebration.`
             )}`}
             target="_blank"
             rel="noopener noreferrer"

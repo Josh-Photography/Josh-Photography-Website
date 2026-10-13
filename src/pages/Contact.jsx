@@ -249,7 +249,7 @@ export default function Contact() {
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
                       <a
-                        href={`https://wa.me/${siteConfig.whatsapp}?text=${whatsappMessage}`}
+                        href={`https://wa.me/${String(whatsapp || siteConfig.whatsapp).replace(/[^0-9]/g, '')}?text=${whatsappMessage}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="px-6 py-3 bg-gold text-deep-black text-xs uppercase tracking-wider font-sans font-medium hover:bg-gold-light"

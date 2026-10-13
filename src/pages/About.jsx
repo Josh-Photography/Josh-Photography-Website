@@ -91,10 +91,10 @@ const fallbackFaqs = [
 ]
 
 export default function About() {
-  const { about = {}, studio = {} } = useWebsiteData()
+  const { about = {}, studio = {}, team = [] } = useWebsiteData()
 
-  const studioPreviewImages = (studio.previewImages && studio.previewImages.length > 0)
-    ? studio.previewImages.filter(p => p.published !== false)
+  const studioPreviewImages = (Array.isArray(studio.previewImages) && studio.previewImages.length > 0)
+    ? studio.previewImages.filter(p => p && p.published !== false)
     : fallbackStudioPreviewImages
 
   const stats = (about.stats && about.stats.length > 0) ? about.stats : fallbackStats
@@ -290,7 +290,80 @@ export default function About() {
         </div>
       </section>
 
-      {/* 03: Our Photography Style */}
+      {/* 03: Team & Creative Collaborators */}
+      {team && team.length > 0 && (
+        <section className="section-padding bg-ivory border-b border-champagne/40">
+          <div className="container-luxury">
+            <div className="text-center max-w-2xl mx-auto mb-16">
+              <span className="text-caption uppercase tracking-[0.2em] text-muted-gold font-nav font-semibold block mb-3">
+                03 — OUR CREATIVE TEAM
+              </span>
+              <h2 className="font-serif text-3xl md:text-4xl text-charcoal font-light">
+                Photographers & Creative Collaborators
+              </h2>
+              <div className="w-16 h-[1px] bg-champagne mx-auto mt-4 mb-4" />
+              <p className="text-warm-brown/75 text-body-sm font-light">
+                Dedicated storytellers devoted to documenting genuine emotions with discretion, warmth, and artistry.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {team.map((member, i) => (
+                <div
+                  key={member.id || i}
+                  className="bg-[#F5EEE3]/40 border border-champagne/70 overflow-hidden shadow-sm group hover:border-muted-gold transition-all duration-300 flex flex-col justify-between"
+                >
+                  <div className="aspect-[4/5] overflow-hidden bg-beige relative">
+                    <img
+                      src={member.image || 'https://images.unsplash.com/photo-1556157382-97eda2d62296?w=900&q=80'}
+                      alt={member.name}
+                      className="w-full h-full object-cover object-top transition-transform duration-700 ease-luxury group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <span className="text-[11px] uppercase tracking-wider text-muted-gold font-nav font-semibold block mb-1">
+                        {member.role}
+                      </span>
+                      <h3 className="font-serif text-xl text-charcoal mb-2">{member.name}</h3>
+                      <p className="text-warm-brown/80 text-xs sm:text-sm font-light leading-relaxed mb-4">
+                        {member.bio}
+                      </p>
+                    </div>
+                    {member.social && (
+                      <div className="flex items-center gap-3 pt-3 border-t border-champagne/40">
+                        {member.social.instagram && (
+                          <a
+                            href={member.social.instagram}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-warm-brown/70 hover:text-muted-gold font-nav uppercase tracking-wider"
+                          >
+                            Instagram
+                          </a>
+                        )}
+                        {member.social.whatsapp && (
+                          <a
+                            href={`https://wa.me/${String(member.social.whatsapp).replace(/[^0-9]/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-warm-brown/70 hover:text-muted-gold font-nav uppercase tracking-wider"
+                          >
+                            WhatsApp
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 04: Our Photography Style */}
       <section className="section-padding bg-ivory border-b border-champagne/40">
         <div className="container-luxury">
           <div className="text-center max-w-2xl mx-auto mb-16">

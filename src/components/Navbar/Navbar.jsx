@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronDown } from 'lucide-react'
 import { siteConfig, navigation } from '../../data/siteConfig'
+import { useWebsiteData } from '../../hooks/useWebsiteData'
 
 // Routes with dark hero imagery at the top
 const DARK_HERO_ROUTES = [
@@ -19,6 +20,9 @@ const DARK_HERO_ROUTES = [
   '/corporate-events',
   '/mothers-day',
   '/fathers-day',
+  '/family',
+  '/maternity',
+  '/graduations',
   '/portfolio',
   '/films',
   '/testimonials',
@@ -27,6 +31,13 @@ const DARK_HERO_ROUTES = [
 ]
 
 export default function Navbar() {
+  const { studio = {}, settings = {} } = useWebsiteData()
+  const studioName = settings.siteName || studio.name || siteConfig.studioName
+  const lightLogo = settings.logoBlack || "/logo-black.png"
+  const darkLogo = settings.logo || "/logo.png"
+  const ctaText = settings.ctaButtonText || settings.bookingButtonText || 'Check Availability'
+  const ctaLink = settings.ctaButtonLink || settings.bookingButtonLink || '/check-availability'
+
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState(null)
@@ -121,11 +132,11 @@ export default function Navbar() {
             <Link
               to="/"
               className="group flex items-center gap-2 sm:gap-2.5 xl:gap-3"
-              aria-label={`${siteConfig.studioName} - Home`}
+              aria-label={`${studioName} - Home`}
             >
               <img
-                src={isLightMode ? "/logo-black.png" : "/logo.png"}
-                alt={siteConfig.studioName}
+                src={isLightMode ? lightLogo : darkLogo}
+                alt={studioName}
                 className="h-8 sm:h-9 lg:h-8 xl:h-9 2xl:h-10 w-auto object-contain transition-all duration-300 group-hover:scale-105"
               />
               <span
@@ -134,7 +145,7 @@ export default function Navbar() {
                     : 'text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'
                   }`}
               >
-                JOSH PHOTOGRAPHY
+                {String(studioName || 'Josh Photography').toUpperCase()}
               </span>
             </Link>
           </div>
@@ -229,13 +240,13 @@ export default function Navbar() {
           {/* Column 3: Check Availability Button (Right Aligned) */}
           <div className="flex-shrink-0 flex items-center justify-end gap-2">
             <Link
-              to="/check-availability"
+              to={ctaLink}
               className={`hidden lg:inline-flex items-center justify-center whitespace-nowrap px-3.5 py-1.5 lg:px-4 lg:py-2 xl:px-6 xl:py-2.5 font-nav text-[11px] lg:text-[12px] xl:text-[13px] uppercase tracking-[0.1em] lg:tracking-[0.14em] xl:tracking-[0.16em] font-semibold transition-all duration-300 border shadow-sm rounded-sm ${isLightMode
                   ? 'border-[#292522] text-[#292522] hover:bg-[#292522] hover:text-[#FAF6EE]'
                   : 'border-[#E5BA78] text-[#E5BA78] hover:bg-[#E5BA78] hover:text-[#1A1715] backdrop-blur-sm bg-black/25'
                 }`}
             >
-              Check Availability
+              {ctaText}
             </Link>
 
             {/* Mobile Menu Button */}
@@ -267,12 +278,12 @@ export default function Navbar() {
             <div className="flex items-center justify-between px-6 py-5 border-b border-[#D8B77A]/30">
               <div className="flex items-center gap-2.5 sm:gap-3">
                 <img
-                  src="/logo-black.png"
-                  alt={siteConfig.studioName}
+                  src={lightLogo}
+                  alt={studioName}
                   className="h-8 w-auto object-contain"
                 />
                 <span className="font-serif text-xl text-charcoal font-medium tracking-[0.08em] uppercase">
-                  JOSH PHOTOGRAPHY
+                  {String(studioName || 'Josh Photography').toUpperCase()}
                 </span>
               </div>
               <button
@@ -365,11 +376,11 @@ export default function Navbar() {
 
               <div className="pt-6 pb-8">
                 <Link
-                  to="/check-availability"
+                  to={ctaLink}
                   onClick={() => setIsMobileOpen(false)}
                   className="w-full block text-center py-4 bg-muted-gold text-deep-black font-nav text-xs uppercase tracking-[0.16em] font-semibold hover:bg-gold-light shadow-sm"
                 >
-                  Check Availability
+                  {ctaText}
                 </Link>
               </div>
             </div>

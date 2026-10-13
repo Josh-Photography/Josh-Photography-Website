@@ -63,18 +63,36 @@
   ],
   "photos": [
     {
+      "id": "photo-test-1791919377058",
+      "title": "Cathedral Sunset Confetti & Joy",
+      "desc": "Breathtaking church steps golden hour exit showered with dried floral petals.",
+      "alt": "Bride and groom cathedral golden hour confetti exit",
+      "category": "weddings",
+      "categorySlug": "weddings",
+      "image": "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=85",
+      "src": "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=85",
+      "srcLarge": "https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=90",
+      "num": "99",
+      "order": 1,
+      "published": true,
+      "createdAt": "2026-10-13T19:22:57.058Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
+    },
+    {
       "id": "photo-weddings-1",
       "title": "Traditional Church Vows & Altar",
       "desc": "The sacred stillness of the church aisle, timeless choral hymns, and the reverent exchange of holy vows at the altar.",
       "alt": "Traditional British church wedding ceremony with floral arch at altar",
       "category": "weddings",
+      "categorySlug": "weddings",
       "image": "/images/hero-church-wedding.jpg",
       "src": "/images/hero-church-wedding.jpg",
       "srcLarge": "/images/hero-church-wedding.jpg",
       "num": "01",
       "order": 1,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.955Z"
+      "createdAt": "2026-10-12T20:48:19.955Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-weddings-2",
@@ -82,13 +100,15 @@
       "desc": "Celebrate the unforgettable moment of walking down the aisle, surrounded by loved ones, beautiful details, and genuine emotion.",
       "alt": "Bride and groom kissing passionately in front of wedding pavilion",
       "category": "weddings",
+      "categorySlug": "weddings",
       "image": "/images/wedding-img-2.png",
       "src": "/images/wedding-img-2.png",
       "srcLarge": "/images/wedding-img-2.png",
       "num": "02",
       "order": 2,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-weddings-3",
@@ -96,13 +116,15 @@
       "desc": "Tender macro details of precious wedding bands, clasped hands, and intimate heartfelt commitments spoken from the soul.",
       "alt": "Close-up macro detail of wedding bands and hands held together",
       "category": "weddings",
+      "categorySlug": "weddings",
       "image": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=85",
       "src": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=85",
       "srcLarge": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=85",
       "num": "03",
       "order": 3,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-weddings-4",
@@ -110,13 +132,15 @@
       "desc": "Romantic architectural backdrops — from ancient stone parish arches to grand countryside manors glowing in afternoon light.",
       "alt": "Bride and groom in grand timber-frame wedding barn aisle with floral installations",
       "category": "weddings",
+      "categorySlug": "weddings",
       "image": "/images/wedding-img-4.jpg",
       "src": "/images/wedding-img-4.jpg",
       "srcLarge": "/images/wedding-img-4.jpg",
       "num": "04",
       "order": 4,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-weddings-5",
@@ -124,27 +148,15 @@
       "desc": "Stealing thirty golden-hour minutes alone as newlyweds in the estate gardens away from the festive crowd.",
       "alt": "Newlywed couple standing together by historic stone church doorway with floral arches",
       "category": "weddings",
+      "categorySlug": "weddings",
       "image": "/images/wedding-img-5.jpg",
       "src": "/images/wedding-img-5.jpg",
       "srcLarge": "/images/wedding-img-5.jpg",
       "num": "05",
       "order": 5,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
-    },
-    {
-      "id": "photo-weddings-6",
-      "title": "Candid Family & Generational Legacy",
-      "desc": "Proud parents embracing, grandparents wiping happy tears, and joyful confetti celebrations preserved forever.",
-      "alt": "Bride and groom joyfully showered in colorful confetti outside historic venue",
-      "category": "weddings",
-      "image": "/images/wedding-img-6.jpg",
-      "src": "/images/wedding-img-6.jpg",
-      "srcLarge": "/images/wedding-img-6.jpg",
-      "num": "06",
-      "order": 6,
-      "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-birthdays-1",
@@ -152,13 +164,15 @@
       "desc": "Macro details of delicate sugar artistry, shimmering candles, handcrafted pastries, and whimsical floral dessert arrangements.",
       "alt": "Elegant tiered artisanal birthday cake with warm ambient lighting",
       "category": "birthdays",
+      "categorySlug": "birthdays",
       "image": "/images/birthday-cake-artisanal.jpg",
       "src": "/images/birthday-cake-artisanal.jpg",
       "srcLarge": "/images/birthday-cake-artisanal.jpg",
       "num": "01",
       "order": 7,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-birthdays-2",
@@ -166,13 +180,15 @@
       "desc": "The room hushes as the golden sparklers glow, capturing wide-eyed wonder, joyful wishes, and celebratory cheer.",
       "alt": "Children celebrating around birthday cake with sparkler candles and balloons",
       "category": "birthdays",
+      "categorySlug": "birthdays",
       "image": "/images/birthday_01.png",
       "src": "/images/birthday_01.png",
       "srcLarge": "/images/birthday_01.png",
       "num": "02",
       "order": 8,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-birthdays-3",
@@ -180,13 +196,15 @@
       "desc": "The room hushes as glowing sparkler candles illuminate radiant smiles, shared laughter, and unforgettable party cheer.",
       "alt": "Birthday girl making a wish and blowing out glowing sparkler candles with friends",
       "category": "birthdays",
+      "categorySlug": "birthdays",
       "image": "/images/birthday-img-3.jpg",
       "src": "/images/birthday-img-3.jpg",
       "srcLarge": "/images/birthday-img-3.jpg",
       "num": "03",
       "order": 9,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-birthdays-4",
@@ -194,13 +212,15 @@
       "desc": "Untamed childhood curiosity, tiny strawberry frosting-coated fingers, and priceless giggles during the landmark first birthday.",
       "alt": "Baby girl in strawberry dress celebrating first birthday cake smash",
       "category": "birthdays",
+      "categorySlug": "birthdays",
       "image": "/images/birthday-img-4.jpg",
       "src": "/images/birthday-img-4.jpg",
       "srcLarge": "/images/birthday-img-4.jpg",
       "num": "04",
       "order": 10,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-birthdays-5",
@@ -208,13 +228,15 @@
       "desc": "Curated milestone birthday sets with custom teepee tents, balloon styling, plush textures, and charming bespoke outfits.",
       "alt": "Baby boy smiling on plush rug with birthday cake, balloons, and teepee decor",
       "category": "birthdays",
+      "categorySlug": "birthdays",
       "image": "/images/birthday-img-5.jpg",
       "src": "/images/birthday-img-5.jpg",
       "srcLarge": "/images/birthday-img-5.jpg",
       "num": "05",
       "order": 11,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-birthdays-6",
@@ -222,13 +244,15 @@
       "desc": "Heartwarming family moments with parents and siblings in party hats, singing together around the birthday table.",
       "alt": "Happy family gathered around the birthday cake wearing party hats",
       "category": "birthdays",
+      "categorySlug": "birthdays",
       "image": "/images/birthday-img-6.jpg",
       "src": "/images/birthday-img-6.jpg",
       "srcLarge": "/images/birthday-img-6.jpg",
       "num": "06",
       "order": 12,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-engagement-1",
@@ -236,13 +260,15 @@
       "desc": "The breathtaking instant on bended knee, the stunned disbelief, joyful tears, and the heartfelt answer whispered in return.",
       "alt": "Romantic surprise proposal on bended knee with candlelit rooftop terrace setting",
       "category": "engagement",
+      "categorySlug": "engagement",
       "image": "/images/engagement-img-1.jpg",
       "src": "/images/engagement-img-1.jpg",
       "srcLarge": "/images/engagement-img-1.jpg",
       "num": "01",
       "order": 13,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-engagement-2",
@@ -250,13 +276,15 @@
       "desc": "Timeless, romantic couple portraits framed by London’s majestic Victorian heritage facades and lush tree canopies.",
       "alt": "Engaged couple embracing in front of Victorian Romanesque stone architecture and lush trees",
       "category": "engagement",
+      "categorySlug": "engagement",
       "image": "/images/engagement-img-2.jpg",
       "src": "/images/engagement-img-2.jpg",
       "srcLarge": "/images/engagement-img-2.jpg",
       "num": "02",
       "order": 14,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-engagement-3",
@@ -264,13 +292,15 @@
       "desc": "Iconic London riverside portraits bathed in soft daylight, framed by the majestic twin towers of historic Tower Bridge.",
       "alt": "Engaged couple in chic black attire holding hands tenderly by Tower Bridge",
       "category": "engagement",
+      "categorySlug": "engagement",
       "image": "/images/engagement-img-3.jpg",
       "src": "/images/engagement-img-3.jpg",
       "srcLarge": "/images/engagement-img-3.jpg",
       "num": "03",
       "order": 15,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-engagement-4",
@@ -278,13 +308,15 @@
       "desc": "Timeless architectural engagement photography along the Thames with Big Ben and Parliament rising gracefully behind.",
       "alt": "Engaged couple smiling warmly together beside Westminster Bridge and Big Ben",
       "category": "engagement",
+      "categorySlug": "engagement",
       "image": "/images/engagement-img-4.jpg",
       "src": "/images/engagement-img-4.jpg",
       "srcLarge": "/images/engagement-img-4.jpg",
       "num": "04",
       "order": 16,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-engagement-5",
@@ -292,13 +324,15 @@
       "desc": "Strolling hand in hand across London’s Millennium Bridge with the grand dome of St Paul’s Cathedral in view.",
       "alt": "Engaged couple holding hands in evening wear on Millennium Bridge with St Paul’s Cathedral",
       "category": "engagement",
+      "categorySlug": "engagement",
       "image": "/images/engagement-img-5.jpg",
       "src": "/images/engagement-img-5.jpg",
       "srcLarge": "/images/engagement-img-5.jpg",
       "num": "05",
       "order": 17,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-engagement-6",
@@ -306,13 +340,15 @@
       "desc": "Romantic, joyful couple embraces framed by the gothic towers of Parliament under glowing London skies.",
       "alt": "Happy engaged couple hugging with the Palace of Westminster in the backdrop",
       "category": "engagement",
+      "categorySlug": "engagement",
       "image": "/images/engagement-img-6.jpg",
       "src": "/images/engagement-img-6.jpg",
       "srcLarge": "/images/engagement-img-6.jpg",
       "num": "06",
       "order": 18,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-anniversary-1",
@@ -320,13 +356,15 @@
       "desc": "Gentle, dignified portraits celebrating shared wisdom, enduring affection, and the quiet comfort of a life built together.",
       "alt": "Senior couple embracing warmly in gentle natural light",
       "category": "anniversary",
+      "categorySlug": "anniversary",
       "image": "/images/anniv-test-elderly-embrace.jpg",
       "src": "/images/anniv-test-elderly-embrace.jpg",
       "srcLarge": "/images/anniv-test-elderly-embrace.jpg",
       "num": "01",
       "order": 19,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-anniversary-2",
@@ -334,13 +372,15 @@
       "desc": "Recommitting timeless promises amidst open green meadows and warm golden hour light, celebrating enduring romance and deep affection.",
       "alt": "Affectionate couple smiling together in open countryside meadow during golden hour vow renewal",
       "category": "anniversary",
+      "categorySlug": "anniversary",
       "image": "/images/Anniversary-img-2.jpg",
       "src": "/images/Anniversary-img-2.jpg",
       "srcLarge": "/images/Anniversary-img-2.jpg",
       "num": "02",
       "order": 20,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-anniversary-3",
@@ -348,13 +388,15 @@
       "desc": "Stylish editorial couple portraits against rustic stone walls, celebrating intimate early marriage milestones with chic modern elegance.",
       "alt": "Chic young couple with floral bouquet leaning affectionately against a dark stone wall",
       "category": "anniversary",
+      "categorySlug": "anniversary",
       "image": "/images/Anniversary-img-3.jpg",
       "src": "/images/Anniversary-img-3.jpg",
       "srcLarge": "/images/Anniversary-img-3.jpg",
       "num": "03",
       "order": 21,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-anniversary-4",
@@ -362,13 +404,15 @@
       "desc": "Quiet moments together surrounded by peaceful nature, celebrating the quiet strength of love nurtured over decades.",
       "alt": "Couple in warm embrace in peaceful woodland setting",
       "category": "anniversary",
+      "categorySlug": "anniversary",
       "image": "/images/Anniversary-img-4.jpg",
       "src": "/images/Anniversary-img-4.jpg",
       "srcLarge": "/images/Anniversary-img-4.jpg",
       "num": "04",
       "order": 22,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-anniversary-5",
@@ -376,13 +420,15 @@
       "desc": "Heirloom group photographs uniting the anniversary couple with their children, spouses, and joyful grandchildren.",
       "alt": "Multi-generational family gathered around anniversary couple on stone steps",
       "category": "anniversary",
+      "categorySlug": "anniversary",
       "image": "/images/Anniversary-img-5.jpg",
       "src": "/images/Anniversary-img-5.jpg",
       "srcLarge": "/images/Anniversary-img-5.jpg",
       "num": "05",
       "order": 23,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-anniversary-6",
@@ -390,13 +436,15 @@
       "desc": "Timeless portraits bathed in the warm radiance of golden hour sunset, capturing enduring love and companionship.",
       "alt": "Couple embracing on hillside at sunset golden hour",
       "category": "anniversary",
+      "categorySlug": "anniversary",
       "image": "/images/Anniversary-img-6.jpg",
       "src": "/images/Anniversary-img-6.jpg",
       "srcLarge": "/images/Anniversary-img-6.jpg",
       "num": "06",
       "order": 24,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-baby-family-1",
@@ -404,13 +452,15 @@
       "desc": "Tranquil portraits of sleeping newborns nestled in organic textured wraps, bathed in soft diffused natural window light.",
       "alt": "Peaceful sleeping newborn baby wrapped gently in soft linen",
       "category": "baby-family",
+      "categorySlug": "baby-family",
       "image": "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=1200&q=85",
       "src": "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=1200&q=85",
       "srcLarge": "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=1200&q=85",
       "num": "01",
       "order": 25,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-baby-family-2",
@@ -418,13 +468,15 @@
       "desc": "Micro-perspective photographs of tiny eyelashes, wrinkled toes, miniature fingernails, and soft downy newborn curls.",
       "alt": "Macro detail of newborn tiny feet held gently by parent hands",
       "category": "baby-family",
+      "categorySlug": "baby-family",
       "image": "https://images.unsplash.com/photo-1544126592-807ade215a0b?w=1200&q=85",
       "src": "https://images.unsplash.com/photo-1544126592-807ade215a0b?w=1200&q=85",
       "srcLarge": "https://images.unsplash.com/photo-1544126592-807ade215a0b?w=1200&q=85",
       "num": "02",
       "order": 26,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-baby-family-3",
@@ -432,13 +484,15 @@
       "desc": "Playful outdoor moments as parents lift their giggling baby high among blooming spring cherry blossoms.",
       "alt": "Parents joyfully holding baby up in blooming spring garden",
       "category": "baby-family",
+      "categorySlug": "baby-family",
       "image": "/images/baby-family-img-3.jpg",
       "src": "/images/baby-family-img-3.jpg",
       "srcLarge": "/images/baby-family-img-3.jpg",
       "num": "03",
       "order": 27,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-baby-family-4",
@@ -446,13 +500,15 @@
       "desc": "Heartwarming in-home portraits of loving parents cradling and supporting their curious, bright-eyed baby on the living room sofa.",
       "alt": "Smiling parents sitting on sofa supporting their happy red-haired baby in living room",
       "category": "baby-family",
+      "categorySlug": "baby-family",
       "image": "/images/baby-family-img-4.jpg",
       "src": "/images/baby-family-img-4.jpg",
       "srcLarge": "/images/baby-family-img-4.jpg",
       "num": "04",
       "order": 28,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-baby-family-5",
@@ -460,13 +516,15 @@
       "desc": "Unscripted lifestyle adventures exploring the forest together, following little pointing fingers and contagious toddler giggles.",
       "alt": "Parents and laughing toddler exploring woodland trail together",
       "category": "baby-family",
+      "categorySlug": "baby-family",
       "image": "/images/baby-family-img-5.jpg",
       "src": "/images/baby-family-img-5.jpg",
       "srcLarge": "/images/baby-family-img-5.jpg",
       "num": "05",
       "order": 29,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-baby-family-6",
@@ -474,13 +532,15 @@
       "desc": "Warm, luminous sunset portraits of the whole family relaxing together on open green meadow grass.",
       "alt": "Family with two young children sitting happily in grassy field during golden hour sunset",
       "category": "baby-family",
+      "categorySlug": "baby-family",
       "image": "/images/baby-family-img-6.jpg",
       "src": "/images/baby-family-img-6.jpg",
       "srcLarge": "/images/baby-family-img-6.jpg",
       "num": "06",
       "order": 30,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-festivals-1",
@@ -488,13 +548,15 @@
       "desc": "Steam rising from artisanal stalls, wooden chalets, mulled cider cups, and thousands of twinkling amber fairy lights overhead.",
       "alt": "Traditional British Christmas market illuminated by warm golden lights",
       "category": "festivals",
+      "categorySlug": "festivals",
       "image": "/images/christmas-festival.jpg",
       "src": "/images/christmas-festival.jpg",
       "srcLarge": "/images/christmas-festival.jpg",
       "num": "01",
       "order": 31,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-festivals-2",
@@ -502,13 +564,15 @@
       "desc": "Heirloom crystal ornaments, sparkling stars, and the reverent wonder of children looking upward at the grand decorated fir.",
       "alt": "Warm glowing Christmas tree decorated with golden baubles",
       "category": "festivals",
+      "categorySlug": "festivals",
       "image": "https://images.unsplash.com/photo-1543258103-a62bdc069871?w=1200&q=85",
       "src": "https://images.unsplash.com/photo-1543258103-a62bdc069871?w=1200&q=85",
       "srcLarge": "https://images.unsplash.com/photo-1543258103-a62bdc069871?w=1200&q=85",
       "num": "02",
       "order": 32,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-festivals-3",
@@ -516,13 +580,15 @@
       "desc": "Crackling open fireplace, knit stockings hung with care, fresh pine sprigs, and family gatherings on Christmas Eve.",
       "alt": "Cozy fireplace mantel decorated with evergreen pine garlands and candles",
       "category": "festivals",
+      "categorySlug": "festivals",
       "image": "https://images.unsplash.com/photo-1619371455629-84aec3771d79?w=1200&q=85",
       "src": "https://images.unsplash.com/photo-1619371455629-84aec3771d79?w=1200&q=85",
       "srcLarge": "https://images.unsplash.com/photo-1619371455629-84aec3771d79?w=1200&q=85",
       "num": "03",
       "order": 33,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-festivals-4",
@@ -530,13 +596,15 @@
       "desc": "Vibrant outdoor festival storytelling capturing cheering crowds, sunlit stages, and the energetic atmosphere of British summer music gatherings.",
       "alt": "Joyful crowd cheering with hands up at an outdoor summer music festival stage",
       "category": "festivals",
+      "categorySlug": "festivals",
       "image": "/images/festival-img-4.jpg",
       "src": "/images/festival-img-4.jpg",
       "srcLarge": "/images/festival-img-4.jpg",
       "num": "04",
       "order": 34,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-festivals-5",
@@ -544,13 +612,15 @@
       "desc": "Magical festive portraits with little sisters in holiday red dresses sitting together on a rustic wooden sled amidst snowy pines and lanterns.",
       "alt": "Two young sisters in red holiday dresses laughing on a wooden sled with snowy Christmas trees and lanterns",
       "category": "festivals",
+      "categorySlug": "festivals",
       "image": "/images/festival-img-5.jpg",
       "src": "/images/festival-img-5.jpg",
       "srcLarge": "/images/festival-img-5.jpg",
       "num": "05",
       "order": 35,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-festivals-6",
@@ -558,13 +628,15 @@
       "desc": "Playful Halloween memories capturing children in witch hats and costumes on the front porch with hand-carved Jack-o’-Lanterns.",
       "alt": "Two young girls in Halloween witch costumes sitting on doorstep with carved pumpkins",
       "category": "festivals",
+      "categorySlug": "festivals",
       "image": "/images/festival-img-6.jpg",
       "src": "/images/festival-img-6.jpg",
       "srcLarge": "/images/festival-img-6.jpg",
       "num": "06",
       "order": 36,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-mothers-day-1",
@@ -572,13 +644,15 @@
       "desc": "Soft morning sunshine illuminating the effortless embrace between a mother and her child in a blooming private garden.",
       "alt": "Mother smiling warmly while holding her child in sunlit park",
       "category": "mothers-day",
+      "categorySlug": "mothers-day",
       "image": "https://images.unsplash.com/photo-1437913135140-944c1ee62782?w=1200&q=85",
       "src": "https://images.unsplash.com/photo-1437913135140-944c1ee62782?w=1200&q=85",
       "srcLarge": "https://images.unsplash.com/photo-1437913135140-944c1ee62782?w=1200&q=85",
       "num": "01",
       "order": 37,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-mothers-day-2",
@@ -586,13 +660,15 @@
       "desc": "Tender outdoor portraits of a mother in a pink sundress joyfully lifting her baby girl amidst blooming white spring blossoms.",
       "alt": "Mother in pink dress smiling at her baby in white dress in sunlit spring garden",
       "category": "mothers-day",
+      "categorySlug": "mothers-day",
       "image": "/images/mothersday-img-2.jpg",
       "src": "/images/mothersday-img-2.jpg",
       "srcLarge": "/images/mothersday-img-2.jpg",
       "num": "02",
       "order": 38,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-mothers-day-3",
@@ -600,13 +676,15 @@
       "desc": "Capturing proud smiles and affectionate embraces as a young boy gifts a colorful bouquet of fresh spring tulips to his mother.",
       "alt": "Young boy in denim jacket gifting fresh tulip bouquet to smiling mother",
       "category": "mothers-day",
+      "categorySlug": "mothers-day",
       "image": "/images/mothersday-img-3.jpg",
       "src": "/images/mothersday-img-3.jpg",
       "srcLarge": "/images/mothersday-img-3.jpg",
       "num": "03",
       "order": 39,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-mothers-day-4",
@@ -614,13 +692,15 @@
       "desc": "Warm and elegant studio portraits capturing a radiant mother sitting together with her young toddler and baby in harmonious neutral tones.",
       "alt": "Blonde mother sitting in studio with toddler son and baby daughter",
       "category": "mothers-day",
+      "categorySlug": "mothers-day",
       "image": "/images/mothersday-img-4.jpg",
       "src": "/images/mothersday-img-4.jpg",
       "srcLarge": "/images/mothersday-img-4.jpg",
       "num": "04",
       "order": 40,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.966Z"
+      "createdAt": "2026-10-12T20:48:19.966Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-mothers-day-5",
@@ -628,13 +708,15 @@
       "desc": "Intimate fine-art portraits of a loving mother in white cradling her cheerful, bright-eyed baby in a gentle embrace.",
       "alt": "Mother in white dress holding her cheerful laughing baby",
       "category": "mothers-day",
+      "categorySlug": "mothers-day",
       "image": "/images/mothersday-img-5.jpg",
       "src": "/images/mothersday-img-5.jpg",
       "srcLarge": "/images/mothersday-img-5.jpg",
       "num": "05",
       "order": 41,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-mothers-day-6",
@@ -642,13 +724,15 @@
       "desc": "Heartwarming natural outdoor embraces capturing the close bond, sweet smiles, and tender affection between a mother and her toddler daughter.",
       "alt": "Mother lovingly embracing her smiling young daughter with pigtails outdoors",
       "category": "mothers-day",
+      "categorySlug": "mothers-day",
       "image": "/images/mothersday-img-6.jpg",
       "src": "/images/mothersday-img-6.jpg",
       "srcLarge": "/images/mothersday-img-6.jpg",
       "num": "06",
       "order": 42,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-fathers-day-1",
@@ -656,13 +740,15 @@
       "desc": "A dignified, contemplative solo portrait capturing dad’s quiet wisdom, warm smile, and lifelong devotion to family.",
       "alt": "Warm dignified portrait of father smiling gently with arms crossed",
       "category": "fathers-day",
+      "categorySlug": "fathers-day",
       "image": "https://images.unsplash.com/photo-1609220136736-443140cffec6?w=1200&q=85",
       "src": "https://images.unsplash.com/photo-1609220136736-443140cffec6?w=1200&q=85",
       "srcLarge": "https://images.unsplash.com/photo-1609220136736-443140cffec6?w=1200&q=85",
       "num": "01",
       "order": 43,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-fathers-day-2",
@@ -670,13 +756,15 @@
       "desc": "Touching in-home moments of a proud father sitting on the sofa reading a sweet handmade Father’s Day card alongside his beaming daughter.",
       "alt": "Father on couch reading handmade Fathers Day card with his smiling young daughter",
       "category": "fathers-day",
+      "categorySlug": "fathers-day",
       "image": "/images/fatherday-img-2.jpg",
       "src": "/images/fatherday-img-2.jpg",
       "srcLarge": "/images/fatherday-img-2.jpg",
       "num": "02",
       "order": 44,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-fathers-day-3",
@@ -684,13 +772,15 @@
       "desc": "Heartwarming family portraits of a smiling father hugging his son and daughter as they proudly display their \"The Best Dad Ever\" chalkboard sign.",
       "alt": "Smiling father hugging son and daughter holding The Best Dad Ever chalkboard",
       "category": "fathers-day",
+      "categorySlug": "fathers-day",
       "image": "/images/fatherday-img-3.jpg",
       "src": "/images/fatherday-img-3.jpg",
       "srcLarge": "/images/fatherday-img-3.jpg",
       "num": "03",
       "order": 45,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-fathers-day-4",
@@ -698,13 +788,15 @@
       "desc": "Sweet lifestyle moments of a smiling dad lying on the living room rug receiving loving cheek kisses and handmade cards from his little daughter.",
       "alt": "Little girl kissing fathers cheek as he lies on carpet holding handmade card",
       "category": "fathers-day",
+      "categorySlug": "fathers-day",
       "image": "/images/fatherday-img-4.jpg",
       "src": "/images/fatherday-img-4.jpg",
       "srcLarge": "/images/fatherday-img-4.jpg",
       "num": "04",
       "order": 46,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-fathers-day-5",
@@ -712,13 +804,15 @@
       "desc": "Joyful family moments as a happy father unwraps thoughtful gifts and greeting cards surrounded by the warm smiles of his daughter and son.",
       "alt": "Happy father with gift box and card surrounded by his daughter and son on sofa",
       "category": "fathers-day",
+      "categorySlug": "fathers-day",
       "image": "/images/fatherday-img-5.jpg",
       "src": "/images/fatherday-img-5.jpg",
       "srcLarge": "/images/fatherday-img-5.jpg",
       "num": "05",
       "order": 47,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-fathers-day-6",
@@ -726,13 +820,15 @@
       "desc": "Luminous coastal portraits of an athletic father lifting his playful toddler high into the golden hour sky along the ocean shoreline.",
       "alt": "Father lifting toddler boy high into the air on beach at golden hour sunset",
       "category": "fathers-day",
+      "categorySlug": "fathers-day",
       "image": "/images/fatherday-img-6.jpg",
       "src": "/images/fatherday-img-6.jpg",
       "srcLarge": "/images/fatherday-img-6.jpg",
       "num": "06",
       "order": 48,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-corporate-events-1",
@@ -740,13 +836,15 @@
       "desc": "Glamorous networking reception on the London riverside with Tower Bridge backdrop, capturing attendees in black-tie attire enjoying drinks.",
       "alt": "Attendees in evening wear holding drinks at corporate awards reception by Tower Bridge",
       "category": "corporate-events",
+      "categorySlug": "corporate-events",
       "image": "/images/corporate-img-1.jpg",
       "src": "/images/corporate-img-1.jpg",
       "srcLarge": "/images/corporate-img-1.jpg",
       "num": "01",
       "order": 49,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-corporate-events-2",
@@ -754,13 +852,15 @@
       "desc": "Dramatic perspectives of grand corporate awards banquets, featuring illuminated branding stages, chandeliers, and seated banquet dining.",
       "alt": "Grand corporate gala dinner and awards banquet in luxury auditorium ballroom",
       "category": "corporate-events",
+      "categorySlug": "corporate-events",
       "image": "/images/corporate-img-2.jpg",
       "src": "/images/corporate-img-2.jpg",
       "srcLarge": "/images/corporate-img-2.jpg",
       "num": "02",
       "order": 50,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-corporate-events-3",
@@ -768,13 +868,15 @@
       "desc": "Lively, high-energy team celebrations and conference socials capturing enthusiastic coworkers bonding and celebrating milestone achievements.",
       "alt": "Enthusiastic corporate team celebrating with drinks and conference badges",
       "category": "corporate-events",
+      "categorySlug": "corporate-events",
       "image": "/images/corporate-img-3.jpg",
       "src": "/images/corporate-img-3.jpg",
       "srcLarge": "/images/corporate-img-3.jpg",
       "num": "03",
       "order": 51,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-corporate-events-4",
@@ -782,13 +884,15 @@
       "desc": "High-angle banquet coverage capturing formal ceremonial dinners, round dining tables, waited service, and distinguished guests in formal attire.",
       "alt": "Overhead perspective of corporate formal gala banquet dinner with circular tables",
       "category": "corporate-events",
+      "categorySlug": "corporate-events",
       "image": "/images/corporate-img-4.jpg",
       "src": "/images/corporate-img-4.jpg",
       "srcLarge": "/images/corporate-img-4.jpg",
       "num": "04",
       "order": 52,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-corporate-events-5",
@@ -796,13 +900,15 @@
       "desc": "Timeless monochrome editorial documentary capturing senior executives and industry leaders in meaningful boardroom discussions.",
       "alt": "Black and white photograph of business executives conversing in stately boardroom",
       "category": "corporate-events",
+      "categorySlug": "corporate-events",
       "image": "/images/corporate-img-5.jpg",
       "src": "/images/corporate-img-5.jpg",
       "srcLarge": "/images/corporate-img-5.jpg",
       "num": "05",
       "order": 53,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-corporate-events-6",
@@ -810,13 +916,15 @@
       "desc": "Polished studio step-and-repeat portrait stations with professional softbox lighting, providing magazine-quality group portraits for gala guests.",
       "alt": "Photographer shooting corporate group portrait at gala photo studio booth with softboxes",
       "category": "corporate-events",
+      "categorySlug": "corporate-events",
       "image": "/images/corporate-img-6.jpg",
       "src": "/images/corporate-img-6.jpg",
       "srcLarge": "/images/corporate-img-6.jpg",
       "num": "06",
       "order": 54,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-family-1",
@@ -824,13 +932,15 @@
       "desc": "A stunning sunset gathering of an extended multigenerational family holding hands along the shoreline under dramatic golden skies.",
       "alt": "Multigenerational family holding hands along the beach shoreline at sunset",
       "category": "family",
+      "categorySlug": "family",
       "image": "/images/family-photography-img-1.jpg",
       "src": "/images/family-photography-img-1.jpg",
       "srcLarge": "/images/family-photography-img-1.jpg",
       "num": "01",
       "order": 55,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-family-2",
@@ -838,13 +948,15 @@
       "desc": "Extended family generations smiling together on lush private estate lawns under weeping willow trees.",
       "alt": "Extended multigenerational family smiling together on lawn under willow trees",
       "category": "family",
+      "categorySlug": "family",
       "image": "/images/family-photography-img-2.jpg",
       "src": "/images/family-photography-img-2.jpg",
       "srcLarge": "/images/family-photography-img-2.jpg",
       "num": "02",
       "order": 56,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-family-3",
@@ -852,13 +964,15 @@
       "desc": "Heartwarming outdoor lifestyle portraits of loving parents and their young daughter sharing smiles on a sunlit meadow blanket.",
       "alt": "Parents sitting in meadow with smiling young daughter during golden hour",
       "category": "family",
+      "categorySlug": "family",
       "image": "/images/family-photography-img-3.jpg",
       "src": "/images/family-photography-img-3.jpg",
       "srcLarge": "/images/family-photography-img-3.jpg",
       "num": "03",
       "order": 57,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-family-4",
@@ -866,13 +980,15 @@
       "desc": "Joyful family moments among blooming spring magnolia and orchard trees, with parents holding their smiling children.",
       "alt": "Parents holding their young son and daughter laughing in blooming spring orchard",
       "category": "family",
+      "categorySlug": "family",
       "image": "/images/family-photography-img-4.jpg",
       "src": "/images/family-photography-img-4.jpg",
       "srcLarge": "/images/family-photography-img-4.jpg",
       "num": "04",
       "order": 58,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-family-5",
@@ -880,13 +996,15 @@
       "desc": "A dignified, formal multi-generational family heirloom portrait uniting grandparents, adult children, and grandchildren on country grounds.",
       "alt": "Large multi-generational family standing together under estate trees",
       "category": "family",
+      "categorySlug": "family",
       "image": "/images/family-photography-img-5.jpg",
       "src": "/images/family-photography-img-5.jpg",
       "srcLarge": "/images/family-photography-img-5.jpg",
       "num": "05",
       "order": 59,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-family-6",
@@ -894,13 +1012,15 @@
       "desc": "Cozy autumn woodland portraiture capturing parents and their two young daughters in matching camel coats amidst golden fallen leaves.",
       "alt": "Family in camel coats and berets smiling together in autumn forest with golden leaves",
       "category": "family",
+      "categorySlug": "family",
       "image": "/images/family-photography-img-6.jpg",
       "src": "/images/family-photography-img-6.jpg",
       "srcLarge": "/images/family-photography-img-6.jpg",
       "num": "06",
       "order": 60,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-maternity-1",
@@ -908,13 +1028,15 @@
       "desc": "Silken maternity gowns sweeping across sunlit tall grasses, capturing the majestic grace of expecting motherhood.",
       "alt": "Expectant mother in flowing gown holding her baby bump at sunset",
       "category": "maternity",
+      "categorySlug": "maternity",
       "image": "/images/maternity-editorial-portrait.jpg",
       "src": "/images/maternity-editorial-portrait.jpg",
       "srcLarge": "/images/maternity-editorial-portrait.jpg",
       "num": "01",
       "order": 61,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-maternity-2",
@@ -922,13 +1044,15 @@
       "desc": "Expecting parents standing together in golden meadow light, husband holding his smiling pregnant wife in a soft white knit sweater.",
       "alt": "Expecting couple standing in sunset meadow with husband embracing pregnant wife",
       "category": "maternity",
+      "categorySlug": "maternity",
       "image": "/images/Maternity-Photography-img-2.jpg",
       "src": "/images/Maternity-Photography-img-2.jpg",
       "srcLarge": "/images/Maternity-Photography-img-2.jpg",
       "num": "02",
       "order": 62,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-maternity-3",
@@ -936,13 +1060,15 @@
       "desc": "Radiant expectant mother in a flowing off-the-shoulder magenta lace gown embraced tenderly by her husband among yellow wildflowers.",
       "alt": "Pregnant woman in magenta lace gown holding baby bump with husband in wildflower field",
       "category": "maternity",
+      "categorySlug": "maternity",
       "image": "/images/Maternity-Photography-img-3.jpg",
       "src": "/images/Maternity-Photography-img-3.jpg",
       "srcLarge": "/images/Maternity-Photography-img-3.jpg",
       "num": "03",
       "order": 63,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-maternity-4",
@@ -950,13 +1076,15 @@
       "desc": "Relaxed romantic moments under blooming spring blossom trees as the expecting mother rests comfortably on a park bench with her husband.",
       "alt": "Expecting couple relaxing on wooden park bench under blooming spring trees",
       "category": "maternity",
+      "categorySlug": "maternity",
       "image": "/images/Maternity-Photography-img-4.jpg",
       "src": "/images/Maternity-Photography-img-4.jpg",
       "srcLarge": "/images/Maternity-Photography-img-4.jpg",
       "num": "04",
       "order": 64,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-maternity-5",
@@ -964,13 +1092,15 @@
       "desc": "Intimate moments in lush botanical gardens with parents gently resting their hands together on the baby bump in gentle natural light.",
       "alt": "Couple gently resting hands on pregnant belly in lush botanical garden",
       "category": "maternity",
+      "categorySlug": "maternity",
       "image": "/images/Maternity-Photography-img-5.jpg",
       "src": "/images/Maternity-Photography-img-5.jpg",
       "srcLarge": "/images/Maternity-Photography-img-5.jpg",
       "num": "05",
       "order": 65,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-maternity-6",
@@ -978,13 +1108,15 @@
       "desc": "Breathtaking editorial maternity fine-art portrait featuring an expectant mother in a voluminous ruffled tulle couture gown in a wild grassy meadow.",
       "alt": "Expectant mother in ruffled tulle couture gown standing in wild grass meadow",
       "category": "maternity",
+      "categorySlug": "maternity",
       "image": "/images/Maternity-Photography-img-6.jpg",
       "src": "/images/Maternity-Photography-img-6.jpg",
       "srcLarge": "/images/Maternity-Photography-img-6.jpg",
       "num": "06",
       "order": 66,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-graduations-1",
@@ -992,13 +1124,15 @@
       "desc": "Graduates in ceremonial robes and purple tassels tossing mortarboards into the air before majestic neoclassical collegiate columns.",
       "alt": "Graduates in academic gowns tossing mortarboard caps into the air outside neoclassical university building",
       "category": "graduations",
+      "categorySlug": "graduations",
       "image": "/images/Graduation-Photography-img-1.jpg",
       "src": "/images/Graduation-Photography-img-1.jpg",
       "srcLarge": "/images/Graduation-Photography-img-1.jpg",
       "num": "01",
       "order": 67,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-graduations-2",
@@ -1006,13 +1140,15 @@
       "desc": "Scholars, faculty, and graduates gathered on historic collegiate quads in traditional ceremonial gowns to commemorate scholarly achievement.",
       "alt": "University graduates and faculty in ceremonial academic gowns and regalia on campus",
       "category": "graduations",
+      "categorySlug": "graduations",
       "image": "/images/grad_photo.jpg",
       "src": "/images/grad_photo.jpg",
       "srcLarge": "/images/grad_photo.jpg",
       "num": "02",
       "order": 68,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-graduations-3",
@@ -1020,13 +1156,15 @@
       "desc": "Joyful university graduates in academic gowns with light blue hoods cheering and tossing caps on sunny university steps.",
       "alt": "Group of happy graduates with light blue hoods celebrating on sunny campus steps",
       "category": "graduations",
+      "categorySlug": "graduations",
       "image": "/images/Graduation-Photography-img-3.jpg",
       "src": "/images/Graduation-Photography-img-3.jpg",
       "srcLarge": "/images/Graduation-Photography-img-3.jpg",
       "num": "03",
       "order": 69,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-graduations-4",
@@ -1034,13 +1172,15 @@
       "desc": "Proud graduate in cap and gown with a bright red hood holding her tied diploma scroll before the historic collegiate clock tower.",
       "alt": "Female graduate in cap, gown, and red hood holding diploma scroll before campus clock tower",
       "category": "graduations",
+      "categorySlug": "graduations",
       "image": "/images/Graduation-Photography-img-4.jpg",
       "src": "/images/Graduation-Photography-img-4.jpg",
       "srcLarge": "/images/Graduation-Photography-img-4.jpg",
       "num": "04",
       "order": 70,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-graduations-5",
@@ -1048,13 +1188,15 @@
       "desc": "Distinguished individual portrait capturing the pride, accomplishment, and bright future of the graduate in mortarboard and gown.",
       "alt": "Smiling male graduate solo portrait in mortarboard cap and academic gown",
       "category": "graduations",
+      "categorySlug": "graduations",
       "image": "/images/Graduation-Photography-img-5.jpg",
       "src": "/images/Graduation-Photography-img-5.jpg",
       "srcLarge": "/images/Graduation-Photography-img-5.jpg",
       "num": "05",
       "order": 71,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     },
     {
       "id": "photo-graduations-6",
@@ -1062,13 +1204,15 @@
       "desc": "Heartwarming group portrait of close university friends and classmates celebrating together outside historic stone campus chapels.",
       "alt": "Five university friends and classmates embracing in academic gowns outside historic stone building",
       "category": "graduations",
+      "categorySlug": "graduations",
       "image": "/images/Graduation-Photography-img-6.jpg",
       "src": "/images/Graduation-Photography-img-6.jpg",
       "srcLarge": "/images/Graduation-Photography-img-6.jpg",
       "num": "06",
       "order": 72,
       "published": true,
-      "createdAt": "2026-10-12T20:48:19.967Z"
+      "createdAt": "2026-10-12T20:48:19.967Z",
+      "updatedAt": "2026-10-13T19:40:26.285Z"
     }
   ]
 }

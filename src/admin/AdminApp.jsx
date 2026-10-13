@@ -43,12 +43,13 @@ const convertGoogleDriveLink = (url) => {
 async function uploadImageFile(file, token) {
   if (!file) return null
   try {
+    const authToken = token || (typeof window !== 'undefined' ? localStorage.getItem('adminToken') : '')
     const formData = new FormData()
     formData.append('image', file)
     const res = await fetch(`${API_URL}/content/upload`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token}`
+        ...(authToken ? { Authorization: `Bearer ${authToken}` } : {})
       },
       body: formData
     })
@@ -1420,7 +1421,7 @@ function CollaboratorsEditor({ data, onSave, saving, token }) {
         role: 'Assistant Photographer',
         bio: 'Passionate about documentary capturing and authentic emotional candid frames.',
         image: '',
-        social: { instagram: '', linkedin: '', behance: '' },
+        social: { instagram: '', whatsapp: '' },
         published: true
       }
     ])
@@ -1561,13 +1562,15 @@ function CollaboratorsEditor({ data, onSave, saving, token }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // 9. Fully Dynamic Portfolio Photos Manager (Requirements #1 & #14)
 // ─────────────────────────────────────────────────────────────────────────────
-function PhotosEditor({ data, onSave, saving, token, onReload }) {
+function PhotosEditor({ data, onSave, onDelete, saving, token, onReload }) {
   const [photos, setPhotos] = useState(data || [])
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [sortBy, setSortBy] = useState('order')
   const [uploadCategory, setUploadCategory] = useState('weddings')
   const [editingPhoto, setEditingPhoto] = useState(null)
+  const [photoToDelete, setPhotoToDelete] = useState(null)
+  const [deletingId, setDeletingId] = useState(null)
   const [isUploading, setIsUploading] = useState(false)
   const [uploadStatus, setUploadStatus] = useState('')
 
@@ -1678,16 +1681,41 @@ function PhotosEditor({ data, onSave, saving, token, onReload }) {
     await onSave(updated)
   }
 
-  // Delete photo with confirmation
-  const handleDeletePhoto = async (photoId) => {
-    const photo = photos.find((p) => p.id === photoId)
-    if (!window.confirm(`Are you sure you want to delete "${photo?.title || 'this photograph'}"? This action cannot be undone.`)) {
-      return
-    }
+  // Delete photo with in-app confirmation
+  const confirmDeletePhoto = async (photoId) => {
+    setDeletingId(photoId)
+    try {
+      if (onDelete) {
+        await onDelete(photoId)
+      } else {
+        const authToken = token || (typeof window !== 'undefined' ? localStorage.getItem('adminToken') : '')
+        try {
+          await fetch(`${API_URL}/photos/${encodeURIComponent(photoId)}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(authToken ? { Authorization: `Bearer ${authToken}` } : {})
+            }
+          })
+        } catch (e) {}
 
-    const updated = photos.filter((p) => p.id !== photoId)
-    setPhotos(updated)
-    await onSave(updated)
+        const updated = photos.filter((p) => String(p.id) !== String(photoId))
+        setPhotos(updated)
+        await dataService.updatePhotos(updated, {
+          ...(authToken ? { Authorization: `Bearer ${authToken}` } : {})
+        })
+        if (onSave) {
+          await onSave(updated)
+        }
+      }
+      setPhotoToDelete(null)
+      if (onReload) onReload()
+    } catch (err) {
+      console.error('Delete error:', err)
+      alert('Failed to delete photo: ' + (err.message || 'Error'))
+    } finally {
+      setDeletingId(null)
+    }
   }
 
   // Save edited photo modal
@@ -1712,6 +1740,7 @@ function PhotosEditor({ data, onSave, saving, token, onReload }) {
       num: String(photos.filter((p) => p.category === newPhotoData.category).length + 1).padStart(2, '0'),
       title: newPhotoData.title || 'Untitled Photograph',
       category: newPhotoData.category,
+      categorySlug: newPhotoData.category,
       desc: newPhotoData.desc || '',
       alt: newPhotoData.alt || newPhotoData.title || 'Josh Photography showcase',
       src: newPhotoData.src,
@@ -1919,7 +1948,7 @@ function PhotosEditor({ data, onSave, saving, token, onReload }) {
                     <button
                       type="button"
                       className="admin-btn admin-btn--danger admin-btn--small"
-                      onClick={() => handleDeletePhoto(photo.id)}
+                      onClick={() => setPhotoToDelete(photo)}
                     >
                       Delete
                     </button>
@@ -1928,6 +1957,46 @@ function PhotosEditor({ data, onSave, saving, token, onReload }) {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* In-App Delete Confirmation Modal (Bypasses browser popup blockers) */}
+      {photoToDelete && (
+        <div className="admin-modal-overlay" onClick={() => !deletingId && setPhotoToDelete(null)}>
+          <div className="admin-modal" style={{ maxWidth: '440px' }} onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal__header">
+              <h3 style={{ color: '#ff6b6b' }}>Delete Photograph?</h3>
+              <button className="admin-modal__close" onClick={() => !deletingId && setPhotoToDelete(null)}>
+                ×
+              </button>
+            </div>
+            <div className="admin-modal__body">
+              <p style={{ color: '#ddd', fontSize: '0.9rem', lineHeight: 1.5, marginBottom: '0.75rem' }}>
+                Are you sure you want to permanently delete <strong>"{photoToDelete.title || 'Untitled'}"</strong> from {PHOTOGRAPHY_CATEGORIES.find(c => c.id === photoToDelete.category)?.label || photoToDelete.category}?
+              </p>
+              <p style={{ color: '#888', fontSize: '0.8rem', margin: 0 }}>
+                This photograph will be permanently deleted from the database and will no longer appear on the public website.
+              </p>
+            </div>
+            <div className="admin-modal__footer" style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
+              <button
+                type="button"
+                className="admin-btn admin-btn--secondary"
+                onClick={() => setPhotoToDelete(null)}
+                disabled={Boolean(deletingId)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="admin-btn admin-btn--danger"
+                disabled={Boolean(deletingId)}
+                onClick={() => confirmDeletePhoto(photoToDelete.id)}
+              >
+                {deletingId ? 'Deleting...' : 'Yes, Delete Photo'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -2209,11 +2278,7 @@ function SocialEditor({ data, onSave, saving }) {
   const platforms = [
     { key: 'instagram', label: 'Instagram', icon: '📷', defaultPlaceholder: 'https://instagram.com/joshphotography' },
     { key: 'facebook', label: 'Facebook', icon: '👥', defaultPlaceholder: 'https://facebook.com/joshphotography' },
-    { key: 'youtube', label: 'YouTube', icon: '📺', defaultPlaceholder: 'https://youtube.com/@joshphotography' },
-    { key: 'pinterest', label: 'Pinterest', icon: '📌', defaultPlaceholder: 'https://pinterest.com/joshphotography' },
-    { key: 'linkedin', label: 'LinkedIn', icon: '💼', defaultPlaceholder: 'https://linkedin.com/company/joshphotography' },
-    { key: 'whatsapp', label: 'WhatsApp', icon: '💬', defaultPlaceholder: '+447988827057' },
-    { key: 'tiktok', label: 'TikTok', icon: '🎵', defaultPlaceholder: 'https://tiktok.com/@joshphotography' }
+    { key: 'whatsapp', label: 'WhatsApp', icon: '💬', defaultPlaceholder: '+447988827057' }
   ]
 
   const handleChange = (key, value) => {
@@ -2225,7 +2290,12 @@ function SocialEditor({ data, onSave, saving }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSave(social)
+    const cleanedSocial = { ...social }
+    delete cleanedSocial.youtube
+    delete cleanedSocial.pinterest
+    delete cleanedSocial.linkedin
+    delete cleanedSocial.tiktok
+    onSave(cleanedSocial)
   }
 
   return (
@@ -2281,13 +2351,20 @@ function SettingsEditor({ data, onSave, saving, token }) {
     if (!file) return
     const url = await uploadImageFile(file, token)
     if (url) {
-      setSettings((p) => ({ ...p, logo: url }))
+      setSettings((p) => ({ ...p, logo: url, lightLogo: url }))
     }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSave(settings)
+    onSave({
+      ...settings,
+      studioName: settings.siteName || settings.studioName,
+      lightLogo: settings.logo || settings.lightLogo,
+      ctaButtonText: settings.bookingButtonText || settings.ctaButtonText,
+      ctaButtonLink: settings.bookingButtonLink || settings.ctaButtonLink,
+      seoDefaultTitle: settings.seoTitle || settings.seoDefaultTitle,
+    })
   }
 
   return (
@@ -2303,8 +2380,8 @@ function SettingsEditor({ data, onSave, saving, token }) {
             <label>Website / Brand Name</label>
             <input
               type="text"
-              value={settings.siteName || 'Josh Photography'}
-              onChange={(e) => setSettings((p) => ({ ...p, siteName: e.target.value }))}
+              value={settings.siteName || settings.studioName || 'Josh Photography'}
+              onChange={(e) => setSettings((p) => ({ ...p, siteName: e.target.value, studioName: e.target.value }))}
             />
           </div>
 
@@ -2312,8 +2389,8 @@ function SettingsEditor({ data, onSave, saving, token }) {
             <label>Brand Logo Path / URL</label>
             <input
               type="text"
-              value={settings.logo || '/logo.png'}
-              onChange={(e) => setSettings((p) => ({ ...p, logo: e.target.value }))}
+              value={settings.logo || settings.lightLogo || '/logo.png'}
+              onChange={(e) => setSettings((p) => ({ ...p, logo: e.target.value, lightLogo: e.target.value }))}
             />
           </div>
 
@@ -2327,20 +2404,20 @@ function SettingsEditor({ data, onSave, saving, token }) {
           </div>
 
           <div className="admin-input-group">
-            <label>Booking Button Text</label>
+            <label>Booking / CTA Button Text</label>
             <input
               type="text"
-              value={settings.bookingButtonText || 'Check Availability'}
-              onChange={(e) => setSettings((p) => ({ ...p, bookingButtonText: e.target.value }))}
+              value={settings.bookingButtonText || settings.ctaButtonText || 'Check Availability'}
+              onChange={(e) => setSettings((p) => ({ ...p, bookingButtonText: e.target.value, ctaButtonText: e.target.value }))}
             />
           </div>
 
           <div className="admin-input-group">
-            <label>Booking Button Destination URL</label>
+            <label>Booking / CTA Button Destination URL</label>
             <input
               type="text"
-              value={settings.bookingButtonLink || '/check-availability'}
-              onChange={(e) => setSettings((p) => ({ ...p, bookingButtonLink: e.target.value }))}
+              value={settings.bookingButtonLink || settings.ctaButtonLink || '/check-availability'}
+              onChange={(e) => setSettings((p) => ({ ...p, bookingButtonLink: e.target.value, ctaButtonLink: e.target.value }))}
             />
           </div>
 
@@ -2357,8 +2434,8 @@ function SettingsEditor({ data, onSave, saving, token }) {
             <label>SEO Meta Page Title</label>
             <input
               type="text"
-              value={settings.seoTitle || 'Josh Photography | Timeless Luxury Wedding & Celebration Photography UK'}
-              onChange={(e) => setSettings((p) => ({ ...p, seoTitle: e.target.value }))}
+              value={settings.seoTitle || settings.seoDefaultTitle || 'Josh Photography | Timeless Luxury Wedding & Celebration Photography UK'}
+              onChange={(e) => setSettings((p) => ({ ...p, seoTitle: e.target.value, seoDefaultTitle: e.target.value }))}
             />
           </div>
 
@@ -2664,7 +2741,7 @@ function Dashboard({ token, onLogout }) {
   const savePhotos = async (updatedPhotosList) => {
     setSaving(true)
     try {
-      await dataService.updatePhotos(updatedPhotosList)
+      await dataService.updatePhotos(updatedPhotosList, authHeaders)
       setData((prev) => ({
         ...prev,
         photos: {
@@ -2675,18 +2752,72 @@ function Dashboard({ token, onLogout }) {
 
       // Sync to backend if accessible
       try {
-        await fetch(`${API_URL}/photos`, {
+        const res = await fetch(`${API_URL}/photos`, {
           method: 'PUT',
           headers: authHeaders,
           body: JSON.stringify({ photos: updatedPhotosList })
         })
-      } catch (e) {}
+        if (!res.ok) {
+          console.warn('Backend update returned status:', res.status)
+        }
+      } catch (e) {
+        console.warn('Backend update error:', e)
+      }
 
       showToast('Portfolio photographs updated successfully!')
-      loadAllData()
+      await loadAllData()
     } catch (err) {
       console.error(err)
       showToast('Failed to update portfolio photographs', 'error')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  // Delete single photo handler
+  const deletePortfolioPhoto = async (photoId) => {
+    setSaving(true)
+    try {
+      // 1. Direct DELETE to backend
+      try {
+        await fetch(`${API_URL}/photos/${encodeURIComponent(photoId)}`, {
+          method: 'DELETE',
+          headers: authHeaders
+        })
+      } catch (e) {
+        console.warn('Backend DELETE error:', e)
+      }
+
+      // 2. Filter list
+      const currentList = data.photos?.photos || (Array.isArray(data.photos) ? data.photos : [])
+      const updatedList = currentList.filter((p) => String(p.id) !== String(photoId))
+
+      // 3. Update dataService & localStorage
+      await dataService.updatePhotos(updatedList, authHeaders)
+
+      // 4. PUT updated list to backend to guarantee disk synchronization
+      try {
+        await fetch(`${API_URL}/photos`, {
+          method: 'PUT',
+          headers: authHeaders,
+          body: JSON.stringify({ photos: updatedList })
+        })
+      } catch (e) {}
+
+      // 5. Update local React state immediately
+      setData((prev) => ({
+        ...prev,
+        photos: {
+          ...prev.photos,
+          photos: updatedList
+        }
+      }))
+
+      showToast('Photograph deleted permanently')
+      await loadAllData()
+    } catch (err) {
+      console.error(err)
+      showToast('Failed to delete photograph', 'error')
     } finally {
       setSaving(false)
     }
@@ -2877,6 +3008,7 @@ function Dashboard({ token, onLogout }) {
             <PhotosEditor
               data={rawPhotos}
               onSave={savePhotos}
+              onDelete={deletePortfolioPhoto}
               saving={saving}
               token={token}
               onReload={loadAllData}

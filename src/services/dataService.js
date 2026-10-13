@@ -58,9 +58,51 @@ class DataService {
         const stored = localStorage.getItem(STORAGE_KEY)
         if (stored) {
           const parsed = JSON.parse(stored)
-          if (parsed && parsed.content && parsed.photos) {
-            this.memoryCache = parsed
-            return parsed
+          if (parsed && typeof parsed === 'object') {
+            const rawContent = (parsed.content && typeof parsed.content === 'object') ? parsed.content : {}
+
+            // Normalize photos array safely
+            let photosList = []
+            if (Array.isArray(parsed.photos)) {
+              photosList = parsed.photos
+            } else if (parsed.photos && Array.isArray(parsed.photos.photos)) {
+              photosList = parsed.photos.photos
+            } else if (Array.isArray(initialPhotos.photos)) {
+              photosList = initialPhotos.photos
+            }
+
+            // Normalize categories array safely
+            let categoriesList = []
+            if (Array.isArray(parsed.categories)) {
+              categoriesList = parsed.categories
+            } else if (parsed.photos && Array.isArray(parsed.photos.categories)) {
+              categoriesList = parsed.photos.categories
+            } else if (Array.isArray(initialPhotos.categories)) {
+              categoriesList = initialPhotos.categories
+            }
+
+            const rawHeroSlides = Array.isArray(rawContent.heroSlides) ? rawContent.heroSlides : []
+            const heroSlidesList = (rawHeroSlides.length > 0) ? rawHeroSlides : (initialContent.heroSlides || [])
+
+            const rawServices = Array.isArray(rawContent.services) ? rawContent.services : []
+            const servicesList = (rawServices.length > 0) ? rawServices : (initialContent.services || [])
+
+            const normalized = {
+              content: {
+                studio: { ...(initialContent.studio || {}), ...(rawContent.studio || {}) },
+                about: { ...(initialContent.about || {}), ...(rawContent.about || {}) },
+                heroSlides: heroSlidesList,
+                services: servicesList,
+                testimonials: (Array.isArray(rawContent.testimonials) && rawContent.testimonials.length > 0) ? rawContent.testimonials : (initialContent.testimonials || []),
+                collaborators: (Array.isArray(rawContent.collaborators) && rawContent.collaborators.length > 0) ? rawContent.collaborators : (initialContent.collaborators || []),
+                social: { ...(initialContent.social || {}), ...(rawContent.social || {}) },
+                settings: { ...(initialContent.settings || {}), ...(rawContent.settings || {}) },
+              },
+              photos: photosList,
+              categories: categoriesList,
+            }
+            this.memoryCache = normalized
+            return normalized
           }
         }
       } catch (e) {
@@ -70,8 +112,8 @@ class DataService {
 
     const fallback = {
       content: initialContent,
-      photos: initialPhotos.photos || [],
-      categories: initialPhotos.categories || [],
+      photos: Array.isArray(initialPhotos.photos) ? initialPhotos.photos : [],
+      categories: Array.isArray(initialPhotos.categories) ? initialPhotos.categories : [],
     }
     this.memoryCache = fallback
     return fallback
@@ -81,8 +123,8 @@ class DataService {
   async refreshAllData() {
     try {
       const [contentRes, photosRes] = await Promise.all([
-        fetch(`${API_BASE}/content`).catch(() => null),
-        fetch(`${API_BASE}/photos`).catch(() => null),
+        fetch(`${API_BASE}/content?t=${Date.now()}`, { cache: 'no-store' }).catch(() => null),
+        fetch(`${API_BASE}/photos?t=${Date.now()}`, { cache: 'no-store' }).catch(() => null),
       ])
 
       let content = null
@@ -97,10 +139,27 @@ class DataService {
 
       if (content || photosData) {
         const current = this.getAllDataSync()
+
+        let newPhotos = current.photos
+        if (photosData) {
+          if (Array.isArray(photosData.photos)) {
+            newPhotos = photosData.photos
+          } else if (Array.isArray(photosData)) {
+            newPhotos = photosData
+          }
+        }
+
+        let newCategories = current.categories
+        if (photosData) {
+          if (Array.isArray(photosData.categories)) {
+            newCategories = photosData.categories
+          }
+        }
+
         const merged = {
           content: content || current.content,
-          photos: photosData?.photos || current.photos,
-          categories: photosData?.categories || current.categories,
+          photos: newPhotos,
+          categories: newCategories,
         }
 
         this.memoryCache = merged
@@ -122,19 +181,38 @@ class DataService {
   // Category-specific photos getter
   getCategoryPhotos(categorySlugOrId) {
     const data = this.getAllDataSync()
-    const all = data.photos || []
+    let all = []
+    if (Array.isArray(data.photos)) {
+      all = data.photos
+    } else if (data.photos && Array.isArray(data.photos.photos)) {
+      all = data.photos.photos
+    } else if (Array.isArray(initialPhotos.photos)) {
+      all = initialPhotos.photos
+    }
 
-    const slug = (categorySlugOrId || '').toLowerCase()
+    const normalizeCatKey = (raw) => {
+      const s = String(raw || '').toLowerCase().trim()
+      if (s === 'birthdays' || s === 'birthday-photography') return 'birthdays'
+      if (s === 'engagement' || s === 'pre-wedding') return 'engagement'
+      if (s === 'corporate-events' || s === 'portraits' || s === 'portrait') return 'corporate-events'
+      if (s === 'baby-family' || s === 'baby-and-family') return 'baby-family'
+      if (s === 'festivals' || s === 'cultural-celebrations') return 'festivals'
+      if (s === 'mothers-day' || s === "mother's-day") return 'mothers-day'
+      if (s === 'fathers-day' || s === "father's-day") return 'fathers-day'
+      return s
+    }
+
+    const targetKey = normalizeCatKey(categorySlugOrId)
+    const rawTarget = String(categorySlugOrId || '').toLowerCase().trim()
 
     // Match exact category or alternate slug
     const matching = all.filter((p) => {
-      if (p.published === false) return false
-      const cat = (p.category || '').toLowerCase()
-      if (cat === slug) return true
-      if (slug === 'birthdays' && cat === 'birthday-photography') return true
-      if (slug === 'birthday-photography' && cat === 'birthdays') return true
-      if (slug === 'pre-wedding' && (cat === 'engagement' || cat === 'pre-wedding')) return true
-      return false
+      if (!p || p.published === false) return false
+      const pCat = normalizeCatKey(p.category)
+      const pSlug = normalizeCatKey(p.categorySlug)
+      const rawCat = String(p.category || '').toLowerCase().trim()
+      const rawSlug = String(p.categorySlug || '').toLowerCase().trim()
+      return pCat === targetKey || pSlug === targetKey || rawCat === rawTarget || rawSlug === rawTarget
     })
 
     // Sort by order ascending
@@ -170,29 +248,37 @@ class DataService {
   // Hero Slides
   getHeroSlides() {
     const data = this.getAllDataSync()
-    const slides = data.content?.heroSlides || initialContent.heroSlides
-    return slides.filter((s) => s.published !== false)
+    const slides = Array.isArray(data.content?.heroSlides)
+      ? data.content.heroSlides
+      : (Array.isArray(initialContent.heroSlides) ? initialContent.heroSlides : [])
+    return slides.filter((s) => s && s.published !== false)
   }
 
   // Services
   getServices() {
     const data = this.getAllDataSync()
-    const services = data.content?.services || initialContent.services
-    return services.filter((s) => s.published !== false)
+    const services = Array.isArray(data.content?.services)
+      ? data.content.services
+      : (Array.isArray(initialContent.services) ? initialContent.services : [])
+    return services.filter((s) => s && s.published !== false)
   }
 
   // Testimonials
   getTestimonials() {
     const data = this.getAllDataSync()
-    const testimonials = data.content?.testimonials || initialContent.testimonials
-    return testimonials.filter((t) => t.published !== false)
+    const testimonials = Array.isArray(data.content?.testimonials)
+      ? data.content.testimonials
+      : (Array.isArray(initialContent.testimonials) ? initialContent.testimonials : [])
+    return testimonials.filter((t) => t && t.published !== false)
   }
 
   // Team
   getTeam() {
     const data = this.getAllDataSync()
-    const team = data.content?.collaborators || initialContent.collaborators
-    return team.filter((t) => t.published !== false)
+    const team = Array.isArray(data.content?.collaborators)
+      ? data.content.collaborators
+      : (Array.isArray(initialContent.collaborators) ? initialContent.collaborators : [])
+    return team.filter((t) => t && t.published !== false)
   }
 
   // Social
@@ -209,9 +295,28 @@ class DataService {
 
   // Update Section (used by Admin)
   async updateContentSection(sectionKey, endpoint, payload, authHeaders = {}) {
+    let cleanPayload = payload
+    if (sectionKey === 'settings' && typeof payload === 'object' && payload !== null) {
+      cleanPayload = {
+        ...payload,
+        ctaButtonText: payload.ctaButtonText || payload.bookingButtonText || 'Check Availability',
+        bookingButtonText: payload.bookingButtonText || payload.ctaButtonText || 'Check Availability',
+        ctaButtonLink: payload.ctaButtonLink || payload.bookingButtonLink || '/check-availability',
+        bookingButtonLink: payload.bookingButtonLink || payload.ctaButtonLink || '/check-availability',
+        seoDefaultTitle: payload.seoDefaultTitle || payload.seoTitle,
+        seoTitle: payload.seoTitle || payload.seoDefaultTitle,
+      }
+    }
+
     // 1. Update memory and localStorage immediately
     const current = this.getAllDataSync()
-    const updatedContent = { ...current.content, [sectionKey]: payload }
+    const updatedContent = { ...current.content, [sectionKey]: cleanPayload }
+    if (sectionKey === 'studio' && cleanPayload?.name) {
+      updatedContent.settings = {
+        ...updatedContent.settings,
+        siteName: cleanPayload.name,
+      }
+    }
     const updated = { ...current, content: updatedContent }
 
     this.memoryCache = updated
@@ -230,7 +335,7 @@ class DataService {
           'Content-Type': 'application/json',
           ...authHeaders,
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(cleanPayload),
       })
       if (!res.ok) {
         console.warn('Backend update returned non-OK status:', res.status)
@@ -244,7 +349,7 @@ class DataService {
   }
 
   // Update photos list
-  async updatePhotos(photosList) {
+  async updatePhotos(photosList, authHeaders = {}) {
     const current = this.getAllDataSync()
     const updated = { ...current, photos: photosList }
     this.memoryCache = updated
@@ -254,6 +359,27 @@ class DataService {
         window.dispatchEvent(new Event(EVENT_NAME))
       } catch (e) {}
     }
+
+    // Persist to backend API if available
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null
+      const headers = {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...authHeaders,
+      }
+      const res = await fetch(`${API_BASE}/photos`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({ photos: photosList }),
+      })
+      if (!res.ok) {
+        console.warn('Backend photos update returned status:', res.status)
+      }
+    } catch (err) {
+      console.warn('Backend photos update failed, saved to local cache:', err)
+    }
+
     this.notify()
     return updated
   }

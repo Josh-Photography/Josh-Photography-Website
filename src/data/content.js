@@ -10,9 +10,8 @@ export const studioInfo = {
   whatsapp: '+447988827057',
   social: {
     instagram: 'https://instagram.com/joshphotography.uk',
-    twitter: 'https://twitter.com/joshphoto',
-    behance: 'https://behance.net/joshphoto',
-    linkedin: 'https://linkedin.com/company/joshphotography'
+    facebook: 'https://facebook.com/joshphotography.uk',
+    whatsapp: 'https://wa.me/447988827057'
   }
 }
 
