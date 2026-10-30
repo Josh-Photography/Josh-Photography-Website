@@ -60,11 +60,23 @@ function writePhotos(data) {
 
 function normalizeCategory(cat) {
   const s = String(cat || '').toLowerCase().trim()
-  if (s === 'birthdays' || s === 'birthday-photography') return 'birthdays'
-  if (s === 'engagement' || s === 'pre-wedding') return 'engagement'
-  if (s === 'corporate-events' || s === 'portraits') return 'corporate-events'
-  if (s === 'baby-family' || s === 'baby-and-family') return 'baby-family'
-  if (s === 'festivals' || s === 'cultural-celebrations') return 'festivals'
+  if (s === 'car-shoot' || s === 'car-photography' || s === 'cars' || s === 'cars-shoot' || s === 'car') return 'car-photography'
+  if (s === 'model-shoot' || s === 'model-photography' || s === 'models' || s === 'fashion' || s === 'model') return 'model-photography'
+  if (s === 'product-shoot' || s === 'product-photography' || s === 'products' || s === 'product') return 'product-photography'
+  if (s === 'reels-shoot' || s === 'reels-shoots' || s === 'reels' || s === 'creative-video' || s === 'reel') return 'reels-shoots'
+  if (s === 'sports-shoot' || s === 'sports-photography' || s === 'sports' || s === 'sport') return 'sports-photography'
+  if (s === 'birthdays' || s === 'birthday-photography' || s === 'birthday' || s === 'birthdays-shoot') return 'birthdays'
+  if (s === 'engagement' || s === 'pre-wedding' || s === 'engagement-shoot') return 'engagement'
+  if (s === 'anniversary' || s === 'anniversary-shoot') return 'anniversary'
+  if (s === 'baby-family' || s === 'baby-and-family' || s === 'baby-newborn-maternity') return 'baby-family'
+  if (s === 'festivals' || s === 'cultural-celebrations' || s === 'christmas') return 'festivals'
+  if (s === 'mothers-day' || s === "mother's-day" || s === 'mothersday') return 'mothers-day'
+  if (s === 'fathers-day' || s === "father's-day" || s === 'fathersday') return 'fathers-day'
+  if (s === 'corporate-events' || s === 'portraits' || s === 'portrait' || s === 'corporate') return 'corporate-events'
+  if (s === 'family' || s === 'family-shoot') return 'family'
+  if (s === 'maternity' || s === 'maternity-shoot') return 'maternity'
+  if (s === 'graduations' || s === 'graduation' || s === 'graduation-photography') return 'graduations'
+  if (s === 'weddings' || s === 'wedding' || s === 'wedding-photography') return 'weddings'
   return s
 }
 
@@ -152,11 +164,11 @@ router.get('/category/:category', (req, res) => {
       category === 'all'
         ? data.photos.filter((p) => p.published !== false)
         : data.photos.filter(
-            (p) =>
-              (normalizeCategory(p.category) === targetCat ||
-                normalizeCategory(p.categorySlug) === targetCat) &&
-              p.published !== false
-          )
+          (p) =>
+            (normalizeCategory(p.category) === targetCat ||
+              normalizeCategory(p.categorySlug) === targetCat) &&
+            p.published !== false
+        )
 
     res.json(filtered.sort((a, b) => (a.order || 0) - (b.order || 0)))
   } catch (error) {
@@ -201,7 +213,7 @@ router.post(
         uploadedFiles.forEach((file, index) => {
           try {
             copyFileSync(file.path, join(publicUploadsPath, file.filename))
-          } catch (e) {}
+          } catch (e) { }
           const fileUrl = `/uploads/${file.filename}`
           const photoTitle =
             uploadedFiles.length === 1 && title
@@ -338,12 +350,12 @@ router.put('/:id', authenticateToken, upload.single('photo'), (req, res) => {
         if (existsSync(oldPath)) {
           try {
             unlinkSync(oldPath)
-          } catch (e) {}
+          } catch (e) { }
         }
       }
       try {
         copyFileSync(req.file.path, join(publicUploadsPath, req.file.filename))
-      } catch (e) {}
+      } catch (e) { }
       const newUrl = `/uploads/${req.file.filename}`
       updates.src = newUrl
       updates.srcLarge = newUrl
@@ -419,7 +431,7 @@ router.delete('/:id', authenticateToken, (req, res) => {
       if (existsSync(filePath)) {
         try {
           unlinkSync(filePath)
-        } catch (e) {}
+        } catch (e) { }
       }
     }
 

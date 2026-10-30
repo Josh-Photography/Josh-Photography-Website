@@ -178,11 +178,11 @@ class DataService {
           offers: offersData ? (offersData.offers || []) : (current.offers || []),
           offersSettings: offersData
             ? {
-                enabled: offersData.enabled !== false,
-                eyebrow: offersData.eyebrow || 'SPECIAL OFFERS & SEASONAL PROMOTIONS',
-                title: offersData.title || 'Limited-Time Photography Promotions',
-                subtitle: offersData.subtitle || '',
-              }
+              enabled: offersData.enabled !== false,
+              eyebrow: offersData.eyebrow || 'SPECIAL OFFERS & SEASONAL PROMOTIONS',
+              title: offersData.title || 'Limited-Time Photography Promotions',
+              subtitle: offersData.subtitle || '',
+            }
             : (current.offersSettings || { enabled: true }),
         }
 
@@ -217,13 +217,23 @@ class DataService {
 
     const normalizeCatKey = (raw) => {
       const s = String(raw || '').toLowerCase().trim()
-      if (s === 'birthdays' || s === 'birthday-photography') return 'birthdays'
-      if (s === 'engagement' || s === 'pre-wedding') return 'engagement'
-      if (s === 'corporate-events' || s === 'portraits' || s === 'portrait') return 'corporate-events'
-      if (s === 'baby-family' || s === 'baby-and-family') return 'baby-family'
-      if (s === 'festivals' || s === 'cultural-celebrations') return 'festivals'
-      if (s === 'mothers-day' || s === "mother's-day") return 'mothers-day'
-      if (s === 'fathers-day' || s === "father's-day") return 'fathers-day'
+      if (s === 'car-shoot' || s === 'car-photography' || s === 'cars' || s === 'cars-shoot' || s === 'car') return 'car-photography'
+      if (s === 'model-shoot' || s === 'model-photography' || s === 'models' || s === 'fashion' || s === 'model') return 'model-photography'
+      if (s === 'product-shoot' || s === 'product-photography' || s === 'products' || s === 'product') return 'product-photography'
+      if (s === 'reels-shoot' || s === 'reels-shoots' || s === 'reels' || s === 'creative-video' || s === 'reel') return 'reels-shoots'
+      if (s === 'sports-shoot' || s === 'sports-photography' || s === 'sports' || s === 'sport') return 'sports-photography'
+      if (s === 'birthdays' || s === 'birthday-photography' || s === 'birthday' || s === 'birthdays-shoot') return 'birthdays'
+      if (s === 'engagement' || s === 'pre-wedding' || s === 'engagement-shoot') return 'engagement'
+      if (s === 'anniversary' || s === 'anniversary-shoot') return 'anniversary'
+      if (s === 'baby-family' || s === 'baby-and-family' || s === 'baby-newborn-maternity') return 'baby-family'
+      if (s === 'festivals' || s === 'cultural-celebrations' || s === 'christmas') return 'festivals'
+      if (s === 'mothers-day' || s === "mother's-day" || s === 'mothersday') return 'mothers-day'
+      if (s === 'fathers-day' || s === "father's-day" || s === 'fathersday') return 'fathers-day'
+      if (s === 'corporate-events' || s === 'portraits' || s === 'portrait' || s === 'corporate') return 'corporate-events'
+      if (s === 'family' || s === 'family-shoot') return 'family'
+      if (s === 'maternity' || s === 'maternity-shoot') return 'maternity'
+      if (s === 'graduations' || s === 'graduation' || s === 'graduation-photography') return 'graduations'
+      if (s === 'weddings' || s === 'wedding' || s === 'wedding-photography') return 'weddings'
       return s
     }
 
