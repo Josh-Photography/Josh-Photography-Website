@@ -1,65 +1,12 @@
-import express from 'express'
-import cors from 'cors'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
-import authRoutes from './routes/auth.js'
-import contentRoutes from './routes/content.js'
-import photoRoutes from './routes/photos.js'
-import contactRoutes from './routes/contact.js'
-import commentRoutes from './routes/comments.js'
-import overviewRoutes from './routes/overview.js'
-import chatRoutes from './routes/chat.js'
-import offerRoutes from './routes/offers.js'
+import { app } from './app.js'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-const app = express()
 const PORT = process.env.PORT || 3001
 
-// Middleware
-app.use(cors())
-app.use(express.json({ limit: '50mb' }))
-app.use(express.urlencoded({ extended: true, limit: '50mb' }))
-app.use('/uploads', express.static(join(__dirname, 'uploads')))
-
-// Routes
-app.use('/api/auth', authRoutes)
-app.use('/api/content', contentRoutes)
-app.use('/api/photos', photoRoutes)
-app.use('/api/contact', contactRoutes)
-app.use('/api/comments', commentRoutes)
-app.use('/api/overview', overviewRoutes)
-app.use('/api/chat', chatRoutes)
-app.use('/api/offers', offerRoutes)
-
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    message: 'Josh Photography CMS API is running',
-    version: '2.0.0',
-    timestamp: new Date().toISOString(),
+if (process.argv[1] && process.argv[1].endsWith('index.js')) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Josh Photography Standalone Server running on http://localhost:${PORT}`)
   })
-})
+}
 
-// 404 handler for API routes
-app.use('/api/*', (req, res) => {
-  res.status(404).json({ error: `API route not found: ${req.method} ${req.originalUrl}` })
-})
-
-// Global error-handling middleware (guarantees JSON error response)
-app.use((err, req, res, next) => {
-  console.error('Unhandled server error:', err)
-  if (res.headersSent) {
-    return next(err)
-  }
-  res.status(err.status || 500).json({
-    error: err.message || 'Internal Server Error',
-    code: err.code || 'SERVER_ERROR',
-  })
-})
-
-app.listen(PORT, () => {
-  console.log(`🚀 Josh Photography Server running on http://localhost:${PORT}`)
-})
+export default app
+export { app }

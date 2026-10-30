@@ -4,10 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -n \"CLIENT,SERVER\" -c \"cyan,magenta\" \"vite\" \"npm run dev:server\"",
+    "dev": "vite",
     "dev:client": "vite",
-    "dev:server": "cd server && npm run dev",
-    "dev:all": "concurrently -k -p \"[{name}]\" -n \"CLIENT,SERVER\" -c \"cyan,magenta\" \"vite\" \"npm run dev:server\"",
+    "dev:standalone-server": "cd server && npm run dev",
     "build": "vite build",
     "preview": "vite preview",
     "server:install": "cd server && npm install",
