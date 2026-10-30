@@ -164,11 +164,11 @@ router.get('/category/:category', (req, res) => {
       category === 'all'
         ? data.photos.filter((p) => p.published !== false)
         : data.photos.filter(
-          (p) =>
-            (normalizeCategory(p.category) === targetCat ||
-              normalizeCategory(p.categorySlug) === targetCat) &&
-            p.published !== false
-        )
+            (p) =>
+              (normalizeCategory(p.category) === targetCat ||
+                normalizeCategory(p.categorySlug) === targetCat) &&
+              p.published !== false
+          )
 
     res.json(filtered.sort((a, b) => (a.order || 0) - (b.order || 0)))
   } catch (error) {
@@ -213,7 +213,7 @@ router.post(
         uploadedFiles.forEach((file, index) => {
           try {
             copyFileSync(file.path, join(publicUploadsPath, file.filename))
-          } catch (e) { }
+          } catch (e) {}
           const fileUrl = `/uploads/${file.filename}`
           const photoTitle =
             uploadedFiles.length === 1 && title
@@ -350,12 +350,12 @@ router.put('/:id', authenticateToken, upload.single('photo'), (req, res) => {
         if (existsSync(oldPath)) {
           try {
             unlinkSync(oldPath)
-          } catch (e) { }
+          } catch (e) {}
         }
       }
       try {
         copyFileSync(req.file.path, join(publicUploadsPath, req.file.filename))
-      } catch (e) { }
+      } catch (e) {}
       const newUrl = `/uploads/${req.file.filename}`
       updates.src = newUrl
       updates.srcLarge = newUrl
@@ -431,7 +431,7 @@ router.delete('/:id', authenticateToken, (req, res) => {
       if (existsSync(filePath)) {
         try {
           unlinkSync(filePath)
-        } catch (e) { }
+        } catch (e) {}
       }
     }
 

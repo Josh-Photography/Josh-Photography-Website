@@ -178,11 +178,11 @@ class DataService {
           offers: offersData ? (offersData.offers || []) : (current.offers || []),
           offersSettings: offersData
             ? {
-              enabled: offersData.enabled !== false,
-              eyebrow: offersData.eyebrow || 'SPECIAL OFFERS & SEASONAL PROMOTIONS',
-              title: offersData.title || 'Limited-Time Photography Promotions',
-              subtitle: offersData.subtitle || '',
-            }
+                enabled: offersData.enabled !== false,
+                eyebrow: offersData.eyebrow || 'SPECIAL OFFERS & SEASONAL PROMOTIONS',
+                title: offersData.title || 'Limited-Time Photography Promotions',
+                subtitle: offersData.subtitle || '',
+              }
             : (current.offersSettings || { enabled: true }),
         }
 
