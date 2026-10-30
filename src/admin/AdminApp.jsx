@@ -5,30 +5,17 @@ import dataService from '../services/dataService'
 import initialContent from '../../server/data/content.json'
 import initialPhotos from '../../server/data/photos.json'
 import initialOffers from '../../server/data/offers.json'
-import { OFFER_CATEGORIES, getCategoryHeroImage, getCategoryLabel, getCategoryPath } from '../data/offerCategories'
+import { OFFER_CATEGORIES, getCategoryHeroImage, getCategoryPath } from '../data/offerCategories'
+import {
+  PHOTOGRAPHY_CATEGORIES,
+  normalizeCategoryKey,
+  getCategoryLabel,
+  isCategoryMatch,
+} from '../utils/categoryUtils'
 import PromotionalBadge, { SpecialOfferSticker } from '../components/common/PromotionalBadge'
 
 const API_URL = '/api'
-
-export const PHOTOGRAPHY_CATEGORIES = [
-  { id: 'weddings', label: 'Wedding Photography' },
-  { id: 'birthdays', label: 'Birthday Celebrations' },
-  { id: 'engagement', label: 'Engagement Photography' },
-  { id: 'anniversary', label: 'Anniversary Photography' },
-  { id: 'baby-family', label: 'Baby & Newborn Photography' },
-  { id: 'festivals', label: 'Festival & Cultural Celebrations' },
-  { id: 'mothers-day', label: "Mother's Day Photography" },
-  { id: 'fathers-day', label: "Father's Day Photography" },
-  { id: 'corporate-events', label: 'Corporate Event Photography' },
-  { id: 'family', label: 'Family Photography' },
-  { id: 'maternity', label: 'Maternity Photography' },
-  { id: 'graduations', label: 'Graduation Photography' },
-  { id: 'sports-shoot', label: 'Sports Photography' },
-  { id: 'product-shoot', label: 'Product Photography' },
-  { id: 'car-shoot', label: 'Car & Vehicle Photography' },
-  { id: 'reels-shoot', label: 'Reels & Creative Video Shoots' },
-  { id: 'model-shoot', label: 'Model & Fashion Photography' },
-]
+export { PHOTOGRAPHY_CATEGORIES }
 
 // Convert Google Drive sharing links to direct embed URLs
 const convertGoogleDriveLink = (url) => {
@@ -1923,7 +1910,7 @@ function CollaboratorsEditor({ data, onSave, saving, token }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // 9. Fully Dynamic Portfolio Photos Manager (Requirements #1 & #14)
 // ─────────────────────────────────────────────────────────────────────────────
-function PhotosEditor({ data, onSave, onDelete, saving, token, onReload }) {
+function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading }) {
   const [photos, setPhotos] = useState(data || [])
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
@@ -1956,12 +1943,8 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload }) {
 
     // Category filter
     if (selectedCategory !== 'all') {
-      result = result.filter(
-        (p) =>
-          p.category === selectedCategory ||
-          p.categorySlug === selectedCategory ||
-          (selectedCategory === 'birthdays' && p.category === 'birthday-photography') ||
-          (selectedCategory === 'birthday-photography' && p.category === 'birthdays')
+      result = result.filter((p) =>
+        isCategoryMatch(p.category || p.categorySlug, selectedCategory)
       )
     }
 
@@ -1992,7 +1975,8 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload }) {
   const handleMultiFileUpload = async (files) => {
     if (!files || files.length === 0) return
     setIsUploading(true)
-    setUploadStatus(`Uploading ${files.length} photograph(s) to ${uploadCategory}...`)
+    const normCategory = normalizeCategoryKey(uploadCategory)
+    setUploadStatus(`Uploading ${files.length} photograph(s) to ${getCategoryLabel(normCategory)}...`)
 
     const addedList = []
 
@@ -2008,8 +1992,9 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload }) {
 
         addedList.push({
           id: `photo-${Date.now()}-${i}`,
-          num: String(photos.filter((p) => p.category === uploadCategory).length + i + 1).padStart(2, '0'),
-          category: uploadCategory,
+          num: String(photos.filter((p) => isCategoryMatch(p.category, normCategory)).length + i + 1).padStart(2, '0'),
+          category: normCategory,
+          categorySlug: normCategory,
           title: cleanTitle,
           desc: `Documentary capture celebrating authentic emotional moments.`,
           alt: cleanTitle,
@@ -2202,18 +2187,15 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload }) {
           All Categories ({photos.length})
         </button>
         {PHOTOGRAPHY_CATEGORIES.map((cat) => {
-          const count = photos.filter(
-            (p) =>
-              p.category === cat.id ||
-              p.categorySlug === cat.id ||
-              (cat.id === 'birthdays' && p.category === 'birthday-photography') ||
-              (cat.id === 'birthday-photography' && p.category === 'birthdays')
+          const count = photos.filter((p) =>
+            isCategoryMatch(p.category || p.categorySlug, cat.id)
           ).length
+          const isActive = selectedCategory !== 'all' && isCategoryMatch(selectedCategory, cat.id)
           return (
             <button
               key={cat.id}
               type="button"
-              className={`admin-pill ${selectedCategory === cat.id ? 'admin-pill--active' : ''}`}
+              className={`admin-pill ${isActive ? 'admin-pill--active' : ''}`}
               onClick={() => setSelectedCategory(cat.id)}
             >
               {cat.label} ({count})
@@ -2251,11 +2233,58 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload }) {
         </div>
       </div>
 
-      {/* Photographs Grid */}
-      {filteredPhotos.length === 0 ? (
+      {/* Photographs Grid / Loading Skeleton */}
+      {loading ? (
+        <div className="admin-portfolio-grid">
+          {[1, 2, 3, 4, 5, 6].map((n) => (
+            <div
+              key={n}
+              className="admin-portfolio-card"
+              style={{
+                opacity: 0.65,
+                background: '#191512',
+                border: '1px solid rgba(216,183,122,0.15)',
+                animation: 'pulse 1.8s infinite',
+              }}
+            >
+              <div
+                style={{
+                  height: '220px',
+                  background: 'linear-gradient(90deg, #221c17 25%, #2d251f 50%, #221c17 75%)',
+                  backgroundSize: '200% 100%',
+                }}
+              />
+              <div style={{ padding: '1.25rem' }}>
+                <div style={{ height: '12px', width: '35%', background: '#2c251f', borderRadius: '4px', marginBottom: '0.75rem' }} />
+                <div style={{ height: '18px', width: '75%', background: '#362d26', borderRadius: '4px', marginBottom: '0.6rem' }} />
+                <div style={{ height: '12px', width: '90%', background: '#25201a', borderRadius: '4px' }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : filteredPhotos.length === 0 ? (
         <div className="admin-empty">
-          <span>📷</span>
+          <span style={{ fontSize: '2rem' }}>📷</span>
           <p>No photographs found matching your filter criteria.</p>
+          <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.75rem' }}>
+            <button
+              type="button"
+              className="admin-btn admin-btn--secondary admin-btn--small"
+              onClick={() => {
+                setSelectedCategory('all')
+                setSearchQuery('')
+              }}
+            >
+              Reset Filters & View All ({photos.length})
+            </button>
+            <button
+              type="button"
+              className="admin-btn admin-btn--primary admin-btn--small"
+              onClick={() => setNewPhotoModal(true)}
+            >
+              + Upload Photograph
+            </button>
+          </div>
         </div>
       ) : (
         <div className="admin-portfolio-grid">
@@ -2275,7 +2304,7 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload }) {
                     {photo.published !== false ? 'Published' : 'Draft'}
                   </span>
                   <span className="admin-badge admin-badge--cat">
-                    {PHOTOGRAPHY_CATEGORIES.find((c) => c.id === photo.category)?.label || photo.category}
+                    {getCategoryLabel(photo.category || photo.categorySlug)}
                   </span>
                 </div>
               </div>
@@ -3887,7 +3916,17 @@ function OffersEditor({ token, showToast }) {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flex: 1, minWidth: '280px' }}>
                     <div style={{ position: 'relative', width: '90px', height: '65px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0, background: '#25201b' }}>
                       {offer.bannerImage ? (
-                        <img src={offer.bannerImage} alt={offer.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <img
+                          src={offer.bannerImage}
+                          alt={offer.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          onError={(e) => {
+                            const fallback = getCategoryHeroImage(offer.category || offer.categories?.[0])
+                            if (fallback && e.target.src !== fallback) {
+                              e.target.src = fallback
+                            }
+                          }}
+                        />
                       ) : (
                         <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fbbf24', fontSize: '1.1rem' }}>
                           📷
@@ -4016,19 +4055,22 @@ function Dashboard({ token, onLogout }) {
           photosRes,
           contactsRes,
           commentsRes,
-          overviewRes
+          overviewRes,
+          offersRes
         ] = await Promise.all([
           fetch(`${API_URL}/content`).catch(() => null),
           fetch(`${API_URL}/photos`).catch(() => null),
           fetch(`${API_URL}/contact`, { headers: authHeaders }).catch(() => null),
           fetch(`${API_URL}/comments`, { headers: authHeaders }).catch(() => null),
-          fetch(`${API_URL}/overview`, { headers: authHeaders }).catch(() => null)
+          fetch(`${API_URL}/overview`, { headers: authHeaders }).catch(() => null),
+          fetch(`${API_URL}/offers/admin`, { headers: authHeaders }).catch(() => null)
         ])
 
         if (contentRes && contentRes.ok) live.content = await contentRes.json()
         if (photosRes && photosRes.ok) live.photos = await photosRes.json()
         if (contactsRes && contactsRes.ok) live.contacts = await contactsRes.json()
         if (commentsRes && commentsRes.ok) live.comments = await commentsRes.json()
+        if (offersRes && offersRes.ok) live.offers = await offersRes.json()
         if (overviewRes && overviewRes.ok) {
           const ov = await overviewRes.json()
           setOverviewLive(ov)
@@ -4041,6 +4083,8 @@ function Dashboard({ token, onLogout }) {
       const merged = {
         content: live.content || syncData.content || initialContent,
         photos: live.photos || syncData.photos || initialPhotos,
+        offers: live.offers?.offers || syncData.offers || initialOffers.offers || [],
+        offersSettings: live.offers?.sectionSettings || syncData.offersSettings || initialOffers.sectionSettings || { enabled: true },
         contacts: live.contacts || [],
         comments: live.comments || []
       }
@@ -4371,6 +4415,7 @@ function Dashboard({ token, onLogout }) {
               saving={saving}
               token={token}
               onReload={loadAllData}
+              loading={loading}
             />
           )}
 

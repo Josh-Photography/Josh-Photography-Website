@@ -6,6 +6,7 @@ import { dirname, join, extname } from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import { authenticateToken } from '../middleware/auth.js'
 import { logActivity } from '../utils/activity.js'
+import { processImageUpload } from '../utils/storage.js'
 
 const router = express.Router()
 const __filename = fileURLToPath(import.meta.url)
@@ -57,20 +58,14 @@ function writeContent(data) {
 }
 
 // Upload endpoint for any content image (protected)
-router.post('/upload', authenticateToken, upload.single('image'), (req, res) => {
+router.post('/upload', authenticateToken, upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No image file uploaded' })
     }
-    // Mirror to public/uploads so Vite serves immediately
-    try {
-      copyFileSync(req.file.path, join(publicUploadsPath, req.file.filename))
-    } catch (err) {
-      console.warn('Could not mirror upload to public/uploads:', err)
-    }
-    const url = `/uploads/${req.file.filename}`
+    const result = await processImageUpload(req.file, { folder: 'josh_content' })
     logActivity(`Uploaded content asset: ${req.file.originalname}`)
-    res.json({ url, filename: req.file.filename })
+    res.json({ url: result.url, filename: result.filename, provider: result.provider })
   } catch (error) {
     console.error('Content upload error:', error)
     res.status(500).json({ error: 'Failed to upload image' })

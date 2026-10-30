@@ -1,5 +1,59 @@
 [
   {
+    "id": "act-1793398477577",
+    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
+    "user": "Admin",
+    "timestamp": "2026-10-30T22:14:37.577Z"
+  },
+  {
+    "id": "act-1793397408196",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-30T21:56:48.196Z"
+  },
+  {
+    "id": "act-1793397408147",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-30T21:56:48.147Z"
+  },
+  {
+    "id": "act-1793397408113",
+    "action": "Uploaded content asset: model.png",
+    "user": "Admin",
+    "timestamp": "2026-10-30T21:56:48.113Z"
+  },
+  {
+    "id": "act-1793397353484",
+    "action": "Updated Hero Section Slideshow",
+    "user": "Admin",
+    "timestamp": "2026-10-30T21:55:53.484Z"
+  },
+  {
+    "id": "act-1793397346624",
+    "action": "Uploaded content asset: fatherday-img-3.jpg",
+    "user": "Admin",
+    "timestamp": "2026-10-30T21:55:46.624Z"
+  },
+  {
+    "id": "act-1793397328554",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-30T21:55:28.554Z"
+  },
+  {
+    "id": "act-1793397328506",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-10-30T21:55:28.506Z"
+  },
+  {
+    "id": "act-1793397328265",
+    "action": "Deleted photo \"Model\" from car-shoot",
+    "user": "Admin",
+    "timestamp": "2026-10-30T21:55:28.265Z"
+  },
+  {
     "id": "act-1793396237905",
     "action": "Synchronized 103 portfolio photograph(s) across categories",
     "user": "Admin",
@@ -244,59 +298,5 @@
     "action": "Updated promotional offer: \"Christmas & Winter Festive Family Jubilee\"",
     "user": "Admin",
     "timestamp": "2026-10-28T23:27:24.645Z"
-  },
-  {
-    "id": "act-1793230044604",
-    "action": "Updated promotional offer: \"Christmas & Winter Festive Family Jubilee\"",
-    "user": "Admin",
-    "timestamp": "2026-10-28T23:27:24.604Z"
-  },
-  {
-    "id": "act-1793229070366",
-    "action": "Updated Special Offers Section settings (Enabled)",
-    "user": "Admin",
-    "timestamp": "2026-10-28T23:11:10.366Z"
-  },
-  {
-    "id": "act-1793229067760",
-    "action": "Updated Special Offers Section settings (Hidden)",
-    "user": "Admin",
-    "timestamp": "2026-10-28T23:11:07.760Z"
-  },
-  {
-    "id": "act-1793224034418",
-    "action": "Deleted promotional offer: \"Mother's Day Special Studio Portrait\"",
-    "user": "Admin",
-    "timestamp": "2026-10-28T21:47:14.418Z"
-  },
-  {
-    "id": "act-1793224034410",
-    "action": "Updated Special Offers Section settings (Enabled)",
-    "user": "Admin",
-    "timestamp": "2026-10-28T21:47:14.410Z"
-  },
-  {
-    "id": "act-1793224034400",
-    "action": "Updated Special Offers Section settings (Hidden)",
-    "user": "Admin",
-    "timestamp": "2026-10-28T21:47:14.400Z"
-  },
-  {
-    "id": "act-1793224034391",
-    "action": "Created seasonal photography offer: \"Mother's Day Special Studio Portrait\" (25% off)",
-    "user": "Admin",
-    "timestamp": "2026-10-28T21:47:14.391Z"
-  },
-  {
-    "id": "act-1793221600946",
-    "action": "Updated De Fab Studio Section & Content",
-    "user": "Admin",
-    "timestamp": "2026-10-28T21:06:40.946Z"
-  },
-  {
-    "id": "act-1792268314877",
-    "action": "Updated Team Members & Biographies",
-    "user": "Admin",
-    "timestamp": "2026-10-17T20:18:34.877Z"
   }
 ]

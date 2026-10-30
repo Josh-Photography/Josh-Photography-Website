@@ -156,6 +156,12 @@ export default function SpecialOffers() {
                       alt={offer.title}
                       loading="lazy"
                       className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
+                      onError={(e) => {
+                        const fallback = getCategoryHeroImage(targetCat) || '/images/hero-church-wedding.jpg'
+                        if (e.target.src !== fallback) {
+                          e.target.src = fallback
+                        }
+                      }}
                     />
 
                     {/* Subtle Vignette Gradient */}

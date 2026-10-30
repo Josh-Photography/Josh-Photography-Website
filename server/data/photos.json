@@ -101,7 +101,7 @@
       "order": 1,
       "published": true,
       "createdAt": "2026-10-13T19:22:57.058Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-weddings-1",
@@ -117,7 +117,7 @@
       "order": 1,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.955Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-weddings-2",
@@ -133,7 +133,7 @@
       "order": 2,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-weddings-3",
@@ -149,7 +149,7 @@
       "order": 3,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-weddings-4",
@@ -165,7 +165,7 @@
       "order": 4,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-weddings-5",
@@ -181,7 +181,7 @@
       "order": 5,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-birthdays-1",
@@ -197,7 +197,7 @@
       "order": 7,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-birthdays-2",
@@ -213,7 +213,7 @@
       "order": 8,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-birthdays-3",
@@ -229,7 +229,7 @@
       "order": 9,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-birthdays-4",
@@ -245,7 +245,7 @@
       "order": 10,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-birthdays-5",
@@ -261,7 +261,7 @@
       "order": 11,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-birthdays-6",
@@ -277,7 +277,7 @@
       "order": 12,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-engagement-1",
@@ -293,7 +293,7 @@
       "order": 13,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-engagement-2",
@@ -309,7 +309,7 @@
       "order": 14,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-engagement-3",
@@ -325,7 +325,7 @@
       "order": 15,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-engagement-4",
@@ -341,7 +341,7 @@
       "order": 16,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-engagement-5",
@@ -357,7 +357,7 @@
       "order": 17,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-engagement-6",
@@ -373,7 +373,7 @@
       "order": 18,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-anniversary-1",
@@ -389,7 +389,7 @@
       "order": 19,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-anniversary-2",
@@ -405,7 +405,7 @@
       "order": 20,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-anniversary-3",
@@ -421,7 +421,7 @@
       "order": 21,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-anniversary-4",
@@ -437,7 +437,7 @@
       "order": 22,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-anniversary-5",
@@ -453,7 +453,7 @@
       "order": 23,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-anniversary-6",
@@ -469,7 +469,7 @@
       "order": 24,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-baby-family-1",
@@ -485,7 +485,7 @@
       "order": 25,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-baby-family-2",
@@ -501,7 +501,7 @@
       "order": 26,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-baby-family-3",
@@ -517,7 +517,7 @@
       "order": 27,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-baby-family-4",
@@ -533,7 +533,7 @@
       "order": 28,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-baby-family-5",
@@ -549,7 +549,7 @@
       "order": 29,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-baby-family-6",
@@ -565,7 +565,7 @@
       "order": 30,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-festivals-1",
@@ -581,7 +581,7 @@
       "order": 31,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-festivals-2",
@@ -597,7 +597,7 @@
       "order": 32,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-festivals-3",
@@ -613,7 +613,7 @@
       "order": 33,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-festivals-4",
@@ -629,7 +629,7 @@
       "order": 34,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-festivals-5",
@@ -645,7 +645,7 @@
       "order": 35,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-festivals-6",
@@ -661,7 +661,7 @@
       "order": 36,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-mothers-day-1",
@@ -677,7 +677,7 @@
       "order": 37,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-mothers-day-2",
@@ -693,7 +693,7 @@
       "order": 38,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-mothers-day-3",
@@ -709,7 +709,7 @@
       "order": 39,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-mothers-day-4",
@@ -725,7 +725,7 @@
       "order": 40,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.966Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-mothers-day-5",
@@ -741,7 +741,7 @@
       "order": 41,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-mothers-day-6",
@@ -757,7 +757,7 @@
       "order": 42,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-fathers-day-1",
@@ -773,7 +773,7 @@
       "order": 43,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-fathers-day-2",
@@ -789,7 +789,7 @@
       "order": 44,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-fathers-day-3",
@@ -805,7 +805,7 @@
       "order": 45,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-fathers-day-4",
@@ -821,7 +821,7 @@
       "order": 46,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-fathers-day-5",
@@ -837,7 +837,7 @@
       "order": 47,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-fathers-day-6",
@@ -853,7 +853,7 @@
       "order": 48,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-corporate-events-1",
@@ -869,7 +869,7 @@
       "order": 49,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-corporate-events-2",
@@ -885,7 +885,7 @@
       "order": 50,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-corporate-events-3",
@@ -901,7 +901,7 @@
       "order": 51,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-corporate-events-4",
@@ -917,7 +917,7 @@
       "order": 52,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-corporate-events-5",
@@ -933,7 +933,7 @@
       "order": 53,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-corporate-events-6",
@@ -949,7 +949,7 @@
       "order": 54,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-family-1",
@@ -965,7 +965,7 @@
       "order": 55,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-family-2",
@@ -981,7 +981,7 @@
       "order": 56,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-family-3",
@@ -997,7 +997,7 @@
       "order": 57,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-family-4",
@@ -1013,7 +1013,7 @@
       "order": 58,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-family-5",
@@ -1029,7 +1029,7 @@
       "order": 59,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-family-6",
@@ -1045,7 +1045,7 @@
       "order": 60,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-maternity-1",
@@ -1061,7 +1061,7 @@
       "order": 61,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.901Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-maternity-2",
@@ -1077,7 +1077,7 @@
       "order": 62,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-maternity-3",
@@ -1093,7 +1093,7 @@
       "order": 63,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-maternity-4",
@@ -1109,7 +1109,7 @@
       "order": 64,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-maternity-5",
@@ -1125,7 +1125,7 @@
       "order": 65,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-maternity-6",
@@ -1141,7 +1141,7 @@
       "order": 66,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-graduations-1",
@@ -1157,7 +1157,7 @@
       "order": 67,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-graduations-2",
@@ -1173,7 +1173,7 @@
       "order": 68,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-graduations-3",
@@ -1189,7 +1189,7 @@
       "order": 69,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-graduations-4",
@@ -1205,7 +1205,7 @@
       "order": 70,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-graduations-5",
@@ -1221,7 +1221,7 @@
       "order": 71,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-graduations-6",
@@ -1237,14 +1237,14 @@
       "order": 72,
       "published": true,
       "createdAt": "2026-10-12T20:48:19.967Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-sports-shoot-1",
       "title": "Explosive Athletic Action & Decisive Motion",
       "desc": "Split-second shutter precision capturing rapid acceleration, mid-air leaps, and the raw kinetic force of competitive sports.",
       "alt": "Explosive Athletic Action & Decisive Motion - Josh Photography",
-      "category": "sports-shoot",
+      "category": "sports-photography",
       "categorySlug": "sports-photography",
       "image": "/images/sports_shoot_1.jpg",
       "src": "/images/sports_shoot_1.jpg",
@@ -1253,14 +1253,14 @@
       "order": 73,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.428Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-sports-shoot-2",
       "title": "Dramatic Strobed Athlete Studio Portrait",
       "desc": "Sculpted rim lighting, dramatic high-contrast shadows, and focused gaze defining the relentless discipline of dedicated athletes.",
       "alt": "Dramatic Strobed Athlete Studio Portrait - Josh Photography",
-      "category": "sports-shoot",
+      "category": "sports-photography",
       "categorySlug": "sports-photography",
       "image": "/images/sports_shoot_2.jpg",
       "src": "/images/sports_shoot_2.jpg",
@@ -1269,14 +1269,14 @@
       "order": 74,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.430Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-sports-shoot-3",
       "title": "Team Spirit & Championship Moment",
       "desc": "Joyful locker room camaraderie, sideline anticipation, and the ecstatic roar of victory when the final whistle sounds.",
       "alt": "Team Spirit & Championship Moment - Josh Photography",
-      "category": "sports-shoot",
+      "category": "sports-photography",
       "categorySlug": "sports-photography",
       "image": "/images/sports_shoot_3.jpg",
       "src": "/images/sports_shoot_3.jpg",
@@ -1285,14 +1285,14 @@
       "order": 75,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.430Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-sports-shoot-4",
       "title": "Conditioning, Sweat & Intense Grit",
       "desc": "Intimate close-up documentary coverage of grueling training routines, weight rooms, and relentless preparation.",
       "alt": "Conditioning, Sweat & Intense Grit - Josh Photography",
-      "category": "sports-shoot",
+      "category": "sports-photography",
       "categorySlug": "sports-photography",
       "image": "/images/sports_shoot_4.jpg",
       "src": "/images/sports_shoot_4.jpg",
@@ -1301,14 +1301,14 @@
       "order": 76,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.430Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-sports-shoot-5",
       "title": "Arena Lights & Grand Stadium Atmosphere",
       "desc": "Wide-angle compositions capturing roaring crowds, atmospheric stadium mist, and the grand theatre of British athletics.",
       "alt": "Arena Lights & Grand Stadium Atmosphere - Josh Photography",
-      "category": "sports-shoot",
+      "category": "sports-photography",
       "categorySlug": "sports-photography",
       "image": "/images/sports_shoot_5.jpg",
       "src": "/images/sports_shoot_5.jpg",
@@ -1317,14 +1317,14 @@
       "order": 77,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.430Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.192Z"
     },
     {
       "id": "photo-sports-shoot-6",
       "title": "Commercial Fitness & Athletic Apparel",
       "desc": "Polished commercial visuals engineered for sports apparel brands, athletic sponsors, and high-impact digital campaigns.",
       "alt": "Commercial Fitness & Athletic Apparel - Josh Photography",
-      "category": "sports-shoot",
+      "category": "sports-photography",
       "categorySlug": "sports-photography",
       "image": "/images/sports_shoot_6.jpg",
       "src": "/images/sports_shoot_6.jpg",
@@ -1333,14 +1333,14 @@
       "order": 78,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-product-shoot-1",
       "title": "Signature Hero Bottle & Luxury Packaging",
       "desc": "Pristine directional lighting accentuating delicate embossed foil, glass contours, and exquisite product architecture.",
       "alt": "Signature Hero Bottle & Luxury Packaging - Josh Photography",
-      "category": "product-shoot",
+      "category": "product-photography",
       "categorySlug": "product-photography",
       "image": "/images/product_shoot_1.jpg",
       "src": "/images/product_shoot_1.jpg",
@@ -1349,14 +1349,14 @@
       "order": 79,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-product-shoot-2",
       "title": "Styled Editorial Lifestyle In-Context Scene",
       "desc": "Organic surfaces, curated botanical accents, and natural sunlit backdrops that immerse the product in aspirational settings.",
       "alt": "Styled Editorial Lifestyle In-Context Scene - Josh Photography",
-      "category": "product-shoot",
+      "category": "product-photography",
       "categorySlug": "product-photography",
       "image": "/images/product_shoot_2.jpg",
       "src": "/images/product_shoot_2.jpg",
@@ -1365,14 +1365,14 @@
       "order": 80,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-product-shoot-3",
       "title": "Macro Textures & Material Craftsmanship",
       "desc": "Hyper-focused macro lenses revealing micro-droplets, woven leather, brushed metal grains, and tactile surfaces.",
       "alt": "Macro Textures & Material Craftsmanship - Josh Photography",
-      "category": "product-shoot",
+      "category": "product-photography",
       "categorySlug": "product-photography",
       "image": "/images/product_shoot_3.jpg",
       "src": "/images/product_shoot_3.jpg",
@@ -1381,14 +1381,14 @@
       "order": 81,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-product-shoot-4",
       "title": "Clean E-Commerce Studio Catalog Cutout",
       "desc": "Flawless studio isolation with razor-sharp clipping paths ready for instant deployment on Shopify, Amazon, and print.",
       "alt": "Clean E-Commerce Studio Catalog Cutout - Josh Photography",
-      "category": "product-shoot",
+      "category": "product-photography",
       "categorySlug": "product-photography",
       "image": "/images/product_shoot_4.jpg",
       "src": "/images/product_shoot_4.jpg",
@@ -1397,14 +1397,14 @@
       "order": 82,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-product-shoot-5",
       "title": "Artisanal Unboxing & Gift Presentation",
       "desc": "Preserving the excitement of the customer experience with thoughtfully composed gift boxes, ribbon seals, and tags.",
       "alt": "Artisanal Unboxing & Gift Presentation - Josh Photography",
-      "category": "product-shoot",
+      "category": "product-photography",
       "categorySlug": "product-photography",
       "image": "/images/product_shoot_5.jpg",
       "src": "/images/product_shoot_5.jpg",
@@ -1413,14 +1413,14 @@
       "order": 83,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-product-shoot-6",
       "title": "Dynamic Multi-Product Collection Ensemble",
       "desc": "Harmonious geometric arrangements displaying complete skincare lines, seasonal flavors, and luxury ensembles.",
       "alt": "Dynamic Multi-Product Collection Ensemble - Josh Photography",
-      "category": "product-shoot",
+      "category": "product-photography",
       "categorySlug": "product-photography",
       "image": "/images/product_shoot_6.jpg",
       "src": "/images/product_shoot_6.jpg",
@@ -1429,14 +1429,14 @@
       "order": 84,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-car-shoot-1",
       "title": "Golden-Hour Rolling Track Motion Tracking",
       "desc": "Fluid shutter blur capturing dynamic wheels at speed while the bodywork remains razor-sharp against the fading sunset.",
       "alt": "Golden-Hour Rolling Track Motion Tracking - Josh Photography",
-      "category": "car-shoot",
+      "category": "car-photography",
       "categorySlug": "car-photography",
       "image": "/images/car_shoot_1.jpg",
       "src": "/images/car_shoot_1.jpg",
@@ -1445,14 +1445,14 @@
       "order": 85,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-car-shoot-2",
       "title": "Aerodynamic Stance & Front 3/4 Profiling",
       "desc": "Low-angle compositions that emphasize aggressive splitters, wide wheelbases, and the commanding presence of modern engineering.",
       "alt": "Aerodynamic Stance & Front 3/4 Profiling - Josh Photography",
-      "category": "car-shoot",
+      "category": "car-photography",
       "categorySlug": "car-photography",
       "image": "/images/car_shoot_2.jpg",
       "src": "/images/car_shoot_2.jpg",
@@ -1461,14 +1461,14 @@
       "order": 86,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-car-shoot-3",
       "title": "Handcrafted Interior & Cockpit Details",
       "desc": "Soft ambient illumination highlighting diamond-quilted leather, milled aluminum toggles, and illuminated digital dashboards.",
       "alt": "Handcrafted Interior & Cockpit Details - Josh Photography",
-      "category": "car-shoot",
+      "category": "car-photography",
       "categorySlug": "car-photography",
       "image": "/images/car_shoot_3.jpg",
       "src": "/images/car_shoot_3.jpg",
@@ -1477,14 +1477,14 @@
       "order": 87,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-car-shoot-4",
       "title": "Sculpted Tail Lamps & Exhaust Profiles",
       "desc": "Atmospheric twilight compositions focusing on carbon-fiber rear diffusers, glowing quad exhaust tips, and brake calipers.",
       "alt": "Sculpted Tail Lamps & Exhaust Profiles - Josh Photography",
-      "category": "car-shoot",
+      "category": "car-photography",
       "categorySlug": "car-photography",
       "image": "/images/car_shoot_4.jpg",
       "src": "/images/car_shoot_4.jpg",
@@ -1493,14 +1493,14 @@
       "order": 88,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-car-shoot-5",
       "title": "Classic Heritage & Vintage Concours Elegance",
       "desc": "Timeless British country estates and historic cobblestones complementing vintage chrome bumpers and wire wheels.",
       "alt": "Classic Heritage & Vintage Concours Elegance - Josh Photography",
-      "category": "car-shoot",
+      "category": "car-photography",
       "categorySlug": "car-photography",
       "image": "/images/car_shoot_5.jpg",
       "src": "/images/car_shoot_5.jpg",
@@ -1509,14 +1509,14 @@
       "order": 89,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-car-shoot-6",
       "title": "Dramatic Night Light Painting & Reflections",
       "desc": "Handheld continuous LED sweeps carving glowing metallic highlights across dark body panels in atmospheric hangar settings.",
       "alt": "Dramatic Night Light Painting & Reflections - Josh Photography",
-      "category": "car-shoot",
+      "category": "car-photography",
       "categorySlug": "car-photography",
       "image": "/images/car_shoot_6.jpg",
       "src": "/images/car_shoot_6.jpg",
@@ -1525,14 +1525,14 @@
       "order": 90,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-reels-shoot-1",
       "title": "Wedding Ceremony & Vow Teaser Reels",
       "desc": "Emotional audio soundbites blended with slow-motion confetti showers and tender glances, optimized for instant social sharing.",
       "alt": "Wedding Ceremony & Vow Teaser Reels - Josh Photography",
-      "category": "reels-shoot",
+      "category": "reels-shoots",
       "categorySlug": "reels-shoots",
       "image": "/images/reel_shoot_1.jpg",
       "src": "/images/reel_shoot_1.jpg",
@@ -1541,14 +1541,14 @@
       "order": 91,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-reels-shoot-2",
       "title": "High-Energy Party Entrances & Dance Floors",
       "desc": "Dynamic gimbal tracking, rhythmic strobe bursts, and beat-matched cuts capturing pure celebration electricity.",
       "alt": "High-Energy Party Entrances & Dance Floors - Josh Photography",
-      "category": "reels-shoot",
+      "category": "reels-shoots",
       "categorySlug": "reels-shoots",
       "image": "/images/reel_shoot_2.jpg",
       "src": "/images/reel_shoot_2.jpg",
@@ -1557,14 +1557,14 @@
       "order": 92,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-reels-shoot-3",
       "title": "Behind-The-Scenes Creative Storytelling",
       "desc": "Unfiltered, captivating glimpses into the craft, backstage preparation, and candid artistry of high-end events.",
       "alt": "Behind-The-Scenes Creative Storytelling - Josh Photography",
-      "category": "reels-shoot",
+      "category": "reels-shoots",
       "categorySlug": "reels-shoots",
       "image": "/images/reel_shoot_3.jpg",
       "src": "/images/reel_shoot_3.jpg",
@@ -1573,14 +1573,14 @@
       "order": 93,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-reels-shoot-4",
       "title": "Cinematic Lifestyle & Fashion Transitions",
       "desc": "Smooth match-cuts and creative wardrobe transitions delivering magazine-worthy editorial elegance in 15 exhilarating seconds.",
       "alt": "Cinematic Lifestyle & Fashion Transitions - Josh Photography",
-      "category": "reels-shoot",
+      "category": "reels-shoots",
       "categorySlug": "reels-shoots",
       "image": "/images/reel_shoot_4.jpg",
       "src": "/images/reel_shoot_4.jpg",
@@ -1589,14 +1589,14 @@
       "order": 94,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-reels-shoot-5",
       "title": "Automotive & Movement Speed Ramps",
       "desc": "Kinetic acceleration ramps, tire spins, and cinematic rolling motion tailored for maximum viral engagement.",
       "alt": "Automotive & Movement Speed Ramps - Josh Photography",
-      "category": "reels-shoot",
+      "category": "reels-shoots",
       "categorySlug": "reels-shoots",
       "image": "/images/reel_shoot_5.jpg",
       "src": "/images/reel_shoot_5.jpg",
@@ -1605,14 +1605,14 @@
       "order": 95,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-reels-shoot-6",
       "title": "Luxury Brand Reveal & Showcase Reels",
       "desc": "Hypnotic macro panning shots, lighting flares, and sleek product reveals designed to drive conversions and prestige.",
       "alt": "Luxury Brand Reveal & Showcase Reels - Josh Photography",
-      "category": "reels-shoot",
+      "category": "reels-shoots",
       "categorySlug": "reels-shoots",
       "image": "/images/reel_shoot_6.jpg",
       "src": "/images/reel_shoot_6.jpg",
@@ -1621,14 +1621,14 @@
       "order": 96,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-model-shoot-1",
       "title": "High-Fashion Studio Editorial Posing",
       "desc": "Clean geometric lines, striking silhouette posing, and sculptured studio strobes designed for fashion magazines.",
       "alt": "High-Fashion Studio Editorial Posing - Josh Photography",
-      "category": "model-shoot",
+      "category": "model-photography",
       "categorySlug": "model-photography",
       "image": "/images/model_shoot_1.jpg",
       "src": "/images/model_shoot_1.jpg",
@@ -1637,14 +1637,14 @@
       "order": 97,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-model-shoot-2",
       "title": "Natural Beauty & Expressive Agency Headshots",
       "desc": "Minimalist makeup, honest eye contact, and delicate natural lighting showcasing authentic bone structure and skin fidelity.",
       "alt": "Natural Beauty & Expressive Agency Headshots - Josh Photography",
-      "category": "model-shoot",
+      "category": "model-photography",
       "categorySlug": "model-photography",
       "image": "/images/model_shoot_2.jpg",
       "src": "/images/model_shoot_2.jpg",
@@ -1653,14 +1653,14 @@
       "order": 98,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-model-shoot-3",
       "title": "Avant-Garde Styling & Dramatic Shadows",
       "desc": "Bold sartorial statements, dynamic fabrics in motion, and chiaroscuro lighting that pushes creative boundaries.",
       "alt": "Avant-Garde Styling & Dramatic Shadows - Josh Photography",
-      "category": "model-shoot",
+      "category": "model-photography",
       "categorySlug": "model-photography",
       "image": "/images/model_shoot_3.jpg",
       "src": "/images/model_shoot_3.jpg",
@@ -1669,14 +1669,14 @@
       "order": 99,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-model-shoot-4",
       "title": "Urban Street Style & Architectural Context",
       "desc": "London’s iconic concrete brutalism and historical façades providing rich, contemporary context for street-fashion lookbooks.",
       "alt": "Urban Street Style & Architectural Context - Josh Photography",
-      "category": "model-shoot",
+      "category": "model-photography",
       "categorySlug": "model-photography",
       "image": "/images/model_shoot_4.jpg",
       "src": "/images/model_shoot_4.jpg",
@@ -1685,14 +1685,14 @@
       "order": 100,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-model-shoot-5",
       "title": "Dynamic Movement, Fabric & Fluidity",
       "desc": "High-speed flashes capturing flowing silk gowns, airborne hair, and unscripted motion that radiates confidence.",
       "alt": "Dynamic Movement, Fabric & Fluidity - Josh Photography",
-      "category": "model-shoot",
+      "category": "model-photography",
       "categorySlug": "model-photography",
       "image": "/images/model_shoot_5.jpg",
       "src": "/images/model_shoot_5.jpg",
@@ -1701,14 +1701,14 @@
       "order": 101,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
       "id": "photo-model-shoot-6",
       "title": "Commercial Campaign & Lookbook Styling",
       "desc": "Versatile, approachable aesthetics engineered for clothing designers, accessories brands, and digital lookbooks.",
       "alt": "Commercial Campaign & Lookbook Styling - Josh Photography",
-      "category": "model-shoot",
+      "category": "model-photography",
       "categorySlug": "model-photography",
       "image": "/images/model_shoot_6.jpg",
       "src": "/images/model_shoot_6.jpg",
@@ -1717,23 +1717,23 @@
       "order": 102,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     },
     {
-      "id": "photo-1793396237855-0",
+      "id": "photo-1793397408118-0",
       "title": "Model",
       "desc": "Documentary capture celebrating authentic emotional moments.",
       "alt": "Model",
-      "category": "car-shoot",
-      "categorySlug": "car-shoot",
-      "image": "/uploads/content-1793396237721-0fe00316.png",
-      "src": "/uploads/content-1793396237721-0fe00316.png",
-      "srcLarge": "/uploads/content-1793396237721-0fe00316.png",
-      "num": "07",
+      "category": "reels-shoots",
+      "categorySlug": "reels-shoots",
+      "image": "/uploads/content-1793397408004-e19d218a.png",
+      "src": "/uploads/content-1793397408004-e19d218a.png",
+      "srcLarge": "/uploads/content-1793397408004-e19d218a.png",
+      "num": "01",
       "order": 103,
       "published": true,
-      "createdAt": "2026-10-30T21:37:17.855Z",
-      "updatedAt": "2026-10-30T21:37:17.902Z"
+      "createdAt": "2026-10-30T21:56:48.118Z",
+      "updatedAt": "2026-10-30T21:56:48.193Z"
     }
   ]
 }

@@ -6,6 +6,7 @@ import { dirname, join, extname } from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import { authenticateToken } from '../middleware/auth.js'
 import { logActivity } from '../utils/activity.js'
+import { processImageUpload, removeLocalUpload } from '../utils/storage.js'
 
 const router = express.Router()
 const __filename = fileURLToPath(import.meta.url)
@@ -191,7 +192,7 @@ router.post(
   '/',
   authenticateToken,
   upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'photos', maxCount: 20 }]),
-  (req, res) => {
+  async (req, res) => {
     try {
       const data = readPhotos()
       const { title, desc, alt, category, order, published, src } = req.body
@@ -210,11 +211,10 @@ router.post(
       const createdPhotos = []
 
       if (uploadedFiles.length > 0) {
-        uploadedFiles.forEach((file, index) => {
-          try {
-            copyFileSync(file.path, join(publicUploadsPath, file.filename))
-          } catch (e) {}
-          const fileUrl = `/uploads/${file.filename}`
+        for (let index = 0; index < uploadedFiles.length; index++) {
+          const file = uploadedFiles[index]
+          const uploadResult = await processImageUpload(file, { folder: `josh_portfolio/${targetCategory}` })
+          const fileUrl = uploadResult.url
           const photoTitle =
             uploadedFiles.length === 1 && title
               ? title
@@ -237,7 +237,7 @@ router.post(
           }
           data.photos.push(newPhoto)
           createdPhotos.push(newPhoto)
-        })
+        }
       } else if (src) {
         const photoTitle = title || 'New Photograph'
         const newPhoto = {
@@ -426,14 +426,7 @@ router.delete('/:id', authenticateToken, (req, res) => {
     const photo = data.photos[index]
 
     // Delete local file if in /uploads/
-    if (photo.src && photo.src.startsWith('/uploads/')) {
-      const filePath = join(__dirname, '..', photo.src)
-      if (existsSync(filePath)) {
-        try {
-          unlinkSync(filePath)
-        } catch (e) {}
-      }
-    }
+    removeLocalUpload(photo.src || photo.image)
 
     data.photos.splice(index, 1)
     writePhotos(data)

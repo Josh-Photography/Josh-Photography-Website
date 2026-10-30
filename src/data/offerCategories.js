@@ -153,7 +153,18 @@ const CATEGORY_MAP = OFFER_CATEGORIES.reduce((acc, cat) => {
 
 // Aliases for backward compatibility and alternate slugs
 CATEGORY_MAP['baby-newborn-maternity'] = CATEGORY_MAP['baby-family']
+CATEGORY_MAP['baby-and-family'] = CATEGORY_MAP['baby-family']
 CATEGORY_MAP['christmas'] = CATEGORY_MAP['festivals']
+CATEGORY_MAP['cultural-celebrations'] = CATEGORY_MAP['festivals']
+CATEGORY_MAP['birthday-photography'] = CATEGORY_MAP['birthdays']
+CATEGORY_MAP['birthdays-shoot'] = CATEGORY_MAP['birthdays']
+CATEGORY_MAP['pre-wedding'] = CATEGORY_MAP['engagement']
+CATEGORY_MAP['engagement-shoot'] = CATEGORY_MAP['engagement']
+CATEGORY_MAP['anniversary-shoot'] = CATEGORY_MAP['anniversary']
+CATEGORY_MAP['portraits'] = CATEGORY_MAP['corporate-events']
+CATEGORY_MAP['corporate'] = CATEGORY_MAP['corporate-events']
+CATEGORY_MAP['graduation'] = CATEGORY_MAP['graduations']
+CATEGORY_MAP['graduation-photography'] = CATEGORY_MAP['graduations']
 CATEGORY_MAP['sports-photography'] = CATEGORY_MAP['sports-shoot']
 CATEGORY_MAP['product-photography'] = CATEGORY_MAP['product-shoot']
 CATEGORY_MAP['car-photography'] = CATEGORY_MAP['car-shoot']

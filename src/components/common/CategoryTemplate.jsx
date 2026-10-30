@@ -85,19 +85,25 @@ export default function CategoryTemplate({
   return (
     <div className="bg-[#F8F3EA]">
       {/* ── Hero Banner ── */}
-      <section className="relative min-h-[85vh] lg:min-h-[92vh] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[90vh] lg:min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src={heroImg}
             alt={title || categoryData?.name}
             style={{ objectPosition: resolvedHeroPos }}
             className="w-full h-full object-cover scale-105 animate-ken-burns"
+            onError={(e) => {
+              const fallback = categoryData?.heroImage || '/images/hero-church-wedding.jpg'
+              if (e.target.src !== fallback) {
+                e.target.src = fallback
+              }
+            }}
           />
           <div
             className="absolute inset-0"
             style={{
               background:
-                'linear-gradient(180deg, rgba(28, 15, 8, 0.40) 0%, rgba(28, 15, 8, 0.25) 45%, rgba(20, 12, 7, 0.72) 100%)',
+                'linear-gradient(180deg, rgba(28, 22, 18, 0.45) 0%, rgba(28, 22, 18, 0.28) 45%, rgba(20, 14, 10, 0.82) 100%)',
             }}
           />
         </div>
@@ -116,7 +122,7 @@ export default function CategoryTemplate({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-[5rem] text-[#F8F3EA] font-light tracking-wide max-w-5xl mx-auto mb-6 leading-[1.1] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+            className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] text-[#F8F3EA] font-light tracking-wide max-w-5xl mx-auto mb-6 leading-[1.08] drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
           >
             {title || categoryData?.name}
           </motion.h1>
@@ -125,7 +131,7 @@ export default function CategoryTemplate({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-[#F8F3EA]/90 text-base sm:text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed mb-10 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]"
+            className="text-[#F8F3EA]/90 text-base sm:text-lg md:text-xl font-light max-w-3xl mx-auto leading-relaxed mb-10 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
           >
             {tagline || categoryData?.headline || categoryData?.subheadline}
           </motion.p>
@@ -153,6 +159,12 @@ export default function CategoryTemplate({
               Chat on WhatsApp
             </a>
           </motion.div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 text-[#F8F3EA]/70 pointer-events-none">
+          <span className="text-[10px] uppercase tracking-[0.25em] font-nav">SCROLL TO EXPLORE</span>
+          <div className="w-[1px] h-7 bg-gradient-to-b from-[#D8B77A] to-transparent animate-pulse" />
         </div>
       </section>
 
