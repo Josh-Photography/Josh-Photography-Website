@@ -114,15 +114,15 @@
     "storyQuote": "Every unspoken breath, preserved forever.",
     "stats": [
       {
-        "value": "200+",
+        "value": "250+",
         "label": "Weddings Captured"
       },
       {
-        "value": "200+",
+        "value": "250+",
         "label": "Happy Families"
       },
       {
-        "value": "150+",
+        "value": "200+",
         "label": "Celebrations Covered"
       },
       {
@@ -176,6 +176,20 @@
     ]
   },
   "heroSlides": [
+    {
+      "id": 10,
+      "shortName": "Father's Day",
+      "category": "Father's Day Photography",
+      "badge": "10 / 12 — PILLARS OF OUR LIVES",
+      "image": "/uploads/content-1793395933125-529059e4.png",
+      "title": "Strength, Guidance & Warmth",
+      "subtitle": "Capturing Camaraderie, Quiet Pride & Lifelong Bonds",
+      "alt": "Proud father with children sharing joyful candid moments outdoors",
+      "explorePath": "/fathers-day",
+      "exploreText": "Explore Father's Day",
+      "order": 10,
+      "published": true
+    },
     {
       "id": 1,
       "shortName": "Weddings",
@@ -300,20 +314,6 @@
       "explorePath": "/mothers-day",
       "exploreText": "Explore Mother's Day",
       "order": 9,
-      "published": true
-    },
-    {
-      "id": 10,
-      "shortName": "Father's Day",
-      "category": "Father's Day Photography",
-      "badge": "10 / 12 — PILLARS OF OUR LIVES",
-      "image": "/images/fatherday-img-3.jpg",
-      "title": "Strength, Guidance & Warmth",
-      "subtitle": "Capturing Camaraderie, Quiet Pride & Lifelong Bonds",
-      "alt": "Proud father with children sharing joyful candid moments outdoors",
-      "explorePath": "/fathers-day",
-      "exploreText": "Explore Father's Day",
-      "order": 10,
       "published": true
     },
     {

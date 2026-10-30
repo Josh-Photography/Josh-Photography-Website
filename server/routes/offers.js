@@ -1,6 +1,6 @@
 import express from 'express'
 import multer from 'multer'
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join, extname } from 'path'
 import { v4 as uuidv4 } from 'uuid'
@@ -12,9 +12,13 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const offersPath = join(__dirname, '../data/offers.json')
 const uploadsPath = join(__dirname, '../uploads')
+const publicUploadsPath = join(__dirname, '../../public/uploads')
 
 if (!existsSync(uploadsPath)) {
   mkdirSync(uploadsPath, { recursive: true })
+}
+if (!existsSync(publicUploadsPath)) {
+  mkdirSync(publicUploadsPath, { recursive: true })
 }
 
 const storage = multer.diskStorage({
@@ -200,6 +204,11 @@ router.post('/upload', authenticateToken, upload.single('image'), (req, res) => 
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No promotional image file uploaded' })
+    }
+    try {
+      copyFileSync(req.file.path, join(publicUploadsPath, req.file.filename))
+    } catch (err) {
+      console.warn('Could not mirror upload to public/uploads:', err)
     }
     const url = `/uploads/${req.file.filename}`
     logActivity(`Uploaded promotional banner: ${req.file.originalname}`)

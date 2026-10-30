@@ -949,6 +949,15 @@ function HeroEditor({ data, onSave, saving, token }) {
     }
   }
 
+  const moveSlide = (fromIndex, toIndex) => {
+    setSlides((prev) => {
+      const copy = [...prev]
+      const [item] = copy.splice(fromIndex, 1)
+      copy.splice(toIndex, 0, item)
+      return copy
+    })
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     onSave(slides)
@@ -974,13 +983,48 @@ function HeroEditor({ data, onSave, saving, token }) {
             <div key={slide.id || index} className="admin-card">
               <div className="admin-card__header">
                 <h4>Slide {index + 1}: {slide.title || 'Untitled'}</h4>
-                <button
-                  type="button"
-                  className="admin-btn admin-btn--danger admin-btn--small"
-                  onClick={() => removeSlide(index)}
-                >
-                  Remove
-                </button>
+                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                  {index > 0 && (
+                    <button
+                      type="button"
+                      className="admin-btn admin-btn--secondary admin-btn--small"
+                      style={{ fontSize: '0.75rem', padding: '0.3rem 0.65rem', color: 'var(--admin-accent)' }}
+                      onClick={() => moveSlide(index, 0)}
+                      title="Set as First Slide on Homepage"
+                    >
+                      ★ Make First
+                    </button>
+                  )}
+                  {index > 0 && (
+                    <button
+                      type="button"
+                      className="admin-btn admin-btn--secondary admin-btn--small"
+                      style={{ fontSize: '0.8rem', padding: '0.3rem 0.6rem' }}
+                      onClick={() => moveSlide(index, index - 1)}
+                      title="Move Up"
+                    >
+                      ↑
+                    </button>
+                  )}
+                  {index < slides.length - 1 && (
+                    <button
+                      type="button"
+                      className="admin-btn admin-btn--secondary admin-btn--small"
+                      style={{ fontSize: '0.8rem', padding: '0.3rem 0.6rem' }}
+                      onClick={() => moveSlide(index, index + 1)}
+                      title="Move Down"
+                    >
+                      ↓
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn--danger admin-btn--small"
+                    onClick={() => removeSlide(index)}
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
 
               <div className="admin-grid">

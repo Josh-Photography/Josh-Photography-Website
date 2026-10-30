@@ -1,6 +1,6 @@
 import express from 'express'
 import multer from 'multer'
-import { readFileSync, writeFileSync, existsSync, mkdirSync, unlinkSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync, mkdirSync, unlinkSync, copyFileSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join, extname } from 'path'
 import { v4 as uuidv4 } from 'uuid'
@@ -12,10 +12,14 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const photosPath = join(__dirname, '../data/photos.json')
 const uploadsPath = join(__dirname, '../uploads')
+const publicUploadsPath = join(__dirname, '../../public/uploads')
 
 // Ensure uploads directory exists
 if (!existsSync(uploadsPath)) {
   mkdirSync(uploadsPath, { recursive: true })
+}
+if (!existsSync(publicUploadsPath)) {
+  mkdirSync(publicUploadsPath, { recursive: true })
 }
 
 // Configure multer for file uploads
@@ -195,6 +199,9 @@ router.post(
 
       if (uploadedFiles.length > 0) {
         uploadedFiles.forEach((file, index) => {
+          try {
+            copyFileSync(file.path, join(publicUploadsPath, file.filename))
+          } catch (e) {}
           const fileUrl = `/uploads/${file.filename}`
           const photoTitle =
             uploadedFiles.length === 1 && title
@@ -334,6 +341,9 @@ router.put('/:id', authenticateToken, upload.single('photo'), (req, res) => {
           } catch (e) {}
         }
       }
+      try {
+        copyFileSync(req.file.path, join(publicUploadsPath, req.file.filename))
+      } catch (e) {}
       const newUrl = `/uploads/${req.file.filename}`
       updates.src = newUrl
       updates.srcLarge = newUrl
