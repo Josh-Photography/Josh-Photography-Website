@@ -27,6 +27,7 @@ export default function Footer() {
     { label: 'About', path: '/about' },
     { label: 'Photography', path: '/portfolio' },
     { label: 'Weddings', path: '/weddings' },
+    { label: 'Special Offers', path: '/special-offers' },
     { label: 'Client Testimonials', path: '/testimonials' },
     { label: 'Contact', path: '/contact' },
     { label: 'Check Availability', path: '/check-availability' },
@@ -191,7 +192,7 @@ export default function Footer() {
               Terms
             </Link>
             <span className="text-[0.7rem] text-ivory/40 tracking-wider flex items-center gap-1">
-              Greater London & Across the UK
+              Northampton & Across the UK
             </span>
           </div>
         </div>

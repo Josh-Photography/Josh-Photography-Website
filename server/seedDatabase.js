@@ -370,36 +370,20 @@ const contentData = {
       order: 5,
       published: true,
     },
-  ],
-  collaborators: [
     {
-      id: 1,
-      name: 'Josh',
-      role: 'Lead Photographer & Founder',
-      bio: 'Over a decade documenting luxury weddings, candid celebrations, and multi-generational heirloom portraits across the United Kingdom.',
-      image:
-        'https://images.unsplash.com/photo-1556157382-97eda2d62296?w=900&q=80',
-      social: {
-        instagram: 'https://instagram.com/joshphotography.uk',
-        whatsapp: '+447988827057',
-      },
-      order: 1,
-      published: true,
-    },
-    {
-      id: 2,
-      name: 'Elena Vance',
-      role: 'Associate Photographer & Lighting Specialist',
-      bio: 'Specialist in candid photojournalism, multi-angle ceremony coverage, and soft ambient light portraits.',
-      image:
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=85',
-      social: {
-        instagram: 'https://instagram.com/joshphotography.uk',
-      },
-      order: 2,
+      id: 6,
+      name: 'Sophie & Alexander',
+      event: 'Secret Proposal & Golden Hour Engagement',
+      location: 'Surrey Hills Estate, UK',
+      rating: 5,
+      review:
+        'Josh helped coordinate the surprise proposal timing and secret vantage point flawlessly. The raw emotion captured in the golden hour light is beyond anything we imagined. Truly unforgettable artistry.',
+      image: '/images/engagement-img-1.jpg',
+      order: 6,
       published: true,
     },
   ],
+  collaborators: [],
   social: {
     instagram: {
       url: 'https://instagram.com/joshphotography.uk',

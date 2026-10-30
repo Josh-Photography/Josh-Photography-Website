@@ -23,8 +23,21 @@ const DARK_HERO_ROUTES = [
   '/family',
   '/maternity',
   '/graduations',
+  '/sports-photography',
+  '/sports-shoot',
+  '/product-photography',
+  '/product-shoot',
+  '/car-photography',
+  '/car-shoot',
+  '/cars-shoot',
+  '/reels-shoots',
+  '/reels-shoot',
+  '/model-photography',
+  '/model-shoot',
   '/portfolio',
   '/films',
+  '/special-offers',
+  '/offers',
   '/testimonials',
   '/about',
   '/contact',
@@ -119,16 +132,16 @@ export default function Navbar() {
           backgroundColor: isLightMode ? '#F8F3EA' : undefined,
         }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ease-luxury ${isLightMode
-            ? 'bg-ivory border-b border-[#D8B77A]/35 shadow-[0_4px_24px_rgba(41,37,34,0.06)] py-4'
-            : 'bg-gradient-to-b from-[#181310]/90 via-[#181310]/40 to-transparent py-5'
+          ? 'bg-ivory border-b border-[#D8B77A]/35 shadow-[0_4px_24px_rgba(41,37,34,0.06)] py-4'
+          : 'bg-gradient-to-b from-[#181310]/90 via-[#181310]/40 to-transparent py-5'
           }`}
       >
         <div
           ref={navContainerRef}
-          className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 flex items-center justify-between gap-3 lg:gap-4 xl:gap-6"
+          className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-6 xl:px-10 flex items-center justify-between gap-2 lg:gap-3 xl:gap-5"
         >
           {/* Column 1: Logo & Studio Name (Left Aligned) */}
-          <div className="flex-shrink-0 flex items-center">
+          <div className="shrink-0 flex items-center">
             <Link
               to="/"
               className="group flex items-center gap-2 sm:gap-2.5 xl:gap-3"
@@ -137,12 +150,12 @@ export default function Navbar() {
               <img
                 src={isLightMode ? lightLogo : darkLogo}
                 alt={studioName}
-                className="h-8 sm:h-9 lg:h-8 xl:h-9 2xl:h-10 w-auto object-contain transition-all duration-300 group-hover:scale-105"
+                className="h-10 sm:h-12 lg:h-11 xl:h-14 w-auto object-contain transition-all duration-300 group-hover:scale-105 shrink-0"
               />
               <span
-                className={`font-serif text-lg sm:text-xl lg:text-[1.2rem] xl:text-[1.42rem] 2xl:text-[1.6rem] tracking-[0.06em] sm:tracking-[0.08em] uppercase whitespace-nowrap transition-colors duration-300 font-normal ${isLightMode
-                    ? 'text-charcoal'
-                    : 'text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'
+                className={`font-serif text-base sm:text-lg lg:text-[1.05rem] xl:text-[1.28rem] 2xl:text-[1.48rem] tracking-[0.05em] xl:tracking-[0.07em] uppercase whitespace-nowrap transition-colors duration-300 font-normal shrink-0 ${isLightMode
+                  ? 'text-charcoal'
+                  : 'text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'
                   }`}
               >
                 {String(studioName || 'Josh Photography').toUpperCase()}
@@ -150,9 +163,9 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Column 2: Navigation Links (Centered in remaining space) */}
+          {/* Column 2: Navigation Links (Centered with balanced spacing) */}
           <nav
-            className="hidden lg:flex items-center justify-center gap-0.5 sm:gap-1 xl:gap-2 2xl:gap-3 flex-1 min-w-0"
+            className="hidden lg:flex items-center justify-center gap-0.5 lg:gap-1 xl:gap-2 2xl:gap-3 flex-1 min-w-0 mx-1 lg:mx-2 xl:mx-4"
             role="navigation"
             aria-label="Main navigation"
           >
@@ -160,10 +173,19 @@ export default function Navbar() {
               const hasChildren = Boolean(item.children && item.children.length > 0)
               const isOpen = activeDropdown === item.path
 
+              // Responsive label: on tighter desktop screens, shorten "Client Testimonials" to "Testimonials"
+              const displayLabel = item.label === 'Client Testimonials' ? (
+                <span>
+                  <span className="hidden xl:inline">CLIENT </span>TESTIMONIALS
+                </span>
+              ) : (
+                item.label
+              )
+
               return (
                 <div
                   key={item.path}
-                  className="relative flex-shrink-0"
+                  className="relative shrink-0"
                   onMouseEnter={() => hasChildren && setActiveDropdown(item.path)}
                   onMouseLeave={() => hasChildren && setActiveDropdown(null)}
                 >
@@ -173,34 +195,34 @@ export default function Navbar() {
                       onClick={() => setActiveDropdown(null)}
                       aria-expanded={isOpen}
                       aria-haspopup="true"
-                      className={`px-2 py-1.5 lg:px-2.5 xl:px-3.5 xl:py-2 font-nav text-[12px] xl:text-[13.5px] uppercase tracking-[0.08em] xl:tracking-[0.14em] transition-all duration-300 flex items-center gap-1 xl:gap-1.5 cursor-pointer rounded-sm whitespace-nowrap ${isOpen || isActive(item.path)
-                          ? isLightMode
-                            ? 'text-gold font-bold'
-                            : 'text-[#E5BA78] font-bold drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
-                          : isLightMode
-                            ? 'text-charcoal font-semibold hover:text-gold'
-                            : 'text-ivory font-medium hover:text-[#E5BA78] drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
+                      className={`px-1.5 py-1 lg:px-2 lg:py-1.5 xl:px-3 xl:py-2 font-nav text-[11px] lg:text-[11.5px] xl:text-[13px] 2xl:text-[13.5px] uppercase tracking-[0.05em] lg:tracking-[0.06em] xl:tracking-[0.1em] transition-all duration-300 flex items-center gap-1 cursor-pointer rounded-sm whitespace-nowrap ${isOpen || isActive(item.path)
+                        ? isLightMode
+                          ? 'text-gold font-bold'
+                          : 'text-[#E5BA78] font-bold drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
+                        : isLightMode
+                          ? 'text-charcoal font-semibold hover:text-gold'
+                          : 'text-ivory font-medium hover:text-[#E5BA78] drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
                         }`}
                     >
-                      <span>{item.label}</span>
+                      <span>{displayLabel}</span>
                       <ChevronDown
-                        className={`w-3.5 h-3.5 transition-transform duration-300 ${isOpen ? 'rotate-180 text-gold' : 'opacity-80'
+                        className={`w-3 h-3 xl:w-3.5 xl:h-3.5 transition-transform duration-300 shrink-0 ${isOpen ? 'rotate-180 text-gold' : 'opacity-80'
                           }`}
                       />
                     </Link>
                   ) : (
                     <Link
                       to={item.path}
-                      className={`px-2 py-1.5 lg:px-2.5 xl:px-3.5 xl:py-2 font-nav text-[12px] xl:text-[13.5px] uppercase tracking-[0.08em] xl:tracking-[0.14em] transition-all duration-300 flex items-center gap-1 rounded-sm whitespace-nowrap ${isActive(item.path)
-                          ? isLightMode
-                            ? 'text-gold font-bold'
-                            : 'text-[#E5BA78] font-bold drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
-                          : isLightMode
-                            ? 'text-charcoal font-semibold hover:text-gold'
-                            : 'text-ivory font-medium hover:text-[#E5BA78] drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
+                      className={`px-1.5 py-1 lg:px-2 lg:py-1.5 xl:px-3 xl:py-2 font-nav text-[11px] lg:text-[11.5px] xl:text-[13px] 2xl:text-[13.5px] uppercase tracking-[0.05em] lg:tracking-[0.06em] xl:tracking-[0.1em] transition-all duration-300 flex items-center gap-1 rounded-sm whitespace-nowrap ${isActive(item.path)
+                        ? isLightMode
+                          ? 'text-gold font-bold'
+                          : 'text-[#E5BA78] font-bold drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
+                        : isLightMode
+                          ? 'text-charcoal font-semibold hover:text-gold'
+                          : 'text-ivory font-medium hover:text-[#E5BA78] drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]'
                         }`}
                     >
-                      <span>{item.label}</span>
+                      <span>{displayLabel}</span>
                     </Link>
                   )}
 
@@ -213,7 +235,7 @@ export default function Navbar() {
                         exit={{ opacity: 0, y: 6, scale: 0.98 }}
                         transition={{ duration: 0.2, ease: 'easeOut' }}
                         style={{ backgroundColor: '#F8F3EA' }}
-                        className="absolute top-full left-1/2 -translate-x-1/2 mt-2 min-w-[280px] sm:min-w-[300px] bg-ivory border border-[#D8B77A]/60 shadow-[0_16px_40px_rgba(41,37,34,0.18)] py-2.5 z-[70] rounded-sm"
+                        className="absolute top-full left-1/2 -translate-x-1/2 mt-2 min-w-[280px] sm:min-w-[310px] max-h-[75vh] overflow-y-auto bg-ivory border border-[#D8B77A]/60 shadow-[0_16px_40px_rgba(41,37,34,0.18)] py-2.5 z-[70] rounded-sm"
                       >
                         {item.children.map((child) => (
                           <Link
@@ -221,8 +243,8 @@ export default function Navbar() {
                             to={child.path}
                             onClick={() => setActiveDropdown(null)}
                             className={`flex items-center justify-between px-5 py-3 font-nav text-[14px] tracking-[0.04em] font-medium transition-all duration-200 border-l-2 group ${isActive(child.path)
-                                ? 'border-gold text-gold bg-[#F3ECE0]'
-                                : 'border-transparent text-charcoal/90 hover:text-charcoal hover:bg-[#F3ECE0] hover:border-gold/80 hover:pl-6'
+                              ? 'border-gold text-gold bg-[#F3ECE0]'
+                              : 'border-transparent text-charcoal/90 hover:text-charcoal hover:bg-[#F3ECE0] hover:border-gold/80 hover:pl-6'
                               }`}
                           >
                             <span>{child.label}</span>
@@ -238,12 +260,12 @@ export default function Navbar() {
           </nav>
 
           {/* Column 3: Check Availability Button (Right Aligned) */}
-          <div className="flex-shrink-0 flex items-center justify-end gap-2">
+          <div className="shrink-0 flex items-center justify-end gap-2">
             <Link
               to={ctaLink}
-              className={`hidden lg:inline-flex items-center justify-center whitespace-nowrap px-3.5 py-1.5 lg:px-4 lg:py-2 xl:px-6 xl:py-2.5 font-nav text-[11px] lg:text-[12px] xl:text-[13px] uppercase tracking-[0.1em] lg:tracking-[0.14em] xl:tracking-[0.16em] font-semibold transition-all duration-300 border shadow-sm rounded-sm ${isLightMode
-                  ? 'border-[#292522] text-[#292522] hover:bg-[#292522] hover:text-[#FAF6EE]'
-                  : 'border-[#E5BA78] text-[#E5BA78] hover:bg-[#E5BA78] hover:text-[#1A1715] backdrop-blur-sm bg-black/25'
+              className={`hidden lg:inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 lg:px-3.5 lg:py-2 xl:px-5 xl:py-2.5 font-nav text-[11px] lg:text-[11.5px] xl:text-[12.5px] uppercase tracking-[0.08em] lg:tracking-[0.1em] xl:tracking-[0.14em] font-semibold transition-all duration-300 border shadow-sm rounded-sm shrink-0 ${isLightMode
+                ? 'border-[#292522] text-[#292522] hover:bg-[#292522] hover:text-[#FAF6EE]'
+                : 'border-[#E5BA78] text-[#E5BA78] hover:bg-[#E5BA78] hover:text-[#1A1715] backdrop-blur-sm bg-black/25'
                 }`}
             >
               {ctaText}
@@ -280,7 +302,7 @@ export default function Navbar() {
                 <img
                   src={lightLogo}
                   alt={studioName}
-                  className="h-8 w-auto object-contain"
+                  className="h-12 w-auto object-contain" style={{ filter: 'brightness(0)' }}
                 />
                 <span className="font-serif text-xl text-charcoal font-medium tracking-[0.08em] uppercase">
                   {String(studioName || 'Josh Photography').toUpperCase()}

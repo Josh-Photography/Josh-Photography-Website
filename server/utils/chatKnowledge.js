@@ -25,7 +25,7 @@ export const OFFICIAL_PACKAGES = [
     ],
     bestFor: 'Smaller gatherings, intimate birthdays, civil ceremonies, maternity and newborn portraits',
     popular: false,
-    ctaPath: '/packages',
+    ctaPath: '/check-availability',
   },
   {
     id: 'premium',
@@ -45,7 +45,7 @@ export const OFFICIAL_PACKAGES = [
     ],
     bestFor: 'Full wedding days, grand milestone birthdays, and full-scale celebrations (Our Most Popular Choice)',
     popular: true,
-    ctaPath: '/packages',
+    ctaPath: '/check-availability',
   },
   {
     id: 'signature',
@@ -67,7 +67,7 @@ export const OFFICIAL_PACKAGES = [
     ],
     bestFor: 'Luxury weddings, estate celebrations, multi-day functions, and couples seeking the ultimate heirloom legacy',
     popular: false,
-    ctaPath: '/packages',
+    ctaPath: '/check-availability',
   },
 ]
 

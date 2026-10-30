@@ -18,6 +18,9 @@ export default function CategoryTemplate({
   features = [],
   quote,
   quoteImage,
+  heroPosition,
+  quoteImagePosition,
+  cardAspectRatio,
 }) {
   const [selectedImage, setSelectedImage] = useState(null)
   const { getCategoryCards, data, studio = {} } = useWebsiteData()
@@ -32,6 +35,37 @@ export default function CategoryTemplate({
   const categoryCards = (dynamicCards && (dynamicCards.length > 0 || hasLoadedData)) ? dynamicCards : (categoryData?.cards || [])
 
   const heroImg = categoryData?.heroImage || quoteImage || '/images/hero-church-wedding.jpg'
+
+  // Focal position resolution for Hero so faces and athletes are never cropped
+  const getHeroFocalPosition = (img, explicitPos) => {
+    if (explicitPos) return explicitPos
+    if (categoryData?.heroPosition) return categoryData.heroPosition
+    const s = String(img || '').toLowerCase()
+    if (s.includes('model_shoot_1')) return 'center 18%'
+    if (s.includes('model_shoot_')) return 'center 20%'
+    if (s.includes('sports_shoot_1')) return 'center 18%'
+    if (s.includes('sports_shoot_')) return 'center 20%'
+    if (s.includes('reel_shoot_1')) return 'center 20%'
+    if (s.includes('reel_shoot_')) return 'center 25%'
+    if (s.includes('car_shoot_1')) return 'center 60%'
+    if (s.includes('car_shoot_')) return 'center 60%'
+    if (s.includes('product_shoot_1')) return 'center 45%'
+    return 'center center'
+  }
+  const resolvedHeroPos = getHeroFocalPosition(heroImg, heroPosition)
+
+  // Focal position resolution for Quote Image
+  const quoteImg = quoteImage || categoryCards[1]?.image || heroImg
+  const getQuoteFocalPosition = (img, explicitPos) => {
+    if (explicitPos) return explicitPos
+    if (categoryData?.quoteImagePosition) return categoryData.quoteImagePosition
+    const s = String(img || '').toLowerCase()
+    if (s.includes('model_shoot_')) return 'center 18%'
+    if (s.includes('sports_shoot_')) return 'center 18%'
+    if (s.includes('reel_shoot_')) return 'center 18%'
+    return 'center center'
+  }
+  const resolvedQuotePos = getQuoteFocalPosition(quoteImg, quoteImagePosition)
 
   const lightboxImages = categoryCards.map((c, i) => ({
     id: `${categoryId}-${c.id || i}`,
@@ -50,6 +84,7 @@ export default function CategoryTemplate({
           <img
             src={heroImg}
             alt={title || categoryData?.name}
+            style={{ objectPosition: resolvedHeroPos }}
             className="w-full h-full object-cover scale-105 animate-ken-burns"
           />
           <div
@@ -158,8 +193,9 @@ export default function CategoryTemplate({
             <div className="relative">
               <div className="relative z-10 overflow-hidden shadow-luxury border-4 border-[#F8F3EA]">
                 <img
-                  src={quoteImage || categoryCards[1]?.image || heroImg}
+                  src={quoteImg}
                   alt={title}
+                  style={{ objectPosition: resolvedQuotePos }}
                   className="w-full h-[520px] object-cover"
                 />
               </div>
@@ -207,6 +243,8 @@ export default function CategoryTemplate({
                   desc={card.desc}
                   image={card.image}
                   alt={card.alt}
+                  objectPosition={card.objectPosition || card.imagePosition || categoryData?.cardObjectPosition}
+                  aspectRatio={card.aspectRatio || cardAspectRatio || categoryData?.cardAspectRatio}
                   onImageClick={() => setSelectedImage(lightboxImages[idx])}
                 />
               ))}

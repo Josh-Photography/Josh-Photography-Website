@@ -97,9 +97,12 @@ class DataService {
                 collaborators: (Array.isArray(rawContent.collaborators) && rawContent.collaborators.length > 0) ? rawContent.collaborators : (initialContent.collaborators || []),
                 social: { ...(initialContent.social || {}), ...(rawContent.social || {}) },
                 settings: { ...(initialContent.settings || {}), ...(rawContent.settings || {}) },
+                anotherStudio: { ...(initialContent.anotherStudio || {}), ...(rawContent.anotherStudio || {}) },
               },
               photos: photosList,
               categories: categoriesList,
+              offers: Array.isArray(parsed.offers) ? parsed.offers : (Array.isArray(rawContent.offers) ? rawContent.offers : []),
+              offersSettings: parsed.offersSettings || rawContent.offersSettings || { enabled: true },
             }
             this.memoryCache = normalized
             return normalized
@@ -114,6 +117,8 @@ class DataService {
       content: initialContent,
       photos: Array.isArray(initialPhotos.photos) ? initialPhotos.photos : [],
       categories: Array.isArray(initialPhotos.categories) ? initialPhotos.categories : [],
+      offers: [],
+      offersSettings: { enabled: true },
     }
     this.memoryCache = fallback
     return fallback
@@ -122,13 +127,15 @@ class DataService {
   // Fetch latest data from backend API with cache update
   async refreshAllData() {
     try {
-      const [contentRes, photosRes] = await Promise.all([
+      const [contentRes, photosRes, offersRes] = await Promise.all([
         fetch(`${API_BASE}/content?t=${Date.now()}`, { cache: 'no-store' }).catch(() => null),
         fetch(`${API_BASE}/photos?t=${Date.now()}`, { cache: 'no-store' }).catch(() => null),
+        fetch(`${API_BASE}/offers?t=${Date.now()}`, { cache: 'no-store' }).catch(() => null),
       ])
 
       let content = null
       let photosData = null
+      let offersData = null
 
       if (contentRes && contentRes.ok) {
         content = await contentRes.json()
@@ -136,8 +143,11 @@ class DataService {
       if (photosRes && photosRes.ok) {
         photosData = await photosRes.json()
       }
+      if (offersRes && offersRes.ok) {
+        offersData = await offersRes.json()
+      }
 
-      if (content || photosData) {
+      if (content || photosData || offersData) {
         const current = this.getAllDataSync()
 
         let newPhotos = current.photos
@@ -160,13 +170,22 @@ class DataService {
           content: content || current.content,
           photos: newPhotos,
           categories: newCategories,
+          offers: offersData ? (offersData.offers || []) : (current.offers || []),
+          offersSettings: offersData
+            ? {
+                enabled: offersData.enabled !== false,
+                eyebrow: offersData.eyebrow || 'SPECIAL OFFERS & SEASONAL PROMOTIONS',
+                title: offersData.title || 'Limited-Time Photography Promotions',
+                subtitle: offersData.subtitle || '',
+              }
+            : (current.offersSettings || { enabled: true }),
         }
 
         this.memoryCache = merged
         if (typeof window !== 'undefined') {
           try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
-          } catch (e) {}
+          } catch (e) { }
         }
         this.notify()
         return merged
@@ -230,6 +249,8 @@ class DataService {
       category: p.category,
       order: p.order || idx + 1,
       published: p.published !== false,
+      objectPosition: p.objectPosition || p.imagePosition || null,
+      aspectRatio: p.aspectRatio || null,
     }))
   }
 
@@ -324,7 +345,7 @@ class DataService {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
         window.dispatchEvent(new Event(EVENT_NAME))
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // 2. Persist to backend API if available
@@ -357,7 +378,7 @@ class DataService {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
         window.dispatchEvent(new Event(EVENT_NAME))
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // Persist to backend API if available
@@ -410,7 +431,7 @@ class DataService {
           status: 'unread',
         })
         localStorage.setItem('josh_offline_messages', JSON.stringify(stored))
-      } catch (e) {}
+      } catch (e) { }
     }
 
     return { message: 'Message received successfully', status: 'stored' }

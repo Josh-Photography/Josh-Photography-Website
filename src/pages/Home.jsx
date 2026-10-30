@@ -2,6 +2,7 @@ import Hero from '../components/Hero/Hero'
 import BrandStory from '../components/sections/BrandStory'
 import Categories from '../components/sections/Categories'
 import ServicesSection from '../components/sections/ServicesSection'
+import DeFabStudioSection from '../components/sections/DeFabStudioSection'
 import TestimonialsSection from '../components/sections/TestimonialsSection'
 import BookingCTA from '../components/sections/BookingCTA'
 
@@ -12,6 +13,7 @@ export default function Home() {
       <BrandStory />
       <Categories />
       <ServicesSection />
+      <DeFabStudioSection />
       <TestimonialsSection />
       <BookingCTA />
     </>

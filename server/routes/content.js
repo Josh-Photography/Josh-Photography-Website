@@ -306,4 +306,30 @@ router.put('/stats', authenticateToken, (req, res) => {
   }
 })
 
+// Get/Update another studio (De Fab Studio)
+router.get('/another-studio', (req, res) => {
+  try {
+    const content = readContent()
+    res.json(content.anotherStudio || {})
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to load another studio info' })
+  }
+})
+
+router.put('/another-studio', authenticateToken, (req, res) => {
+  try {
+    const content = readContent()
+    content.anotherStudio = {
+      ...content.anotherStudio,
+      ...req.body,
+    }
+    writeContent(content)
+    logActivity('Updated De Fab Studio Section & Content')
+    res.json(content.anotherStudio)
+  } catch (error) {
+    console.error('Error updating another studio:', error)
+    res.status(500).json({ error: 'Failed to update another studio info' })
+  }
+})
+
 export default router

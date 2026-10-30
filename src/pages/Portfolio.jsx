@@ -135,6 +135,7 @@ export default function Portfolio() {
             key={cat.id}
             category={cat}
             index={index}
+            showCards={false}
           />
         ))}
       </main>

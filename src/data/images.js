@@ -135,6 +135,6 @@ export const categories = [
   { id: 'event', label: 'Events' }
 ]
 
-export const aboutImage = 'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=1000&q=90'
+export const aboutImage = '/Fonder.jpeg'
 
 export const heroVideo = null // Can be set to a video URL if needed

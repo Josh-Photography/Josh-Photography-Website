@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
       reply: 'I’m Hello Chatbot, your photography assistant! I am here to help you with our photography services, packages, bookings, and other website-related questions. Please feel free to ask your question or reach us directly on WhatsApp or call +44 7988 827057.',
       suggestions: ['Wedding Packages & Pricing', 'Birthday Photography', 'Check Availability', 'Contact Details'],
       actions: [
-        { label: 'View Packages', url: '/packages', type: 'internal' },
+        { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
         { label: 'Contact Us', url: '/contact', type: 'internal' },
       ],
     })

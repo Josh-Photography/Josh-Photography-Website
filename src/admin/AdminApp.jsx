@@ -4,6 +4,8 @@ import './admin.css'
 import dataService from '../services/dataService'
 import initialContent from '../../server/data/content.json'
 import initialPhotos from '../../server/data/photos.json'
+import { OFFER_CATEGORIES, getCategoryHeroImage, getCategoryLabel, getCategoryPath } from '../data/offerCategories'
+import PromotionalBadge, { SpecialOfferSticker } from '../components/common/PromotionalBadge'
 
 const API_URL = '/api'
 
@@ -20,6 +22,11 @@ export const PHOTOGRAPHY_CATEGORIES = [
   { id: 'family', label: 'Family Photography' },
   { id: 'maternity', label: 'Maternity Photography' },
   { id: 'graduations', label: 'Graduation Photography' },
+  { id: 'sports-shoot', label: 'Sports Photography' },
+  { id: 'product-shoot', label: 'Product Photography' },
+  { id: 'car-shoot', label: 'Car & Vehicle Photography' },
+  { id: 'reels-shoot', label: 'Reels & Creative Video Shoots' },
+  { id: 'model-shoot', label: 'Model & Fashion Photography' },
 ]
 
 // Convert Google Drive sharing links to direct embed URLs
@@ -567,6 +574,315 @@ function StudioEditor({ data, onSave, saving, token }) {
         <div className="admin-actions">
           <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
             {saving ? 'Saving...' : 'Save Studio Information'}
+          </button>
+        </div>
+      </form>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// De Fab Studio (Another Studio) Section Editor Component
+// ─────────────────────────────────────────────────────────────────────────────
+function DeFabStudioEditor({ data, onSave, saving, token }) {
+  const [formData, setFormData] = useState(() => ({
+    enabled: true,
+    studioName: 'De Fab Studio',
+    eyebrow: 'OUR ANOTHER STUDIO — UNITED KINGDOM',
+    heading: 'Introducing De Fab Studio',
+    subheading: 'A New Space for Extraordinary Stories.',
+    posterImage: '/another_studio.png',
+    paragraphs: [
+      "We are delighted to introduce De Fab Studio, our additional photography studio in the United Kingdom, expanding our commitment to capturing life's most meaningful moments with creativity, artistry, and professionalism.",
+      "From beautiful weddings and engagement sessions to birthdays, anniversaries, maternity shoots, newborn portraits, and family celebrations, we create timeless photographs that preserve genuine emotions and unforgettable memories.",
+      "We also capture graduations, corporate events, professional portraits, and special occasions, including Mother's Day and Father's Day. Every session is approached with thoughtful composition, beautiful lighting, creative direction, and meticulous editing to ensure every photograph tells a meaningful story.",
+      "Whether it is an intimate family gathering or a grand celebration, our goal is to preserve the moments that matter most, creating photographs you and your loved ones will treasure for generations."
+    ],
+    tagline: 'Every Moment Has a Story. Let Us Capture Yours.',
+    exploreButtonText: 'Explore Our Studio',
+    exploreButtonLink: '/portfolio',
+    availabilityButtonText: 'Check Availability',
+    availabilityButtonLink: '/check-availability',
+    ...(data || {})
+  }))
+
+  const [paragraphsText, setParagraphsText] = useState(() => {
+    const p = data?.paragraphs || [
+      "We are delighted to introduce De Fab Studio, our additional photography studio in the United Kingdom, expanding our commitment to capturing life's most meaningful moments with creativity, artistry, and professionalism.",
+      "From beautiful weddings and engagement sessions to birthdays, anniversaries, maternity shoots, newborn portraits, and family celebrations, we create timeless photographs that preserve genuine emotions and unforgettable memories.",
+      "We also capture graduations, corporate events, professional portraits, and special occasions, including Mother's Day and Father's Day. Every session is approached with thoughtful composition, beautiful lighting, creative direction, and meticulous editing to ensure every photograph tells a meaningful story.",
+      "Whether it is an intimate family gathering or a grand celebration, our goal is to preserve the moments that matter most, creating photographs you and your loved ones will treasure for generations."
+    ]
+    return Array.isArray(p) ? p.join('\n\n') : String(p || '')
+  })
+
+  const [uploadingPoster, setUploadingPoster] = useState(false)
+  const [showLivePreview, setShowLivePreview] = useState(true)
+
+  useEffect(() => {
+    if (data) {
+      setFormData((prev) => ({ ...prev, ...data }))
+      if (data.paragraphs) {
+        setParagraphsText(Array.isArray(data.paragraphs) ? data.paragraphs.join('\n\n') : String(data.paragraphs))
+      }
+    }
+  }, [data])
+
+  const handlePosterFileUpload = async (file) => {
+    if (!file) return
+    setUploadingPoster(true)
+    try {
+      const url = await uploadImageFile(file, token)
+      if (url) {
+        setFormData((prev) => ({ ...prev, posterImage: url }))
+      }
+    } catch (err) {
+      console.error('Failed to upload poster:', err)
+    } finally {
+      setUploadingPoster(false)
+    }
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const parsedParagraphs = paragraphsText
+      .split('\n\n')
+      .map((p) => p.trim())
+      .filter(Boolean)
+
+    onSave({
+      ...formData,
+      paragraphs: parsedParagraphs.length > 0 ? parsedParagraphs : formData.paragraphs
+    })
+  }
+
+  const currentPoster = formData.posterImage || '/another_studio.png'
+  const currentParagraphs = paragraphsText.split('\n\n').map((p) => p.trim()).filter(Boolean)
+
+  return (
+    <div className="admin-section">
+      <div className="admin-section__header">
+        <h2>De Fab Studio — United Kingdom</h2>
+        <p>Manage the new studio introduction section, promotional poster, editorial descriptions, and action buttons on the homepage</p>
+      </div>
+
+      <form onSubmit={handleSubmit}>
+        {/* Visibility Toggle Card */}
+        <div className="admin-card" style={{ marginBottom: '1.5rem', background: 'rgba(216, 183, 122, 0.05)', border: '1px solid rgba(216, 183, 122, 0.25)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+            <div>
+              <h3 style={{ fontSize: '1rem', color: 'var(--admin-accent)', margin: 0 }}>
+                Homepage Section Visibility
+              </h3>
+              <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: 'var(--admin-text-muted)' }}>
+                Enable or disable displaying the De Fab Studio section between Services and Testimonials on the homepage.
+              </p>
+            </div>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', fontWeight: '500' }}>
+              <input
+                type="checkbox"
+                checked={formData.enabled !== false}
+                onChange={(e) => setFormData((p) => ({ ...p, enabled: e.target.checked }))}
+                style={{ width: '1.25rem', height: '1.25rem', accentColor: 'var(--admin-accent)' }}
+              />
+              <span>{formData.enabled !== false ? 'Section Enabled (Visible)' : 'Section Disabled (Hidden)'}</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Poster Image Management Card */}
+        <div className="admin-card" style={{ marginBottom: '1.5rem' }}>
+          <h3 style={{ fontSize: '1rem', color: 'var(--admin-accent)', marginBottom: '1rem' }}>
+            Promotional Poster Image
+          </h3>
+          <p style={{ fontSize: '0.85rem', color: 'var(--admin-text-muted)', marginBottom: '1rem' }}>
+            Upload or replace the De Fab Studio high-resolution promotional artwork. The image is saved dynamically through the backend API.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', alignItems: 'start' }}>
+            <div>
+              <div className="admin-input-group">
+                <label>Upload / Replace Poster File</label>
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  onChange={(e) => handlePosterFileUpload(e.target.files?.[0])}
+                  disabled={uploadingPoster}
+                />
+                {uploadingPoster && (
+                  <span style={{ fontSize: '0.8rem', color: 'var(--admin-accent)', marginTop: '0.25rem', display: 'block' }}>
+                    Uploading image to server...
+                  </span>
+                )}
+              </div>
+
+              <div className="admin-input-group" style={{ marginTop: '1rem' }}>
+                <label>Or Poster Image URL / Path</label>
+                <input
+                  type="text"
+                  value={formData.posterImage || ''}
+                  onChange={(e) => setFormData((p) => ({ ...p, posterImage: convertGoogleDriveLink(e.target.value) }))}
+                  placeholder="/another_studio.png"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label style={{ fontSize: '0.85rem', color: 'var(--admin-text-muted)', display: 'block', marginBottom: '0.5rem' }}>
+                Current Poster Preview
+              </label>
+              <div
+                style={{
+                  maxWidth: '220px',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                  border: '1px solid rgba(216, 183, 122, 0.4)',
+                  background: '#0a0a0a',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.5)'
+                }}
+              >
+                <img
+                  src={currentPoster}
+                  alt="De Fab Studio Poster"
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Section Titles & Copy Card */}
+        <div className="admin-card" style={{ marginBottom: '1.5rem' }}>
+          <h3 style={{ fontSize: '1rem', color: 'var(--admin-accent)', marginBottom: '1rem' }}>
+            Introduction Text & Headings
+          </h3>
+
+          <div className="admin-grid">
+            <div className="admin-input-group">
+              <label>Studio Name</label>
+              <input
+                type="text"
+                value={formData.studioName || ''}
+                onChange={(e) => setFormData((p) => ({ ...p, studioName: e.target.value }))}
+                placeholder="De Fab Studio"
+                required
+              />
+            </div>
+
+            <div className="admin-input-group">
+              <label>Section Eyebrow</label>
+              <input
+                type="text"
+                value={formData.eyebrow || ''}
+                onChange={(e) => setFormData((p) => ({ ...p, eyebrow: e.target.value }))}
+                placeholder="OUR NEW STUDIO — UNITED KINGDOM"
+              />
+            </div>
+
+            <div className="admin-input-group">
+              <label>Section Heading</label>
+              <input
+                type="text"
+                value={formData.heading || ''}
+                onChange={(e) => setFormData((p) => ({ ...p, heading: e.target.value }))}
+                placeholder="Introducing De Fab Studio"
+                required
+              />
+            </div>
+
+            <div className="admin-input-group">
+              <label>Section Subheading</label>
+              <input
+                type="text"
+                value={formData.subheading || ''}
+                onChange={(e) => setFormData((p) => ({ ...p, subheading: e.target.value }))}
+                placeholder="A New Space for Extraordinary Stories."
+              />
+            </div>
+
+            <div className="admin-input-group admin-input-group--full">
+              <label>Introduction Narrative (Separate paragraphs with a blank line)</label>
+              <textarea
+                rows={9}
+                value={paragraphsText}
+                onChange={(e) => setParagraphsText(e.target.value)}
+                placeholder="Write the introduction paragraphs here..."
+                required
+                style={{ lineHeight: '1.6' }}
+              />
+              <span style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)', marginTop: '0.25rem', display: 'block' }}>
+                Tip: Press Enter twice to create a new paragraph.
+              </span>
+            </div>
+
+            <div className="admin-input-group admin-input-group--full">
+              <label>Closing Tagline</label>
+              <input
+                type="text"
+                value={formData.tagline || ''}
+                onChange={(e) => setFormData((p) => ({ ...p, tagline: e.target.value }))}
+                placeholder="Every Moment Has a Story. Let Us Capture Yours."
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Live Preview Before Saving */}
+        <div className="admin-card" style={{ marginBottom: '2rem', background: '#0a0908', border: '1px solid rgba(216, 183, 122, 0.3)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h3 style={{ fontSize: '1rem', color: 'var(--admin-accent)', margin: 0 }}>
+              Live Section Preview (Before Saving)
+            </h3>
+            <button
+              type="button"
+              className="admin-btn admin-btn--secondary"
+              style={{ fontSize: '0.75rem', padding: '0.3rem 0.75rem' }}
+              onClick={() => setShowLivePreview(!showLivePreview)}
+            >
+              {showLivePreview ? 'Hide Preview' : 'Show Preview'}
+            </button>
+          </div>
+
+          {showLivePreview && (
+            <div style={{ padding: '1.5rem', background: '#0e0c0a', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', alignItems: 'center' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <img
+                    src={currentPoster}
+                    alt="Preview Poster"
+                    style={{ maxHeight: '360px', width: 'auto', maxWidth: '100%', borderRadius: '8px', border: '1px solid rgba(216, 183, 122, 0.4)', margin: '0 auto', boxShadow: '0 12px 32px rgba(0,0,0,0.8)' }}
+                  />
+                </div>
+                <div>
+                  <span style={{ fontSize: '0.75rem', color: '#D8B77A', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 'bold' }}>
+                    {formData.eyebrow}
+                  </span>
+                  <h4 style={{ fontSize: '1.75rem', fontFamily: 'serif', color: '#fff', margin: '0.5rem 0 0.25rem' }}>
+                    {formData.heading}
+                  </h4>
+                  <p style={{ fontStyle: 'italic', color: '#E5BA78', margin: '0 0 1rem', fontSize: '1rem' }}>
+                    {formData.subheading}
+                  </p>
+                  <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.75)', lineHeight: '1.6', maxHeight: '180px', overflowY: 'auto', marginBottom: '1rem', paddingRight: '0.5rem' }}>
+                    {currentParagraphs.map((p, i) => (
+                      <p key={i} style={{ marginBottom: '0.75rem' }}>{p}</p>
+                    ))}
+                  </div>
+                  {formData.tagline && (
+                    <div style={{ padding: '0.75rem', borderLeft: '3px solid #D8B77A', background: 'rgba(255,255,255,0.03)', marginBottom: '1rem', fontStyle: 'italic', color: '#fff', fontSize: '0.9rem' }}>
+                      "{formData.tagline}"
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Submit Actions */}
+        <div className="admin-actions">
+          <button type="submit" className="admin-btn admin-btn--primary" disabled={saving || uploadingPoster}>
+            {saving ? 'Publishing Changes...' : 'Save & Publish De Fab Studio Section'}
           </button>
         </div>
       </form>
@@ -1697,7 +2013,7 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload }) {
               ...(authToken ? { Authorization: `Bearer ${authToken}` } : {})
             }
           })
-        } catch (e) {}
+        } catch (e) { }
 
         const updated = photos.filter((p) => String(p.id) !== String(photoId))
         setPhotos(updated)
@@ -2641,6 +2957,983 @@ function CommentsManager({ data, onApprove, onDelete }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// 13.5 Offers & Promotions Editor (Complete Seasonal Campaigns & Taglines)
+// ─────────────────────────────────────────────────────────────────────────────
+function OffersEditor({ token, showToast }) {
+  const [offersData, setOffersData] = useState({ sectionSettings: { enabled: true }, offers: [] })
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [editingOffer, setEditingOffer] = useState(null)
+  const [isCreating, setIsCreating] = useState(false)
+  const [uploadingBanner, setUploadingBanner] = useState(false)
+  const [showSettingsEdit, setShowSettingsEdit] = useState(false)
+  const [sectionSettings, setSectionSettings] = useState({
+    enabled: true,
+    eyebrow: 'SPECIAL OFFERS & SEASONAL PROMOTIONS',
+    title: 'Limited-Time Photography Promotions',
+    subtitle: 'Discover our bespoke seasonal collections, featuring generous inclusions, complimentary keepsake upgrades, and preferential calendar priority.'
+  })
+
+  const authHeaders = useMemo(() => ({
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`
+  }), [token])
+
+  useEffect(() => {
+    loadOffers()
+  }, [])
+
+  const loadOffers = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch(`${API_URL}/offers/admin`, { headers: authHeaders })
+      if (res.ok) {
+        const data = await res.json()
+        setOffersData(data)
+        if (data.sectionSettings) {
+          setSectionSettings(data.sectionSettings)
+        }
+      }
+    } catch (err) {
+      console.error('Failed to load admin offers:', err)
+      showToast('Failed to load promotional offers', 'error')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Save Page Settings (Header & Global Toggle)
+  const handleSaveSettings = async (e) => {
+    if (e) e.preventDefault()
+    setSaving(true)
+    try {
+      const res = await fetch(`${API_URL}/offers/settings`, {
+        method: 'PUT',
+        headers: authHeaders,
+        body: JSON.stringify(sectionSettings)
+      })
+      if (res.ok) {
+        showToast('Special Offers page settings saved successfully!')
+        setShowSettingsEdit(false)
+        dataService.refreshAllData()
+      } else {
+        throw new Error('Save settings failed')
+      }
+    } catch (err) {
+      console.error(err)
+      showToast('Failed to save settings', 'error')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  // Toggle Global Page Visibility
+  const handleTogglePageVisibility = async (enabled) => {
+    const updated = { ...sectionSettings, enabled }
+    setSectionSettings(updated)
+    try {
+      await fetch(`${API_URL}/offers/settings`, {
+        method: 'PUT',
+        headers: authHeaders,
+        body: JSON.stringify(updated)
+      })
+      showToast(enabled ? 'Special Offers page is now ACTIVE publicly' : 'Special Offers page is now OFFLINE')
+      dataService.refreshAllData()
+    } catch (err) {
+      showToast('Failed to update page status', 'error')
+    }
+  }
+
+  // Toggle Single Campaign Active / Published Status Checkbox
+  const handleToggleOfferActive = async (offer) => {
+    const newPublished = offer.published === false ? true : false
+    try {
+      const res = await fetch(`${API_URL}/offers/${offer.id}`, {
+        method: 'PUT',
+        headers: authHeaders,
+        body: JSON.stringify({ published: newPublished })
+      })
+      if (res.ok) {
+        setOffersData((prev) => ({
+          ...prev,
+          offers: prev.offers.map((o) => (o.id === offer.id ? { ...o, published: newPublished } : o))
+        }))
+        showToast(`Offer "${offer.title}" is now ${newPublished ? 'ACTIVE (Published)' : 'INACTIVE (Hidden)'}`)
+        dataService.refreshAllData()
+      }
+    } catch (err) {
+      showToast('Failed to update offer status', 'error')
+    }
+  }
+
+  // Upload Promotional Banner
+  const handleBannerUpload = async (file) => {
+    if (!file) return
+    setUploadingBanner(true)
+    try {
+      const formData = new FormData()
+      formData.append('image', file)
+      const res = await fetch(`${API_URL}/offers/upload`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData
+      })
+      if (res.ok) {
+        const d = await res.json()
+        if (d.url) {
+          setEditingOffer((p) => ({ ...p, bannerImage: d.url }))
+          showToast('Promotional banner image uploaded!')
+          return
+        }
+      }
+      const fallbackUrl = await uploadImageFile(file, token)
+      setEditingOffer((p) => ({ ...p, bannerImage: fallbackUrl }))
+      showToast('Promotional banner image attached!')
+    } catch (err) {
+      console.error('Banner upload error:', err)
+      showToast('Failed to upload image', 'error')
+    } finally {
+      setUploadingBanner(false)
+    }
+  }
+
+  // Start Creating New Campaign
+  const handleStartCreate = (categoryPreset = 'weddings') => {
+    const defaultHero = getCategoryHeroImage(categoryPreset)
+    setEditingOffer({
+      id: '',
+      title: '',
+      category: categoryPreset,
+      tagline: '',
+      festival: '',
+      description: '',
+      discountPercent: 20,
+      badgeText: 'OFF',
+      badgeStyle: 'starburst',
+      showBadge: true,
+      promoLabel: '',
+      showSpecialOfferSticker: false,
+      bannerImage: defaultHero || '',
+      categories: [categoryPreset],
+      categoryDiscounts: {},
+      startDate: '',
+      endDate: '',
+      terms: 'Subject to date availability. Early reservation recommended.',
+      order: (offersData.offers || []).length + 1,
+      published: true
+    })
+    setIsCreating(true)
+  }
+
+  // Save / Submit Campaign
+  const handleSaveOffer = async (e) => {
+    e.preventDefault()
+    if (!editingOffer.title || !editingOffer.title.trim()) {
+      showToast('Please enter a campaign title', 'error')
+      return
+    }
+
+    setSaving(true)
+    const payload = {
+      ...editingOffer,
+      category: editingOffer.category || editingOffer.categories?.[0] || 'weddings',
+      categories: (Array.isArray(editingOffer.categories) && editingOffer.categories.length > 0)
+        ? editingOffer.categories
+        : [editingOffer.category || 'weddings']
+    }
+    try {
+      if (isCreating) {
+        const res = await fetch(`${API_URL}/offers`, {
+          method: 'POST',
+          headers: authHeaders,
+          body: JSON.stringify(payload)
+        })
+        if (res.ok) {
+          showToast(`Campaign "${editingOffer.title}" created successfully!`)
+          setEditingOffer(null)
+          setIsCreating(false)
+          loadOffers()
+          dataService.refreshAllData()
+        } else {
+          const errData = await res.json()
+          throw new Error(errData.error || 'Failed to create campaign')
+        }
+      } else {
+        const res = await fetch(`${API_URL}/offers/${editingOffer.id}`, {
+          method: 'PUT',
+          headers: authHeaders,
+          body: JSON.stringify(payload)
+        })
+        if (res.ok) {
+          showToast(`Campaign "${editingOffer.title}" updated successfully!`)
+          setEditingOffer(null)
+          loadOffers()
+          dataService.refreshAllData()
+        } else {
+          const errData = await res.json()
+          throw new Error(errData.error || 'Failed to update campaign')
+        }
+      }
+    } catch (err) {
+      console.error(err)
+      showToast(err.message || 'Failed to save campaign', 'error')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  // Delete Campaign
+  const handleDeleteOffer = async (offer) => {
+    if (!window.confirm(`Are you sure you want to permanently delete the campaign "${offer.title}"?`)) return
+    try {
+      const res = await fetch(`${API_URL}/offers/${offer.id}`, {
+        method: 'DELETE',
+        headers: authHeaders
+      })
+      if (res.ok) {
+        showToast('Campaign deleted successfully')
+        setOffersData((prev) => ({
+          ...prev,
+          offers: prev.offers.filter((o) => o.id !== offer.id)
+        }))
+        dataService.refreshAllData()
+      }
+    } catch (err) {
+      showToast('Failed to delete campaign', 'error')
+    }
+  }
+
+  // Toggle category selection inside edit form
+  const handleToggleCategory = (catId) => {
+    if (!editingOffer) return
+    const currentCats = Array.isArray(editingOffer.categories) ? [...editingOffer.categories] : []
+    const idx = currentCats.indexOf(catId)
+    if (idx > -1) {
+      currentCats.splice(idx, 1)
+    } else {
+      currentCats.push(catId)
+    }
+    setEditingOffer((prev) => ({ ...prev, categories: currentCats }))
+  }
+
+  // Update specific category discount override
+  const handleCategoryDiscountChange = (catId, val) => {
+    if (!editingOffer) return
+    const num = val === '' ? undefined : Number(val)
+    setEditingOffer((prev) => {
+      const discounts = { ...(prev.categoryDiscounts || {}) }
+      if (num === undefined || isNaN(num)) {
+        delete discounts[catId]
+      } else {
+        discounts[catId] = num
+      }
+      return { ...prev, categoryDiscounts: discounts }
+    })
+  }
+
+  if (loading) {
+    return (
+      <div className="admin-loading" style={{ minHeight: '300px' }}>
+        <div className="admin-loading__spinner" />
+        <p>Loading promotional offers & campaigns...</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="admin-section">
+      {/* Header */}
+      <div className="admin-section__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
+        <div>
+          <h2 style={{ fontSize: '1.5rem', color: 'var(--admin-accent)', margin: 0 }}>Offers & Promotions Manager</h2>
+          <p style={{ margin: '0.25rem 0 0', color: 'var(--admin-text-muted)', fontSize: '0.9rem' }}>
+            Manage individual seasonal discounts, advertisement taglines, promotional banners, and active publication status.
+          </p>
+        </div>
+        {!editingOffer && (
+          <button
+            type="button"
+            className="admin-btn admin-btn--primary"
+            onClick={handleStartCreate}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+          >
+            <span>+</span>
+            <span>Create New Campaign</span>
+          </button>
+        )}
+      </div>
+
+      {/* Global Page Visibility Card */}
+      <div
+        className="admin-card"
+        style={{
+          marginBottom: '1.5rem',
+          background: sectionSettings.enabled ? 'rgba(216, 183, 122, 0.06)' : 'rgba(255, 255, 255, 0.03)',
+          border: sectionSettings.enabled ? '1px solid rgba(216, 183, 122, 0.35)' : '1px solid var(--admin-border)'
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <span style={{ fontSize: '1.25rem' }}>🎁</span>
+              <h3 style={{ fontSize: '1rem', color: 'var(--admin-accent)', margin: 0 }}>
+                Special Offers Page Status: {sectionSettings.enabled ? 'Published (Active)' : 'Hidden (Offline)'}
+              </h3>
+            </div>
+            <p style={{ margin: '0.35rem 0 0', fontSize: '0.85rem', color: 'var(--admin-text-muted)' }}>
+              {sectionSettings.enabled
+                ? 'The Special Offers page (/special-offers) is active and accessible from the website navigation.'
+                : 'The Special Offers page is temporarily offline. Visitors will see the elegant standby state.'}
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <button
+              type="button"
+              className="admin-btn admin-btn--secondary"
+              style={{ fontSize: '0.8rem', padding: '0.4rem 0.8rem' }}
+              onClick={() => setShowSettingsEdit(!showSettingsEdit)}
+            >
+              {showSettingsEdit ? 'Close Header Settings' : 'Edit Page Header'}
+            </button>
+
+            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontWeight: '500' }}>
+              <input
+                type="checkbox"
+                checked={sectionSettings.enabled !== false}
+                onChange={(e) => handleTogglePageVisibility(e.target.checked)}
+                style={{ width: '1.25rem', height: '1.25rem', accentColor: 'var(--admin-accent)' }}
+              />
+              <span>{sectionSettings.enabled ? 'Page Enabled' : 'Page Disabled'}</span>
+            </label>
+          </div>
+        </div>
+
+        {/* Section Header Editor */}
+        {showSettingsEdit && (
+          <form onSubmit={handleSaveSettings} style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--admin-border)' }}>
+            <div className="admin-grid">
+              <div className="admin-input-group">
+                <label>Page Eyebrow</label>
+                <input
+                  type="text"
+                  value={sectionSettings.eyebrow || ''}
+                  onChange={(e) => setSectionSettings((p) => ({ ...p, eyebrow: e.target.value }))}
+                  placeholder="SPECIAL OFFERS & SEASONAL PROMOTIONS"
+                />
+              </div>
+
+              <div className="admin-input-group">
+                <label>Hero Title</label>
+                <input
+                  type="text"
+                  value={sectionSettings.title || ''}
+                  onChange={(e) => setSectionSettings((p) => ({ ...p, title: e.target.value }))}
+                  placeholder="Limited-Time Photography Promotions"
+                />
+              </div>
+
+              <div className="admin-input-group admin-input-group--full">
+                <label>Hero Subtitle</label>
+                <textarea
+                  rows={2}
+                  value={sectionSettings.subtitle || ''}
+                  onChange={(e) => setSectionSettings((p) => ({ ...p, subtitle: e.target.value }))}
+                  placeholder="Introductory text displayed on the Special Offers hero banner..."
+                />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1rem' }}>
+              <button type="button" className="admin-btn admin-btn--secondary" onClick={() => setShowSettingsEdit(false)}>
+                Cancel
+              </button>
+              <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
+                {saving ? 'Saving...' : 'Save Header Settings'}
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+
+      {/* Campaign Create / Edit Form Panel */}
+      {editingOffer ? (
+        <div className="admin-card" style={{ marginBottom: '2rem', border: '1px solid var(--admin-accent)', background: '#12100e' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <h3 style={{ fontSize: '1.2rem', color: 'var(--admin-accent)', margin: 0 }}>
+              {isCreating ? 'Create New Seasonal Photography Offer' : `Edit Campaign: ${editingOffer.title}`}
+            </h3>
+            <button
+              type="button"
+              className="admin-btn admin-btn--secondary"
+              onClick={() => {
+                setEditingOffer(null)
+                setIsCreating(false)
+              }}
+            >
+              ✕ Close
+            </button>
+          </div>
+
+          <form onSubmit={handleSaveOffer}>
+            <div className="admin-grid">
+              <div className="admin-input-group">
+                <label>Campaign Title *</label>
+                <input
+                  type="text"
+                  value={editingOffer.title || ''}
+                  onChange={(e) => setEditingOffer((p) => ({ ...p, title: e.target.value }))}
+                  placeholder="e.g. Luxury Wedding & Nuptial Season Collection"
+                  required
+                />
+              </div>
+
+              <div className="admin-input-group">
+                <label>Photography Category / Shoot Type *</label>
+                <select
+                  value={editingOffer.category || editingOffer.categories?.[0] || 'weddings'}
+                  onChange={(e) => {
+                    const sel = e.target.value
+                    setEditingOffer((prev) => {
+                      const next = {
+                        ...prev,
+                        category: sel,
+                        categories: [sel]
+                      }
+                      if (!prev.bannerImage) {
+                        next.bannerImage = getCategoryHeroImage(sel)
+                      }
+                      return next
+                    })
+                  }}
+                  style={{ width: '100%', padding: '0.65rem', background: '#1c1815', color: '#fff', border: '1px solid var(--admin-border)', borderRadius: '4px' }}
+                >
+                  <optgroup label="12 Primary Photography Categories">
+                    {OFFER_CATEGORIES.filter((c) => c.isPrimaryCategory).map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.icon} {cat.label}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="5 Additional Shoot Types">
+                    {OFFER_CATEGORIES.filter((c) => !c.isPrimaryCategory).map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.icon} {cat.label}
+                      </option>
+                    ))}
+                  </optgroup>
+                </select>
+                <span style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)' }}>
+                  Assign this campaign to one of the 12 categories or 5 additional shoot types.
+                </span>
+              </div>
+
+              <div className="admin-input-group">
+                <label>Festival / Event Name (Optional)</label>
+                <input
+                  type="text"
+                  value={editingOffer.festival || ''}
+                  onChange={(e) => setEditingOffer((p) => ({ ...p, festival: e.target.value }))}
+                  placeholder="e.g. Wedding Season, Golden Jubilees, Holiday Special"
+                />
+              </div>
+
+              {/* Promotional Tagline - Prominently featured */}
+              <div className="admin-input-group admin-input-group--full" style={{ background: 'rgba(216, 183, 122, 0.08)', padding: '1rem', borderRadius: '6px', border: '1px solid rgba(216, 183, 122, 0.3)' }}>
+                <label style={{ color: 'var(--admin-accent)', fontWeight: 'bold' }}>
+                  ★ Promotional Tagline (Featured on Public Card) *
+                </label>
+                <input
+                  type="text"
+                  value={editingOffer.tagline || ''}
+                  onChange={(e) => setEditingOffer((p) => ({ ...p, tagline: e.target.value }))}
+                  placeholder="e.g. Complimentary Pre-Wedding Engagement Shoot + Bespoke Handcrafted Keepsake Album"
+                  style={{ fontWeight: '500' }}
+                />
+                <span style={{ fontSize: '0.78rem', color: 'var(--admin-text-muted)', marginTop: '0.35rem', display: 'block' }}>
+                  This tagline is prominently highlighted in gold at the top of the advertisement card.
+                </span>
+              </div>
+
+              {/* Promotional Badge Controls (Reference Style) */}
+              <div className="admin-input-group admin-input-group--full" style={{ background: '#0e0c0a', padding: '1.25rem', borderRadius: '8px', border: '1px solid rgba(220, 38, 38, 0.4)' }}>
+                <h4 style={{ margin: '0 0 0.5rem', color: '#EF4444', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span>🏷️</span> Promotional Badge & Advertisement Controls
+                </h4>
+                <p style={{ margin: '0 0 1rem', fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>
+                  Configure the code-generated red discount badge and optional promotional sticker.
+                </p>
+
+                <div className="admin-grid">
+                  <div className="admin-input-group">
+                    <label>Discount Percentage (1% to 100%) *</label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="100"
+                      value={editingOffer.discountPercent ?? 20}
+                      onChange={(e) => setEditingOffer((p) => ({ ...p, discountPercent: Number(e.target.value) }))}
+                      required
+                    />
+                    <span style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)' }}>
+                      Large bold white percentage on the red starburst badge.
+                    </span>
+                  </div>
+
+                  <div className="admin-input-group">
+                    <label>Badge Bottom Text</label>
+                    <input
+                      type="text"
+                      value={editingOffer.badgeText ?? 'OFF'}
+                      onChange={(e) => setEditingOffer((p) => ({ ...p, badgeText: e.target.value }))}
+                      placeholder="OFF (or SPECIAL OFFER, LIMITED OFFER)"
+                    />
+                    <span style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)' }}>
+                      Displayed in bold gold/yellow beneath the discount percentage.
+                    </span>
+                  </div>
+
+                  <div className="admin-input-group">
+                    <label>Badge Style</label>
+                    <select
+                      value={editingOffer.badgeStyle || 'starburst'}
+                      onChange={(e) => setEditingOffer((p) => ({ ...p, badgeStyle: e.target.value }))}
+                      style={{ width: '100%', padding: '0.6rem', background: '#1c1815', color: '#fff', border: '1px solid var(--admin-border)', borderRadius: '4px' }}
+                    >
+                      <option value="starburst">Red Jagged Starburst (Reference Style)</option>
+                      <option value="ribbon">Corner Ribbon Style</option>
+                    </select>
+                  </div>
+
+                  <div className="admin-input-group">
+                    <label>Promotional Event Label</label>
+                    <input
+                      type="text"
+                      value={editingOffer.promoLabel || ''}
+                      onChange={(e) => setEditingOffer((p) => ({ ...p, promoLabel: e.target.value }))}
+                      placeholder="e.g. CHRISTMAS SPECIAL, MOTHER'S DAY"
+                    />
+                    <span style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)' }}>
+                      Optional top-left advertisement label or sticker.
+                    </span>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #26201b' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', fontSize: '0.88rem' }}>
+                    <input
+                      type="checkbox"
+                      checked={editingOffer.showBadge !== false}
+                      onChange={(e) => setEditingOffer((p) => ({ ...p, showBadge: e.target.checked }))}
+                      style={{ accentColor: '#DC2626', width: '1.15rem', height: '1.15rem' }}
+                    />
+                    <span>Show Red Discount Badge on Image</span>
+                  </label>
+
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', fontSize: '0.88rem' }}>
+                    <input
+                      type="checkbox"
+                      checked={Boolean(editingOffer.showSpecialOfferSticker)}
+                      onChange={(e) => setEditingOffer((p) => ({ ...p, showSpecialOfferSticker: e.target.checked }))}
+                      style={{ accentColor: '#FACC15', width: '1.15rem', height: '1.15rem' }}
+                    />
+                    <span>Show Yellow "SPECIAL OFFER" Sticker (Top-Left)</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="admin-input-group">
+                <label>Display Order</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={editingOffer.order ?? 1}
+                  onChange={(e) => setEditingOffer((p) => ({ ...p, order: Number(e.target.value) }))}
+                />
+              </div>
+
+              <div className="admin-input-group admin-input-group--full">
+                <label>Promotional Description</label>
+                <textarea
+                  rows={3}
+                  value={editingOffer.description || ''}
+                  onChange={(e) => setEditingOffer((p) => ({ ...p, description: e.target.value }))}
+                  placeholder="A compelling, luxury description of the seasonal photography promotion..."
+                />
+              </div>
+
+              {/* Banner Image Upload & URL */}
+              <div className="admin-input-group">
+                <label>Upload Promotional Banner Image</label>
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  onChange={(e) => handleBannerUpload(e.target.files?.[0])}
+                  disabled={uploadingBanner}
+                />
+                {uploadingBanner && (
+                  <span style={{ fontSize: '0.8rem', color: 'var(--admin-accent)', marginTop: '0.25rem', display: 'block' }}>
+                    Uploading banner to server...
+                  </span>
+                )}
+              </div>
+
+              <div className="admin-input-group">
+                <label>Or Banner Image URL / Path</label>
+                <input
+                  type="text"
+                  value={editingOffer.bannerImage || ''}
+                  onChange={(e) => setEditingOffer((p) => ({ ...p, bannerImage: convertGoogleDriveLink(e.target.value) }))}
+                  placeholder="/images/hero-church-wedding.jpg or https://..."
+                />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn--secondary admin-btn--small"
+                    onClick={() => {
+                      const curCat = editingOffer.category || editingOffer.categories?.[0] || 'weddings'
+                      const defaultImg = getCategoryHeroImage(curCat)
+                      if (defaultImg) {
+                        setEditingOffer((prev) => ({ ...prev, bannerImage: defaultImg }))
+                        showToast(`Loaded default hero image for ${getCategoryLabel(curCat)}!`)
+                      } else {
+                        showToast(`No default hero image on disk for ${getCategoryLabel(curCat)}. Please upload a file.`, 'info')
+                      }
+                    }}
+                  >
+                    📷 Use Category Default Hero Image
+                  </button>
+                  {editingOffer.bannerImage && (
+                    <button
+                      type="button"
+                      className="admin-btn admin-btn--secondary admin-btn--small"
+                      style={{ color: '#ef4444' }}
+                      onClick={() => setEditingOffer((prev) => ({ ...prev, bannerImage: '' }))}
+                    >
+                      Clear Image
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Live Card & Badge Preview */}
+              <div className="admin-input-group admin-input-group--full">
+                <label>Advertisement Live Preview (Image + Code-Generated Badge)</label>
+                <div style={{ position: 'relative', width: '320px', height: '200px', borderRadius: '6px', overflow: 'hidden', border: '1px solid var(--admin-border)', background: '#1c1612' }}>
+                  {editingOffer.bannerImage ? (
+                    <img src={editingOffer.bannerImage} alt="Banner Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--admin-text-muted)', fontSize: '0.85rem' }}>
+                      No image uploaded yet (Campaign stays hidden until image is added)
+                    </div>
+                  )}
+
+                  {/* Render Live Promotional Badge */}
+                  <PromotionalBadge
+                    discount={editingOffer.discountPercent || 20}
+                    text={editingOffer.badgeText || 'OFF'}
+                    style={editingOffer.badgeStyle || 'starburst'}
+                    visible={editingOffer.showBadge !== false}
+                  />
+
+                  {/* Render Live Yellow Sticker */}
+                  {(editingOffer.showSpecialOfferSticker || editingOffer.promoLabel) && (
+                    <SpecialOfferSticker
+                      label={editingOffer.promoLabel || 'SPECIAL OFFER'}
+                    />
+                  )}
+                </div>
+              </div>
+
+              {/* Date Validity */}
+              <div className="admin-input-group">
+                <label>Start Date (Optional)</label>
+                <input
+                  type="date"
+                  value={editingOffer.startDate || ''}
+                  onChange={(e) => setEditingOffer((p) => ({ ...p, startDate: e.target.value }))}
+                />
+                <span style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)' }}>Offer activates automatically on this date</span>
+              </div>
+
+              <div className="admin-input-group">
+                <label>End Date (Optional)</label>
+                <input
+                  type="date"
+                  value={editingOffer.endDate || ''}
+                  onChange={(e) => setEditingOffer((p) => ({ ...p, endDate: e.target.value }))}
+                />
+                <span style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted)' }}>Offer expires automatically after this date</span>
+              </div>
+
+              <div className="admin-input-group admin-input-group--full">
+                <label>Terms & Conditions / Booking Notes (Optional)</label>
+                <textarea
+                  rows={2}
+                  value={editingOffer.terms || ''}
+                  onChange={(e) => setEditingOffer((p) => ({ ...p, terms: e.target.value }))}
+                  placeholder="e.g. Valid for bookings confirmed during the promotional period. Subject to date availability."
+                />
+              </div>
+            </div>
+
+            {/* Applicable Photography Categories Multi-Selector */}
+            <div style={{ marginTop: '1.5rem', padding: '1.25rem', background: '#0a0a0a', borderRadius: '8px', border: '1px solid var(--admin-border)' }}>
+              <div style={{ marginBottom: '1rem' }}>
+                <h4 style={{ margin: 0, fontSize: '0.95rem', color: 'var(--admin-accent)' }}>
+                  Applicable Photography Categories & Custom Discounts
+                </h4>
+                <p style={{ margin: '0.25rem 0 0', fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>
+                  Select one or more photography services included in this campaign. You can also specify unique discount overrides per service.
+                </p>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.85rem' }}>
+                {OFFER_CATEGORIES.map((cat) => {
+                  const isChecked = Array.isArray(editingOffer.categories) && editingOffer.categories.includes(cat.id)
+                  const categoryDiscount = editingOffer.categoryDiscounts?.[cat.id]
+
+                  return (
+                    <div
+                      key={cat.id}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '0.6rem 0.85rem',
+                        background: isChecked ? 'rgba(216, 183, 122, 0.08)' : '#161412',
+                        border: isChecked ? '1px solid var(--admin-accent)' : '1px solid #2a2622',
+                        borderRadius: '6px'
+                      }}
+                    >
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', flex: 1, margin: 0 }}>
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => handleToggleCategory(cat.id)}
+                          style={{ accentColor: 'var(--admin-accent)', width: '1.1rem', height: '1.1rem' }}
+                        />
+                        <span style={{ fontSize: '0.85rem', color: isChecked ? '#fff' : 'var(--admin-text-muted)' }}>
+                          {cat.icon} {cat.label}
+                        </span>
+                      </label>
+
+                      {isChecked && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                          <input
+                            type="number"
+                            min="0"
+                            max="100"
+                            placeholder={`${editingOffer.discountPercent || 20}%`}
+                            value={categoryDiscount !== undefined ? categoryDiscount : ''}
+                            onChange={(e) => handleCategoryDiscountChange(cat.id, e.target.value)}
+                            style={{
+                              width: '56px',
+                              padding: '0.25rem 0.4rem',
+                              fontSize: '0.8rem',
+                              background: '#0e0c0a',
+                              border: '1px solid var(--admin-border)',
+                              borderRadius: '4px',
+                              color: '#fff',
+                              textAlign: 'center'
+                            }}
+                          />
+                          <span style={{ fontSize: '0.75rem', color: 'var(--admin-accent)' }}>%</span>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Active / Published Status Checkbox in Form */}
+            <div style={{ marginTop: '1.5rem', padding: '1rem', background: '#171411', border: '1px solid rgba(216, 183, 122, 0.3)', borderRadius: '6px' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontSize: '0.95rem', fontWeight: 'bold', color: 'var(--admin-accent)' }}>
+                <input
+                  type="checkbox"
+                  checked={editingOffer.published !== false}
+                  onChange={(e) => setEditingOffer((p) => ({ ...p, published: e.target.checked }))}
+                  style={{ width: '1.3rem', height: '1.3rem', accentColor: 'var(--admin-accent)' }}
+                />
+                <span>✓ Active — Publish & Display Immediately on Special Offers Page</span>
+              </label>
+              <p style={{ margin: '0.35rem 0 0 2.05rem', fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>
+                When unchecked, this offer will be saved in your database but hidden from the public website.
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.85rem', marginTop: '1.5rem' }}>
+              <button
+                type="button"
+                className="admin-btn admin-btn--secondary"
+                onClick={() => {
+                  setEditingOffer(null)
+                  setIsCreating(false)
+                }}
+              >
+                Cancel
+              </button>
+              <button type="submit" className="admin-btn admin-btn--primary" disabled={saving}>
+                {saving ? 'Saving Campaign...' : isCreating ? 'Create & Publish Offer' : 'Save Changes'}
+              </button>
+            </div>
+          </form>
+        </div>
+      ) : null}
+
+      {/* Campaign List */}
+      <div className="admin-card">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+          <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'var(--admin-text)' }}>
+            Campaigns ({offersData.offers?.length || 0})
+          </h3>
+          <span style={{ fontSize: '0.85rem', color: 'var(--admin-text-muted)' }}>
+            Use the <strong>Active Checkbox</strong> to immediately publish or hide any offer.
+          </span>
+        </div>
+
+        {(!offersData.offers || offersData.offers.length === 0) ? (
+          <div style={{ padding: '3rem 1rem', textAlign: 'center', color: 'var(--admin-text-muted)' }}>
+            <p style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>No promotional campaigns configured yet.</p>
+            <button type="button" className="admin-btn admin-btn--primary" onClick={handleStartCreate}>
+              + Create Your First Seasonal Offer
+            </button>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {offersData.offers.map((offer) => {
+              const isActive = offer.published !== false
+              const status = offer.computedStatus || (isActive ? 'active' : 'hidden')
+
+              let statusColor = '#4ade80' // green
+              if (status === 'hidden') statusColor = '#94a3b8' // gray
+              if (status === 'expired') statusColor = '#f87171' // red
+              if (status === 'upcoming') statusColor = '#60a5fa' // blue
+              if (status === 'needs_image') statusColor = '#fbbf24' // amber/yellow
+
+              return (
+                <div
+                  key={offer.id}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: '1rem',
+                    padding: '1.25rem',
+                    background: '#151311',
+                    border: isActive ? '1px solid rgba(216, 183, 122, 0.35)' : '1px solid #2a2520',
+                    borderRadius: '8px',
+                    opacity: isActive ? 1 : 0.7
+                  }}
+                >
+                  {/* Left: Thumbnail & Details */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flex: 1, minWidth: '280px' }}>
+                    <div style={{ position: 'relative', width: '90px', height: '65px', borderRadius: '4px', overflow: 'hidden', flexShrink: 0, background: '#25201b' }}>
+                      {offer.bannerImage ? (
+                        <img src={offer.bannerImage} alt={offer.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fbbf24', fontSize: '1.1rem' }}>
+                          📷
+                        </div>
+                      )}
+                      <div style={{ position: 'absolute', top: '2px', right: '2px', background: '#DC2626', color: '#fff', fontSize: '9px', fontWeight: 'bold', padding: '1px 4px', borderRadius: '2px', border: '1px solid rgba(255,255,255,0.3)' }}>
+                        {offer.discountPercent}% {offer.badgeText || 'OFF'}
+                      </div>
+                    </div>
+
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                        <h4 style={{ margin: 0, fontSize: '1rem', color: '#fff' }}>{offer.title}</h4>
+                        {offer.festival && (
+                          <span style={{ fontSize: '0.75rem', padding: '1px 6px', background: '#2a2219', color: 'var(--admin-accent)', borderRadius: '3px', border: '1px solid rgba(216, 183, 122, 0.3)' }}>
+                            {offer.festival}
+                          </span>
+                        )}
+                        <span style={{ fontSize: '0.72rem', padding: '1px 6px', borderRadius: '3px', background: `${statusColor}22`, color: statusColor, fontWeight: 'bold', border: `1px solid ${statusColor}55` }}>
+                          {status === 'needs_image' ? 'NEEDS IMAGE (DRAFT)' : status.toUpperCase()}
+                        </span>
+                      </div>
+
+                      {/* Tagline Preview */}
+                      {offer.tagline && (
+                        <p style={{ margin: '0.25rem 0 0', fontSize: '0.8rem', color: 'var(--admin-accent)', fontWeight: '500' }}>
+                          ★ {offer.tagline}
+                        </p>
+                      )}
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.4rem', flexWrap: 'wrap', fontSize: '0.75rem', color: 'var(--admin-text-muted)' }}>
+                        <span style={{ color: 'var(--admin-accent)', fontWeight: 'bold' }}>
+                          Category: {getCategoryLabel(offer.category || offer.categories?.[0])}
+                        </span>
+                        {offer.startDate && <span>• From: {offer.startDate}</span>}
+                        {offer.endDate && <span>• Ends: {offer.endDate}</span>}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: Controls & Active Checkbox */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexShrink: 0 }}>
+                    {/* Active Checkbox */}
+                    <label
+                      title="Toggle public visibility immediately"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        cursor: 'pointer',
+                        background: isActive ? 'rgba(74, 222, 128, 0.12)' : 'rgba(148, 163, 184, 0.12)',
+                        padding: '0.45rem 0.75rem',
+                        borderRadius: '4px',
+                        border: isActive ? '1px solid rgba(74, 222, 128, 0.4)' : '1px solid rgba(148, 163, 184, 0.3)',
+                        fontSize: '0.85rem',
+                        color: isActive ? '#4ade80' : '#94a3b8',
+                        fontWeight: '600'
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isActive}
+                        onChange={() => handleToggleOfferActive(offer)}
+                        style={{ width: '1.15rem', height: '1.15rem', accentColor: '#4ade80' }}
+                      />
+                      <span>{isActive ? 'Active (Live)' : 'Inactive (Hidden)'}</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      className="admin-btn admin-btn--secondary"
+                      style={{ fontSize: '0.8rem', padding: '0.45rem 0.85rem' }}
+                      onClick={() => {
+                        setIsCreating(false)
+                        setEditingOffer({ ...offer })
+                      }}
+                    >
+                      Edit Offer
+                    </button>
+
+                    <button
+                      type="button"
+                      className="admin-btn admin-btn--danger"
+                      style={{ fontSize: '0.8rem', padding: '0.45rem 0.85rem' }}
+                      onClick={() => handleDeleteOffer(offer)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // 14. Main Admin Dashboard
 // ─────────────────────────────────────────────────────────────────────────────
 function Dashboard({ token, onLogout }) {
@@ -2802,7 +4095,7 @@ function Dashboard({ token, onLogout }) {
           headers: authHeaders,
           body: JSON.stringify({ photos: updatedList })
         })
-      } catch (e) {}
+      } catch (e) { }
 
       // 5. Update local React state immediately
       setData((prev) => ({
@@ -2905,9 +4198,11 @@ function Dashboard({ token, onLogout }) {
     { id: 'overview', label: 'Overview', icon: '📊' },
     { id: 'photos', label: 'Portfolio', icon: '📷', count: (data.photos?.photos || data.photos || []).length },
     { id: 'studio', label: 'Studio Info', icon: '🏠' },
+    { id: 'another-studio', label: 'De Fab Studio', icon: '🏛️' },
     { id: 'hero', label: 'Hero Section', icon: '🎬' },
     { id: 'about', label: 'About Page', icon: '📖' },
     { id: 'services', label: 'Services', icon: '💼' },
+    { id: 'offers', label: 'Offers & Promotions', icon: '🎁' },
     { id: 'testimonials', label: 'Testimonials', icon: '💬' },
     { id: 'collaborators', label: 'Team', icon: '👥' },
     { id: 'social', label: 'Social Links', icon: '🔗' },
@@ -3025,6 +4320,16 @@ function Dashboard({ token, onLogout }) {
             />
           )}
 
+          {/* De Fab Studio (Another Studio) */}
+          {activeTab === 'another-studio' && (
+            <DeFabStudioEditor
+              data={data.content?.anotherStudio || initialContent.anotherStudio}
+              onSave={(studioData) => saveSection('De Fab Studio', '/content/another-studio', 'anotherStudio', studioData)}
+              saving={saving}
+              token={token}
+            />
+          )}
+
           {/* Hero Section */}
           {activeTab === 'hero' && (
             <HeroEditor
@@ -3053,6 +4358,11 @@ function Dashboard({ token, onLogout }) {
               saving={saving}
               token={token}
             />
+          )}
+
+          {/* Offers & Promotions */}
+          {activeTab === 'offers' && (
+            <OffersEditor token={token} showToast={showToast} />
           )}
 
           {/* Testimonials */}

@@ -91,7 +91,7 @@ const fallbackFaqs = [
 ]
 
 export default function About() {
-  const { about = {}, studio = {}, team = [] } = useWebsiteData()
+  const { about = {}, studio = {} } = useWebsiteData()
 
   const studioPreviewImages = (Array.isArray(studio.previewImages) && studio.previewImages.length > 0)
     ? studio.previewImages.filter(p => p && p.published !== false)
@@ -126,7 +126,7 @@ export default function About() {
   const photographerHeadline = about.photographerHeadline || 'A Passion for Authentic Storytelling'
   const photographerName = about.photographerName || 'Josh'
   const photographerRole = about.photographerRole || 'Lead Photographer & Founder'
-  const photographerImage = about.photographerImage || 'https://images.unsplash.com/photo-1556157382-97eda2d62296?w=900&q=80'
+  const photographerImage = about.photographerImage || '/Fonder.jpeg'
   const photographerBio1 = about.photographerBio1 || 'Hello, I am Josh. As a photographer, my goal is simple: to document your most meaningful milestones so faithfully that every time you revisit your photographs, you are instantly transported back to how the moment truly felt.'
   const photographerBio2 = about.photographerBio2 || 'My approach combines quiet photojournalism with refined, editorial portraiture. Whether documenting a sacred church ceremony in the English countryside, a historic countryside manor celebration, or a joyful family garden gathering, I bring patience, warmth, and keen observation to every commission.'
   const photographerQuote = about.photographerQuote || "I don't just photograph what things look like — I photograph what they feel like. Your family's unique laughter, sacred vows, and candid joys deserve to be captured with dignity and timeless care."
@@ -290,78 +290,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* 03: Team & Creative Collaborators */}
-      {team && team.length > 0 && (
-        <section className="section-padding bg-ivory border-b border-champagne/40">
-          <div className="container-luxury">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <span className="text-caption uppercase tracking-[0.2em] text-muted-gold font-nav font-semibold block mb-3">
-                03 — OUR CREATIVE TEAM
-              </span>
-              <h2 className="font-serif text-3xl md:text-4xl text-charcoal font-light">
-                Photographers & Creative Collaborators
-              </h2>
-              <div className="w-16 h-[1px] bg-champagne mx-auto mt-4 mb-4" />
-              <p className="text-warm-brown/75 text-body-sm font-light">
-                Dedicated storytellers devoted to documenting genuine emotions with discretion, warmth, and artistry.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {team.map((member, i) => (
-                <div
-                  key={member.id || i}
-                  className="bg-[#F5EEE3]/40 border border-champagne/70 overflow-hidden shadow-sm group hover:border-muted-gold transition-all duration-300 flex flex-col justify-between"
-                >
-                  <div className="aspect-[4/5] overflow-hidden bg-beige relative">
-                    <img
-                      src={member.image || 'https://images.unsplash.com/photo-1556157382-97eda2d62296?w=900&q=80'}
-                      alt={member.name}
-                      className="w-full h-full object-cover object-top transition-transform duration-700 ease-luxury group-hover:scale-105"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <span className="text-[11px] uppercase tracking-wider text-muted-gold font-nav font-semibold block mb-1">
-                        {member.role}
-                      </span>
-                      <h3 className="font-serif text-xl text-charcoal mb-2">{member.name}</h3>
-                      <p className="text-warm-brown/80 text-xs sm:text-sm font-light leading-relaxed mb-4">
-                        {member.bio}
-                      </p>
-                    </div>
-                    {member.social && (
-                      <div className="flex items-center gap-3 pt-3 border-t border-champagne/40">
-                        {member.social.instagram && (
-                          <a
-                            href={member.social.instagram}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs text-warm-brown/70 hover:text-muted-gold font-nav uppercase tracking-wider"
-                          >
-                            Instagram
-                          </a>
-                        )}
-                        {member.social.whatsapp && (
-                          <a
-                            href={`https://wa.me/${String(member.social.whatsapp).replace(/[^0-9]/g, '')}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs text-warm-brown/70 hover:text-muted-gold font-nav uppercase tracking-wider"
-                          >
-                            WhatsApp
-                          </a>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* 04: Our Photography Style */}
       <section className="section-padding bg-ivory border-b border-champagne/40">

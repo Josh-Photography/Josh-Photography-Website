@@ -313,10 +313,10 @@ export default function Films() {
               Inquire Cinema Availability
             </Link>
             <Link
-              to="/packages"
+              to="/check-availability"
               className="px-8 py-3.5 border border-ivory/30 text-ivory font-sans font-medium text-sm tracking-wider uppercase hover:border-gold hover:text-gold transition-all duration-300"
             >
-              View Film Packages
+              Check Availability
             </Link>
           </div>
         </div>

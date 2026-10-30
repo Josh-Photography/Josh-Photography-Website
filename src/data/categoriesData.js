@@ -873,6 +873,402 @@ export const photographyCategories = [
       },
     ],
   },
+
+  // 13. SPORTS PHOTOGRAPHY
+  {
+    id: 'sports-photography',
+    slug: 'sports-photography',
+    categoryNumber: '13',
+    name: 'Sports Photography',
+    heroBadge: '13 — ATHLETIC ACTION & POWER',
+    headline: 'High-Speed Action & Unstoppable Athletic Spirit',
+    subheadline: 'We freeze the decisive second: raw speed, soaring leaps, and the electric thrill of sporting triumph.',
+    heroImage: '/images/sports_shoot_1.jpg',
+    heroPosition: 'center 18%',
+    introduction:
+      'From stadium floodlights and trackside sprints to competitive media days and intense training sessions, our sports photography captures peak performance with split-second precision. Using high-speed optical tracking, crisp strobe lighting, and dramatic low angles, we document explosive energy, authentic grit, and the unforgettable joy of victory.',
+    serviceRoute: '/sports-photography',
+    enquiryType: 'sports-photography',
+    ctaText: 'Explore Sports Photography',
+    enquireCtaText: 'Enquire About Sports Photography',
+    momentsIncluded: [
+      'High-Speed Decisive Action & Peak Motion',
+      'Dynamic Athlete Portraits & Dramatic Lighting',
+      'Team Rosters & Professional Media Day Sessions',
+      'Track, Court, Field & Arena Competitions',
+      'Championship Triumphs & Trophy Celebrations',
+      'Raw Training Intensity & Conditioning Workouts',
+      'Commercial Fitness & Brand Campaign Imagery',
+      'High-Burst Shutter Delivery with Crystal Clarity',
+    ],
+    cards: [
+      {
+        num: '01',
+        title: 'Explosive Athletic Action',
+        desc: 'Split-second shutter precision capturing rapid acceleration, mid-air leaps, and the raw kinetic force of competitive sports.',
+        image: '/images/sports_shoot_1.jpg',
+        alt: 'High-speed action sports photography capturing athletic motion',
+        objectPosition: 'center 12%',
+      },
+      {
+        num: '02',
+        title: 'Dramatic Strobed Athlete Portraits',
+        desc: 'Sculpted rim lighting, dramatic high-contrast shadows, and focused gaze defining the relentless discipline of dedicated athletes.',
+        image: '/images/sports_shoot_2.jpg',
+        alt: 'Dramatic low-key athletic portrait with rim lighting',
+        objectPosition: 'center center',
+      },
+      {
+        num: '03',
+        title: 'Team Spirit & Championship Moments',
+        desc: 'Joyful locker room camaraderie, sideline anticipation, and the ecstatic roar of victory when the final whistle sounds.',
+        image: '/images/sports_shoot_3.jpg',
+        alt: 'Sports team celebration and competitive triumph',
+        objectPosition: 'center 18%',
+      },
+      {
+        num: '04',
+        title: 'Conditioning, Sweat & Grit',
+        desc: 'Intimate close-up documentary coverage of grueling training routines, weight rooms, and relentless preparation.',
+        image: '/images/sports_shoot_4.jpg',
+        alt: 'Close-up sports training and athletic endurance',
+        objectPosition: 'center 12%',
+      },
+      {
+        num: '05',
+        title: 'Arena & Stadium Atmospheres',
+        desc: 'Wide-angle compositions capturing roaring crowds, atmospheric stadium mist, and the grand theatre of British athletics.',
+        image: '/images/sports_shoot_5.jpg',
+        alt: 'Stadium floodlights and sports arena atmosphere',
+        objectPosition: 'center center',
+      },
+      {
+        num: '06',
+        title: 'Commercial Fitness & Athletic Apparel',
+        desc: 'Polished commercial visuals engineered for sports apparel brands, athletic sponsors, and high-impact digital campaigns.',
+        image: '/images/sports_shoot_6.jpg',
+        alt: 'Athletic apparel commercial sports shoot',
+        objectPosition: 'center center',
+      },
+    ],
+  },
+
+  // 14. PRODUCT PHOTOGRAPHY
+  {
+    id: 'product-photography',
+    slug: 'product-photography',
+    categoryNumber: '14',
+    name: 'Product Photography',
+    heroBadge: '14 — COMMERCIAL CRAFTSMANSHIP',
+    headline: 'Meticulous Optics That Elevate Premium Brands',
+    subheadline: 'Clean lines, studio-grade reflections, and editorial lifestyle contexts crafted to convert.',
+    heroImage: '/images/product_shoot_1.jpg',
+    heroPosition: 'center 45%',
+    introduction:
+      'In a digital marketplace driven by visual impact, exceptional product photography transforms casual browsers into loyal customers. We craft studio e-commerce imagery, macro texture details, and bespoke lifestyle scenes using color-calibrated lighting, precision focus stacking, and pristine reflections. Every angle is engineered to showcase materials, luxury finishes, and brand prestige.',
+    serviceRoute: '/product-photography',
+    enquiryType: 'product-photography',
+    ctaText: 'Explore Product Photography',
+    enquireCtaText: 'Enquire About Product Photography',
+    momentsIncluded: [
+      'Studio Pure-White & High-Key E-Commerce Catalogs',
+      'Creative Styled Lifestyle & In-Context Scenes',
+      'Ultra-Macro Detailing of Finishes & Textures',
+      'Precision Color Calibration & Focus Stacking',
+      'Luxury Packaging, Unboxing & Bottle Reflections',
+      'Social Media Flat-Lays & Visual Storyboards',
+      'High-Resolution Clipping Paths & Transparent PNGs',
+      'Full Commercial Reproduction & Advertising Licensing',
+    ],
+    cards: [
+      {
+        num: '01',
+        title: 'Signature Hero Bottle & Package Display',
+        desc: 'Pristine directional lighting accentuating delicate embossed foil, glass contours, and exquisite product architecture.',
+        image: '/images/product_shoot_1.jpg',
+        alt: 'Commercial product photography hero bottle shot',
+        objectPosition: 'center center',
+      },
+      {
+        num: '02',
+        title: 'Styled Editorial Lifestyle Contexts',
+        desc: 'Organic surfaces, curated botanical accents, and natural sunlit backdrops that immerse the product in aspirational settings.',
+        image: '/images/product_shoot_2.jpg',
+        alt: 'Styled lifestyle product photography on natural stone texture',
+        objectPosition: 'center center',
+      },
+      {
+        num: '03',
+        title: 'Macro Textures & Material Craft',
+        desc: 'Hyper-focused macro lenses revealing micro-droplets, woven leather, brushed metal grains, and tactile surfaces.',
+        image: '/images/product_shoot_3.jpg',
+        alt: 'Macro product detail highlighting texture and finish',
+        objectPosition: 'center center',
+      },
+      {
+        num: '04',
+        title: 'Clean E-Commerce & Transparent Cutouts',
+        desc: 'Flawless studio isolation with razor-sharp clipping paths ready for instant deployment on Shopify, Amazon, and print.',
+        image: '/images/product_shoot_4.jpg',
+        alt: 'Clean white background e-commerce product catalog shoot',
+        objectPosition: 'center center',
+      },
+      {
+        num: '05',
+        title: 'Artisanal Packaging & Unboxing Elegance',
+        desc: 'Preserving the excitement of the customer experience with thoughtfully composed gift boxes, ribbon seals, and tags.',
+        image: '/images/product_shoot_5.jpg',
+        alt: 'Luxury packaging and unboxing product photography',
+        objectPosition: 'center center',
+      },
+      {
+        num: '06',
+        title: 'Dynamic Multi-Product Collections',
+        desc: 'Harmonious geometric arrangements displaying complete skincare lines, seasonal flavors, and luxury ensembles.',
+        image: '/images/product_shoot_6.jpg',
+        alt: 'Multi-item collection product group arrangement',
+        objectPosition: 'center 20%',
+      },
+    ],
+  },
+
+  // 15. CAR & VEHICLE PHOTOGRAPHY
+  {
+    id: 'car-photography',
+    slug: 'car-photography',
+    categoryNumber: '15',
+    name: 'Car & Vehicle Photography',
+    heroBadge: '15 — AUTOMOTIVE SCULPTURE & SPEED',
+    headline: 'Sculpted Reflections & Pure Automotive Passion',
+    subheadline: 'From timeless British classics to modern exotic supercars, we celebrate the art of automotive design.',
+    heroImage: '/images/car_shoot_2.jpg',
+    heroPosition: 'center 60%',
+    introduction:
+      'Automotive photography demands mastery over curvature, metallic reflections, and dynamic velocity. We shoot bespoke location editorials on winding countryside passes, private airstrips, and urban architectural backdrops. Using polarized optics, light painting, and rolling shutter rigs, we accentuate every aerodynamic contour, polished alloy, and handcrafted cockpit stitch.',
+    serviceRoute: '/car-photography',
+    enquiryType: 'car-photography',
+    ctaText: 'Explore Car Photography',
+    enquireCtaText: 'Enquire About Car Photography',
+    momentsIncluded: [
+      'Golden-Hour Rig Shots & Rolling Motion Tracking',
+      'Hyper-Detailed Interior Cockpit & Leather Stitches',
+      'Sculpted Metallic Curves & Light-Painted Night Shoots',
+      'Airfield, Circuit & Countryside Scenic Routes',
+      'Supercar Showroom & Private Collector Portfolios',
+      'Classic Vintage British Restorations & Concours Displays',
+      'Commercial Dealership & Editorial Press Releases',
+      'Ultra-High-Resolution Large-Format Wall Art Prints',
+    ],
+    cards: [
+      {
+        num: '01',
+        title: 'Golden-Hour Rolling Track Motion',
+        desc: 'Fluid shutter blur capturing dynamic wheels at speed while the bodywork remains razor-sharp against the fading sunset.',
+        image: '/images/car_shoot_1.jpg',
+        alt: 'Rolling motion tracking car photography on open road',
+        objectPosition: 'center 60%',
+      },
+      {
+        num: '02',
+        title: 'Aerodynamic Stance & Front 3/4 Profiling',
+        desc: 'Low-angle compositions that emphasize aggressive splitters, wide wheelbases, and the commanding presence of modern engineering.',
+        image: '/images/car_shoot_2.jpg',
+        alt: 'Supercar front three quarter editorial stance portrait',
+        objectPosition: 'center center',
+      },
+      {
+        num: '03',
+        title: 'Handcrafted Interior & Cockpit Details',
+        desc: 'Soft ambient illumination highlighting diamond-quilted leather, milled aluminum toggles, and illuminated digital dashboards.',
+        image: '/images/car_shoot_3.jpg',
+        alt: 'Detailed automotive cockpit interior steering wheel and gauges',
+        objectPosition: 'center center',
+      },
+      {
+        num: '04',
+        title: 'Sculpted Tail Lamps & Exhaust Profiles',
+        desc: 'Atmospheric twilight compositions focusing on carbon-fiber rear diffusers, glowing quad exhaust tips, and brake calipers.',
+        image: '/images/car_shoot_4.jpg',
+        alt: 'Automotive rear profile and tail light signature',
+        objectPosition: 'center center',
+      },
+      {
+        num: '05',
+        title: 'Classic Heritage & Vintage Restorations',
+        desc: 'Timeless British country estates and historic cobblestones complementing vintage chrome bumpers and wire wheels.',
+        image: '/images/car_shoot_5.jpg',
+        alt: 'Classic vintage motorcar on country estate grounds',
+        objectPosition: 'center center',
+      },
+      {
+        num: '06',
+        title: 'Dramatic Night Light Painting & Reflections',
+        desc: 'Handheld continuous LED sweeps carving glowing metallic highlights across dark body panels in atmospheric hangar settings.',
+        image: '/images/car_shoot_6.jpg',
+        alt: 'Light painted automotive night photography',
+        objectPosition: 'center center',
+      },
+    ],
+  },
+
+  // 16. REELS & CREATIVE VIDEO SHOOTS
+  {
+    id: 'reels-shoots',
+    slug: 'reels-shoots',
+    categoryNumber: '16',
+    name: 'Reels & Creative Video Shoots',
+    heroBadge: '16 — 9:16 VERTICAL CINEMA & TRENDS',
+    headline: 'High-Impact Vertical Stories That Captivate & Go Viral',
+    subheadline: 'Cinematic color grading, seamless match-cuts, and rhythmic audio synchronization crafted for Instagram and TikTok.',
+    heroImage: '/images/reel_shoot_1.jpg',
+    heroPosition: 'center 20%',
+    introduction:
+      'In today’s fast-paced digital world, short-form vertical video is the ultimate medium of connection. We produce cinematic 9:16 reels for high-end weddings, VIP milestone celebrations, creative personal branding, and product launches. With 4K stabilized gimbals, licensed trending soundtracks, and same-day delivery options, our reels stop thumbs from scrolling and leave lasting impressions.',
+    serviceRoute: '/reels-shoots',
+    enquiryType: 'reels-shoots',
+    ctaText: 'Explore Creative Reels',
+    enquireCtaText: 'Enquire About Reels Shoots',
+    momentsIncluded: [
+      '4K Cinematic Vertical 9:16 Framing for Socials',
+      'Trending Audio & Rhythmic Beat Synchronization',
+      'Creative Match Cuts, Whip Transitions & Speed Ramps',
+      'Wedding Day Teaser Reels Delivered in 24–48 Hours',
+      'VIP Birthday Entrances & Cake Cutting Highlights',
+      'Behind-The-Scenes Creative Process & Brand Stories',
+      'Full Dynamic Gimbal & Drone Integration',
+      'Multi-Platform Sizing Optimized for IG, TikTok & Shorts',
+    ],
+    cards: [
+      {
+        num: '01',
+        title: 'Wedding Ceremony & Vow Teaser Reels',
+        desc: 'Emotional audio soundbites blended with slow-motion confetti showers and tender glances, optimized for instant social sharing.',
+        image: '/images/reel_shoot_1.jpg',
+        alt: 'Cinematic wedding reel vertical video freeze frame',
+        objectPosition: 'center 15%',
+      },
+      {
+        num: '02',
+        title: 'High-Energy Party Entrances & Dance Floors',
+        desc: 'Dynamic gimbal tracking, rhythmic strobe bursts, and beat-matched cuts capturing pure celebration electricity.',
+        image: '/images/reel_shoot_2.jpg',
+        alt: 'Party entrance and dance floor vertical reel video shot',
+        objectPosition: 'center 30%',
+      },
+      {
+        num: '03',
+        title: 'Behind-The-Scenes Creative Storytelling',
+        desc: 'Unfiltered, captivating glimpses into the craft, backstage preparation, and candid artistry of high-end events.',
+        image: '/images/reel_shoot_3.jpg',
+        alt: 'Behind the scenes creative photoshoot video clip',
+        objectPosition: 'center 35%',
+      },
+      {
+        num: '04',
+        title: 'Cinematic Lifestyle & Fashion Transitions',
+        desc: 'Smooth match-cuts and creative wardrobe transitions delivering magazine-worthy editorial elegance in 15 exhilarating seconds.',
+        image: '/images/reel_shoot_4.jpg',
+        alt: 'Fashion reel transition and lifestyle video production',
+        objectPosition: 'center center',
+      },
+      {
+        num: '05',
+        title: 'Automotive & Movement Speed Ramps',
+        desc: 'Kinetic acceleration ramps, tire spins, and cinematic rolling motion tailored for maximum viral engagement.',
+        image: '/images/reel_shoot_5.jpg',
+        alt: 'Automotive speed ramp and vehicle reel clip',
+        objectPosition: 'center center',
+      },
+      {
+        num: '06',
+        title: 'Luxury Brand Reveal & Showcase Reels',
+        desc: 'Hypnotic macro panning shots, lighting flares, and sleek product reveals designed to drive conversions and prestige.',
+        image: '/images/reel_shoot_6.jpg',
+        alt: 'Luxury brand reveal short-form vertical video reel',
+        objectPosition: 'center center',
+      },
+    ],
+  },
+
+  // 17. MODEL & FASHION PHOTOGRAPHY
+  {
+    id: 'model-photography',
+    slug: 'model-photography',
+    categoryNumber: '17',
+    name: 'Model & Fashion Photography',
+    heroBadge: '17 — HAUTE COUTURE & EDITORIAL EXPRESSION',
+    headline: 'High-Fashion Aesthetics & Striking Model Portfolios',
+    subheadline: 'Poetic lighting, avant-garde posing, and editorial direction that build commanding agency books.',
+    heroImage: '/images/model_shoot_1.jpg',
+    heroPosition: 'center 18%',
+    quoteImagePosition: 'center 18%',
+    introduction:
+      'Whether you are an aspiring talent building your inaugural agency Z-card or an established model updating your international portfolio, we offer high-fashion creative direction, sculptural studio lighting, and location editorial setups. We collaborate closely with stylists, makeup artists, and creatives to produce compelling images that exude personality, versatility, and timeless allure.',
+    serviceRoute: '/model-photography',
+    enquiryType: 'model-photography',
+    ctaText: 'Explore Model Photography',
+    enquireCtaText: 'Enquire About Model Photography',
+    momentsIncluded: [
+      'Comprehensive Agency Z-Card & Comp Sheet Portfolios',
+      'Haute Couture High-Fashion Editorial Concepts',
+      'Clean Commercial Headshots & Natural Beauty Test Shoots',
+      'Location Street-Style & Architecture Backdrops',
+      'Creative Mood-Board Development & Posing Direction',
+      'Studio Strobes, Softboxes & Parabolic Modifiers',
+      'High-End Frequency Separation & Texture-Preserving Retouching',
+      'Wardrobe Changes & Full Creative Freedom',
+    ],
+    cards: [
+      {
+        num: '01',
+        title: 'High-Fashion Studio Editorial',
+        desc: 'Clean geometric lines, striking silhouette posing, and sculptured studio strobes designed for fashion magazines.',
+        image: '/images/model_shoot_1.jpg',
+        alt: 'High fashion editorial studio model portrait',
+        objectPosition: 'center 12%',
+      },
+      {
+        num: '02',
+        title: 'Natural Beauty & Expressive Headshots',
+        desc: 'Minimalist makeup, honest eye contact, and delicate natural lighting showcasing authentic bone structure and skin fidelity.',
+        image: '/images/model_shoot_2.jpg',
+        alt: 'Close-up natural beauty model test headshot',
+        objectPosition: 'center 10%',
+      },
+      {
+        num: '03',
+        title: 'Avant-Garde Styling & Dramatic Shadows',
+        desc: 'Bold sartorial statements, dynamic fabrics in motion, and chiaroscuro lighting that pushes creative boundaries.',
+        image: '/images/model_shoot_3.jpg',
+        alt: 'Dramatic avant-garde fashion shoot with creative shadows',
+        objectPosition: 'center 20%',
+      },
+      {
+        num: '04',
+        title: 'Urban Street Style & Architectural Mood',
+        desc: 'London’s iconic concrete brutalism and historical façades providing rich, contemporary context for street-fashion lookbooks.',
+        image: '/images/model_shoot_4.jpg',
+        alt: 'Urban street style model photoshoot in London setting',
+        objectPosition: 'center 10%',
+      },
+      {
+        num: '05',
+        title: 'Movement, Fabric & Fluidity',
+        desc: 'High-speed flashes capturing flowing silk gowns, airborne hair, and unscripted motion that radiates confidence.',
+        image: '/images/model_shoot_5.jpg',
+        alt: 'Dynamic fashion model in motion with flowing fabric',
+        objectPosition: 'center 10%',
+      },
+      {
+        num: '06',
+        title: 'Commercial Campaign & Lookbook Styling',
+        desc: 'Versatile, approachable aesthetics engineered for clothing designers, accessories brands, and digital lookbooks.',
+        image: '/images/model_shoot_6.jpg',
+        alt: 'Commercial fashion lookbook clothing brand photography',
+        objectPosition: 'center 12%',
+      },
+    ],
+  },
 ]
 
 export const getCategoryBySlug = (slug) => {
@@ -887,6 +1283,21 @@ export const getCategoryBySlug = (slug) => {
       if (s === 'birthday-photography' && (cId === 'birthdays' || cSlug === 'birthdays')) return true
       if (s === 'pre-wedding' && (cId === 'engagement' || cSlug === 'engagement')) return true
       if (s === 'portraits' && (cId === 'corporate-events' || cSlug === 'corporate-events')) return true
+      if (s === 'sports' || s === 'sports-shoot' || s === 'sports-photography') {
+        if (cId === 'sports-photography' || cSlug === 'sports-photography' || cId === 'sports-shoot') return true
+      }
+      if (s === 'product' || s === 'product-shoot' || s === 'product-photography') {
+        if (cId === 'product-photography' || cSlug === 'product-photography' || cId === 'product-shoot') return true
+      }
+      if (s === 'car' || s === 'cars' || s === 'car-shoot' || s === 'cars-shoot' || s === 'car-photography') {
+        if (cId === 'car-photography' || cSlug === 'car-photography' || cId === 'car-shoot') return true
+      }
+      if (s === 'reel' || s === 'reels' || s === 'reels-shoot' || s === 'reels-shoots' || s === 'reel-shoot') {
+        if (cId === 'reels-shoots' || cSlug === 'reels-shoots' || cId === 'reels-shoot') return true
+      }
+      if (s === 'model' || s === 'model-shoot' || s === 'model-photography') {
+        if (cId === 'model-photography' || cSlug === 'model-photography' || cId === 'model-shoot') return true
+      }
       return false
     }) || null
   )

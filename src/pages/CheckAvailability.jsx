@@ -20,6 +20,11 @@ const eventTypeOptions = [
   "Father's Day",
   'Corporate',
   'Portrait',
+  'Sports Photography',
+  'Product Photography',
+  'Car & Vehicle Photography',
+  'Reels & Video Shoots',
+  'Model & Fashion Photography',
   'Other',
 ]
 
@@ -137,12 +142,12 @@ export default function CheckAvailability() {
 
   const whatsappMessage = encodeURIComponent(
     `Hello ${studioName}! I would like to check date availability:\n` +
-      `• Name: ${formData.name || 'Inquirer'}\n` +
-      `• Event: ${formData.eventType}\n` +
-      `• Date: ${formData.date || 'TBD'}\n` +
-      `• Location: ${formData.location || 'To be confirmed'}\n` +
-      `• Guests: ${formData.guestCount || 'Not specified'}\n` +
-      `• Package: ${formData.packagePreference}`
+    `• Name: ${formData.name || 'Inquirer'}\n` +
+    `• Event: ${formData.eventType}\n` +
+    `• Date: ${formData.date || 'TBD'}\n` +
+    `• Location: ${formData.location || 'To be confirmed'}\n` +
+    `• Guests: ${formData.guestCount || 'Not specified'}\n` +
+    `• Package: ${formData.packagePreference}`
   )
 
   return (
@@ -387,16 +392,14 @@ export default function CheckAvailability() {
                           <div
                             key={req}
                             onClick={() => handleRequirementToggle(req)}
-                            className={`p-3.5 border cursor-pointer flex items-center gap-3 transition-colors text-xs font-nav ${
-                              checked
+                            className={`p-3.5 border cursor-pointer flex items-center gap-3 transition-colors text-xs font-nav ${checked
                                 ? 'bg-ivory border-muted-gold text-charcoal font-semibold'
                                 : 'bg-transparent border-champagne/60 text-charcoal/75 hover:bg-ivory/50'
-                            }`}
+                              }`}
                           >
                             <div
-                              className={`w-4 h-4 rounded-sm border flex items-center justify-center flex-shrink-0 ${
-                                checked ? 'bg-muted-gold border-muted-gold text-deep-black' : 'border-champagne'
-                              }`}
+                              className={`w-4 h-4 rounded-sm border flex items-center justify-center flex-shrink-0 ${checked ? 'bg-muted-gold border-muted-gold text-deep-black' : 'border-champagne'
+                                }`}
                             >
                               {checked && <span className="text-[10px] leading-none font-bold">✓</span>}
                             </div>

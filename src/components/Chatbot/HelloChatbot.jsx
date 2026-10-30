@@ -49,7 +49,7 @@ const INITIAL_WELCOME = {
   ],
   actions: [
     { label: 'Explore Weddings', url: '/weddings', type: 'internal' },
-    { label: 'View Packages', url: '/packages', type: 'internal' },
+    { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
     { label: 'Check Availability', url: '/check-availability', type: 'internal' },
   ],
 }
@@ -155,7 +155,7 @@ export default function HelloChatbot() {
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         suggestions: ['Wedding Packages', 'Check Availability', 'Birthday Photography'],
         actions: [
-          { label: 'View Packages', url: '/packages', type: 'internal' },
+          { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
           { label: 'Check Availability', url: '/check-availability', type: 'internal' },
         ],
       }

@@ -166,7 +166,7 @@ export function Contact() {
             <motion.div className="contact__map" variants={itemVariants}>
               <div className="contact__map-visual">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d158858.4734000302!2d-0.24168153406289476!3d51.52855824177266!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a00baf21de75%3A0x52963a5addd52a99!2sLondon%2C%20UK!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2435.0!2d-0.9384!3d52.2476!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4877607e0a2a553f%3A0x9edb85a7e0de1a3d!2sNorthampton%2C%20NN5%2C%20UK!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk"
                   width="100%"
                   height="300"
                   style={{ border: 0, borderRadius: '8px' }}
@@ -177,8 +177,8 @@ export function Contact() {
                 ></iframe>
               </div>
               <div className="contact__location">
-                <h3>{studioInfo.location}</h3>
-                <p>{studioInfo.address}</p>
+                <h3>KG House – Northampton</h3>
+                <p>Unit H5/J, KG House, Northampton, Northamptonshire, NN5 7QS, United Kingdom</p>
               </div>
             </motion.div>
 

@@ -21,21 +21,49 @@ export function PhotographyCard({
   alt,
   onImageClick,
   className = '',
+  objectPosition,
+  aspectRatio = 'aspect-[16/10]',
 }) {
+  // Intelligent focal alignment so portraits, models, athletes, and products are never cropped awkwardly
+  const getFocalPosition = (src, explicitPos) => {
+    if (explicitPos) return explicitPos
+    if (!src) return 'center center'
+    const s = String(src).toLowerCase()
+    if (s.includes('model_shoot_1')) return 'center 12%'
+    if (s.includes('model_shoot_2')) return 'center 10%'
+    if (s.includes('model_shoot_3')) return 'center 20%'
+    if (s.includes('model_shoot_4')) return 'center 10%'
+    if (s.includes('model_shoot_5')) return 'center 10%'
+    if (s.includes('model_shoot_6')) return 'center 12%'
+    if (s.includes('model_shoot_')) return 'center 12%'
+    if (s.includes('sports_shoot_1')) return 'center 12%'
+    if (s.includes('sports_shoot_4')) return 'center 12%'
+    if (s.includes('product_shoot_1')) return 'center center'
+    if (s.includes('product_shoot_6')) return 'center 20%'
+    if (s.includes('car_shoot_1')) return 'center 60%'
+    if (s.includes('reel_shoot_1')) return 'center 15%'
+    if (s.includes('reel_shoot_2')) return 'center 30%'
+    if (s.includes('reel_shoot_3')) return 'center 35%'
+    return 'center center'
+  }
+
+  const focalPosition = getFocalPosition(image, objectPosition)
+
   return (
     <article
       className={`group bg-[#FAF6EE] border border-[#D8B77A]/50 hover:border-[#B9975B] transition-all duration-500 flex flex-col justify-between overflow-hidden shadow-[0_2px_12px_rgba(41,37,34,0.04)] hover:shadow-[0_8px_24px_rgba(185,151,91,0.15)] ${className}`}
     >
       {/* Image container */}
       <div
-        className="relative aspect-[16/10] overflow-hidden bg-[#EADECF] cursor-pointer"
+        className={`relative ${aspectRatio} overflow-hidden bg-[#EADECF] cursor-pointer`}
         onClick={onImageClick}
       >
         <img
           src={image}
           alt={alt || title}
           loading="lazy"
-          className="w-full h-full object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
+          style={{ objectPosition: focalPosition }}
+          className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1A1715]/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
@@ -74,6 +102,7 @@ export function EditorialCollectionSection({
   category = {},
   cards: propCards,
   index = 0,
+  showCards = false,
 }) {
   const [selectedImage, setSelectedImage] = useState(null)
   const isEven = index % 2 === 0
@@ -109,12 +138,14 @@ export function EditorialCollectionSection({
           <span className="text-caption uppercase tracking-[0.25em] text-[#B9975B] font-sans font-semibold block mb-3 text-xs sm:text-sm">
             {category.heroBadge || `${category.categoryNumber} — THE COMPLETE JOURNEY`}
           </span>
-          <h2
-            id={`heading-${category.id}`}
-            className="font-serif text-3xl sm:text-5xl md:text-6xl text-[#292522] font-light leading-[1.12]"
-          >
-            {category.headline || category.name}
-          </h2>
+          <Link to={serviceLink} className="inline-block group/title">
+            <h2
+              id={`heading-${category.id}`}
+              className="font-serif text-3xl sm:text-5xl md:text-6xl text-[#292522] font-light leading-[1.12] group-hover/title:text-[#9E7D42] transition-colors"
+            >
+              {category.headline || category.name}
+            </h2>
+          </Link>
           <div className="w-20 h-[1.5px] bg-[#D8B77A] mx-auto mt-4 mb-5" />
           <p className="text-[#51443A]/85 text-base sm:text-lg font-light leading-relaxed max-w-2xl mx-auto">
             {category.subheadline}
@@ -125,12 +156,23 @@ export function EditorialCollectionSection({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
           {/* Featured Image Column (approx 55% / 7 cols) */}
           <div className="lg:col-span-7">
-            <div className="relative group overflow-hidden border-2 border-[#D8B77A]/50 bg-[#EADECF] shadow-[0_12px_36px_rgba(41,37,34,0.08)]">
+            <Link
+              to={serviceLink}
+              className="block relative group overflow-hidden border-2 border-[#D8B77A]/50 bg-[#EADECF] shadow-[0_12px_36px_rgba(41,37,34,0.08)] cursor-pointer"
+            >
               <div className="aspect-[3/2] overflow-hidden">
                 <img
                   src={category.heroImage || cards[0]?.image}
                   alt={`${category.name} featured photograph`}
                   loading="lazy"
+                  style={{
+                    objectPosition:
+                      category.heroPosition ||
+                      (String(category.heroImage || '').includes('model_shoot_') ? 'center 20%' :
+                       String(category.heroImage || '').includes('sports_shoot_1') ? 'center 18%' :
+                       String(category.heroImage || '').includes('reel_shoot_1') ? 'center 20%' :
+                       'center center')
+                  }}
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 />
               </div>
@@ -140,12 +182,16 @@ export function EditorialCollectionSection({
                   <span className="text-[11px] font-nav uppercase tracking-[0.2em] text-[#E5BA78] block mb-1">
                     Signature Collection
                   </span>
-                  <span className="font-serif text-xl sm:text-2xl font-light text-[#FAF4EA]">
+                  <span className="font-serif text-xl sm:text-2xl font-light text-[#FAF4EA] group-hover:text-[#D8B77A] transition-colors">
                     {category.name}
                   </span>
                 </div>
+                <div className="inline-flex items-center gap-1.5 text-xs font-nav uppercase tracking-[0.15em] text-[#D8B77A]">
+                  <span>Explore Gallery</span>
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
 
           {/* Narrative & Moments Included Column (approx 45% / 5 cols) */}
@@ -199,8 +245,8 @@ export function EditorialCollectionSection({
           </div>
         </div>
 
-        {/* ── 3. Photography Cards Grid (Dynamic Portfolio Images) ── */}
-        {cards && cards.length > 0 && (
+        {/* ── 3. Photography Cards Grid (Only rendered if showCards is true) ── */}
+        {showCards && cards && cards.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 lg:gap-8 mt-12 md:mt-16">
             {cards.map((card, cardIdx) => (
               <PhotographyCard
@@ -210,6 +256,8 @@ export function EditorialCollectionSection({
                 desc={card.desc || card.description}
                 image={card.image || card.src}
                 alt={card.alt || card.title}
+                objectPosition={card.objectPosition || card.imagePosition}
+                aspectRatio={card.aspectRatio || category?.cardAspectRatio}
                 onImageClick={() => setSelectedImage(lightboxImages[cardIdx])}
               />
             ))}

@@ -9,6 +9,7 @@ import contactRoutes from './routes/contact.js'
 import commentRoutes from './routes/comments.js'
 import overviewRoutes from './routes/overview.js'
 import chatRoutes from './routes/chat.js'
+import offerRoutes from './routes/offers.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -30,6 +31,7 @@ app.use('/api/contact', contactRoutes)
 app.use('/api/comments', commentRoutes)
 app.use('/api/overview', overviewRoutes)
 app.use('/api/chat', chatRoutes)
+app.use('/api/offers', offerRoutes)
 
 // Health check
 app.get('/api/health', (req, res) => {

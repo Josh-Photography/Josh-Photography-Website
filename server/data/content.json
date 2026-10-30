@@ -3,11 +3,11 @@
     "name": "Josh Photography",
     "tagline": "Timeless Stories Worth Remembering — Masterfully Preserved",
     "description": "Fine-art documentary storytelling preserving authentic raw emotion and sacred heirlooms across the United Kingdom and Europe.",
-    "location": "Greater London, United Kingdom",
-    "address": "Greater London, United Kingdom",
-    "email": "hello@joshphotography.co.uk",
-    "phone": "+44 7988 889900",
-    "whatsapp": "+447988889900",
+    "location": "KG House – Northampton, United Kingdom",
+    "address": "Unit H5/J, KG House, Northampton, Northamptonshire, NN5 7QS, United Kingdom",
+    "email": "joshyjose282@gmail.com",
+    "phone": "+44 7988 827057",
+    "whatsapp": "+447988827057",
     "openingHours": "Monday – Saturday: 9:00 AM – 6:00 PM | Sunday: By Private Appointment",
     "announcement": {
       "badge": "04 — COMING SOON",
@@ -134,7 +134,7 @@
     "photographerHeadline": "Editorial Mastery & Quiet Presence",
     "photographerName": "Josh",
     "photographerRole": "Lead Photographer & Founder",
-    "photographerImage": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&q=85",
+    "photographerImage": "/Fonder.jpeg",
     "photographerBio1": "Hello, I am Josh. As a photographer, my goal is simple: to document your most meaningful milestones so faithfully that every time you revisit your photographs, you are instantly transported back to how the moment truly felt.",
     "photographerBio2": "My approach combines quiet photojournalism with refined, editorial portraiture. Whether documenting a sacred church ceremony in the English countryside, a historic countryside manor celebration, or a joyful family garden gathering, I bring patience, warmth, and keen observation to every commission.",
     "photographerQuote": "I don't just photograph what things look like — I photograph what they feel like. Your family's unique laughter, sacred vows, and candid joys deserve to be captured with dignity and timeless care.",
@@ -467,35 +467,20 @@
       "image": "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80",
       "order": 5,
       "published": true
-    }
-  ],
-  "collaborators": [
-    {
-      "id": 1,
-      "name": "Josh",
-      "role": "Lead Photographer & Founder",
-      "bio": "Over a decade documenting luxury weddings, candid celebrations, and multi-generational heirloom portraits across the United Kingdom.",
-      "image": "https://images.unsplash.com/photo-1556157382-97eda2d62296?w=900&q=80",
-      "social": {
-        "instagram": "https://instagram.com/joshphotography.uk",
-        "whatsapp": "+447988827057"
-      },
-      "order": 1,
-      "published": true
     },
     {
-      "id": 2,
-      "name": "Elena Vance",
-      "role": "Associate Photographer & Lighting Specialist",
-      "bio": "Specialist in candid photojournalism, multi-angle ceremony coverage, and soft ambient light portraits.",
-      "image": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=85",
-      "social": {
-        "instagram": "https://instagram.com/joshphotography.uk"
-      },
-      "order": 2,
+      "id": 6,
+      "name": "Sophie & Alexander",
+      "event": "Secret Proposal & Golden Hour Engagement",
+      "location": "Surrey Hills Estate, UK",
+      "rating": 5,
+      "review": "Josh helped coordinate the surprise proposal timing and secret vantage point flawlessly. The raw emotion captured in the golden hour light is beyond anything we imagined. Truly unforgettable artistry.",
+      "image": "/images/engagement-img-1.jpg",
+      "order": 6,
       "published": true
     }
   ],
+  "collaborators": [],
   "social": {
     "instagram": "https://www.instagram.com/josh.photography87/",
     "facebook": "",
@@ -521,5 +506,24 @@
     "bookingButtonText": "Check Availability",
     "bookingButtonLink": "/check-availability",
     "seoTitle": "Josh Photography | Luxury Wedding & Celebration Photography"
+  },
+  "anotherStudio": {
+    "enabled": true,
+    "studioName": "De Fab Studio",
+    "eyebrow": "OUR ANOTHER STUDIO — UNITED KINGDOM",
+    "heading": "Introducing De Fab Studio",
+    "subheading": "A New Space for Extraordinary Stories.",
+    "posterImage": "/another_studio.png",
+    "paragraphs": [
+      "We are delighted to introduce De Fab Studio, our additional photography studio in the United Kingdom, expanding our commitment to capturing life's most meaningful moments with creativity, artistry, and professionalism.",
+      "From beautiful weddings and engagement sessions to birthdays, anniversaries, maternity shoots, newborn portraits, and family celebrations, we create timeless photographs that preserve genuine emotions and unforgettable memories.",
+      "We also capture graduations, corporate events, professional portraits, and special occasions, including Mother's Day and Father's Day. Every session is approached with thoughtful composition, beautiful lighting, creative direction, and meticulous editing to ensure every photograph tells a meaningful story.",
+      "Whether it is an intimate family gathering or a grand celebration, our goal is to preserve the moments that matter most, creating photographs you and your loved ones will treasure for generations."
+    ],
+    "tagline": "Every Moment Has a Story. Let Us Capture Yours.",
+    "exploreButtonText": "Explore Our Studio",
+    "exploreButtonLink": "/portfolio",
+    "availabilityButtonText": "Check Availability",
+    "availabilityButtonLink": "/check-availability"
   }
 }

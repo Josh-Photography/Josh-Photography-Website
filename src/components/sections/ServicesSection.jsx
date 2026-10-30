@@ -163,10 +163,10 @@ export default function ServicesSection() {
                   <div>
                     <Link
                       to={service.path}
-                      className="group inline-flex items-center gap-3 text-xs uppercase tracking-[0.18em] font-nav font-semibold text-charcoal hover:text-muted-gold transition-all duration-300 pb-1 border-b border-charcoal/30 hover:border-muted-gold"
+                      className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-sm bg-gradient-to-r from-[#C39A57] via-[#D8B77A] to-[#C39A57] text-[#141210] font-nav text-xs uppercase tracking-[0.16em] font-semibold transition-all duration-300 shadow-[0_3px_14px_rgba(216,183,122,0.25)] hover:shadow-[0_5px_22px_rgba(216,183,122,0.45)] hover:-translate-y-0.5"
                     >
                       <span>{service.ctaText}</span>
-                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5 text-muted-gold" />
+                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 text-[#141210]" />
                     </Link>
                   </div>
                 </div>
@@ -184,7 +184,7 @@ export default function ServicesSection() {
         >
           <Link
             to="/services"
-            className="inline-flex items-center gap-3 px-10 py-4 bg-deep-charcoal text-ivory font-nav text-xs uppercase tracking-[0.16em] font-semibold hover:bg-muted-gold hover:text-deep-black transition-all duration-300 shadow-md"
+            className="inline-flex items-center gap-3 px-10 py-4 bg-gradient-to-r from-[#C39A57] via-[#D8B77A] to-[#C39A57] text-[#141210] font-nav text-xs uppercase tracking-[0.16em] font-semibold hover:shadow-[0_6px_28px_rgba(216,183,122,0.45)] transition-all duration-300 shadow-md hover:-translate-y-0.5"
           >
             <span>View All Services & Collections</span>
             <ArrowRight className="w-4 h-4" />

@@ -3,9 +3,9 @@ export const studioInfo = {
   tagline: 'Stories Worth Remembering',
   description: 'Crafting visual stories that transcend time. Every frame, a masterpiece.',
   founded: 2018,
-  location: 'Greater London, United Kingdom',
-  address: 'Greater London, United Kingdom',
-  email: 'hello@joshphotography.co.uk',
+  location: 'KG House – Northampton, United Kingdom',
+  address: 'Unit H5/J, KG House, Northampton, Northamptonshire, NN5 7QS, United Kingdom',
+  email: 'joshyjose282@gmail.com',
   phone: '+44 7988 827057',
   whatsapp: '+447988827057',
   social: {
@@ -96,7 +96,7 @@ export const timeline = [
   {
     year: 2025,
     title: 'Studio Launch',
-    description: 'Preparing for the grand opening of our Greater London studio next month.'
+    description: 'Preparing for the grand opening of our Northampton studio next month.'
   }
 ]
 

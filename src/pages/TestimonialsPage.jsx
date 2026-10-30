@@ -41,7 +41,7 @@ const additionalTestimonials = [
   },
 ]
 
-const fallbackAll = [...fallbackTestimonials, ...additionalTestimonials]
+const fallbackAll = fallbackTestimonials
 
 export default function TestimonialsPage() {
   const { testimonials: dynamicTestimonials } = useWebsiteData()

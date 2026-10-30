@@ -70,7 +70,7 @@ function generateDeterministicAnswer(query, history = [], kb) {
       suggestions: ['Wedding Packages & Pricing', 'Birthday Photography', 'Check Availability', 'Where is it located?'],
       actions: [
         { label: 'Explore Weddings', url: '/weddings', type: 'internal' },
-        { label: 'View Packages', url: '/packages', type: 'internal' },
+        { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
         { label: 'Check Availability', url: '/check-availability', type: 'internal' },
       ],
     }
@@ -208,8 +208,8 @@ function generateDeterministicAnswer(query, history = [], kb) {
       reply: `### Official Photography Packages & Pricing\n\n${focusNote}At Josh Photography, we believe in transparent starting pricing:\n\n1. **Essential Package — Starting From £495**\n   - Up to 4 hours of continuous coverage\n   - 1 professional photographer\n   - 200+ hand-edited high-resolution photographs\n   - Private online gallery with full download access & print release\n   - Fine-art color grading and individual retouching\n   - *Ideal for:* Intimate celebrations, first birthdays, civil ceremonies, maternity and newborn portraits.\n\n2. **Premium Package — Starting From £1,150 (Most Popular)**\n   - Up to 8 hours of complete coverage\n   - 2 professional photographers (capturing multiple angles simultaneously)\n   - 500+ hand-edited high-resolution photographs\n   - Pre-event consultation & timeline planning\n   - Highlight slideshow set to music\n   - Handcrafted 30-page premium photo album\n   - *Ideal for:* Full-day weddings, grand milestone celebrations, and family jubilees.\n\n3. **Signature Package — Request Pricing (Custom Commission)**\n   - Full-day unlimited coverage (12+ hours)\n   - 2 photographers + 1 dedicated cinematic videographer\n   - 800+ artistically edited photographs\n   - 4K cinematic highlight film (5–8 min) + ceremony film\n   - Aerial drone coverage (subject to venue permits)\n   - 50-page signature luxury photo album + 2 parent albums\n   - USB gift box with keepsake prints\n\n**Optional Add-ons:** Extra hours, additional photographer, aerial drone, same-day edit preview, album upgrades, fine-art canvas prints, and destination travel.`,
       suggestions: ['How do I book a package?', 'What is the delivery timeline?', 'Do you provide photo albums?'],
       actions: [
-        { label: 'View Full Packages Page', url: '/packages', type: 'internal' },
         { label: 'Check Availability', url: '/check-availability', type: 'internal' },
+        { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
         { label: 'WhatsApp for Availability', url: kb.studio.whatsappUrl, type: 'external' },
       ],
     }
@@ -252,7 +252,7 @@ function generateDeterministicAnswer(query, history = [], kb) {
       actions: [
         { label: 'Explore Weddings', url: '/weddings', type: 'internal' },
         { label: 'Explore Birthdays', url: '/birthday-photography', type: 'internal' },
-        { label: 'View Packages', url: '/packages', type: 'internal' },
+        { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
       ],
     }
   }
@@ -268,7 +268,7 @@ function generateDeterministicAnswer(query, history = [], kb) {
       actions: [
         { label: 'Explore Wedding Gallery', url: '/weddings', type: 'internal' },
         { label: 'Check Date Availability', url: '/check-availability', type: 'internal' },
-        { label: 'View Wedding Packages', url: '/packages', type: 'internal' },
+        { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
       ],
     }
   }
@@ -377,7 +377,7 @@ function generateDeterministicAnswer(query, history = [], kb) {
       suggestions: ['Explore Films', 'Signature Package Pricing', 'Check Availability'],
       actions: [
         { label: 'Explore Films', url: '/films', type: 'internal' },
-        { label: 'View Packages', url: '/packages', type: 'internal' },
+        { label: 'Check Availability', url: '/check-availability', type: 'internal' },
       ],
     }
   }
@@ -388,7 +388,7 @@ function generateDeterministicAnswer(query, history = [], kb) {
       reply: `### Gallery Delivery & Turnaround Times\n\nWe know how eagerly you and your family anticipate your photographs! Our delivery workflow is:\n\n1. **Curated Highlight Preview (48 to 72 Hours):**\n   You will receive **25 to 30 hand-graded highlight frames** within 48 to 72 hours of your celebration. These are perfect for instant mobile viewing, family sharing, and social announcements.\n\n2. **Complete Digital Gallery (3 to 4 Weeks):**\n   Your full, comprehensive high-resolution gallery (200+ to 800+ frames depending on your package) is individually color-graded, retouched, and delivered within **3 to 4 weeks** via a secure private online gallery.\n\n3. **Heirloom Albums & Prints:**\n   For clients with handcrafted fine-art albums (included in Premium & Signature), once you approve your favorite album spreads, printing and hand-binding take approximately **2 to 3 weeks** before archival delivery to your door.`,
       suggestions: ['What packages include albums?', 'Can we download full resolution?', 'Check Availability'],
       actions: [
-        { label: 'View Packages', url: '/packages', type: 'internal' },
+        { label: 'Check Availability', url: '/check-availability', type: 'internal' },
         { label: 'Contact Team', url: '/contact', type: 'internal' },
       ],
     }
@@ -451,7 +451,7 @@ function generateDeterministicAnswer(query, history = [], kb) {
     reply: `Thank you for asking about **Josh Photography**!\n\nAs your photography assistant, I can help you with:\n- **Photography Services:** Weddings, birthdays, maternity, family, anniversaries, baby & newborn, graduations, corporate events, and wedding films.\n- **Packages & Rates:** Essential (Starting From £495), Premium (Starting From £1,150), and Signature (Request Pricing).\n- **Dates & Availability:** Peak weekend scheduling, advance recommendations, and consultations.\n- **Turnaround:** 25–30 preview frames within 48–72 hours; complete digital gallery in 3–4 weeks.\n\nFor custom quotes, venue travel inquiries, or specific date openings, please get in touch with Josh directly at **${studioPhone}** or email **${studioEmail}**!`,
     suggestions: ['Wedding Packages', 'Birthday Photography', 'Check Availability', 'Where is it located?'],
     actions: [
-      { label: 'View Packages', url: '/packages', type: 'internal' },
+      { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
       { label: 'Check Availability', url: '/check-availability', type: 'internal' },
       { label: 'Contact Team', url: '/contact', type: 'internal' },
     ],
@@ -476,7 +476,7 @@ export async function handleChatMessage({ message = '', history = [] }) {
       ],
       actions: [
         { label: 'Explore Weddings', url: '/weddings', type: 'internal' },
-        { label: 'View Packages', url: '/packages', type: 'internal' },
+        { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
         { label: 'Check Availability', url: '/check-availability', type: 'internal' },
       ],
       topicRestricted: true,
@@ -572,7 +572,7 @@ Keep formatting clean, professional, and friendly with markdown.`
     reply: rawText,
     suggestions: ['Wedding Packages & Pricing', 'Birthday Photography', 'Check Availability'],
     actions: [
-      { label: 'View Packages', url: '/packages', type: 'internal' },
+      { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
       { label: 'Check Availability', url: '/check-availability', type: 'internal' },
       { label: 'Contact Us', url: '/contact', type: 'internal' },
     ],
@@ -632,7 +632,7 @@ STRICT RULES:
     reply: rawText,
     suggestions: ['Wedding Packages & Pricing', 'Birthday Photography', 'Check Availability'],
     actions: [
-      { label: 'View Packages', url: '/packages', type: 'internal' },
+      { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
       { label: 'Check Availability', url: '/check-availability', type: 'internal' },
     ],
     topicRestricted: rawText.includes(OFF_TOPIC_RESPONSE),
