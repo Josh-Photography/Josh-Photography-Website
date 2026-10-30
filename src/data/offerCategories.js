@@ -123,7 +123,7 @@ export const OFFER_CATEGORIES = [
     id: 'car-shoot',
     label: 'Car & Vehicle Photography',
     defaultPath: '/car-photography',
-    defaultHeroImage: '/images/car_shoot_2.jpg',
+    defaultHeroImage: '/images/car_shoot_1.jpg',
     icon: '🏎️',
     isPrimaryCategory: true,
   },

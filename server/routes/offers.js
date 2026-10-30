@@ -54,7 +54,15 @@ function readOffersData() {
     }
   }
   try {
-    return JSON.parse(readFileSync(offersPath, 'utf8'))
+    const raw = readFileSync(offersPath, 'utf8')
+    if (!raw.trim()) {
+      return { sectionSettings: { enabled: true }, offers: [] }
+    }
+    const parsed = JSON.parse(raw)
+    return {
+      sectionSettings: parsed.sectionSettings || { enabled: true },
+      offers: Array.isArray(parsed.offers) ? parsed.offers : [],
+    }
   } catch (err) {
     console.error('Error parsing offers.json:', err)
     return { sectionSettings: { enabled: true }, offers: [] }
@@ -62,7 +70,23 @@ function readOffersData() {
 }
 
 function writeOffersData(data) {
-  writeFileSync(offersPath, JSON.stringify(data, null, 2))
+  const serialized = JSON.stringify(data, null, 2)
+  try {
+    writeFileSync(offersPath, serialized, 'utf8')
+  } catch (err) {
+    if (err.code === 'EBUSY' || err.code === 'EPERM') {
+      try {
+        const tempPath = `${offersPath}.${Date.now()}.tmp`
+        writeFileSync(tempPath, serialized, 'utf8')
+        writeFileSync(offersPath, serialized, 'utf8')
+      } catch (inner) {
+        console.error('Fatal offers write error:', inner)
+        throw inner
+      }
+    } else {
+      throw err
+    }
+  }
 }
 
 function computeOfferStatus(offer) {
@@ -88,6 +112,9 @@ function computeOfferStatus(offer) {
 // ─────────────────────────────────────────────────────────────────────────────
 router.get('/', (req, res) => {
   try {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+    res.set('Pragma', 'no-cache')
+    res.set('Expires', '0')
     const data = readOffersData()
     const settings = data.sectionSettings || { enabled: true }
 
@@ -126,6 +153,9 @@ router.get('/', (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────────
 router.get('/admin', authenticateToken, (req, res) => {
   try {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
+    res.set('Pragma', 'no-cache')
+    res.set('Expires', '0')
     const data = readOffersData()
     const allOffers = Array.isArray(data.offers) ? data.offers : []
 
@@ -212,12 +242,13 @@ router.post('/', authenticateToken, (req, res) => {
     }
 
     const newOffer = {
-      id: `offer-${Date.now()}-${uuidv4().slice(0, 6)}`,
+      id: req.body.id || `offer-${Date.now()}-${uuidv4().slice(0, 6)}`,
       title: title.trim(),
       tagline: tagline ? tagline.trim() : '',
       festival: festival ? festival.trim() : '',
       description: description ? description.trim() : '',
       discountPercent: discountNum,
+      bannerImage: bannerImage ? String(bannerImage).trim() : '',
       category: req.body.category || (Array.isArray(categories) && categories[0]) || '',
       categories: Array.isArray(categories) ? categories : (req.body.category ? [req.body.category] : []),
       categoryDiscounts: (categoryDiscounts && typeof categoryDiscounts === 'object') ? categoryDiscounts : {},
@@ -234,6 +265,8 @@ router.post('/', authenticateToken, (req, res) => {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }
+
+    newOffer.computedStatus = computeOfferStatus(newOffer)
 
     data.offers = data.offers || []
     data.offers.push(newOffer)
@@ -257,24 +290,46 @@ router.put('/:id', authenticateToken, (req, res) => {
     const index = (data.offers || []).findIndex((o) => String(o.id) === String(id))
 
     if (index === -1) {
-      return res.status(404).json({ error: 'Offer not found' })
-    }
-
-    if (req.body.discountPercent !== undefined) {
-      const discountNum = Number(req.body.discountPercent)
-      if (isNaN(discountNum) || discountNum < 0 || discountNum > 100) {
-        return res.status(400).json({ error: 'Discount percentage must be a number between 0% and 100%' })
-      }
-      req.body.discountPercent = discountNum
+      return res.status(404).json({ error: `Offer not found with ID: ${id}` })
     }
 
     const existing = data.offers[index]
+
+    let discountNum = existing.discountPercent
+    if (req.body.discountPercent !== undefined && req.body.discountPercent !== null && req.body.discountPercent !== '') {
+      discountNum = Number(req.body.discountPercent)
+      if (isNaN(discountNum) || discountNum < 0 || discountNum > 100) {
+        return res.status(400).json({ error: 'Discount percentage must be a number between 0% and 100%' })
+      }
+    }
+
     const updated = {
       ...existing,
       ...req.body,
       id: existing.id,
+      title: req.body.title !== undefined ? String(req.body.title).trim() : existing.title,
+      tagline: req.body.tagline !== undefined ? String(req.body.tagline).trim() : existing.tagline,
+      festival: req.body.festival !== undefined ? String(req.body.festival).trim() : existing.festival,
+      description: req.body.description !== undefined ? String(req.body.description).trim() : existing.description,
+      discountPercent: discountNum,
+      order: req.body.order !== undefined ? (Number(req.body.order) || existing.order) : existing.order,
+      published: req.body.published !== undefined ? Boolean(req.body.published) : (existing.published !== false),
+      bannerImage: req.body.bannerImage !== undefined ? String(req.body.bannerImage).trim() : (existing.bannerImage || ''),
+      category: req.body.category !== undefined ? req.body.category : existing.category,
+      categories: Array.isArray(req.body.categories) ? req.body.categories : (existing.categories || (existing.category ? [existing.category] : [])),
+      categoryDiscounts: (req.body.categoryDiscounts && typeof req.body.categoryDiscounts === 'object') ? req.body.categoryDiscounts : (existing.categoryDiscounts || {}),
+      startDate: req.body.startDate !== undefined ? req.body.startDate : existing.startDate,
+      endDate: req.body.endDate !== undefined ? req.body.endDate : existing.endDate,
+      terms: req.body.terms !== undefined ? String(req.body.terms).trim() : existing.terms,
+      badgeText: req.body.badgeText !== undefined ? String(req.body.badgeText).trim() : (existing.badgeText || 'OFF'),
+      badgeStyle: req.body.badgeStyle !== undefined ? (req.body.badgeStyle === 'ribbon' ? 'ribbon' : 'starburst') : (existing.badgeStyle || 'starburst'),
+      showBadge: req.body.showBadge !== undefined ? Boolean(req.body.showBadge) : (existing.showBadge !== false),
+      promoLabel: req.body.promoLabel !== undefined ? String(req.body.promoLabel).trim() : (existing.promoLabel || ''),
+      showSpecialOfferSticker: req.body.showSpecialOfferSticker !== undefined ? Boolean(req.body.showSpecialOfferSticker) : Boolean(existing.showSpecialOfferSticker),
       updatedAt: new Date().toISOString(),
     }
+
+    updated.computedStatus = computeOfferStatus(updated)
 
     data.offers[index] = updated
     writeOffersData(data)
@@ -283,7 +338,7 @@ router.put('/:id', authenticateToken, (req, res) => {
     res.json(updated)
   } catch (error) {
     console.error('Error updating offer:', error)
-    res.status(500).json({ error: 'Failed to update promotional offer' })
+    res.status(500).json({ error: 'Failed to update promotional offer: ' + error.message })
   }
 })
 

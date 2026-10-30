@@ -1027,7 +1027,7 @@ export const photographyCategories = [
         desc: 'Harmonious geometric arrangements displaying complete skincare lines, seasonal flavors, and luxury ensembles.',
         image: '/images/product_shoot_6.jpg',
         alt: 'Multi-item collection product group arrangement',
-        objectPosition: 'center 20%',
+        objectPosition: 'center center',
       },
     ],
   },
@@ -1041,8 +1041,8 @@ export const photographyCategories = [
     heroBadge: '15 — AUTOMOTIVE SCULPTURE & SPEED',
     headline: 'Sculpted Reflections & Pure Automotive Passion',
     subheadline: 'From timeless British classics to modern exotic supercars, we celebrate the art of automotive design.',
-    heroImage: '/images/car_shoot_2.jpg',
-    heroPosition: 'center 60%',
+    heroImage: '/images/car_shoot_1.jpg',
+    heroPosition: 'center center',
     introduction:
       'Automotive photography demands mastery over curvature, metallic reflections, and dynamic velocity. We shoot bespoke location editorials on winding countryside passes, private airstrips, and urban architectural backdrops. Using polarized optics, light painting, and rolling shutter rigs, we accentuate every aerodynamic contour, polished alloy, and handcrafted cockpit stitch.',
     serviceRoute: '/car-photography',
@@ -1066,7 +1066,7 @@ export const photographyCategories = [
         desc: 'Fluid shutter blur capturing dynamic wheels at speed while the bodywork remains razor-sharp against the fading sunset.',
         image: '/images/car_shoot_1.jpg',
         alt: 'Rolling motion tracking car photography on open road',
-        objectPosition: 'center 60%',
+        objectPosition: 'center center',
       },
       {
         num: '02',

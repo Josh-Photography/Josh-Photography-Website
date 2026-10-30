@@ -29,21 +29,22 @@ export function PhotographyCard({
     if (explicitPos) return explicitPos
     if (!src) return 'center center'
     const s = String(src).toLowerCase()
+    // Model shoots — portrait images, keep face/head in frame
     if (s.includes('model_shoot_1')) return 'center 12%'
     if (s.includes('model_shoot_2')) return 'center 10%'
-    if (s.includes('model_shoot_3')) return 'center 20%'
+    if (s.includes('model_shoot_3')) return 'center 15%'
     if (s.includes('model_shoot_4')) return 'center 10%'
     if (s.includes('model_shoot_5')) return 'center 10%'
     if (s.includes('model_shoot_6')) return 'center 12%'
     if (s.includes('model_shoot_')) return 'center 12%'
+    // Sports shoots — vertical action shots, keep athlete head/jump in frame
     if (s.includes('sports_shoot_1')) return 'center 12%'
     if (s.includes('sports_shoot_4')) return 'center 12%'
-    if (s.includes('product_shoot_1')) return 'center center'
-    if (s.includes('product_shoot_6')) return 'center 20%'
-    if (s.includes('car_shoot_1')) return 'center 60%'
-    if (s.includes('reel_shoot_1')) return 'center 15%'
-    if (s.includes('reel_shoot_2')) return 'center 30%'
-    if (s.includes('reel_shoot_3')) return 'center 35%'
+    // Product shots — landscape high-res, standard center
+    if (s.includes('product_shoot_')) return 'center center'
+    // Car & Reel shoots — all now landscape high-res, standard center
+    if (s.includes('car_shoot_')) return 'center center'
+    if (s.includes('reel_shoot_')) return 'center center'
     return 'center center'
   }
 

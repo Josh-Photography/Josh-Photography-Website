@@ -1441,7 +1441,7 @@
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
       "updatedAt": "2026-10-29T23:17:31.431Z",
-      "objectPosition": "center 20%"
+      "objectPosition": "center center"
     },
     {
       "id": "photo-car-shoot-1",
@@ -1458,7 +1458,7 @@
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
       "updatedAt": "2026-10-29T23:17:31.431Z",
-      "objectPosition": "center 60%"
+      "objectPosition": "center center"
     },
     {
       "id": "photo-car-shoot-2",

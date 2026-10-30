@@ -1,5 +1,6 @@
 import initialContent from '../../server/data/content.json'
 import initialPhotos from '../../server/data/photos.json'
+import initialOffers from '../../server/data/offers.json'
 
 const STORAGE_KEY = 'josh_cms_data'
 const EVENT_NAME = 'josh_data_updated'
@@ -87,6 +88,10 @@ class DataService {
             const rawServices = Array.isArray(rawContent.services) ? rawContent.services : []
             const servicesList = (rawServices.length > 0) ? rawServices : (initialContent.services || [])
 
+            const rawOffers = Array.isArray(parsed.offers) ? parsed.offers : (Array.isArray(rawContent.offers) ? rawContent.offers : [])
+            const offersList = (rawOffers.length > 0) ? rawOffers : (initialOffers.offers || [])
+            const offersSettingsData = parsed.offersSettings || rawContent.offersSettings || initialOffers.sectionSettings || { enabled: true }
+
             const normalized = {
               content: {
                 studio: { ...(initialContent.studio || {}), ...(rawContent.studio || {}) },
@@ -101,8 +106,8 @@ class DataService {
               },
               photos: photosList,
               categories: categoriesList,
-              offers: Array.isArray(parsed.offers) ? parsed.offers : (Array.isArray(rawContent.offers) ? rawContent.offers : []),
-              offersSettings: parsed.offersSettings || rawContent.offersSettings || { enabled: true },
+              offers: offersList,
+              offersSettings: offersSettingsData,
             }
             this.memoryCache = normalized
             return normalized
@@ -117,8 +122,8 @@ class DataService {
       content: initialContent,
       photos: Array.isArray(initialPhotos.photos) ? initialPhotos.photos : [],
       categories: Array.isArray(initialPhotos.categories) ? initialPhotos.categories : [],
-      offers: [],
-      offersSettings: { enabled: true },
+      offers: Array.isArray(initialOffers.offers) ? initialOffers.offers : [],
+      offersSettings: initialOffers.sectionSettings || { enabled: true },
     }
     this.memoryCache = fallback
     return fallback
@@ -185,6 +190,7 @@ class DataService {
         if (typeof window !== 'undefined') {
           try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
+            window.dispatchEvent(new Event(EVENT_NAME))
           } catch (e) { }
         }
         this.notify()
@@ -403,6 +409,232 @@ class DataService {
 
     this.notify()
     return updated
+  }
+
+  // Update single promotional offer (used by Admin edit & publish toggle)
+  async updateSingleOffer(offerId, partialOfferData, authHeaders = {}) {
+    // 1. Update memoryCache and localStorage immediately
+    const current = this.getAllDataSync()
+    const currentOffers = Array.isArray(current.offers) ? [...current.offers] : []
+    const idx = currentOffers.findIndex((o) => String(o.id) === String(offerId))
+
+    let updatedOffer = null
+    if (idx !== -1) {
+      updatedOffer = {
+        ...currentOffers[idx],
+        ...partialOfferData,
+        id: currentOffers[idx].id,
+        updatedAt: new Date().toISOString(),
+      }
+      currentOffers[idx] = updatedOffer
+    } else {
+      updatedOffer = {
+        id: offerId,
+        ...partialOfferData,
+        updatedAt: new Date().toISOString(),
+      }
+      currentOffers.push(updatedOffer)
+    }
+
+    const updated = { ...current, offers: currentOffers }
+    this.memoryCache = updated
+
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+        window.dispatchEvent(new Event(EVENT_NAME))
+      } catch (e) { }
+    }
+
+    // 2. Persist to backend API
+    const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...authHeaders,
+    }
+
+    const res = await fetch(`${API_BASE}/offers/${encodeURIComponent(offerId)}`, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(partialOfferData),
+    })
+
+    if (!res.ok) {
+      let errorMsg = `Server returned ${res.status}`
+      try {
+        const text = await res.text()
+        try {
+          const errData = JSON.parse(text)
+          errorMsg = errData.error || errData.message || errorMsg
+        } catch {
+          if (text && text.length < 200) {
+            errorMsg = text
+          }
+        }
+      } catch { }
+      throw new Error(errorMsg)
+    }
+
+    const serverData = await res.json()
+    if (serverData && serverData.id) {
+      const finalIndex = currentOffers.findIndex((o) => String(o.id) === String(serverData.id))
+      if (finalIndex !== -1) {
+        currentOffers[finalIndex] = { ...currentOffers[finalIndex], ...serverData }
+        this.memoryCache = { ...current, offers: currentOffers }
+        if (typeof window !== 'undefined') {
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(this.memoryCache))
+            window.dispatchEvent(new Event(EVENT_NAME))
+          } catch (e) { }
+        }
+      }
+    }
+
+    this.notify()
+    return serverData || updatedOffer
+  }
+
+  // Create new campaign offer
+  async createOffer(newOfferPayload, authHeaders = {}) {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...authHeaders,
+    }
+
+    const res = await fetch(`${API_BASE}/offers`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(newOfferPayload),
+    })
+
+    if (!res.ok) {
+      let errorMsg = `Server returned ${res.status}`
+      try {
+        const text = await res.text()
+        try {
+          const errData = JSON.parse(text)
+          errorMsg = errData.error || errData.message || errorMsg
+        } catch {
+          if (text && text.length < 200) {
+            errorMsg = text
+          }
+        }
+      } catch { }
+      throw new Error(errorMsg)
+    }
+
+    const created = await res.json()
+    const current = this.getAllDataSync()
+    const currentOffers = Array.isArray(current.offers) ? [...current.offers] : []
+    currentOffers.push(created)
+
+    const updated = { ...current, offers: currentOffers }
+    this.memoryCache = updated
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+        window.dispatchEvent(new Event(EVENT_NAME))
+      } catch (e) { }
+    }
+
+    this.notify()
+    return created
+  }
+
+  // Delete campaign offer
+  async deleteOffer(offerId, authHeaders = {}) {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...authHeaders,
+    }
+
+    const res = await fetch(`${API_BASE}/offers/${encodeURIComponent(offerId)}`, {
+      method: 'DELETE',
+      headers,
+    })
+
+    if (!res.ok) {
+      let errorMsg = `Server returned ${res.status}`
+      try {
+        const text = await res.text()
+        try {
+          const errData = JSON.parse(text)
+          errorMsg = errData.error || errData.message || errorMsg
+        } catch {
+          if (text && text.length < 200) {
+            errorMsg = text
+          }
+        }
+      } catch { }
+      throw new Error(errorMsg)
+    }
+
+    const current = this.getAllDataSync()
+    const currentOffers = (current.offers || []).filter((o) => String(o.id) !== String(offerId))
+    const updated = { ...current, offers: currentOffers }
+    this.memoryCache = updated
+
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+        window.dispatchEvent(new Event(EVENT_NAME))
+      } catch (e) { }
+    }
+
+    this.notify()
+    return true
+  }
+
+  // Update section settings (toggle page visibility, hero header)
+  async updateOffersSettings(settingsPayload, authHeaders = {}) {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...authHeaders,
+    }
+
+    const res = await fetch(`${API_BASE}/offers/settings`, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(settingsPayload),
+    })
+
+    if (!res.ok) {
+      let errorMsg = `Server returned ${res.status}`
+      try {
+        const text = await res.text()
+        try {
+          const errData = JSON.parse(text)
+          errorMsg = errData.error || errData.message || errorMsg
+        } catch {
+          if (text && text.length < 200) {
+            errorMsg = text
+          }
+        }
+      } catch { }
+      throw new Error(errorMsg)
+    }
+
+    const updatedSettings = await res.json()
+    const current = this.getAllDataSync()
+    const updated = { ...current, offersSettings: updatedSettings }
+    this.memoryCache = updated
+
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
+        window.dispatchEvent(new Event(EVENT_NAME))
+      } catch (e) { }
+    }
+
+    this.notify()
+    return updatedSettings
   }
 
   // Submit Contact Form

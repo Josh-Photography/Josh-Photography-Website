@@ -34,21 +34,26 @@ export default function CategoryTemplate({
   const hasLoadedData = Boolean(data && Array.isArray(data.photos) && data.photos.length > 0)
   const categoryCards = (dynamicCards && (dynamicCards.length > 0 || hasLoadedData)) ? dynamicCards : (categoryData?.cards || [])
 
-  const heroImg = categoryData?.heroImage || quoteImage || '/images/hero-church-wedding.jpg'
+  // Hero image: when the admin has reordered photos in the Portfolio editor, the first
+  // dynamic card (order=1) becomes the effective hero — enabling admin-managed hero updates.
+  // Falls back to categoryData.heroImage, then quoteImage, then a global default.
+  const firstAdminCard = dynamicCards.length > 0 ? dynamicCards[0] : null
+  const heroImg = (firstAdminCard?.image || firstAdminCard?.src) || categoryData?.heroImage || quoteImage || '/images/hero-church-wedding.jpg'
 
   // Focal position resolution for Hero so faces and athletes are never cropped
   const getHeroFocalPosition = (img, explicitPos) => {
     if (explicitPos) return explicitPos
     if (categoryData?.heroPosition) return categoryData.heroPosition
     const s = String(img || '').toLowerCase()
+    // Model & Sports heroes remain portrait — keep faces at top
     if (s.includes('model_shoot_1')) return 'center 18%'
     if (s.includes('model_shoot_')) return 'center 20%'
     if (s.includes('sports_shoot_1')) return 'center 18%'
     if (s.includes('sports_shoot_')) return 'center 20%'
-    if (s.includes('reel_shoot_1')) return 'center 20%'
-    if (s.includes('reel_shoot_')) return 'center 25%'
-    if (s.includes('car_shoot_1')) return 'center 60%'
-    if (s.includes('car_shoot_')) return 'center 60%'
+    // Reel heroes are now landscape — standard center
+    if (s.includes('reel_shoot_')) return 'center center'
+    // Car heroes are now high-res landscape — standard center
+    if (s.includes('car_shoot_')) return 'center center'
     if (s.includes('product_shoot_1')) return 'center 45%'
     return 'center center'
   }
@@ -62,7 +67,8 @@ export default function CategoryTemplate({
     const s = String(img || '').toLowerCase()
     if (s.includes('model_shoot_')) return 'center 18%'
     if (s.includes('sports_shoot_')) return 'center 18%'
-    if (s.includes('reel_shoot_')) return 'center 18%'
+    // Reel shoots are now landscape — standard center
+    if (s.includes('reel_shoot_')) return 'center center'
     return 'center center'
   }
   const resolvedQuotePos = getQuoteFocalPosition(quoteImg, quoteImagePosition)

@@ -7,7 +7,7 @@ export default function Cars() {
       badge="15 — AUTOMOTIVE SCULPTURE & SPEED"
       title="Sculpted Reflections & Pure Automotive Passion"
       tagline="Rolling Shutter Rigs, Aerodynamic Contours & Cockpit Art"
-      heroPosition="center 60%"
+      heroPosition="center center"
       quoteImagePosition="center center"
       filterCategory="car-photography"
       description={[

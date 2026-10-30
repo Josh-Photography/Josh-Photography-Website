@@ -1,5 +1,59 @@
 [
   {
+    "id": "act-1793393394647",
+    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
+    "user": "Admin",
+    "timestamp": "2026-10-30T20:49:54.647Z"
+  },
+  {
+    "id": "act-1793393394642",
+    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
+    "user": "Admin",
+    "timestamp": "2026-10-30T20:49:54.642Z"
+  },
+  {
+    "id": "act-1793393394634",
+    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
+    "user": "Admin",
+    "timestamp": "2026-10-30T20:49:54.634Z"
+  },
+  {
+    "id": "act-1793392750834",
+    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
+    "user": "Admin",
+    "timestamp": "2026-10-30T20:39:10.834Z"
+  },
+  {
+    "id": "act-1793392750821",
+    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
+    "user": "Admin",
+    "timestamp": "2026-10-30T20:39:10.821Z"
+  },
+  {
+    "id": "act-1793392750803",
+    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
+    "user": "Admin",
+    "timestamp": "2026-10-30T20:39:10.803Z"
+  },
+  {
+    "id": "act-1793391829303",
+    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
+    "user": "Admin",
+    "timestamp": "2026-10-30T20:23:49.303Z"
+  },
+  {
+    "id": "act-1793391829295",
+    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
+    "user": "Admin",
+    "timestamp": "2026-10-30T20:23:49.295Z"
+  },
+  {
+    "id": "act-1793391829286",
+    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
+    "user": "Admin",
+    "timestamp": "2026-10-30T20:23:49.286Z"
+  },
+  {
     "id": "act-1793233087598",
     "action": "New inquiry received from Hirthick (Engagement Ceremony)",
     "user": "System",
@@ -244,59 +298,5 @@
     "action": "Deleted photo \"test\" from birthdays",
     "user": "Admin",
     "timestamp": "2026-10-12T23:36:30.185Z"
-  },
-  {
-    "id": "act-1791848177528",
-    "action": "Synchronized 73 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-12T23:36:17.528Z"
-  },
-  {
-    "id": "act-1791848177450",
-    "action": "Synchronized 73 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-12T23:36:17.450Z"
-  },
-  {
-    "id": "act-1791848162583",
-    "action": "Synchronized 73 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-12T23:36:02.584Z"
-  },
-  {
-    "id": "act-1791848162069",
-    "action": "Synchronized 73 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-12T23:36:02.069Z"
-  },
-  {
-    "id": "act-1791848101410",
-    "action": "Synchronized 73 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-12T23:35:01.410Z"
-  },
-  {
-    "id": "act-1791848101314",
-    "action": "Synchronized 73 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-12T23:35:01.314Z"
-  },
-  {
-    "id": "act-1791848096968",
-    "action": "Uploaded content asset: bi.jpg",
-    "user": "Admin",
-    "timestamp": "2026-10-12T23:34:56.968Z"
-  },
-  {
-    "id": "act-1791848008836",
-    "action": "Deleted photo \"Temporary Photo To Delete\" from weddings",
-    "user": "Admin",
-    "timestamp": "2026-10-12T23:33:28.836Z"
-  },
-  {
-    "id": "act-1791848008801",
-    "action": "Synchronized 73 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-12T23:33:28.801Z"
   }
 ]

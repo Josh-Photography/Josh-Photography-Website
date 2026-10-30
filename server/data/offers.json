@@ -20,7 +20,7 @@
       "showBadge": true,
       "promoLabel": "SPECIAL OFFER",
       "showSpecialOfferSticker": true,
-      "tagline": "Complimentary Pre-Wedding Engagement Shoot + Bespoke Handcrafted Italian Heirloom Album",
+      "tagline": "★ Complimentary Pre-Wedding Engagement Shoot + Bespoke Handcrafted Italian Heirloom Album",
       "festival": "Wedding Season",
       "description": "Commission full-day coverage for historic church ceremonies or countryside manor celebrations across the United Kingdom. Includes dual photographers, full-resolution master gallery, and signature hand-bound leather keepsake album.",
       "startDate": "",
@@ -29,7 +29,8 @@
       "order": 1,
       "published": true,
       "computedStatus": "active",
-      "updatedAt": "2026-10-29T00:17:19.347Z"
+      "updatedAt": "2026-10-30T20:49:54.645Z",
+      "categoryDiscounts": {}
     },
     {
       "id": "offer-birthdays",
@@ -340,7 +341,7 @@
         "car-shoot",
         "car-photography"
       ],
-      "bannerImage": "/images/car_shoot_2.jpg",
+      "bannerImage": "/images/car_shoot_1.jpg",
       "discountPercent": 20,
       "badgeText": "OFF",
       "badgeStyle": "starburst",

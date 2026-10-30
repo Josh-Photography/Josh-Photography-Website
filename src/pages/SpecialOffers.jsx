@@ -21,6 +21,7 @@ export default function SpecialOffers() {
   // Strict Date, Image, and Publication Enforcement
   const now = new Date()
   const validOffers = useMemo(() => {
+    if (offersSettings?.enabled === false) return []
     if (!Array.isArray(offers)) return []
 
     return offers

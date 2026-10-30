@@ -43,6 +43,23 @@ app.get('/api/health', (req, res) => {
   })
 })
 
+// 404 handler for API routes
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ error: `API route not found: ${req.method} ${req.originalUrl}` })
+})
+
+// Global error-handling middleware (guarantees JSON error response)
+app.use((err, req, res, next) => {
+  console.error('Unhandled server error:', err)
+  if (res.headersSent) {
+    return next(err)
+  }
+  res.status(err.status || 500).json({
+    error: err.message || 'Internal Server Error',
+    code: err.code || 'SERVER_ERROR',
+  })
+})
+
 app.listen(PORT, () => {
   console.log(`🚀 Josh Photography Server running on http://localhost:${PORT}`)
 })

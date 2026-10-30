@@ -74,7 +74,11 @@ html, body {
 
 .admin-login__header p {
   color: var(--admin-text-muted);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   margin: 0;
 }
 
@@ -134,7 +138,11 @@ html, body {
 /* Buttons */
 .admin-btn {
   padding: 0.75rem 1.5rem;
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   font-weight: 500;
   border-radius: 6px;
   border: none;
@@ -187,7 +195,11 @@ html, body {
   border: 1px solid rgba(248, 113, 113, 0.3);
   border-radius: 6px;
   color: var(--admin-error);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 /* Loading */
@@ -266,7 +278,11 @@ html, body {
   background: none;
   border: none;
   color: var(--admin-text-muted);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   cursor: pointer;
   text-align: left;
   transition: all 0.2s;
@@ -295,7 +311,11 @@ html, body {
   border-radius: 6px;
   color: var(--admin-error);
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   transition: all 0.2s;
 }
 
@@ -358,7 +378,11 @@ html, body {
 
 .admin-section__header p {
   color: var(--admin-text-muted);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   margin: 0;
 }
 
@@ -387,7 +411,11 @@ html, body {
   padding: 1rem;
   border-radius: var(--admin-radius);
   margin-bottom: 1.5rem;
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .admin-message--success {
@@ -444,7 +472,11 @@ html, body {
 .admin-card__content p {
   margin: 0;
   color: var(--admin-text-muted);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 /* Grids */
@@ -591,7 +623,11 @@ html, body {
 
 .admin-stat-card p {
   color: var(--admin-text-muted);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   margin: 0;
 }
 
@@ -623,7 +659,11 @@ html, body {
   padding: 0.75rem;
   background: var(--admin-card);
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .admin-activity-item span {
@@ -682,7 +722,11 @@ html, body {
 .admin-contact__info p {
   margin: 0.25rem 0;
   color: var(--admin-text-muted);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .admin-contact__meta {
@@ -784,7 +828,11 @@ html, body {
 .admin-collaborator__info p {
   margin: 0.25rem 0;
   color: var(--admin-text-muted);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .admin-collaborator__actions {
@@ -823,7 +871,11 @@ html, body {
 .admin-comment__header p {
   margin: 0.25rem 0;
   color: var(--admin-text-muted);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .admin-comment__text {
@@ -897,7 +949,11 @@ html, body {
 .admin-message__info p {
   margin: 0.25rem 0;
   color: var(--admin-text-muted);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .admin-message__meta {
@@ -917,7 +973,11 @@ html, body {
   padding: 0.75rem;
   background: rgba(201, 169, 98, 0.1);
   border-radius: 6px;
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .admin-message__service strong {
@@ -1045,7 +1105,11 @@ html, body {
   border: 1px solid var(--admin-border);
   border-radius: 6px;
   color: var(--admin-text);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .admin-search-input:focus {
@@ -1059,7 +1123,11 @@ html, body {
   border: 1px solid var(--admin-border);
   border-radius: 6px;
   color: var(--admin-text);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   cursor: pointer;
 }
 

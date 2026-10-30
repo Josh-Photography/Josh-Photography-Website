@@ -4,6 +4,7 @@ import './admin.css'
 import dataService from '../services/dataService'
 import initialContent from '../../server/data/content.json'
 import initialPhotos from '../../server/data/photos.json'
+import initialOffers from '../../server/data/offers.json'
 import { OFFER_CATEGORIES, getCategoryHeroImage, getCategoryLabel, getCategoryPath } from '../data/offerCategories'
 import PromotionalBadge, { SpecialOfferSticker } from '../components/common/PromotionalBadge'
 
@@ -2986,12 +2987,39 @@ function OffersEditor({ token, showToast }) {
   const loadOffers = async () => {
     setLoading(true)
     try {
-      const res = await fetch(`${API_URL}/offers/admin`, { headers: authHeaders })
-      if (res.ok) {
-        const data = await res.json()
-        setOffersData(data)
-        if (data.sectionSettings) {
-          setSectionSettings(data.sectionSettings)
+      // Try backend API first (when server is running)
+      let loaded = false
+      try {
+        const res = await fetch(`${API_URL}/offers/admin?t=${Date.now()}`, {
+          headers: authHeaders,
+          cache: 'no-store'
+        })
+        if (res.ok) {
+          const data = await res.json()
+          setOffersData(data)
+          if (data.sectionSettings) {
+            setSectionSettings(data.sectionSettings)
+          }
+          loaded = true
+        }
+      } catch (apiErr) {
+        console.warn('Admin offers API unavailable, using local fallback:', apiErr)
+      }
+
+      // Fallback: use dataService / bundled server/data/offers.json when backend is unreachable
+      if (!loaded) {
+        const local = dataService.getAllDataSync()
+        const fallbackOffers = (local.offers && local.offers.length > 0) ? local.offers : (initialOffers.offers || [])
+        const fallbackData = {
+          sectionSettings: local.offersSettings || initialOffers.sectionSettings || { enabled: true },
+          offers: fallbackOffers.map((offer) => ({
+            ...offer,
+            computedStatus: offer.published === false ? 'hidden' : (offer.bannerImage ? 'active' : 'needs_image'),
+          })),
+        }
+        setOffersData(fallbackData)
+        if (fallbackData.sectionSettings) {
+          setSectionSettings(fallbackData.sectionSettings)
         }
       }
     } catch (err) {
@@ -3007,21 +3035,14 @@ function OffersEditor({ token, showToast }) {
     if (e) e.preventDefault()
     setSaving(true)
     try {
-      const res = await fetch(`${API_URL}/offers/settings`, {
-        method: 'PUT',
-        headers: authHeaders,
-        body: JSON.stringify(sectionSettings)
-      })
-      if (res.ok) {
-        showToast('Special Offers page settings saved successfully!')
-        setShowSettingsEdit(false)
-        dataService.refreshAllData()
-      } else {
-        throw new Error('Save settings failed')
-      }
+      await dataService.updateOffersSettings(sectionSettings, authHeaders)
+      showToast('✓ Special Offers page settings saved successfully!', 'success')
+      setShowSettingsEdit(false)
+      await loadOffers()
+      await dataService.refreshAllData()
     } catch (err) {
-      console.error(err)
-      showToast('Failed to save settings', 'error')
+      console.error('Save settings error:', err)
+      showToast(err.message || 'Failed to save settings', 'error')
     } finally {
       setSaving(false)
     }
@@ -3032,15 +3053,12 @@ function OffersEditor({ token, showToast }) {
     const updated = { ...sectionSettings, enabled }
     setSectionSettings(updated)
     try {
-      await fetch(`${API_URL}/offers/settings`, {
-        method: 'PUT',
-        headers: authHeaders,
-        body: JSON.stringify(updated)
-      })
-      showToast(enabled ? 'Special Offers page is now ACTIVE publicly' : 'Special Offers page is now OFFLINE')
-      dataService.refreshAllData()
+      await dataService.updateOffersSettings(updated, authHeaders)
+      showToast(enabled ? '✓ Special Offers page is now ACTIVE publicly' : '✓ Special Offers page is now OFFLINE', 'success')
+      await dataService.refreshAllData()
     } catch (err) {
-      showToast('Failed to update page status', 'error')
+      console.error('Toggle page visibility error:', err)
+      showToast(err.message || 'Failed to update page status', 'error')
     }
   }
 
@@ -3048,21 +3066,16 @@ function OffersEditor({ token, showToast }) {
   const handleToggleOfferActive = async (offer) => {
     const newPublished = offer.published === false ? true : false
     try {
-      const res = await fetch(`${API_URL}/offers/${offer.id}`, {
-        method: 'PUT',
-        headers: authHeaders,
-        body: JSON.stringify({ published: newPublished })
-      })
-      if (res.ok) {
-        setOffersData((prev) => ({
-          ...prev,
-          offers: prev.offers.map((o) => (o.id === offer.id ? { ...o, published: newPublished } : o))
-        }))
-        showToast(`Offer "${offer.title}" is now ${newPublished ? 'ACTIVE (Published)' : 'INACTIVE (Hidden)'}`)
-        dataService.refreshAllData()
-      }
+      const updated = await dataService.updateSingleOffer(offer.id, { published: newPublished }, authHeaders)
+      setOffersData((prev) => ({
+        ...prev,
+        offers: prev.offers.map((o) => (o.id === offer.id ? { ...o, published: newPublished, computedStatus: updated.computedStatus || (newPublished ? 'active' : 'hidden') } : o))
+      }))
+      showToast(newPublished ? `✓ "${offer.title}" published and live on website!` : `✓ "${offer.title}" hidden from public website.`, 'success')
+      await dataService.refreshAllData()
     } catch (err) {
-      showToast('Failed to update offer status', 'error')
+      console.error('Toggle error:', err)
+      showToast(err.message || 'Failed to update campaign visibility', 'error')
     }
   }
 
@@ -3128,55 +3141,56 @@ function OffersEditor({ token, showToast }) {
   // Save / Submit Campaign
   const handleSaveOffer = async (e) => {
     e.preventDefault()
+
+    // 1. Strict Validation
     if (!editingOffer.title || !editingOffer.title.trim()) {
       showToast('Please enter a campaign title', 'error')
+      return
+    }
+
+    const discountNum = Number(editingOffer.discountPercent)
+    if (isNaN(discountNum) || discountNum < 0 || discountNum > 100) {
+      showToast('Discount percentage must be a number between 0% and 100%', 'error')
       return
     }
 
     setSaving(true)
     const payload = {
       ...editingOffer,
+      title: editingOffer.title.trim(),
+      tagline: editingOffer.tagline ? editingOffer.tagline.trim() : '',
+      festival: editingOffer.festival ? editingOffer.festival.trim() : '',
+      description: editingOffer.description ? editingOffer.description.trim() : '',
+      discountPercent: discountNum,
+      bannerImage: editingOffer.bannerImage ? String(editingOffer.bannerImage).trim() : '',
+      order: Number(editingOffer.order) || 1,
       category: editingOffer.category || editingOffer.categories?.[0] || 'weddings',
       categories: (Array.isArray(editingOffer.categories) && editingOffer.categories.length > 0)
         ? editingOffer.categories
-        : [editingOffer.category || 'weddings']
+        : [editingOffer.category || 'weddings'],
+      published: editingOffer.published !== false,
+      startDate: editingOffer.startDate || '',
+      endDate: editingOffer.endDate || '',
+      terms: editingOffer.terms ? editingOffer.terms.trim() : '',
     }
+
     try {
       if (isCreating) {
-        const res = await fetch(`${API_URL}/offers`, {
-          method: 'POST',
-          headers: authHeaders,
-          body: JSON.stringify(payload)
-        })
-        if (res.ok) {
-          showToast(`Campaign "${editingOffer.title}" created successfully!`)
-          setEditingOffer(null)
-          setIsCreating(false)
-          loadOffers()
-          dataService.refreshAllData()
-        } else {
-          const errData = await res.json()
-          throw new Error(errData.error || 'Failed to create campaign')
-        }
+        await dataService.createOffer(payload, authHeaders)
       } else {
-        const res = await fetch(`${API_URL}/offers/${editingOffer.id}`, {
-          method: 'PUT',
-          headers: authHeaders,
-          body: JSON.stringify(payload)
-        })
-        if (res.ok) {
-          showToast(`Campaign "${editingOffer.title}" updated successfully!`)
-          setEditingOffer(null)
-          loadOffers()
-          dataService.refreshAllData()
-        } else {
-          const errData = await res.json()
-          throw new Error(errData.error || 'Failed to update campaign')
-        }
+        await dataService.updateSingleOffer(editingOffer.id, payload, authHeaders)
       }
+
+      // Backend confirmed successful saving!
+      showToast('✓ Changes saved successfully!', 'success')
+      setEditingOffer(null)
+      setIsCreating(false)
+      await loadOffers()
+      await dataService.refreshAllData()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (err) {
-      console.error(err)
-      showToast(err.message || 'Failed to save campaign', 'error')
+      console.error('Save offer error:', err)
+      showToast(err.message || 'Failed to save campaign. Please try again.', 'error')
     } finally {
       setSaving(false)
     }
@@ -3186,20 +3200,16 @@ function OffersEditor({ token, showToast }) {
   const handleDeleteOffer = async (offer) => {
     if (!window.confirm(`Are you sure you want to permanently delete the campaign "${offer.title}"?`)) return
     try {
-      const res = await fetch(`${API_URL}/offers/${offer.id}`, {
-        method: 'DELETE',
-        headers: authHeaders
-      })
-      if (res.ok) {
-        showToast('Campaign deleted successfully')
-        setOffersData((prev) => ({
-          ...prev,
-          offers: prev.offers.filter((o) => o.id !== offer.id)
-        }))
-        dataService.refreshAllData()
-      }
+      await dataService.deleteOffer(offer.id, authHeaders)
+      showToast(`✓ Campaign "${offer.title}" deleted successfully`, 'success')
+      setOffersData((prev) => ({
+        ...prev,
+        offers: prev.offers.filter((o) => o.id !== offer.id)
+      }))
+      await dataService.refreshAllData()
     } catch (err) {
-      showToast('Failed to delete campaign', 'error')
+      console.error('Delete error:', err)
+      showToast(err.message || 'Failed to delete campaign', 'error')
     }
   }
 
@@ -4001,7 +4011,7 @@ function Dashboard({ token, onLogout }) {
 
   const showToast = (text, type = 'success') => {
     setMessage({ text, type })
-    setTimeout(() => setMessage(null), 3500)
+    setTimeout(() => setMessage(null), 4500)
   }
 
   // Save content section handler
@@ -4280,11 +4290,21 @@ function Dashboard({ token, onLogout }) {
             {message && (
               <motion.div
                 className={`admin-message admin-message--${message.type}`}
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
+                style={{
+                  position: 'sticky',
+                  top: '1rem',
+                  zIndex: 9999,
+                  boxShadow: '0 8px 30px rgba(0, 0, 0, 0.5)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
+                }}
+                initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                transition={{ duration: 0.25 }}
               >
-                {message.text}
+                {message.type === 'error' ? '✕ ' : '✓ '}
+                {message.text.replace(/^[✓✕\s]+/, '')}
               </motion.div>
             )}
           </AnimatePresence>
