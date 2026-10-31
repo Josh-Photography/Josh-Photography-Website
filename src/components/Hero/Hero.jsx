@@ -206,30 +206,6 @@ export default function Hero() {
         </AnimatePresence>
       </div>
 
-      {/* Slide Navigation Dots / Indicators */}
-      {heroSlides.length > 1 && (
-        <div className="absolute bottom-14 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 max-w-[95vw] overflow-x-auto py-1.5 px-3 bg-black/45 backdrop-blur-md rounded-full border border-[#D8B77A]/25 shadow-luxury">
-          {heroSlides.map((s, idx) => {
-            const isActive = idx === safeCurrent
-            return (
-              <button
-                key={s.id || idx}
-                onClick={() => setCurrent(idx)}
-                aria-label={`Go to slide ${idx + 1}: ${s.title}`}
-                title={`${idx + 1}. ${s.categoryLabel || s.category || ''} — ${s.title}`}
-                className={`transition-all duration-300 rounded-full flex items-center justify-center cursor-pointer ${
-                  isActive
-                    ? 'w-6 h-6 bg-[#D8B77A] text-[#140E0A] font-nav font-bold text-[10px] shadow-md scale-105'
-                    : 'w-2 h-2 bg-ivory/40 hover:bg-[#D8B77A] hover:scale-125'
-                }`}
-              >
-                {isActive && (idx + 1)}
-              </button>
-            )
-          })}
-        </div>
-      )}
-
       {/* Scroll Indicator */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pointer-events-none z-20 text-ivory/50">
         <span className="text-[8px] uppercase tracking-[0.25em] font-nav font-medium">
