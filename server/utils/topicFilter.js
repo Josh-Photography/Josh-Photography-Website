@@ -67,6 +67,18 @@ const ON_TOPIC_PATTERNS = [
   // 9. General Photography Inquiries
   /\b(service|services|category|categories|options|recommend|recommendation|popular)\b/i,
   /\b(what\s+do\s+you\s+(?:do|offer|shoot|photograph|cover|provide))\b/i,
+
+  // 10. Photography Experience, Preparation, Style & Equipment
+  /\b(style|approach|candid|documentary|posing|pose|unposed|awkward|shy|camera\s+shy|nervous|natural|direction|comfortable)\b/i,
+  /\b(what\s+to\s+wear|wear|outfit|outfits|clothes|clothing|dress\s+code|wardrobe|colors?|styling)\b/i,
+  /\b(rain|rains|raining|rainy|bad\s+weather|weather|forecast|umbrella|indoor|outdoor|reschedule|cancel|cancellation)\b/i,
+  /\b(camera|cameras|gear|equipment|lens|lenses|lighting|flash|strobes|bodies|sensor|backup\s+gear)\b/i,
+  /\b(video|videographer|videography|cinematography|film|drone|aerial|teaser\s+reel)\b/i,
+  /\b(raw|raw\s+files|unedited|unedited\s+photos|original\s+files|master\s+files|resolution|print\s+release|copyright)\b/i,
+  /\b(second\s+shooter|second\s+photographer|two\s+photographers|assistant|team|lead\s+photographer)\b/i,
+  /\b(how\s+far\s+in\s+advance|notice|months\s+in\s+advance|weeks\s+in\s+advance|advance\s+booking|timing|golden\s+hour)\b/i,
+  /\b(travel|destination|travel\s+fee|mileage|travel\s+costs?|outside\s+northampton|nationwide|abroad|london)\b/i,
+  /\b(visit\s+the\s+studio|meet\s+in\s+person|consultation|in-person\s+meeting|coffee|video\s+call|zoom)\b/i,
 ]
 
 // Purely off-topic domains (coding, politics, math, medicine, non-photography general trivia)

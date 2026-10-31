@@ -1,5 +1,11 @@
 [
   {
+    "id": "act-1793477301964",
+    "action": "New inquiry received from Hirthick (Wedding Ceremony & Reception)",
+    "user": "System",
+    "timestamp": "2026-10-31T20:08:21.964Z"
+  },
+  {
     "id": "act-1793410966623",
     "action": "Synchronized 102 portfolio photograph(s) across categories",
     "user": "Admin",
@@ -292,11 +298,5 @@
     "action": "Uploaded content asset: model.png",
     "user": "Admin",
     "timestamp": "2026-10-30T21:32:13.223Z"
-  },
-  {
-    "id": "act-1793395914898",
-    "action": "Uploaded content asset: model.png",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:31:54.898Z"
   }
 ]

@@ -7,6 +7,7 @@ import { getKnowledgeBase } from './chatKnowledge.js'
 function normalizeText(str = '') {
   return str
     .toLowerCase()
+    .replace(/['’]/g, '')
     .replace(/[^\w\s£$€%-]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
@@ -93,10 +94,10 @@ function resolveContext(history = []) {
     if (hasWord(norm, ['festival', 'festivals', 'cultural', 'christmas', 'diwali', 'eid', 'cultural celebrations'])) {
       return categories.find((c) => c.id === 'festivals')
     }
-    if (hasWord(norm, ["mother's day", 'mothers day', 'mother day', 'mom day'])) {
+    if (hasWord(norm, ['mothers day', 'mother day', 'mom day', 'mothers', 'mother'])) {
       return categories.find((c) => c.id === 'mothers-day')
     }
-    if (hasWord(norm, ["father's day", 'fathers day', 'father day', 'dad day'])) {
+    if (hasWord(norm, ['fathers day', 'father day', 'dad day', 'fathers', 'father'])) {
       return categories.find((c) => c.id === 'fathers-day')
     }
     if (hasWord(norm, ['corporate', 'conference', 'summit', 'business event', 'headshot', 'headshots', 'corporate event'])) {
@@ -237,8 +238,7 @@ function resolveContext(history = []) {
         'reserve a date',
         'book a photographer',
         'book photographer',
-        'booking',
-      ])
+      ]) || norm === 'booking'
     ) {
       return {
         reply: `### How to Book with Josh Photography 📅\n\nBooking your celebration is clear and straightforward:\n\n1. **Check Dates / Inquire:** Visit our [Check Availability](/check-availability) page or submit your details on our [Contact page](/contact).\n2. **Consultation:** We’ll arrange an unhurried consultation (video call, phone, or in person) to review your itinerary and aesthetic preferences.\n3. **Reservation:** To officially secure your date on our calendar, a service agreement and date retainer are completed.\n\n**Advance Booking Guidelines:**\n- **Weddings & Peak Weekend Dates:** We recommend inquiring **6 to 12 months in advance** as peak British summer and autumn dates fill quickly.\n- **Birthdays, Newborns, Family & Commercial Sessions:** **3 to 6 weeks notice** is ideal.\n\n*Please note: Calendar dates are only officially reserved once your consultation is held and the retainer is received.*`,
@@ -249,6 +249,401 @@ function resolveContext(history = []) {
           {
             label: 'Chat on WhatsApp',
             url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh Photography! I would like to check availability for my celebration date.')}`,
+            type: 'external',
+          },
+        ],
+      }
+    }
+
+    // 2B. How Far in Advance to Book & Timing Guidelines
+    if (
+      hasWord(norm, [
+        'how far in advance',
+        'how early should',
+        'when should i book',
+        'when should we book',
+        'how much notice',
+        'when to book',
+        'advance booking',
+        'months in advance',
+        'weeks in advance',
+        'advance notice',
+      ])
+    ) {
+      return {
+        reply: `### How Far in Advance Should You Book? 📅\n\nTo ensure dedicated calendar availability for your celebration, here are our recommended booking timelines:\n\n- 💍 **Weddings & Peak Weekend Dates:** We recommend inquiring **6 to 12 months in advance** as popular British spring, summer, and autumn Saturdays fill quickly.\n- 🎂 **Birthdays, Anniversaries & Private Events:** **3 to 6 weeks notice** is ideal.\n- 👶 **Newborn & Baby Portraits:** Best reserved during your second or third trimester based on your estimated due date, allowing us to photograph your little one in their calm first 7–14 days.\n- 🏎️ **Commercial, Product, Sports & Car Shoots:** **2 to 4 weeks notice** to coordinate venue access, track days, or studio staging.\n- ⚡ **Short-Notice Inquiries:** If your celebration is happening soon, don't hesitate to reach out! We accommodate last-minute bookings whenever our calendar permits.`,
+        suggestions: ['Check Date Availability', 'How to Book', 'Special Offers', 'Chat on WhatsApp'],
+        actions: [
+          { label: 'Check Availability Now', url: '/check-availability', type: 'internal' },
+          { label: 'Contact Us', url: '/contact', type: 'internal' },
+          {
+            label: 'Message Josh on WhatsApp',
+            url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh! I would like to check availability for our upcoming celebration date.')}`,
+            type: 'external',
+          },
+        ],
+      }
+    }
+
+    // 2C. Deposit, Retainer & Payment Terms Intent
+    if (
+      hasWord(norm, [
+        'deposit',
+        'retainer',
+        'down payment',
+        'how to pay',
+        'payment process',
+        'when is payment due',
+        'balance due',
+        'payment methods',
+        'payment terms',
+        'payment plan',
+      ])
+    ) {
+      return {
+        reply: `### Booking Deposit & Payment Information 💳\n\nOur reservation and payment process is designed to be completely transparent with zero hidden fees:\n\n1. **Securing Your Date:** A straightforward digital booking agreement and date retainer officially secure your date on our calendar.\n2. **Date Exclusivity:** Once your retainer is confirmed, your date is exclusively held for you—no other client inquiries will be accepted for that time.\n3. **Remaining Balance:** The remaining balance is conveniently settled prior to your celebration day.\n4. **Accepted Payment Methods:** Secure UK bank transfer (BACS) and major credit or debit cards.\n5. **Transparent Pricing:** All costs, travel guidelines, and deliverables are confirmed upfront with no surprise add-ons.`,
+        suggestions: ['How to Book', 'Check Availability', 'Special Offers', 'Inquire on WhatsApp'],
+        actions: [
+          { label: 'Check Availability', url: '/check-availability', type: 'internal' },
+          { label: 'Contact Us', url: '/contact', type: 'internal' },
+          {
+            label: 'Discuss with Josh on WhatsApp',
+            url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh! I would like to ask about booking and payment options.')}`,
+            type: 'external',
+          },
+        ],
+      }
+    }
+
+    // 2D. Weather & Rainy Day Policy / Rescheduling Intent
+    if (
+      hasWord(norm, [
+        'rain',
+        'raining',
+        'rainy',
+        'bad weather',
+        'what happens if it rains',
+        'what if it rains',
+        'weather forecast',
+        'umbrella',
+        'weather policy',
+        'reschedule',
+        'rescheduling',
+        'cancel',
+        'cancellation',
+      ])
+    ) {
+      return {
+        reply: `### Weather & Rainy Day Policy 🌦️\n\nBritish weather is unpredictable, but we are always thoroughly prepared to create stunning photographs:\n\n- 🌿 **Outdoor Portrait Sessions (Family, Maternity, Engagement, Car):** If heavy rain, gales, or extreme weather are forecast, we happily reschedule your session to another mutually convenient date at **no extra fee**. Your comfort and relaxed smiles are our top priority!\n- 💒 **Weddings & Fixed Milestone Celebrations:** Rain never spoils a wedding day! We carry elegant, transparent umbrellas that look romantic and cinematic in portraits. We also scout your venue for beautiful indoor architecture, grand staircases, warm fireplace corners, and soft window light.\n- 💡 **Studio Alternative:** You also have the option to hold portraits in our dedicated Northampton studio space with controlled professional lighting.`,
+        suggestions: ['View Client Reviews', 'Where is your studio?', 'Check Availability', 'WhatsApp Josh'],
+        actions: [
+          { label: 'Check Availability', url: '/check-availability', type: 'internal' },
+          { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
+          {
+            label: 'Ask Josh on WhatsApp',
+            url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh! I had a question regarding shoot weather and locations.')}`,
+            type: 'external',
+          },
+        ],
+      }
+    }
+
+    // 2E. Wardrobe, Outfit & Styling Advice Intent
+    if (
+      hasWord(norm, [
+        'what to wear',
+        'what should we wear',
+        'outfit',
+        'outfits',
+        'clothing',
+        'clothes',
+        'wardrobe',
+        'dress code',
+        'what colours',
+        'what colors',
+        'styling tips',
+      ])
+    ) {
+      return {
+        reply: `### What to Wear for Your Photoshoot 👗👔\n\nWhat you wear sets the tone for your photographs. Here are Josh’s top styling recommendations:\n\n- 🎨 **Timeless, Warm Neutral Palette:** Earthy tones photograph with natural elegance—think creams, ivory, oatmeal, warm beige, soft terracotta, olive green, slate blue, navy, and muted pastels.\n- 🤝 **Coordinate, Don't Match:** Rather than everyone wearing identical white shirts and jeans, choose 3 to 4 coordinating colors that complement each other naturally.\n- 🚫 **Patterns to Avoid:** Avoid bold commercial logos, high-contrast neon shades, or busy micro-stripes (which can create distorting moiré patterns on camera).\n- 👟 **Comfort & Layers:** Bring comfortable footwear for walking between scenic spots (you can switch into heels or formal shoes for the shot!). Textured layers (chunky knits, structured jackets, scarves) add wonderful depth.\n\n*We also provide tailored wardrobe guidance during your pre-shoot consultation!*`,
+        suggestions: ['Our Photography Style', 'Client Reviews', 'Check Availability', 'Contact Team'],
+        actions: [
+          { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
+          { label: 'Check Availability', url: '/check-availability', type: 'internal' },
+          {
+            label: 'Consult Josh on WhatsApp',
+            url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh! I would like some advice on wardrobe and styling for our shoot.')}`,
+            type: 'external',
+          },
+        ],
+      }
+    }
+
+    // 2F. Photography Style, Candid Approach & Camera Shyness / Feeling Awkward Intent
+    if (
+      hasWord(norm, [
+        'photography style',
+        'photo style',
+        'your style',
+        'candid',
+        'documentary',
+        'awkward',
+        'camera shy',
+        'unposed',
+        'posing',
+        'hate having photos',
+        'not photogenic',
+        'nervous',
+        'feel uncomfortable',
+      ]) ||
+      (norm.includes('style') && (norm.includes('photo') || norm.includes('shoot') || norm.includes('work')))
+    ) {
+      return {
+        reply: `### Our Photography Style & Gentle Direction 📷\n\n- ✨ **Emotional Documentary Storytelling:** Josh’s philosophy is rooted in capturing genuine emotion as it unfolds naturally—unscripted laughter, joyful tears, tender touches, and lively celebration energy rather than forced smiles.\n- 🤗 **Feeling Awkward or Camera-Shy?** Over 90% of our clients tell us they feel nervous in front of the camera! Josh’s calm, warm, and friendly demeanor puts everyone at ease within the first five minutes.\n- 💬 **Gentle Prompts, Never Stiff Poses:** Rather than freezing you into rigid poses, Josh gives fun, natural prompts and gentle guidance so you focus on each other and forget the camera is even there.\n- 🌿 **Timeless Color Harmony:** Every delivered image is graded with rich, organic tones that honor authentic skin tones and stand the test of time.`,
+        suggestions: ['Client Reviews', 'Special Offers', 'Check Availability', 'About Josh'],
+        actions: [
+          { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
+          { label: 'About Josh', url: '/about', type: 'internal' },
+          {
+            label: 'Message Josh on WhatsApp',
+            url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh! I wanted to chat about your photography style and approach.')}`,
+            type: 'external',
+          },
+        ],
+      }
+    }
+
+    // 2G. RAW Files & Unedited Photos Policy Intent
+    if (
+      hasWord(norm, [
+        'raw',
+        'raw files',
+        'unedited',
+        'unedited photos',
+        'original files',
+        'master files',
+        'can i have raw',
+        'unedited pictures',
+      ])
+    ) {
+      return {
+        reply: `### RAW & Unedited Files Policy 🎨\n\n- 🖼️ **Our Fine-Art Quality Standard:** We do not deliver RAW or unedited digital files.\n- 📖 **The Creative Process:** Just as a master chef presents a finished culinary creation rather than raw ingredients, RAW camera files are unfinished, flat digital negatives designed solely for professional editing software.\n- ✨ **What You Receive:** Every photograph delivered by Josh Photography is hand-selected and individually artistically graded—with exposure balance, shadow depth, color harmony, and fine retouching applied.\n- 💾 **Full Resolution & Print Release:** You receive all final, finished high-resolution master JPEG files with full personal printing and digital sharing rights.`,
+        suggestions: ['Photo Delivery Times', 'Client Reviews', 'Check Availability', 'Special Offers'],
+        actions: [
+          { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
+          { label: 'Check Availability', url: '/check-availability', type: 'internal' },
+          {
+            label: 'Inquire on WhatsApp',
+            url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh! I had a question regarding photo files and delivery.')}`,
+            type: 'external',
+          },
+        ],
+      }
+    }
+
+    // 2H. Camera Equipment, Lenses & Professional Lighting Gear Intent
+    if (
+      hasWord(norm, [
+        'gear',
+        'equipment',
+        'cameras',
+        'camera',
+        'lens',
+        'lenses',
+        'lighting gear',
+        'what cameras do you use',
+        'what equipment',
+        'backup camera',
+      ])
+    ) {
+      return {
+        reply: `### Professional Equipment & Redundancy Standards 📸\n\nWe invest in world-class imaging technology to guarantee flawless reliability for your once-in-a-lifetime moments:\n\n- 📷 **Dual-Card Full-Frame Cinema & Stills Bodies:** Every shot is written in real time to two separate high-speed memory cards simultaneously, ensuring instant in-camera redundancy.\n- 🔍 **Ultra-Fast Optical Prime Lenses:** Premium f/1.2 and f/1.4 lenses that produce creamy background bokeh and capture crisp, noise-free images in dim church cathedrals and evening ballrooms.\n- 💡 **Sculptural Lighting Technology:** Wireless Godox strobes, parabolic umbrellas, and soft diffused light modifiers for flattering, natural-looking skin tones.\n- 🛡️ **100% On-Site Backup Gear:** We bring duplicate professional camera bodies, spare lenses, backup flash units, and ample battery banks to every single commission for total peace of mind.`,
+        suggestions: ['Drone Photography', 'Our Photography Style', 'Where is your studio?', 'Check Availability'],
+        actions: [
+          { label: 'About Josh Photography', url: '/about', type: 'internal' },
+          { label: 'Check Availability', url: '/check-availability', type: 'internal' },
+          {
+            label: 'WhatsApp Josh',
+            url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh! I wanted to ask about your photography setup.')}`,
+            type: 'external',
+          },
+        ],
+      }
+    }
+
+    // 2I. Drone & Aerial Photography Intent
+    if (
+      hasWord(norm, [
+        'drone',
+        'aerial',
+        'drone shots',
+        'aerial footage',
+        'drone photo',
+        'drone photography',
+        'sky shots',
+        'aerial coverage',
+      ])
+    ) {
+      return {
+        reply: `### Drone Aerial Photography & Cinematography 🚁\n\n- 🏰 **Majestic Elevated Perspectives:** We provide high-definition aerial drone photography and 4K aerial cinema for countryside manors, historic estates, golf resorts, and large outdoor gatherings.\n- 📜 **Licensed & Regulatory Compliant:** All drone operations are conducted in strict compliance with UK Civil Aviation Authority (CAA) safety standards, subject to weather and venue airspace permissions.\n- 🎬 **Cinematic Establishing Visuals:** Aerial perspectives provide sweeping grandeur that captures the full beauty of your venue and surrounding landscapes.`,
+        suggestions: ['Videography Services', 'Our Photography Style', 'Check Availability', 'Special Offers'],
+        actions: [
+          { label: 'Check Availability', url: '/check-availability', type: 'internal' },
+          { label: 'Contact Us', url: '/contact', type: 'internal' },
+          {
+            label: 'Inquire About Drone on WhatsApp',
+            url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh! I would like to inquire about drone aerial coverage for our celebration.')}`,
+            type: 'external',
+          },
+        ],
+      }
+    }
+
+    // 2J. Videography & Cinematic Filmmaking Intent
+    if (
+      hasWord(norm, [
+        'video',
+        'videography',
+        'videographer',
+        'cinematic film',
+        'wedding film',
+        'ceremony film',
+        'cinematography',
+        'video shoots',
+      ]) &&
+      !norm.includes('car') &&
+      !norm.includes('product') &&
+      !hasWord(norm, ['reel', 'reels'])
+    ) {
+      return {
+        reply: `### Videography & Cinematic Filmmaking 🎥\n\n- 🎬 **4K Cinematic Highlight Films:** In addition to stills photography, we craft artistic 4K wedding and celebration highlight films (5–8 minutes) set to licensed cinematic soundtracks.\n- 🎙️ **Full Ceremony & Speech Coverage:** Multi-camera ceremony and speech recordings with dedicated high-fidelity wireless audio capture.\n- 📱 **9:16 Vertical Social Reels (48hr Rush Delivery):** Dynamic, beat-matched vertical teaser reels optimized for Instagram Reels, TikTok, and YouTube Shorts.\n- 🤝 **Seamless Synchrony:** When photo and cinema are coordinated together by our team, there is zero friction or competing for angles—delivering a unified artistic vision.`,
+        suggestions: ['Reels & Video Shoots', 'Check Availability', 'Special Offers', 'WhatsApp Josh'],
+        actions: [
+          { label: 'Explore Reels & Video', url: '/reels-shoots', type: 'internal' },
+          { label: 'Check Availability', url: '/check-availability', type: 'internal' },
+          {
+            label: 'Chat on WhatsApp',
+            url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh! I would like to inquire about videography and cinematic film coverage.')}`,
+            type: 'external',
+          },
+        ],
+      }
+    }
+
+    // 2K. Handcrafted Photo Albums & Archival Keepsakes Intent
+    if (
+      hasWord(norm, [
+        'photo album',
+        'photo albums',
+        'albums',
+        'album',
+        'parent album',
+        'parent albums',
+        'prints',
+        'wall art',
+        'canvas prints',
+        'photobook',
+      ])
+    ) {
+      return {
+        reply: `### Handcrafted Heirloom Photo Albums & Prints 📖\n\n- 🇮🇹 **Handmade in Italy:** Our signature heirloom albums are handcrafted in Italy using archival museum-grade fine-art paper and genuine full-grain leather or organic linen covers.\n- 📐 **Lay-Flat Panoramic Spreads:** Engineered with flush-mount binding that opens completely flat, allowing panoramic landscape photographs to span across two full pages without central gutter distortion.\n- 🎁 **Parent & Keepsake Albums:** Beautiful duplicate parent albums are available in matching finishes—the ultimate sentimental gift for parents and grandparents.\n- ⏳ **Generational Durability:** Certified acid-free materials guaranteed to retain rich color depth and resist yellowing across generations.`,
+        suggestions: ['Photo Delivery Times', 'Client Reviews', 'Where is your studio?', 'Check Availability'],
+        actions: [
+          { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
+          { label: 'Check Availability', url: '/check-availability', type: 'internal' },
+          {
+            label: 'Discuss Albums on WhatsApp',
+            url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh! I would like to see examples and learn more about your heirloom photo albums.')}`,
+            type: 'external',
+          },
+        ],
+      }
+    }
+
+    // 2L. Second Photographer & Team Coverage Intent
+    if (
+      hasWord(norm, [
+        'second photographer',
+        'second shooter',
+        'two photographers',
+        'second camera',
+        'assistant photographer',
+        'extra photographer',
+        'dual photographer',
+      ])
+    ) {
+      return {
+        reply: `### Dual Photographer & Team Coverage 👥\n\n- 🌟 **Lead Photographer Josh:** Josh personally directs and captures every commission with dedicated artistic vision and unhurried focus.\n- 📸 **When a Second Photographer is Ideal:**\n  - **Dual Preparations:** Capturing both partners getting ready simultaneously at different hotels or venues.\n  - **Multi-Angle Ceremony:** Documenting the bride walking down the aisle while simultaneously capturing the groom's emotional first look.\n  - **Comprehensive Guest Reactions:** Capturing spontaneous laughter and tears during speeches from multiple viewpoints.\n  - **Large Guest Counts:** Recommended for celebrations with over 100 guests to ensure no fleeting moment goes unnoticed.`,
+        suggestions: ['Our Photography Style', 'Client Reviews', 'Check Availability', 'Special Offers'],
+        actions: [
+          { label: 'Check Availability', url: '/check-availability', type: 'internal' },
+          { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
+          {
+            label: 'Inquire on WhatsApp',
+            url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh! I would like to inquire about dual photographer coverage for our celebration.')}`,
+            type: 'external',
+          },
+        ],
+      }
+    }
+
+    // 2M. Studio Consultations & In-Person Visits Intent
+    if (
+      hasWord(norm, [
+        'visit the studio',
+        'visit your studio',
+        'come to the studio',
+        'meet in person',
+        'meet before booking',
+        'in person meeting',
+        'video call',
+        'zoom call',
+        'consultation meeting',
+        'see the studio',
+      ])
+    ) {
+      return {
+        reply: `### Consultations & Studio Visits 🏛️\n\n- ☕ **Unhurried Meeting:** We would love to meet you before you make any decisions! We offer consultations via video call (Zoom/FaceTime), phone, or in person.\n- 📍 **Northampton Studio Location:** You are warmly invited to visit our studio at **Unit H5/J, KG House, Northampton, NN5 7QS**.\n- 📖 **What We Explore:** Review physical Italian album swatches, discuss your ceremony timeline and aesthetics, explore your vision, and answer any questions with zero pressure.`,
+        suggestions: ['Where is your studio?', 'Check Availability', 'Special Offers', 'WhatsApp Josh'],
+        actions: [
+          { label: 'Contact Us', url: '/contact', type: 'internal' },
+          { label: 'Check Availability', url: '/check-availability', type: 'internal' },
+          {
+            label: 'Book Consultation on WhatsApp',
+            url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh! I would like to arrange a consultation / studio visit.')}`,
+            type: 'external',
+          },
+        ],
+      }
+    }
+
+    // 2N. Travel, Nationwide UK & Destination Coverage Intent
+    if (
+      hasWord(norm, [
+        'travel',
+        'travel fee',
+        'travel fees',
+        'travel cost',
+        'outside northampton',
+        'destination wedding',
+        'destination shoot',
+        'travel to london',
+        'cover london',
+        'cotswolds',
+        'surrey',
+        'nationwide',
+        'abroad',
+      ])
+    ) {
+      return {
+        reply: `### Travel & Nationwide UK Coverage 🗺️\n\n- 📍 **Based in Northampton, Working Across the UK:** Josh regularly travels across Northamptonshire, Greater London, Surrey, the Cotswolds, Oxfordshire, Hertfordshire, Buckinghamshire, and nationwide.\n- ✈️ **Destination Celebrations:** We also accept European and international destination commissions upon request.\n- 🚗 **Transparent Travel Policy:** Travel throughout Northamptonshire and surrounding counties is included. For distant UK or destination events, modest travel arrangements are agreed upon transparently upfront with zero hidden charges.`,
+        suggestions: ['Where is your studio?', 'Check Availability', 'Client Reviews', 'WhatsApp Josh'],
+        actions: [
+          { label: 'Check Availability', url: '/check-availability', type: 'internal' },
+          { label: 'Contact Us', url: '/contact', type: 'internal' },
+          {
+            label: 'Discuss Travel on WhatsApp',
+            url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh! I would like to inquire about coverage for an event outside Northampton.')}`,
             type: 'external',
           },
         ],
