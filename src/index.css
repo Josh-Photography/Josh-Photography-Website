@@ -303,6 +303,8 @@
 
 /* ============================================================
    WHATSAPP FLOATING BUTTON
+   Desktop (>= 768px): Visible at bottom-right
+   Mobile (< 768px): Hidden completely (represented in mobile header)
    ============================================================ */
 .whatsapp-float {
   position: fixed;
@@ -321,16 +323,9 @@
   cursor: pointer;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .whatsapp-float {
-    bottom: 18px;
-    right: 18px;
-    width: 48px;
-    height: 48px;
-  }
-  .whatsapp-float svg {
-    width: 24px;
-    height: 24px;
+    display: none !important;
   }
 }
 
@@ -354,4 +349,56 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ============================================================
+   GOLDEN CHATBOT LAUNCHER FLOATING ANIMATION
+   Fixed at BOTTOM-LEFT corner across desktop, tablet, and mobile
+   ============================================================ */
+@keyframes goldenFloatBob {
+  0%, 100% {
+    transform: translateY(0px);
+    filter: drop-shadow(0 6px 14px rgba(212, 175, 55, 0.38));
+  }
+  50% {
+    transform: translateY(-6px);
+    filter: drop-shadow(0 12px 24px rgba(212, 175, 55, 0.6));
+  }
+}
+
+.golden-chatbot-float {
+  position: fixed;
+  bottom: 25px;
+  bottom: calc(25px + env(safe-area-inset-bottom, 0px));
+  left: 25px;
+  left: calc(25px + env(safe-area-inset-left, 0px));
+  right: auto;
+  z-index: 899;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+  animation: goldenFloatBob 3.5s ease-in-out infinite;
+}
+
+@media (max-width: 640px) {
+  .golden-chatbot-float {
+    bottom: 20px;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    left: 20px;
+    left: calc(20px + env(safe-area-inset-left, 0px));
+  }
+}
+
+.golden-chatbot-float:hover {
+  transform: scale(1.1) translateY(-2px);
+  filter: drop-shadow(0 14px 28px rgba(212, 175, 55, 0.7));
+}
+
+.golden-chatbot-float:active {
+  transform: scale(0.95);
 }

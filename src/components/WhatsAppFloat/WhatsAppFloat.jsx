@@ -14,7 +14,7 @@ export default function WhatsAppFloat() {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="whatsapp-float"
+      className="hidden md:flex whatsapp-float"
       aria-label="Contact us on WhatsApp"
     >
       <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7">

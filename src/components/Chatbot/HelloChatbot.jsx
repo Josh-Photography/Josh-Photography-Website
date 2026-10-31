@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import ChatbotLogo from './ChatbotLogo'
+import GoldenChatIcon from './GoldenChatIcon'
 
 // Subtle audio chime using Web Audio API
 function playChime(type = 'receive') {
@@ -329,35 +330,22 @@ export default function HelloChatbot() {
   return (
     <>
       {/* ──────────────────────────────────────────────────────────── */}
-      {/* 1. SIMPLE & NEAT FLOATING LAUNCHER (WHITE LIGHT DESIGN)    */}
+      {/* 1. LUXURIOUS GOLDEN CHATBOT LAUNCHER (BOTTOM-LEFT)          */}
       {/* ──────────────────────────────────────────────────────────── */}
       {!isOpen && (
         <aside
-          className="fixed bottom-6 left-6 z-[850] sm:bottom-8 sm:left-8 select-none"
+          className="select-none"
           aria-label="Hello Chatbot Launcher"
         >
           <button
             type="button"
             id="open-hello-chatbot-btn"
             onClick={() => setIsOpen(true)}
-            className="group flex items-center gap-3 bg-white hover:bg-neutral-50 text-neutral-900 px-4 py-2.5 sm:px-4.5 sm:py-3 rounded-full border border-neutral-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_8px_28px_rgba(0,0,0,0.12)] transition-all duration-300 hover:scale-102 active:scale-98 focus:outline-none focus:ring-2 focus:ring-neutral-400"
-            aria-label="Open Hello Chatbot"
+            className="golden-chatbot-float group focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
+            aria-label="Open Hello Chatbot Assistant"
+            title="Chat with Hello Chatbot"
           >
-            {/* Logo */}
-            <ChatbotLogo size="sm" />
-
-            {/* Clean Typography */}
-            <div className="flex flex-col text-left pr-1">
-              <div className="flex items-center gap-1.5">
-                <span className="font-serif text-sm font-semibold tracking-wide text-neutral-900">
-                  Hello Chatbot
-                </span>
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              </div>
-              <span className="text-[10px] tracking-wider uppercase text-neutral-400 font-sans">
-                Josh Photography
-              </span>
-            </div>
+            <GoldenChatIcon size={56} className="sm:w-[62px] sm:h-[62px]" />
           </button>
         </aside>
       )}
@@ -379,7 +367,7 @@ export default function HelloChatbot() {
       <section
         id="hello-chatbot-panel"
         aria-label="Hello Chatbot Assistant"
-        className={`fixed top-0 left-0 bottom-0 z-[950] w-full sm:w-[390px] md:w-[410px] flex flex-col bg-white text-neutral-800 shadow-[12px_0_40px_rgba(0,0,0,0.08)] border-r border-neutral-200/80 transition-transform duration-300 ease-out select-text ${
+        className={`fixed top-0 left-0 bottom-0 z-[950] w-full sm:w-[390px] md:w-[410px] flex flex-col bg-white text-neutral-800 shadow-[12px_0_40px_rgba(0,0,0,0.12)] border-r border-neutral-200/80 transition-transform duration-300 ease-out select-text ${
           isOpen ? 'translate-x-0' : '-translate-x-full pointer-events-none'
         }`}
       >
