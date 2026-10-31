@@ -439,8 +439,12 @@ function StudioEditor({ data, onSave, saving, token }) {
             <input
               type="text"
               value={formData.whatsapp || ''}
+              placeholder="+44 7988 827057"
               onChange={(e) => setFormData((p) => ({ ...p, whatsapp: e.target.value }))}
             />
+            <small style={{ fontSize: '0.75rem', color: 'var(--admin-text-muted, #a0978d)', display: 'block', marginTop: '0.25rem' }}>
+              Central WhatsApp number powering Contact page, Booking Inquiries, and Floating WhatsApp button.
+            </small>
           </div>
 
           <div className="admin-input-group admin-input-group--full">

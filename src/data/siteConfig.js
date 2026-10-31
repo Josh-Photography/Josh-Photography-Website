@@ -9,7 +9,7 @@ export const siteConfig = {
   fullDescription:
     'We preserve the laughter before the cake is cut, the silence before the vows, the tears of a parent, the excitement of a child, and the little moments nobody planned.',
   phone: '+44 7988 827057',
-  whatsapp: '+447988827057',
+  whatsapp: '+44 7988 827057',
   email: 'joshyjose282@gmail.com',
   address: 'Unit H5/J, KG House, Northampton, Northamptonshire, NN5 7QS, United Kingdom',
   operatingRegion: 'Available for commissions & destination events across the United Kingdom',

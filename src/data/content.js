@@ -7,7 +7,7 @@ export const studioInfo = {
   address: 'Unit H5/J, KG House, Northampton, Northamptonshire, NN5 7QS, United Kingdom',
   email: 'joshyjose282@gmail.com',
   phone: '+44 7988 827057',
-  whatsapp: '+447988827057',
+  whatsapp: '+44 7988 827057',
   social: {
     instagram: 'https://instagram.com/joshphotography.uk',
     facebook: 'https://facebook.com/joshphotography.uk',

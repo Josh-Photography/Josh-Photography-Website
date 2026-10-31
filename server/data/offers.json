@@ -29,7 +29,7 @@
       "order": 1,
       "published": true,
       "computedStatus": "active",
-      "updatedAt": "2026-10-30T22:14:37.569Z",
+      "updatedAt": "2026-10-31T00:47:06.925Z",
       "categoryDiscounts": {}
     },
     {
@@ -40,7 +40,7 @@
         "birthdays"
       ],
       "bannerImage": "/images/birthday_01.png",
-      "discountPercent": 20,
+      "discountPercent": 25,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
       "showBadge": true,
@@ -54,7 +54,9 @@
       "terms": "Minimum 2 hours coverage required for event celebrations. UK-wide travel available.",
       "order": 2,
       "published": true,
-      "updatedAt": "2026-10-29T00:15:41.509Z"
+      "updatedAt": "2026-10-31T00:47:09.189Z",
+      "computedStatus": "active",
+      "categoryDiscounts": {}
     },
     {
       "id": "offer-engagement",

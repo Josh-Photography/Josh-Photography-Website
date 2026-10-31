@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "c3e6b27c-542c-4b61-b86f-bbe7da49378c",
+    "name": "Hirthick",
+    "email": "hirthicksofficial@gmail.com",
+    "phone": "+917530053910",
+    "service": "Wedding",
+    "eventDate": "",
+    "location": "madurai",
+    "message": "Package: Premium Collection (Most Popular — Full Day)\nRequirements: Candid & Traditional Photography, Cinematic 4K Wedding / Event Film\nMessage: hi i want to book",
+    "submittedAt": "2026-10-31T01:34:12.758Z",
+    "status": "unread"
+  },
+  {
+    "id": "50e63146-e6a9-4e24-8b13-7158f54a1d90",
+    "name": "Hirthick",
+    "email": "hirthicksofficial@gmail.com",
+    "phone": "+917530053910",
+    "service": "Personal / Executive Portrait",
+    "eventDate": "",
+    "location": "MADURAI",
+    "message": "HI i want to book a slot",
+    "submittedAt": "2026-10-31T01:30:00.446Z",
+    "status": "unread"
+  }
+]

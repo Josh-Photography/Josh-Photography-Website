@@ -2,11 +2,18 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import {
   MapPin, Phone, Mail, Clock, Send, CheckCircle2,
-  Calendar, Users, Sparkles, MessageSquare
+  Calendar, Users, Sparkles, MessageSquare, AlertCircle
 } from 'lucide-react'
 import { siteConfig } from '../data/siteConfig'
 import { WhatsAppIcon } from '../components/common/Icons'
 import { useWebsiteData } from '../hooks/useWebsiteData'
+import {
+  getWhatsAppUrl,
+  getCleanWhatsAppNumber,
+  formatBookingInquiryMessage,
+  openWhatsAppChat,
+  DEFAULT_WHATSAPP_DISPLAY,
+} from '../utils/whatsapp'
 
 const eventOptions = [
   'Wedding Ceremony & Reception',
@@ -27,8 +34,14 @@ export default function Contact() {
   const phone = studio.phone || siteConfig.phone
   const email = studio.email || siteConfig.email
   const address = studio.address || siteConfig.address
-  const whatsapp = studio.whatsapp || siteConfig.whatsapp
+  const rawWhatsapp = studio.whatsapp || siteConfig.whatsapp
   const openingHours = studio.openingHours || 'Monday – Sunday, 9:00 AM – 8:00 PM'
+
+  // Centralized WhatsApp link for "Start WhatsApp Chat" quick button
+  const startWhatsAppChatUrl = getWhatsAppUrl(
+    rawWhatsapp,
+    `Hello ${studioName}! I would like to inquire about your photography services.`
+  )
 
   const [formData, setFormData] = useState({
     name: '',
@@ -41,18 +54,85 @@ export default function Contact() {
     budget: '',
     message: '',
   })
+  const [validationErrors, setValidationErrors] = useState({})
+  const [generalError, setGeneralError] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
+    // Clear validation error when user begins typing in that field
+    if (validationErrors[name]) {
+      setValidationErrors((prev) => {
+        const updated = { ...prev }
+        delete updated[name]
+        return updated
+      })
+    }
+    if (generalError) {
+      setGeneralError('')
+    }
+  }
+
+  const validateBookingForm = () => {
+    const errors = {}
+    if (!formData.name?.trim()) {
+      errors.name = 'Please enter your full name.'
+    }
+    if (!formData.phone?.trim()) {
+      errors.phone = 'Please enter your phone or WhatsApp number.'
+    } else if (formData.phone.replace(/[^0-9]/g, '').length < 7) {
+      errors.phone = 'Please enter a valid phone number.'
+    }
+    if (!formData.email?.trim()) {
+      errors.email = 'Please enter your email address.'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      errors.email = 'Please enter a valid email address.'
+    }
+    if (!formData.date?.trim()) {
+      errors.date = 'Please select your celebration date.'
+    }
+    if (!formData.location?.trim()) {
+      errors.location = 'Please specify your venue or city.'
+    }
+
+    return errors
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // 1. Validate required booking fields before redirecting (keeps data safe)
+    const errors = validateBookingForm()
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors)
+      setGeneralError('Please complete all required fields marked with an asterisk (*) to proceed.')
+      return
+    }
+
+    setValidationErrors({})
+    setGeneralError('')
     setLoading(true)
 
+    // 2. Format pre-filled message with all 8 customer-entered details
+    const bookingMessage = formatBookingInquiryMessage({
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      eventType: formData.eventType,
+      date: formData.date,
+      location: formData.location,
+      guestCount: formData.guestCount,
+      message: formData.message,
+    })
+
+    const bookingWhatsappUrl = getWhatsAppUrl(rawWhatsapp, bookingMessage)
+
+    // 3. Immediately launch WhatsApp to configured number (desktop or mobile)
+    openWhatsAppChat(bookingWhatsappUrl)
+
+    // 4. Concurrently record inquiry in backend database
     try {
       if (submitContact) {
         await submitContact({
@@ -65,20 +145,29 @@ export default function Contact() {
           guestCount: formData.guestCount,
           budget: formData.budget,
           message: formData.message,
-          subject: `Inquiry for ${formData.eventType}`,
+          subject: `Booking Inquiry for ${formData.eventType} (${formData.date})`,
         })
       }
-      setSubmitted(true)
     } catch (err) {
-      console.warn('Submission fallback:', err)
-      setSubmitted(true)
+      console.warn('Backend contact submission fallback:', err)
     } finally {
       setLoading(false)
+      setSubmitted(true)
     }
   }
 
-  const whatsappMessage = encodeURIComponent(
-    `Hello ${studioName}! My name is ${formData.name || '[Name]'}. I would like to inquire about ${formData.eventType} on ${formData.date || '[Date]'} at ${formData.location || '[Location]'}.`
+  const formattedBookingWhatsAppUrl = getWhatsAppUrl(
+    rawWhatsapp,
+    formatBookingInquiryMessage({
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      eventType: formData.eventType,
+      date: formData.date,
+      location: formData.location,
+      guestCount: formData.guestCount,
+      message: formData.message,
+    })
   )
 
   return (
@@ -128,47 +217,36 @@ export default function Contact() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-[#FAF4EA]/90 text-base sm:text-lg md:text-xl font-light leading-relaxed max-w-2xl mx-auto drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]"
           >
-            We would be honored to preserve your most meaningful memories. Share your plans with us below.
+            Whether planning an intimate countryside ceremony or a grand milestone jubilee, we would love to hear your vision.
           </motion.p>
         </div>
       </section>
 
-      {/* Main Contact Section */}
-      <section className="section-padding bg-ivory">
-        <div className="container-luxury">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch">
-            {/* Left: Studio Info Card */}
-            <div className="lg:col-span-5 flex flex-col justify-between p-8 md:p-10 bg-cream/40 border border-[#D8B77A]/50 shadow-sm rounded-sm">
-              <div className="space-y-6">
-                <div>
-                  <span className="text-caption uppercase tracking-[0.2em] text-[#B9975B] font-sans font-medium block mb-2 text-xs">
-                    Studio Concierge
-                  </span>
-                  <h2 className="font-serif text-3xl md:text-4xl text-charcoal font-light mb-3">
-                    Visit Us or Connect
-                  </h2>
-                  <p className="text-warm-brown/80 text-body-sm font-light leading-relaxed">
-                    We welcome couples and families by appointment to review handcrafted album samples, screen 4K cinema showreels, and chat over coffee.
-                  </p>
-                </div>
+      {/* Main Content Area */}
+      <section className="py-20 md:py-28">
+        <div className="container-luxury px-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+            {/* Left: Studio Contact Details & Direct WhatsApp Quick Card */}
+            <div className="lg:col-span-5 flex flex-col justify-between">
+              <div>
+                <span className="text-caption uppercase tracking-[0.2em] text-gold font-sans font-medium block mb-2">
+                  Studio Contact
+                </span>
+                <h2 className="font-serif text-3xl md:text-4xl text-charcoal font-light mb-6">
+                  {studioName}
+                </h2>
+                <p className="text-warm-brown/80 text-body-md font-light mb-8 leading-relaxed">
+                  We look forward to connecting with you. Reach out through our direct studio channels or submit your celebration details via WhatsApp.
+                </p>
 
-                {/* Contact Details List */}
-                <div className="space-y-5 pt-4 border-t border-[#D8B77A]/30">
+                <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-full bg-gold/15 text-gold flex items-center justify-center flex-shrink-0 mt-0.5">
                       <MapPin className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="font-serif text-base text-charcoal font-medium mb-0.5">Studio Address</h4>
-                      <p className="text-warm-brown/80 text-xs sm:text-sm font-light">{address}</p>
-                      <a
-                        href={studio.mapUrl || siteConfig.mapUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[11px] text-gold hover:underline uppercase tracking-wider font-sans mt-1 inline-block"
-                      >
-                        View on Google Maps →
-                      </a>
+                      <h4 className="font-serif text-base text-charcoal font-medium mb-0.5">Studio Location</h4>
+                      <p className="text-warm-brown/80 text-xs sm:text-sm font-light leading-relaxed">{address}</p>
                     </div>
                   </div>
 
@@ -205,20 +283,20 @@ export default function Contact() {
                 </div>
               </div>
 
-              {/* Direct WhatsApp Quick Card */}
+              {/* 1. START WHATSAPP CHAT (Direct WhatsApp Quick Card) */}
               <div className="mt-8 p-6 bg-[#2B170E] text-ivory border border-[#D8B77A]/30 rounded-sm">
                 <div className="flex items-center gap-2.5 mb-2">
                   <WhatsAppIcon className="w-5 h-5 text-[#25D366]" />
                   <h3 className="font-serif text-lg text-ivory">Need An Immediate Answer?</h3>
                 </div>
                 <p className="text-ivory/70 text-xs font-light mb-4 leading-relaxed">
-                  For last-minute date checks or urgent inquiries, message our lead team directly on WhatsApp.
+                  For last-minute date checks or urgent inquiries, message our lead team directly on WhatsApp ({DEFAULT_WHATSAPP_DISPLAY}).
                 </p>
                 <a
-                  href={`https://wa.me/${whatsapp}?text=${whatsappMessage}`}
+                  href={startWhatsAppChatUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-2 py-3 bg-[#25D366] text-[#1A1715] text-xs uppercase tracking-widest font-sans font-semibold hover:bg-[#20ba5a] transition-all rounded-sm"
+                  className="w-full inline-flex items-center justify-center gap-2 py-3 bg-[#25D366] text-[#1A1715] text-xs uppercase tracking-widest font-sans font-semibold hover:bg-[#20ba5a] transition-all rounded-sm shadow-sm"
                 >
                   <WhatsAppIcon className="w-4 h-4 fill-current" />
                   <span>Start WhatsApp Chat</span>
@@ -239,33 +317,34 @@ export default function Contact() {
                       <CheckCircle2 className="w-10 h-10" />
                     </div>
                     <span className="text-caption uppercase tracking-[0.2em] text-gold font-sans font-medium block mb-2">
-                      Inquiry Received
+                      Inquiry Prepared & Logged
                     </span>
                     <h3 className="font-serif text-3xl text-charcoal mb-4">
                       Thank You, {formData.name || 'Friend'}!
                     </h3>
-                    <p className="text-warm-brown/80 text-body-md font-light max-w-md mx-auto mb-8">
-                      We have received your celebration details. Our creative director will review your dates and connect with you within 24 hours.
+                    <p className="text-warm-brown/80 text-body-md font-light max-w-md mx-auto mb-6">
+                      We have prepared your celebration details for WhatsApp to <strong>{DEFAULT_WHATSAPP_DISPLAY}</strong>. If WhatsApp did not open automatically, tap below:
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
                       <a
-                        href={`https://wa.me/${String(whatsapp || siteConfig.whatsapp).replace(/[^0-9]/g, '')}?text=${whatsappMessage}`}
+                        href={formattedBookingWhatsAppUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-6 py-3 bg-gold text-deep-black text-xs uppercase tracking-wider font-sans font-medium hover:bg-gold-light"
+                        className="px-6 py-3.5 bg-[#25D366] text-[#1A1715] text-xs uppercase tracking-wider font-sans font-semibold hover:bg-[#20ba5a] inline-flex items-center gap-2 rounded-sm shadow-sm transition-all"
                       >
-                        Follow Up On WhatsApp
+                        <WhatsAppIcon className="w-4 h-4 fill-current" />
+                        <span>Continue on WhatsApp</span>
                       </a>
                       <button
                         onClick={() => setSubmitted(false)}
-                        className="px-6 py-3 border border-charcoal/30 text-charcoal text-xs uppercase tracking-wider font-sans hover:border-gold"
+                        className="px-6 py-3.5 border border-charcoal/30 text-charcoal text-xs uppercase tracking-wider font-sans hover:border-gold transition-colors"
                       >
-                        Submit Another Inquiry
+                        Edit Details / Submit Another
                       </button>
                     </div>
                   </motion.div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                     <div>
                       <span className="text-caption uppercase tracking-[0.2em] text-gold font-sans font-medium block mb-2">
                         Event Details
@@ -275,6 +354,14 @@ export default function Contact() {
                       </h3>
                     </div>
 
+                    {/* General Validation Error Alert */}
+                    {generalError && (
+                      <div className="p-3.5 bg-red-50 border border-red-300 text-red-800 text-xs flex items-center gap-2.5 rounded-sm">
+                        <AlertCircle className="w-4 h-4 flex-shrink-0 text-red-600" />
+                        <span>{generalError}</span>
+                      </div>
+                    )}
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       <div>
                         <label className="block text-xs uppercase tracking-wider text-charcoal font-sans font-medium mb-2">
@@ -283,12 +370,16 @@ export default function Contact() {
                         <input
                           type="text"
                           name="name"
-                          required
                           value={formData.name}
                           onChange={handleChange}
                           placeholder="e.g. Eleanor & James"
-                          className="w-full bg-ivory border border-champagne px-4 py-3 text-charcoal text-sm focus:outline-none focus:border-gold transition-colors"
+                          className={`w-full bg-ivory border px-4 py-3 text-charcoal text-sm focus:outline-none transition-colors ${
+                            validationErrors.name ? 'border-red-500 focus:border-red-600' : 'border-champagne focus:border-gold'
+                          }`}
                         />
+                        {validationErrors.name && (
+                          <p className="text-[11px] text-red-600 font-sans mt-1">{validationErrors.name}</p>
+                        )}
                       </div>
 
                       <div>
@@ -298,12 +389,16 @@ export default function Contact() {
                         <input
                           type="tel"
                           name="phone"
-                          required
                           value={formData.phone}
                           onChange={handleChange}
                           placeholder="+44 7988 827057"
-                          className="w-full bg-ivory border border-champagne px-4 py-3 text-charcoal text-sm focus:outline-none focus:border-gold transition-colors"
+                          className={`w-full bg-ivory border px-4 py-3 text-charcoal text-sm focus:outline-none transition-colors ${
+                            validationErrors.phone ? 'border-red-500 focus:border-red-600' : 'border-champagne focus:border-gold'
+                          }`}
                         />
+                        {validationErrors.phone && (
+                          <p className="text-[11px] text-red-600 font-sans mt-1">{validationErrors.phone}</p>
+                        )}
                       </div>
                     </div>
 
@@ -315,12 +410,16 @@ export default function Contact() {
                         <input
                           type="email"
                           name="email"
-                          required
                           value={formData.email}
                           onChange={handleChange}
                           placeholder="eleanor@example.co.uk"
-                          className="w-full bg-ivory border border-champagne px-4 py-3 text-charcoal text-sm focus:outline-none focus:border-gold transition-colors"
+                          className={`w-full bg-ivory border px-4 py-3 text-charcoal text-sm focus:outline-none transition-colors ${
+                            validationErrors.email ? 'border-red-500 focus:border-red-600' : 'border-champagne focus:border-gold'
+                          }`}
                         />
+                        {validationErrors.email && (
+                          <p className="text-[11px] text-red-600 font-sans mt-1">{validationErrors.email}</p>
+                        )}
                       </div>
 
                       <div>
@@ -350,11 +449,15 @@ export default function Contact() {
                         <input
                           type="date"
                           name="date"
-                          required
                           value={formData.date}
                           onChange={handleChange}
-                          className="w-full bg-ivory border border-champagne px-4 py-3 text-charcoal text-sm focus:outline-none focus:border-gold transition-colors"
+                          className={`w-full bg-ivory border px-4 py-3 text-charcoal text-sm focus:outline-none transition-colors ${
+                            validationErrors.date ? 'border-red-500 focus:border-red-600' : 'border-champagne focus:border-gold'
+                          }`}
                         />
+                        {validationErrors.date && (
+                          <p className="text-[11px] text-red-600 font-sans mt-1">{validationErrors.date}</p>
+                        )}
                       </div>
 
                       <div>
@@ -364,12 +467,16 @@ export default function Contact() {
                         <input
                           type="text"
                           name="location"
-                          required
                           value={formData.location}
                           onChange={handleChange}
-                          placeholder="e.g. Grand Manor Estate / Botanical Gardens / Historic Chapel"
-                          className="w-full bg-ivory border border-champagne px-4 py-3 text-charcoal text-sm focus:outline-none focus:border-gold transition-colors"
+                          placeholder="e.g. Grand Manor Estate / Historic Chapel"
+                          className={`w-full bg-ivory border px-4 py-3 text-charcoal text-sm focus:outline-none transition-colors ${
+                            validationErrors.location ? 'border-red-500 focus:border-red-600' : 'border-champagne focus:border-gold'
+                          }`}
                         />
+                        {validationErrors.location && (
+                          <p className="text-[11px] text-red-600 font-sans mt-1">{validationErrors.location}</p>
+                        )}
                       </div>
 
                       <div>
@@ -401,13 +508,14 @@ export default function Contact() {
                       />
                     </div>
 
+                    {/* 2. SUBMIT BOOKING INQUIRY BUTTON */}
                     <button
                       type="submit"
                       disabled={loading}
                       className="w-full py-4 bg-deep-black text-ivory font-sans text-xs uppercase tracking-widest font-semibold hover:bg-gold hover:text-deep-black transition-all duration-300 shadow-md flex items-center justify-center gap-2"
                     >
                       {loading ? (
-                        <span>Submitting Your Inquiry...</span>
+                        <span>Opening WhatsApp & Submitting...</span>
                       ) : (
                         <>
                           <span>Submit Booking Inquiry</span>

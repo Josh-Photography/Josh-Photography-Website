@@ -4,6 +4,7 @@ import { motion, useInView } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { InstagramIcon, FacebookIcon, WhatsAppIcon } from '../common/Icons'
 import { siteConfig } from '../../data/siteConfig'
+import { getWhatsAppUrl } from '../../utils/whatsapp'
 import { galleryImages } from '../../data/gallery'
 import { useWebsiteData } from '../../hooks/useWebsiteData'
 
@@ -15,7 +16,7 @@ export default function SocialSection() {
   const instagramUrl = typeof social.instagram === 'object' ? social.instagram.url : (social.instagram || siteConfig.social.instagram)
   const facebookUrl = typeof social.facebook === 'object' ? social.facebook.url : (social.facebook || siteConfig.social.facebook)
   const rawWhatsapp = studio.whatsapp || siteConfig.whatsapp
-  const whatsappUrl = rawWhatsapp ? `https://wa.me/${String(rawWhatsapp).replace(/[^0-9]/g, '')}` : ''
+  const whatsappUrl = getWhatsAppUrl(rawWhatsapp)
 
   // Pick 6 images from dynamic photos if available, else fallback galleryImages
   const availableImages = (Array.isArray(photos) && photos.length >= 6)

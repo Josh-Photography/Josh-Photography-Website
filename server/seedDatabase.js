@@ -54,7 +54,7 @@ const contentData = {
     address: 'Greater London, United Kingdom',
     email: 'hello@joshphotography.co.uk',
     phone: '+44 7988 827057',
-    whatsapp: '+447988827057',
+    whatsapp: '+44 7988 827057',
     openingHours:
       'Monday – Saturday: 9:00 AM – 6:00 PM | Sunday: By Private Appointment',
     announcement: {

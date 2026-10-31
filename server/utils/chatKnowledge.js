@@ -121,7 +121,7 @@ export function getKnowledgeBase() {
     tagline: 'Stories Worth Remembering',
     location: 'Greater London, United Kingdom',
     phone: '+44 7988 827057',
-    whatsapp: '+447988827057',
+    whatsapp: '+44 7988 827057',
     email: 'hello@joshphotography.co.uk',
     openingHours: 'Monday – Saturday: 9:00 AM – 6:00 PM | Sunday: By Private Appointment',
   }

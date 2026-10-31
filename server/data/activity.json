@@ -1,5 +1,71 @@
 [
   {
+    "id": "act-1793410452764",
+    "action": "New inquiry received from Hirthick (Wedding)",
+    "user": "System",
+    "timestamp": "2026-10-31T01:34:12.764Z"
+  },
+  {
+    "id": "act-1793410200454",
+    "action": "New inquiry received from Hirthick (Personal / Executive Portrait)",
+    "user": "System",
+    "timestamp": "2026-10-31T01:30:00.455Z"
+  },
+  {
+    "id": "act-1793407629192",
+    "action": "Updated promotional offer: \"Birthday Jubilees & Milestone Celebrations\"",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:47:09.192Z"
+  },
+  {
+    "id": "act-1793407626927",
+    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:47:06.927Z"
+  },
+  {
+    "id": "act-1793407620170",
+    "action": "Updated promotional offer: \"Birthday Jubilees & Milestone Celebrations\"",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:47:00.170Z"
+  },
+  {
+    "id": "act-1793407618064",
+    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:46:58.064Z"
+  },
+  {
+    "id": "act-1793407615567",
+    "action": "Updated Special Offers settings (Enabled)",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:46:55.567Z"
+  },
+  {
+    "id": "act-1793407613112",
+    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:46:53.112Z"
+  },
+  {
+    "id": "act-1793407609428",
+    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:46:49.428Z"
+  },
+  {
+    "id": "act-1793407582792",
+    "action": "Updated Special Offers settings (Hidden)",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:46:22.792Z"
+  },
+  {
+    "id": "act-1793407566445",
+    "action": "Updated promotional offer: \"Birthday Jubilees & Milestone Celebrations\"",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:46:06.445Z"
+  },
+  {
     "id": "act-1793406378432",
     "action": "Updated Studio Information & Facilities",
     "user": "Admin",
@@ -232,71 +298,5 @@
     "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
     "user": "Admin",
     "timestamp": "2026-10-30T20:49:54.642Z"
-  },
-  {
-    "id": "act-1793393394634",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-30T20:49:54.634Z"
-  },
-  {
-    "id": "act-1793392750834",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-30T20:39:10.834Z"
-  },
-  {
-    "id": "act-1793392750821",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-30T20:39:10.821Z"
-  },
-  {
-    "id": "act-1793392750803",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-30T20:39:10.803Z"
-  },
-  {
-    "id": "act-1793391829303",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-30T20:23:49.303Z"
-  },
-  {
-    "id": "act-1793391829295",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-30T20:23:49.295Z"
-  },
-  {
-    "id": "act-1793391829286",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-30T20:23:49.286Z"
-  },
-  {
-    "id": "act-1793233087598",
-    "action": "New inquiry received from Hirthick (Engagement Ceremony)",
-    "user": "System",
-    "timestamp": "2026-10-29T00:18:07.598Z"
-  },
-  {
-    "id": "act-1793233039367",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-29T00:17:19.367Z"
-  },
-  {
-    "id": "act-1793232941514",
-    "action": "Updated promotional offer: \"Birthday Jubilees & Milestone Celebrations\"",
-    "user": "Admin",
-    "timestamp": "2026-10-29T00:15:41.514Z"
-  },
-  {
-    "id": "act-1793232941485",
-    "action": "Updated promotional offer: \"Birthday Jubilees & Milestone Celebrations\"",
-    "user": "Admin",
-    "timestamp": "2026-10-29T00:15:41.485Z"
   }
 ]

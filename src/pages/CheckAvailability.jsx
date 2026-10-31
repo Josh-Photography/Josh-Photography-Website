@@ -4,6 +4,11 @@ import { motion } from 'framer-motion'
 import { Calendar, CheckCircle2, Send, Clock, MapPin, Sparkles, AlertCircle } from 'lucide-react'
 import { siteConfig } from '../data/siteConfig'
 import { WhatsAppIcon } from '../components/common/Icons'
+import {
+  getWhatsAppUrl,
+  openWhatsAppChat,
+  DEFAULT_WHATSAPP_DISPLAY,
+} from '../utils/whatsapp'
 import dataService from '../services/dataService'
 import { useWebsiteData } from '../hooks/useWebsiteData'
 
@@ -47,7 +52,6 @@ export default function CheckAvailability() {
   const { studio = {}, settings = {} } = useWebsiteData()
   const studioName = settings.siteName || studio.name || siteConfig.studioName
   const studioWhatsapp = studio.whatsapp || siteConfig.whatsapp
-  const cleanWhatsapp = String(studioWhatsapp).replace(/[^0-9]/g, '')
   const [searchParams] = useSearchParams()
   const todayDateString = new Date().toISOString().split('T')[0]
 
@@ -98,26 +102,80 @@ export default function CheckAvailability() {
     })
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const formatAvailabilityMessage = (data, nameOfStudio) => {
+    const reqs = data.requirements && data.requirements.length > 0
+      ? data.requirements.join(', ')
+      : 'None selected'
+
+    const lines = [
+      `*Date Availability Check — ${nameOfStudio}*`,
+      '',
+      `• *Customer Name:* ${data.name ? data.name.trim() : 'Not specified'}`,
+      `• *Phone Number:* ${data.phone ? data.phone.trim() : 'Not specified'}`,
+      `• *Email Address:* ${data.email ? data.email.trim() : 'Not specified'}`,
+      `• *Event Type:* ${data.eventType || 'Wedding'}`,
+      `• *Event Date:* ${data.date || 'TBD'}`,
+      `• *Venue / City:* ${data.location ? data.location.trim() : 'To be confirmed'}`,
+      `• *Estimated Guest Count:* ${data.guestCount && data.guestCount.trim() ? data.guestCount.trim() : 'Not specified'}`,
+      `• *Package Preference:* ${data.packagePreference || 'Standard'}`,
+      `• *Photography Requirements:* ${reqs}`,
+      `• *Vision & Special Requests:* ${data.message && data.message.trim() ? data.message.trim() : 'None provided'}`,
+    ]
+
+    return lines.join('\n')
+  }
+
+  const validateForm = () => {
+    if (!formData.name?.trim()) {
+      setErrorMsg('Please enter your full name.')
+      return false
+    }
+    if (!formData.email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      setErrorMsg('Please enter a valid email address.')
+      return false
+    }
+    if (!formData.phone?.trim()) {
+      setErrorMsg('Please enter your phone or WhatsApp number.')
+      return false
+    }
     if (!formData.date) {
       setErrorMsg('Please select an event date.')
-      return
+      return false
     }
     if (formData.date < todayDateString) {
       setErrorMsg('Please choose an upcoming date.')
+      return false
+    }
+    if (!formData.location?.trim()) {
+      setErrorMsg('Please enter your event venue or city.')
+      return false
+    }
+    return true
+  }
+
+  // Centralized submission logic for BOTH "Check Availability" and "Send Enquiry via WhatsApp"
+  const processAvailabilityInquiry = async () => {
+    if (!validateForm()) {
       return
     }
 
     setLoading(true)
+    setErrorMsg('')
 
-    // Store in localStorage for client persistence
+    // 1. Format complete WhatsApp message and URL (+44 7988 827057)
+    const formattedMessage = formatAvailabilityMessage(formData, studioName)
+    const targetWhatsappUrl = getWhatsAppUrl(studioWhatsapp, formattedMessage)
+
+    // 2. Open WhatsApp immediately on click
+    openWhatsAppChat(targetWhatsappUrl)
+
+    // 3. Store locally and sync to database asynchronously
     try {
       const existing = JSON.parse(localStorage.getItem('studio_inquiries') || '[]')
       existing.push({ ...formData, timestamp: new Date().toISOString() })
       localStorage.setItem('studio_inquiries', JSON.stringify(existing))
     } catch {
-      // ignore storage error
+      // ignore
     }
 
     try {
@@ -134,20 +192,25 @@ export default function CheckAvailability() {
       })
     } catch (err) {
       console.warn('Backend availability submit error:', err)
+    } finally {
+      setLoading(false)
+      setSubmitted(true)
     }
-
-    setLoading(false)
-    setSubmitted(true)
   }
 
-  const whatsappMessage = encodeURIComponent(
-    `Hello ${studioName}! I would like to check date availability:\n` +
-    `• Name: ${formData.name || 'Inquirer'}\n` +
-    `• Event: ${formData.eventType}\n` +
-    `• Date: ${formData.date || 'TBD'}\n` +
-    `• Location: ${formData.location || 'To be confirmed'}\n` +
-    `• Guests: ${formData.guestCount || 'Not specified'}\n` +
-    `• Package: ${formData.packagePreference}`
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    processAvailabilityInquiry()
+  }
+
+  const handleWhatsAppButtonClick = (e) => {
+    e.preventDefault()
+    processAvailabilityInquiry()
+  }
+
+  const availabilityWhatsAppUrl = getWhatsAppUrl(
+    studioWhatsapp,
+    formatAvailabilityMessage(formData, studioName)
   )
 
   return (
@@ -200,14 +263,15 @@ export default function CheckAvailability() {
               <h2 className="font-serif text-3xl md:text-4xl text-charcoal mb-4">
                 Thank You, {formData.name || 'Friend'}!
               </h2>
-              <p className="text-warm-brown/85 text-body-md font-light max-w-md mx-auto mb-8 leading-relaxed">
+              <p className="text-warm-brown/85 text-body-md font-light max-w-md mx-auto mb-6 leading-relaxed">
                 We have received your dates for <strong>{formData.eventType}</strong> on{' '}
-                <strong>{formData.date}</strong>. Our creative director will review date availability and connect with you shortly.
+                <strong>{formData.date}</strong> and prepared your WhatsApp message for{' '}
+                <strong>{DEFAULT_WHATSAPP_DISPLAY}</strong>. If WhatsApp did not open automatically, tap below:
               </p>
 
               <div className="flex flex-wrap justify-center gap-4">
                 <a
-                  href={`https://wa.me/${cleanWhatsapp}?text=${whatsappMessage}`}
+                  href={availabilityWhatsAppUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#25D366] text-deep-black font-nav text-xs uppercase tracking-wider font-semibold hover:bg-[#20ba5a] transition-all shadow-sm"
@@ -225,7 +289,7 @@ export default function CheckAvailability() {
             </motion.div>
           ) : (
             <div className="bg-[#F5EEE3]/50 border border-champagne/70 p-8 sm:p-12 md:p-16 shadow-luxury">
-              <form onSubmit={handleSubmit} className="space-y-8">
+              <form onSubmit={handleSubmit} className="space-y-8" noValidate>
                 {/* Error Banner */}
                 {errorMsg && (
                   <div className="p-4 bg-rose-100/80 border border-rose-300 text-rose-900 rounded-sm flex items-center gap-3 text-sm font-nav">
@@ -250,7 +314,7 @@ export default function CheckAvailability() {
                         required
                         value={formData.name}
                         onChange={handleChange}
-                        placeholder="e.g. Ananya Sundar"
+                        placeholder="e.g. Eleanor & James"
                         className="w-full bg-ivory border border-champagne px-4 py-3 text-charcoal text-sm focus:outline-none focus:border-muted-gold transition-colors font-sans"
                       />
                     </div>
@@ -265,7 +329,7 @@ export default function CheckAvailability() {
                         required
                         value={formData.email}
                         onChange={handleChange}
-                        placeholder="ananya@example.com"
+                        placeholder="eleanor@example.co.uk"
                         className="w-full bg-ivory border border-champagne px-4 py-3 text-charcoal text-sm focus:outline-none focus:border-muted-gold transition-colors font-sans"
                       />
                     </div>
@@ -280,7 +344,7 @@ export default function CheckAvailability() {
                         required
                         value={formData.phone}
                         onChange={handleChange}
-                        placeholder="+91 98765 43210"
+                        placeholder="+44 7988 827057"
                         className="w-full bg-ivory border border-champagne px-4 py-3 text-charcoal text-sm focus:outline-none focus:border-muted-gold transition-colors font-sans"
                       />
                     </div>
@@ -392,14 +456,16 @@ export default function CheckAvailability() {
                           <div
                             key={req}
                             onClick={() => handleRequirementToggle(req)}
-                            className={`p-3.5 border cursor-pointer flex items-center gap-3 transition-colors text-xs font-nav ${checked
+                            className={`p-3.5 border cursor-pointer flex items-center gap-3 transition-colors text-xs font-nav ${
+                              checked
                                 ? 'bg-ivory border-muted-gold text-charcoal font-semibold'
                                 : 'bg-transparent border-champagne/60 text-charcoal/75 hover:bg-ivory/50'
-                              }`}
+                            }`}
                           >
                             <div
-                              className={`w-4 h-4 rounded-sm border flex items-center justify-center flex-shrink-0 ${checked ? 'bg-muted-gold border-muted-gold text-deep-black' : 'border-champagne'
-                                }`}
+                              className={`w-4 h-4 rounded-sm border flex items-center justify-center flex-shrink-0 ${
+                                checked ? 'bg-muted-gold border-muted-gold text-deep-black' : 'border-champagne'
+                              }`}
                             >
                               {checked && <span className="text-[10px] leading-none font-bold">✓</span>}
                             </div>
@@ -426,7 +492,7 @@ export default function CheckAvailability() {
                   />
                 </div>
 
-                {/* Action Buttons */}
+                {/* Action Buttons: Both redirect to +44 7988 827057 on WhatsApp */}
                 <div className="pt-4 flex flex-col sm:flex-row items-center gap-4">
                   <button
                     type="submit"
@@ -434,7 +500,7 @@ export default function CheckAvailability() {
                     className="w-full sm:flex-1 py-4 bg-muted-gold text-deep-black font-nav text-xs uppercase tracking-[0.18em] font-semibold hover:bg-gold-light transition-all shadow-sm flex items-center justify-center gap-2 border border-champagne/40"
                   >
                     {loading ? (
-                      <span>Checking Availability...</span>
+                      <span>Opening WhatsApp & Submitting...</span>
                     ) : (
                       <>
                         <span>Check Availability</span>
@@ -443,15 +509,15 @@ export default function CheckAvailability() {
                     )}
                   </button>
 
-                  <a
-                    href={`https://wa.me/${cleanWhatsapp}?text=${whatsappMessage}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    onClick={handleWhatsAppButtonClick}
+                    disabled={loading}
                     className="w-full sm:w-auto px-8 py-4 bg-[#25D366] text-deep-black font-nav text-xs uppercase tracking-[0.14em] font-semibold hover:bg-[#20ba5a] transition-all flex items-center justify-center gap-2 shadow-sm"
                   >
                     <WhatsAppIcon className="w-4 h-4 fill-current" />
                     <span>Send Enquiry via WhatsApp</span>
-                  </a>
+                  </button>
                 </div>
               </form>
             </div>

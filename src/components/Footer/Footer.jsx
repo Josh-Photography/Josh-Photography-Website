@@ -4,6 +4,7 @@ import {
   MapPin, Phone, Mail, ArrowUpRight, Heart
 } from 'lucide-react'
 import { InstagramIcon, FacebookIcon, WhatsAppIcon } from '../common/Icons'
+import { getWhatsAppUrl } from '../../utils/whatsapp'
 import { siteConfig } from '../../data/siteConfig'
 import { eventCategories } from '../../data/events'
 import { useWebsiteData } from '../../hooks/useWebsiteData'
@@ -82,7 +83,7 @@ export default function Footer() {
                 )}
                 {whatsapp && (
                   <a
-                    href={`https://wa.me/${String(whatsapp).replace(/[^0-9]/g, '')}`}
+                    href={getWhatsAppUrl(whatsapp)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 border border-ivory/20 flex items-center justify-center transition-all duration-400 hover:border-gold hover:text-gold"

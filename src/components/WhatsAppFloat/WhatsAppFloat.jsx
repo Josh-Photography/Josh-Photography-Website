@@ -1,14 +1,13 @@
 import { siteConfig } from '../../data/siteConfig'
 import { useWebsiteData } from '../../hooks/useWebsiteData'
+import { getWhatsAppUrl } from '../../utils/whatsapp'
 
 export default function WhatsAppFloat() {
   const { studio = {} } = useWebsiteData()
   const rawNumber = studio.whatsapp || siteConfig.whatsapp
-  const cleanNumber = String(rawNumber).replace(/[^0-9]/g, '')
-  const message = encodeURIComponent(
-    `Hi ${studio.name || siteConfig.studioName}, I would like to enquire about photography services.`
-  )
-  const url = `https://wa.me/${cleanNumber}?text=${message}`
+  const studioName = studio.name || siteConfig.studioName
+  const message = `Hello ${studioName}! I would like to inquire about your photography services.`
+  const url = getWhatsAppUrl(rawNumber, message)
 
   return (
     <a
