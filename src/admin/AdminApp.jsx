@@ -88,7 +88,7 @@ function Login({ onLogin }) {
         if (res.ok) {
           const data = await res.json()
           if (data.token) {
-            localStorage.setItem('adminToken', data.token)
+            try { sessionStorage.setItem('adminToken', data.token) } catch (_) {}
             onLogin(data.token)
             return
           }
@@ -103,7 +103,7 @@ function Login({ onLogin }) {
 
       if (isDefaultUser && isDefaultPass) {
         const fallbackToken = 'josh-admin-token-' + Date.now()
-        localStorage.setItem('adminToken', fallbackToken)
+        try { sessionStorage.setItem('adminToken', fallbackToken) } catch (_) {}
         onLogin(fallbackToken)
         return
       }
@@ -137,6 +137,7 @@ function Login({ onLogin }) {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="joshyjose282@gmail.com"
+              autoComplete="username"
               required
             />
           </div>
@@ -148,6 +149,7 @@ function Login({ onLogin }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
+              autoComplete="current-password"
               required
             />
           </div>
@@ -159,7 +161,7 @@ function Login({ onLogin }) {
           </button>
         </form>
 
-        <p className="admin-login__hint">Credentials: joshyjose282@gmail.com / joshyjose@studio123</p>
+        <p className="admin-login__hint">🔒 Restricted Area — Authorized Studio Administration Only</p>
       </motion.div>
     </div>
   )
@@ -4541,13 +4543,25 @@ function Dashboard({ token, onLogout }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 15. Main Export
+// 15. Main Export (Strict Access: Prompt for Email & Password on Every Visit)
 // ─────────────────────────────────────────────────────────────────────────────
 export default function AdminApp() {
-  const [token, setToken] = useState(localStorage.getItem('adminToken'))
+  // Always require signing in on every visit/open — never auto-login from stored tokens
+  const [token, setToken] = useState(null)
+
+  useEffect(() => {
+    // Clear any previous persistent tokens on initial load to ensure strict security
+    try {
+      localStorage.removeItem('adminToken')
+      sessionStorage.removeItem('adminToken')
+    } catch (_) {}
+  }, [])
 
   const handleLogout = () => {
-    localStorage.removeItem('adminToken')
+    try {
+      localStorage.removeItem('adminToken')
+      sessionStorage.removeItem('adminToken')
+    } catch (_) {}
     setToken(null)
   }
 
