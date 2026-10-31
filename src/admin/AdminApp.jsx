@@ -97,14 +97,18 @@ function Login({ onLogin }) {
         // Fallback for Netlify standalone deployment
       }
 
-      if (username === 'admin' && password === 'admin123') {
+      const cleanUser = String(username).toLowerCase().trim()
+      const isDefaultUser = cleanUser === 'joshyjose282@gmail.com' || cleanUser === 'admin'
+      const isDefaultPass = password === 'joshyjose@studio123' || (cleanUser === 'admin' && password === 'admin123')
+
+      if (isDefaultUser && isDefaultPass) {
         const fallbackToken = 'josh-admin-token-' + Date.now()
         localStorage.setItem('adminToken', fallbackToken)
         onLogin(fallbackToken)
         return
       }
 
-      throw new Error('Invalid username or password')
+      throw new Error('Invalid email/username or password')
     } catch (err) {
       setError(err.message || 'Login failed')
     } finally {
@@ -127,12 +131,12 @@ function Login({ onLogin }) {
 
         <form onSubmit={handleSubmit} className="admin-login__form">
           <div className="admin-input-group">
-            <label>Username</label>
+            <label>Email or Username</label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="admin"
+              placeholder="joshyjose282@gmail.com"
               required
             />
           </div>
@@ -155,7 +159,7 @@ function Login({ onLogin }) {
           </button>
         </form>
 
-        <p className="admin-login__hint">Default Credentials: admin / admin123</p>
+        <p className="admin-login__hint">Credentials: joshyjose282@gmail.com / joshyjose@studio123</p>
       </motion.div>
     </div>
   )
