@@ -212,8 +212,8 @@ function resolveContext(history = []) {
       norm.split(' ').length <= 4
     ) {
       return {
-        reply: `Warm greetings! Welcome to **${studio.name}**. ✨\n\nI’m **Hello Chatbot**, your personal photography assistant. I can help you with:\n- 💍 **All 17 Photography Categories** (Weddings, Birthdays, Maternity, Car, Sports, Product, Reels, Model & more)\n- 🎁 **Current Promotional Offers & Discounts**\n- 💰 **Packages & Pricing** (Starting from £495)\n- 🏛️ **Studio Information, Northampton & De Fab Studio**\n- ⭐ **Real Client Reviews & Testimonials**\n- 📅 **Checking Date Availability & How to Book**\n\nWhat celebration or photography service can I assist you with today?`,
-        suggestions: ['Wedding Packages & Pricing', 'Special Offers & Discounts', 'Check Availability', 'Where is your studio?'],
+        reply: `Warm greetings! Welcome to **${studio.name}**. ✨\n\nI’m **Hello Chatbot**, your personal photography assistant. I can help you with:\n- 💍 **All 17 Photography Categories** (Weddings, Birthdays, Maternity, Car, Sports, Product, Reels, Model & more)\n- 🎁 **Current Promotional Offers & Discounts**\n- 🏛️ **Studio Information, Northampton & De Fab Studio**\n- ⭐ **Real Client Reviews & Testimonials**\n- 📅 **Checking Date Availability & How to Book**\n\nWhat celebration or photography service can I assist you with today?`,
+        suggestions: ['Wedding Photography', 'Special Offers & Discounts', 'Check Availability', 'Where is your studio?'],
         actions: [
           { label: 'Explore Weddings', url: '/weddings', type: 'internal' },
           { label: 'Special Offers', url: '/special-offers', type: 'internal' },
@@ -241,8 +241,8 @@ function resolveContext(history = []) {
       ])
     ) {
       return {
-        reply: `### How to Book with Josh Photography 📅\n\nBooking your celebration is clear and straightforward:\n\n1. **Check Dates / Inquire:** Visit our [Check Availability](/check-availability) page or submit your details on our [Contact page](/contact).\n2. **Consultation:** We’ll arrange an unhurried consultation (video call, phone, or in person) to review your itinerary, aesthetic preferences, and package options.\n3. **Reservation:** To officially secure your date on our calendar, a service agreement and date retainer are completed.\n\n**Advance Booking Guidelines:**\n- **Weddings & Peak Weekend Dates:** We recommend inquiring **6 to 12 months in advance** as peak British summer and autumn dates fill quickly.\n- **Birthdays, Newborns, Family & Commercial Sessions:** **3 to 6 weeks notice** is ideal.\n\n*Please note: Calendar dates are only officially reserved once your consultation is held and the retainer is received.*`,
-        suggestions: ['Check Date Availability', 'WhatsApp Josh Directly', 'View Packages & Pricing'],
+        reply: `### How to Book with Josh Photography 📅\n\nBooking your celebration is clear and straightforward:\n\n1. **Check Dates / Inquire:** Visit our [Check Availability](/check-availability) page or submit your details on our [Contact page](/contact).\n2. **Consultation:** We’ll arrange an unhurried consultation (video call, phone, or in person) to review your itinerary and aesthetic preferences.\n3. **Reservation:** To officially secure your date on our calendar, a service agreement and date retainer are completed.\n\n**Advance Booking Guidelines:**\n- **Weddings & Peak Weekend Dates:** We recommend inquiring **6 to 12 months in advance** as peak British summer and autumn dates fill quickly.\n- **Birthdays, Newborns, Family & Commercial Sessions:** **3 to 6 weeks notice** is ideal.\n\n*Please note: Calendar dates are only officially reserved once your consultation is held and the retainer is received.*`,
+        suggestions: ['Check Date Availability', 'WhatsApp Josh Directly', 'Special Offers'],
         actions: [
           { label: 'Check Availability Now', url: '/check-availability', type: 'internal' },
           { label: 'Submit Contact Form', url: '/contact', type: 'internal' },
@@ -288,7 +288,7 @@ function resolveContext(history = []) {
       if (matchedTestimonial) {
         return {
           reply: `### Published Client Testimonial — ${matchedTestimonial.event} ⭐⭐⭐⭐⭐\n\nHere is what our client **${matchedTestimonial.name}** shared regarding their **${matchedTestimonial.event}** (${matchedTestimonial.location}):\n\n> *“${matchedTestimonial.review}”*\n\n— **${matchedTestimonial.name}**\n\nAll our reviews reflect genuine couples and families whose cherished milestones we have documented across the UK.`,
-          suggestions: ['Read More Client Reviews', 'View Packages & Pricing', 'Check Availability'],
+          suggestions: ['Read More Client Reviews', 'Special Offers', 'Check Availability'],
           actions: [
             { label: 'View All Reviews', url: '/testimonials', type: 'internal' },
             { label: 'Check Availability', url: '/check-availability', type: 'internal' },
@@ -303,7 +303,7 @@ function resolveContext(history = []) {
 
       return {
         reply: `### Published Client Reviews — Josh Photography ⭐⭐⭐⭐⭐\n\nHere are genuine testimonials from families and couples we’ve had the privilege of documenting:\n\n${previewList}\n\nYou can read all verified reviews on our [Client Testimonials](/testimonials) page!`,
-        suggestions: ['Wedding Reviews', 'Birthday Reviews', 'View Packages', 'Check Availability'],
+        suggestions: ['Wedding Reviews', 'Birthday Reviews', 'Special Offers', 'Check Availability'],
         actions: [
           { label: 'Read All Reviews', url: '/testimonials', type: 'internal' },
           { label: 'Check Availability', url: '/check-availability', type: 'internal' },
@@ -312,20 +312,15 @@ function resolveContext(history = []) {
       }
     }
 
-    // 4. Packages & Pricing Inquiries (Customized by Category if specified)
+    // 4. Pricing Inquiries (Customized by Category if specified)
     if (
       hasWord(norm, [
-        'package price',
-        'package prices',
-        'packages price',
-        'package cost',
-        'package costs',
         'how much does it cost',
         'how much is',
         'pricing',
         'prices',
-        'packages',
-        'package',
+        'cost',
+        'costs',
         'rates',
         'fees',
         'quote',
@@ -339,20 +334,20 @@ function resolveContext(history = []) {
     ) {
       let focusNote = ''
         if (norm.includes('wedding') || recentTopic === 'weddings') {
-          focusNote = 'For weddings, couples most frequently choose our **Premium Package** (£1,150) for comprehensive 8-hour dual-photographer coverage and a handcrafted photo album, or our bespoke **Signature Package** for full-day cinema & photo.\n\n'
+          focusNote = 'For weddings, couples most frequently choose our **Premium Collection** (£1,150) for comprehensive 8-hour dual-photographer coverage and a handcrafted photo album, or our bespoke **Signature Collection** for full-day cinema & photo.\n\n'
         } else if (norm.includes('birthday') || recentTopic === 'birthdays') {
-          focusNote = 'For birthdays, our **Essential Package** (£495) covers up to 4 hours of celebration action, or **Premium** (£1,150) for complete day coverage with an heirloom album.\n\n'
+          focusNote = 'For birthdays, our **Essential Collection** (£495) covers up to 4 hours of celebration action, or **Premium Collection** (£1,150) for complete day coverage with an heirloom album.\n\n'
         }
 
         return {
-          reply: `### Official Photography Packages & Transparent Pricing 💰\n\n${focusNote}At **Josh Photography**, our transparent starting prices are:\n\n1. **Essential Package — Starting From £495**\n   - Up to 4 hours of continuous photographic coverage\n   - 1 professional photographer\n   - 200+ hand-edited high-resolution photographs\n   - Private online viewing & download gallery with full print release\n   - Fine-art color grading and individual retouching\n   - *Best for:* Intimate celebrations, first birthdays, civil ceremonies, maternity and newborn portraits.\n\n2. **Premium Package — Starting From £1,150 (Our Most Popular Choice)**\n   - Up to 8 hours of complete coverage\n   - 2 professional photographers (multi-angle perspectives simultaneously)\n   - 500+ hand-edited high-resolution master photographs\n   - Pre-event consultation & timeline planning\n   - Curated highlight slideshow set to music\n   - Handcrafted 30-page premium photo album\n   - *Best for:* Full-day weddings, grand milestone jubilees, and full-scale celebrations.\n\n3. **Signature Package — Request Pricing (Custom Luxury Commission)**\n   - Full-day unlimited coverage (12+ hours)\n   - 2 photographers + 1 dedicated cinematic videographer\n   - 800+ artistically edited photographs + 4K cinematic highlight film (5–8 min)\n   - Drone aerial coverage + 50-page signature heirloom album + 2 parent albums\n\n**Optional Add-ons:** Additional hours, extra photographer, aerial drone, same-day edit preview, album upgrades, fine-art canvas prints.`,
-          suggestions: ['How do I book a package?', 'What is the delivery timeline?', 'Do you provide photo albums?', 'Check Availability'],
+          reply: `### Official Photography Collections & Transparent Pricing 💰\n\n${focusNote}At **Josh Photography**, our transparent starting prices are:\n\n1. **Essential Collection — Starting From £495**\n   - Up to 4 hours of continuous photographic coverage\n   - 1 professional photographer\n   - 200+ hand-edited high-resolution photographs\n   - Private online viewing & download gallery with full print release\n   - Fine-art color grading and individual retouching\n   - *Best for:* Intimate celebrations, first birthdays, civil ceremonies, maternity and newborn portraits.\n\n2. **Premium Collection — Starting From £1,150 (Our Most Popular Choice)**\n   - Up to 8 hours of complete coverage\n   - 2 professional photographers (multi-angle perspectives simultaneously)\n   - 500+ hand-edited high-resolution master photographs\n   - Pre-event consultation & timeline planning\n   - Curated highlight slideshow set to music\n   - Handcrafted 30-page premium photo album\n   - *Best for:* Full-day weddings, grand milestone jubilees, and full-scale celebrations.\n\n3. **Signature Collection — Request Pricing (Custom Luxury Commission)**\n   - Full-day unlimited coverage (12+ hours)\n   - 2 photographers + 1 dedicated cinematic videographer\n   - 800+ artistically edited photographs + 4K cinematic highlight film (5–8 min)\n   - Drone aerial coverage + 50-page signature heirloom album + 2 parent albums\n\n**Optional Add-ons:** Additional hours, extra photographer, aerial drone, same-day edit preview, album upgrades, fine-art canvas prints.`,
+          suggestions: ['How do I book?', 'What is the delivery timeline?', 'Do you provide photo albums?', 'Check Availability'],
           actions: [
             { label: 'Check Availability', url: '/check-availability', type: 'internal' },
             { label: 'Special Offers', url: '/special-offers', type: 'internal' },
             {
               label: 'Inquire on WhatsApp',
-              url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh Photography! I would like to inquire about package pricing and options.')}`,
+              url: `${baseWhatsAppUrl}?text=${encodeURIComponent('Hello Josh Photography! I would like to inquire about pricing and options.')}`,
               type: 'external',
             },
           ],
@@ -470,10 +465,10 @@ function resolveContext(history = []) {
             }
 
             return {
-              reply: `### Special Offers & Promotions 🎁\n\nWe do not currently have any active seasonal discount promotions published right now. However, all our photography collections feature transparent, competitive pricing starting from **£495** (Essential) and **£1,150** (Premium).\n\nPlease check back soon or visit our [Special Offers](/special-offers) page for upcoming seasonal announcements!`,
-              suggestions: ['View Packages & Pricing', 'Check Availability', 'Contact Us'],
+              reply: `### Special Offers & Promotions 🎁\n\nWe do not currently have any active seasonal discount promotions published right now.\n\nPlease check back soon or visit our [Special Offers](/special-offers) page for upcoming seasonal announcements!`,
+              suggestions: ['Special Offers', 'Check Availability', 'Contact Us'],
               actions: [
-                { label: 'View Packages', url: '/packages', type: 'internal' },
+                { label: 'Special Offers', url: '/special-offers', type: 'internal' },
                 { label: 'Check Availability', url: '/check-availability', type: 'internal' },
               ],
             }
@@ -490,8 +485,8 @@ function resolveContext(history = []) {
               .join('\n')
 
               return {
-                reply: `### ${matchedCat.name} — Josh Photography 📷\n\n**${matchedCat.headline}**\n\n${matchedCat.description}\n\n**Our Key Specialties & Features:**\n${specialtiesList}\n\n- 💰 **Package Guide:** ${matchedCat.pricingGuide || 'Essential (£495) or Premium (£1,150)'}\n- 🖼️ **Portfolio Gallery:** Explore curated frames on our dedicated [${matchedCat.name}](${matchedCat.route}) page.\n\nWould you like to check date availability or discuss tailored coverage with Josh?`,
-                suggestions: [`View ${matchedCat.name} Page`, 'Check Date Availability', 'Packages & Pricing', 'Client Reviews'],
+                reply: `### ${matchedCat.name} — Josh Photography 📷\n\n**${matchedCat.headline}**\n\n${matchedCat.description}\n\n**Our Key Specialties & Features:**\n${specialtiesList}\n\n- 🖼️ **Portfolio Gallery:** Explore curated frames on our dedicated [${matchedCat.name}](${matchedCat.route}) page.\n\nWould you like to check date availability or discuss tailored celebration coverage with Josh?`,
+                suggestions: [`View ${matchedCat.name} Page`, 'Check Date Availability', 'Special Offers', 'Client Reviews'],
                 actions: [
                   { label: `Explore ${matchedCat.name}`, url: matchedCat.route, type: 'internal' },
                   { label: 'Check Availability', url: '/check-availability', type: 'internal' },
@@ -529,7 +524,7 @@ function resolveContext(history = []) {
               ) {
                 return {
                   reply: `### Meet Lead Photographer & Founder Josh 📷\n\n**${about.photographerName}** is the founder and lead photographer of **${studio.name}**!\n\n**Our Documented Milestones (Published Experience):**\n- 💍 **${statWeddings}** Weddings Captured\n- 👨‍👩‍👧‍👦 **${statFamilies}** Happy Families\n- 🥂 **${statCelebrations}** Celebrations Covered\n- 🏆 **${statAwards}** Industry Features & Awards\n\n**Our Professional Approach & Philosophy:**\n*“${about.photographerQuote}”*\n\n${about.photographerBio1}\n\n${about.photographerBio2}\n\n**Our Core Creative Pillars:**\n1. **Emotional Authenticity:** We never force artificial poses or stiff smiles.\n2. **Unobtrusive Documentary Approach:** We blend seamlessly into your wedding or family celebration.\n3. **Timeless Warmth & Elegant Composition:** Rich, organic tones that honor true skin tones.\n4. **Archival Heirloom Longevity:** Handcrafted albums and digital master files created to outlive generations.`,
-                  suggestions: ['View Packages & Pricing', 'Read Client Testimonials', 'Where is your studio?', 'Check Availability'],
+                  suggestions: ['Special Offers & Discounts', 'Read Client Testimonials', 'Where is your studio?', 'Check Availability'],
                   actions: [
                     { label: 'About Josh Photography', url: '/about', type: 'internal' },
                     { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
@@ -599,7 +594,7 @@ function resolveContext(history = []) {
                   ) {
                     return {
                       reply: `### Official Contact Information — Josh Photography 📞\n\nWe would love to hear all about your upcoming celebration!\n\n- 📞 **Phone:** [${studioPhone}](tel:${studioPhone.replace(/\s+/g, '')})\n- 💬 **WhatsApp:** [Message us on WhatsApp](${baseWhatsAppUrl}) (${studioPhone})\n- ✉️ **Email:** [${studioEmail}](mailto:${studioEmail})\n- 📍 **Studio Address:** ${studioAddress}\n- 🕒 **Hours:** ${studio.openingHours}\n\nOur team is available Monday through Saturday, with private Sunday consultations by appointment.`,
-                      suggestions: ['Check Availability', 'View Packages', 'Special Offers'],
+                      suggestions: ['Check Availability', 'Special Offers', 'Client Reviews'],
                       actions: [
                         {
                           label: 'Start WhatsApp Chat',
@@ -630,10 +625,10 @@ function resolveContext(history = []) {
                     ])
   ) {
                     return {
-                      reply: `### Photo Delivery & Heirloom Album Quality ⏱️\n\n- ⚡ **Sneak Peek Highlights:** You will receive **25–30 hand-graded highlight frames within 48 to 72 hours** of your celebration for instant sharing with family.\n- 📦 **Complete Digital Gallery:** Your full high-resolution digital gallery (every photograph individually retouched and color-graded) is delivered within **3 to 4 weeks** via a private, password-protected online viewing suite.\n- 📖 **Handcrafted Photo Albums:** Our albums are handcrafted in Italy using archival fine-art paper and genuine leather/linen covers, engineered to endure across generations.\n- 💾 **Print Release:** Every package includes full personal printing rights and digital downloads in both web and print resolutions.`,
-                      suggestions: ['View Packages & Pricing', 'Check Availability', 'Contact Us'],
+                      reply: `### Photo Delivery & Heirloom Album Quality ⏱️\n\n- ⚡ **Sneak Peek Highlights:** You will receive **25–30 hand-graded highlight frames within 48 to 72 hours** of your celebration for instant sharing with family.\n- 📦 **Complete Digital Gallery:** Your full high-resolution digital gallery (every photograph individually retouched and color-graded) is delivered within **3 to 4 weeks** via a private, password-protected online viewing suite.\n- 📖 **Handcrafted Photo Albums:** Our albums are handcrafted in Italy using archival fine-art paper and genuine leather/linen covers, engineered to endure across generations.\n- 💾 **Print Release:** Every commission includes full personal printing rights and digital downloads in both web and print resolutions.`,
+                      suggestions: ['Special Offers', 'Check Availability', 'Contact Us'],
                       actions: [
-                        { label: 'View Packages', url: '/packages', type: 'internal' },
+                        { label: 'Special Offers', url: '/special-offers', type: 'internal' },
                         { label: 'Check Availability', url: '/check-availability', type: 'internal' },
                       ],
                     }
@@ -641,8 +636,8 @@ function resolveContext(history = []) {
 
                   // 11. Polite Fallback — Honest & helpful, guides customer to direct channels
                   return {
-                    reply: `I want to make sure you receive the most accurate and personalized details for your celebration! ✨\n\nWhile I can assist with our **17 photography categories**, **packages (starting from £495)**, **promotional offers**, and **studio information**, bespoke inquiries or custom itineraries are best discussed directly with Josh.\n\nPlease feel free to message Josh on WhatsApp at **${studioPhone}** or submit your inquiry on our [Contact page](/contact).`,
-                    suggestions: ['Explore All Categories', 'Special Offers & Discounts', 'Packages & Pricing', 'Contact Team'],
+                    reply: `I want to make sure you receive the most accurate and personalized details for your celebration! ✨\n\nWhile I can assist with our **17 photography categories**, **promotional offers**, and **studio information**, bespoke inquiries or custom itineraries are best discussed directly with Josh.\n\nPlease feel free to message Josh on WhatsApp at **${studioPhone}** or submit your inquiry on our [Contact page](/contact).`,
+                    suggestions: ['Explore All Categories', 'Special Offers & Discounts', 'Client Reviews', 'Contact Team'],
                     actions: [
                       {
                         label: 'Chat on WhatsApp',
@@ -665,7 +660,7 @@ function resolveContext(history = []) {
                       return {
                         reply: validation.fallbackResponse || OFF_TOPIC_RESPONSE,
                         suggestions: [
-                          '💍 Wedding Packages & Pricing',
+                          '💍 Wedding Photography',
                           '🎂 Birthday Photography',
                           '🎁 Special Offers & Discounts',
                           '📅 Check Availability',

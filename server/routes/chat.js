@@ -31,8 +31,8 @@ router.post('/', async (req, res) => {
     console.error('Chat error in /api/chat:', error)
     res.status(500).json({
       success: false,
-      reply: 'I’m Hello Chatbot, your photography assistant! I am here to help you with our photography services, packages, bookings, and other website-related questions. Please feel free to ask your question or reach us directly on WhatsApp or call +44 7988 827057.',
-      suggestions: ['Wedding Packages & Pricing', 'Birthday Photography', 'Check Availability', 'Contact Details'],
+      reply: 'I’m Hello Chatbot, your photography assistant! I am here to help you with our photography services, date bookings, promotional offers, and other website-related questions. Please feel free to ask your question or reach us directly on WhatsApp or call +44 7988 827057.',
+      suggestions: ['Wedding Photography', 'Birthday Photography', 'Special Offers', 'Check Availability'],
       actions: [
         { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
         { label: 'Contact Us', url: '/contact', type: 'internal' },
@@ -53,9 +53,9 @@ router.get('/faq', (req, res) => {
       whatsapp: kb.studio.whatsapp,
       announcement: kb.announcement,
       starterSuggestions: [
-        '💍 Wedding Packages & Pricing',
+        '💍 Wedding Photography',
         '🎂 Birthday Celebrations',
-        '💰 How much does the Premium package cost?',
+        '🎁 Special Offers & Discounts',
         '📅 How far in advance should we book?',
         '🏛️ Tell me about your new studio opening',
         '⏱️ What is your photo delivery turnaround time?',

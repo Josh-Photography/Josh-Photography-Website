@@ -7,7 +7,7 @@
  */
 
 export const OFF_TOPIC_RESPONSE =
-  "I’m Hello Chatbot, your photography assistant! I can help you with our photography services, packages, bookings, promotions, and other website-related questions. Please feel free to ask about our weddings, celebrations, commercial shoots, or packages!"
+  "I’m Hello Chatbot, your photography assistant! I can help you with our photography services, date bookings, promotional offers, and other website-related questions. Please feel free to ask about our weddings, celebrations, commercial shoots, or studio information!"
 
 // Explicit on-topic patterns confirming photography and Josh Photography relevance
 const ON_TOPIC_PATTERNS = [
@@ -46,7 +46,6 @@ const ON_TOPIC_PATTERNS = [
   // 4. Packages, Pricing & Fees
   /\b(package|packages|price|prices|pricing|cost|costs|rate|rates|fee|fees|quote|quotes|budget)\b/i,
   /\b(essential|premium|signature|addon|add-on|starting\s+from|how\s+much)\b/i,
-  /\b(£495|£1,?150|495|1150|gbp|pounds?)\b/i,
 
   // 5. Booking, Availability & Retainer
   /\b(book|booking|reserve|reservation|availability|available|available\s+dates|schedule|dates?|appointment|consultation|hire)\b/i,

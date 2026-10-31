@@ -39,12 +39,12 @@ function playChime(type = 'receive') {
 const INITIAL_WELCOME = {
   id: 'msg-welcome',
   role: 'assistant',
-  content: `**Hello! Welcome to Josh Photography.** ✨\n\nI’m **Hello Chatbot**, your photography assistant. I can help you with:\n• Wedding, birthday & event photography\n• Packages & pricing (starting from £495)\n• Checking date availability & bookings\n• Studio information & photo delivery\n\nWhat can I help you with today?`,
+  content: `**Hello! Welcome to Josh Photography.** ✨\n\nI’m **Hello Chatbot**, your photography assistant. I can help you with:\n• Wedding, birthday & event photography\n• Special offers & seasonal promotions\n• Checking date availability & bookings\n• Studio information & photo delivery\n\nWhat can I help you with today?`,
   timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
   suggestions: [
-    '💍 Wedding Packages',
+    '💍 Wedding Photography',
     '🎂 Birthday Photography',
-    '💰 Pricing & Options',
+    '🎁 Special Offers',
     '📅 Check Availability',
   ],
   actions: [
@@ -73,7 +73,16 @@ export default function HelloChatbot() {
       if (stored) {
         const parsed = JSON.parse(stored)
         if (Array.isArray(parsed) && parsed.length > 0) {
-          setMessages(parsed)
+          // If stored message is old welcome with packages, refresh to clean welcome
+          const hasOldPackageWelcome = parsed.some(
+            (m) => m.id === 'msg-welcome' && (m.content?.includes('Package') || m.content?.includes('starting from £495'))
+          )
+          if (hasOldPackageWelcome) {
+            const sanitized = parsed.map((m) => (m.id === 'msg-welcome' ? INITIAL_WELCOME : m))
+            setMessages(sanitized)
+          } else {
+            setMessages(parsed)
+          }
         }
       }
     } catch (e) {}
@@ -151,9 +160,9 @@ export default function HelloChatbot() {
       const fallbackReply = {
         id: `bot-${Date.now()}`,
         role: 'assistant',
-        content: `I’m Hello Chatbot, your photography assistant! I can help you with our photography services, packages, bookings, and other website-related questions.\n\nOur official packages start from **£495** (Essential) and **£1,150** (Premium). For dates and bespoke quotes, you can also reach Josh directly on **+44 7988 827057** or WhatsApp!`,
+        content: `I’m Hello Chatbot, your photography assistant! I can help you with our photography services, date bookings, promotional offers, and studio details.\n\nFor date availability and bespoke celebration arrangements, you can also reach Josh directly on **+44 7988 827057** or message us on WhatsApp!`,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        suggestions: ['Wedding Packages', 'Check Availability', 'Birthday Photography'],
+        suggestions: ['Wedding Photography', 'Check Availability', 'Birthday Photography'],
         actions: [
           { label: 'Client Reviews', url: '/testimonials', type: 'internal' },
           { label: 'Check Availability', url: '/check-availability', type: 'internal' },
@@ -550,7 +559,7 @@ export default function HelloChatbot() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask about wedding, birthday, packages..."
+              placeholder="Ask about wedding, birthday, offers, availability..."
               disabled={isLoading}
               className="flex-1 bg-transparent text-neutral-900 placeholder:text-neutral-400 text-sm py-1.5 focus:outline-none"
               aria-label="Message Hello Chatbot"
