@@ -11,39 +11,30 @@ import { useWebsiteData } from '../hooks/useWebsiteData'
 // Fallback studio visual placeholders (Opening next month in Greater London)
 const fallbackStudioPreviewImages = [
   {
-    id: 'studio-interior',
-    title: 'Natural Light Studio Space',
+    id: 'studio-lighting-suite',
+    title: 'Professional Studio Lighting & Modifiers',
     subtitle: 'Studio Concept · Opening Next Month',
-    desc: 'Spacious, high-ceiling studio area designed for gentle natural light and family comfort.',
-    src: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=1000&q=80',
-    alt: 'Illustrative concept of an elegant natural light photography studio interior',
-    isConceptPlaceholder: true,
-  },
-  {
-    id: 'studio-equipment',
-    title: 'Professional Optics & Equipment',
-    subtitle: 'Precision Gear Setup',
-    desc: 'Dual-card full-frame cinema bodies, high-speed prime lenses, and color-calibrated tethering.',
-    src: 'https://images.unsplash.com/photo-1502982720700-bfff97f2ecac?w=1000&q=80',
-    alt: 'Illustrative photography gear setup with professional cameras and prime lenses',
-    isConceptPlaceholder: true,
-  },
-  {
-    id: 'studio-lighting',
-    title: 'Dedicated Portrait Lighting Area',
-    subtitle: 'Sculptural Light Setup',
-    desc: 'Large parabolic softboxes and diffused light modifiers configured for soft, flattering skin tones.',
-    src: 'https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=1000&q=80',
-    alt: 'Illustrative studio portrait lighting equipment and softbox setup',
+    desc: 'Equipped with multi-point Godox studio strobes, parabolic umbrellas, octaboxes, and precision diffusers for immaculate light control.',
+    src: '/uploads/content-1793406213026-ca928376.jpg',
+    alt: 'Professional studio strobe lights, umbrellas, and softbox modifier equipment',
     isConceptPlaceholder: true,
   },
   {
     id: 'studio-consultation',
     title: 'Client Consultation & Lounge',
     subtitle: 'Welcoming Meeting Space',
-    desc: 'A calm, relaxed space to review heirloom album swatches, screen films, and plan your celebration.',
-    src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1000&q=80',
-    alt: 'Illustrative client consultation and album review lounge space',
+    desc: 'A calm, comfortable meeting space to review heirloom album swatches, screen cinema films, and plan your photoshoot in total relaxation.',
+    src: '/uploads/content-1793406088823-944cc708.jpg',
+    alt: 'Welcoming client consultation lounge with cozy sofa, green plant, and modern decor',
+    isConceptPlaceholder: true,
+  },
+  {
+    id: 'studio-portrait-stage',
+    title: 'Dedicated Portrait & Editorial Stage',
+    subtitle: 'Sculptural Light Setup',
+    desc: 'Large parabolic softboxes, continuous overhead grid illumination, and seamless backdrops configured for flattering skin tones.',
+    src: 'https://images.unsplash.com/photo-1471341971476-ae15ff5dd4ea?w=1000&q=80',
+    alt: 'Dedicated studio portrait lighting area with overhead grid and softboxes',
     isConceptPlaceholder: true,
   },
 ]
@@ -360,7 +351,7 @@ export default function About() {
             </div>
 
             {/* 3-4 Studio Concept Photographs */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className={`grid grid-cols-1 sm:grid-cols-2 ${studioPreviewImages.length <= 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-4'} gap-6`}>
               {studioPreviewImages.map((img) => (
                 <div
                   key={img.id || img.title}

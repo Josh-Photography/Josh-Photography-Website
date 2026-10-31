@@ -88,7 +88,7 @@ function Login({ onLogin }) {
         if (res.ok) {
           const data = await res.json()
           if (data.token) {
-            try { sessionStorage.setItem('adminToken', data.token) } catch (_) {}
+            try { sessionStorage.setItem('adminToken', data.token) } catch (_) { }
             onLogin(data.token)
             return
           }
@@ -103,7 +103,7 @@ function Login({ onLogin }) {
 
       if (isDefaultUser && isDefaultPass) {
         const fallbackToken = 'josh-admin-token-' + Date.now()
-        try { sessionStorage.setItem('adminToken', fallbackToken) } catch (_) {}
+        try { sessionStorage.setItem('adminToken', fallbackToken) } catch (_) { }
         onLogin(fallbackToken)
         return
       }
@@ -126,7 +126,7 @@ function Login({ onLogin }) {
         <div className="admin-login__header">
           <img src="/logo.png" alt="Josh Photography" className="admin-login__icon" />
           <h1>Josh Photography</h1>
-          <p>Admin Content Management System</p>
+          <p>Admin Content Management System - Josh Photography</p>
         </div>
 
         <form onSubmit={handleSubmit} className="admin-login__form">
@@ -338,6 +338,26 @@ function StudioEditor({ data, onSave, saving, token }) {
     }
   }
 
+  const handleRemovePreviewCard = (index) => {
+    setPreviewImages((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  const handleAddPreviewCard = () => {
+    setPreviewImages((prev) => [
+      ...prev,
+      {
+        id: `studio-card-${Date.now()}`,
+        title: 'New Studio Feature',
+        subtitle: 'Studio Concept',
+        desc: 'Description of this studio area or specialty setup.',
+        src: '',
+        alt: 'New studio feature showcase',
+        order: prev.length + 1,
+        published: true,
+      },
+    ])
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
     onSave({
@@ -498,14 +518,33 @@ function StudioEditor({ data, onSave, saving, token }) {
         </div>
 
         {/* Studio Concept Preview Cards */}
-        <h3 style={{ fontSize: '1rem', color: 'var(--admin-accent)', marginTop: '2.5rem', marginBottom: '1rem' }}>
-          Studio Concept Preview Cards (4 Facilities Showcases)
-        </h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2.5rem', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <h3 style={{ fontSize: '1rem', color: 'var(--admin-accent)', margin: 0 }}>
+            Studio Concept Preview Cards ({previewImages.length} Showcases)
+          </h3>
+          <button
+            type="button"
+            className="admin-btn admin-btn--secondary admin-btn--small"
+            onClick={handleAddPreviewCard}
+          >
+            + Add Showcase Card
+          </button>
+        </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {previewImages.map((card, idx) => (
             <div key={card.id || idx} className="admin-card">
-              <div className="admin-card__header">
+              <div className="admin-card__header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h4>Card {idx + 1}: {card.title || 'Studio Facility'}</h4>
+                {previewImages.length > 1 && (
+                  <button
+                    type="button"
+                    className="admin-btn admin-btn--secondary admin-btn--small"
+                    style={{ color: '#ef4444' }}
+                    onClick={() => handleRemovePreviewCard(idx)}
+                  >
+                    Remove
+                  </button>
+                )}
               </div>
 
               <div className="admin-grid">
@@ -4554,14 +4593,14 @@ export default function AdminApp() {
     try {
       localStorage.removeItem('adminToken')
       sessionStorage.removeItem('adminToken')
-    } catch (_) {}
+    } catch (_) { }
   }, [])
 
   const handleLogout = () => {
     try {
       localStorage.removeItem('adminToken')
       sessionStorage.removeItem('adminToken')
-    } catch (_) {}
+    } catch (_) { }
     setToken(null)
   }
 

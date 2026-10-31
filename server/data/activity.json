@@ -1,5 +1,59 @@
 [
   {
+    "id": "act-1793406378432",
+    "action": "Updated Studio Information & Facilities",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:26:18.432Z"
+  },
+  {
+    "id": "act-1793406377386",
+    "action": "Uploaded content asset: studo.png",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:26:17.386Z"
+  },
+  {
+    "id": "act-1793406221060",
+    "action": "Updated Studio Information & Facilities",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:23:41.060Z"
+  },
+  {
+    "id": "act-1793406213048",
+    "action": "Uploaded content asset: st.jpg",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:23:33.048Z"
+  },
+  {
+    "id": "act-1793406091701",
+    "action": "Updated Studio Information & Facilities",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:21:31.701Z"
+  },
+  {
+    "id": "act-1793406088833",
+    "action": "Uploaded content asset: stu.jpg",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:21:28.833Z"
+  },
+  {
+    "id": "act-1793406072375",
+    "action": "Updated Studio Information & Facilities",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:21:12.375Z"
+  },
+  {
+    "id": "act-1793406069081",
+    "action": "Uploaded content asset: hero-church-wedding.jpg",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:21:09.081Z"
+  },
+  {
+    "id": "act-1793405984860",
+    "action": "Updated Hero Section Slideshow",
+    "user": "Admin",
+    "timestamp": "2026-10-31T00:19:44.860Z"
+  },
+  {
     "id": "act-1793398477577",
     "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
     "user": "Admin",
@@ -244,59 +298,5 @@
     "action": "Updated promotional offer: \"Birthday Jubilees & Milestone Celebrations\"",
     "user": "Admin",
     "timestamp": "2026-10-29T00:15:41.485Z"
-  },
-  {
-    "id": "act-1793231082317",
-    "action": "Deleted promotional offer: \"Automotive & Supercar Showcase\"",
-    "user": "Admin",
-    "timestamp": "2026-10-28T23:44:42.317Z"
-  },
-  {
-    "id": "act-1793231082287",
-    "action": "Created seasonal offer: \"Automotive & Supercar Showcase\" (15% off)",
-    "user": "Admin",
-    "timestamp": "2026-10-28T23:44:42.287Z"
-  },
-  {
-    "id": "act-1793231082265",
-    "action": "Updated promotional offer: \"Birthday Jubilees & Milestone Celebrations\"",
-    "user": "Admin",
-    "timestamp": "2026-10-28T23:44:42.265Z"
-  },
-  {
-    "id": "act-1793231082245",
-    "action": "Updated promotional offer: \"Birthday Jubilees & Milestone Celebrations\"",
-    "user": "Admin",
-    "timestamp": "2026-10-28T23:44:42.245Z"
-  },
-  {
-    "id": "act-1793231082223",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-28T23:44:42.223Z"
-  },
-  {
-    "id": "act-1793231082196",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-28T23:44:42.196Z"
-  },
-  {
-    "id": "act-1793230080807",
-    "action": "Deleted promotional offer: \"Expired Autumn Special\"",
-    "user": "Admin",
-    "timestamp": "2026-10-28T23:28:00.807Z"
-  },
-  {
-    "id": "act-1793230080767",
-    "action": "Created seasonal offer: \"Expired Autumn Special\" (50% off)",
-    "user": "Admin",
-    "timestamp": "2026-10-28T23:28:00.768Z"
-  },
-  {
-    "id": "act-1793230044645",
-    "action": "Updated promotional offer: \"Christmas & Winter Festive Family Jubilee\"",
-    "user": "Admin",
-    "timestamp": "2026-10-28T23:27:24.645Z"
   }
 ]
