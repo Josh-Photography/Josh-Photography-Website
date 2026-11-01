@@ -88,7 +88,7 @@
   ],
   "photos": [
     {
-      "id": "photo-test-1791919377058",
+      "id": "photo-weddings-6",
       "title": "Cathedral Sunset Confetti & Joy",
       "desc": "Breathtaking church steps golden hour exit showered with dried floral petals.",
       "alt": "Bride and groom cathedral golden hour confetti exit",
@@ -97,8 +97,8 @@
       "image": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551374/josh_portfolio/weddings/ctu5s54evzmoqtjt8sj0.jpg",
       "src": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551374/josh_portfolio/weddings/ctu5s54evzmoqtjt8sj0.jpg",
       "srcLarge": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551374/josh_portfolio/weddings/ctu5s54evzmoqtjt8sj0.jpg",
-      "num": "99",
-      "order": 1,
+      "num": "06",
+      "order": 6,
       "published": true,
       "createdAt": "2026-10-13T19:22:57.058Z",
       "updatedAt": "2026-11-01T16:51:47.299Z"
@@ -1717,22 +1717,6 @@
       "order": 102,
       "published": true,
       "createdAt": "2026-10-29T23:17:31.431Z",
-      "updatedAt": "2026-11-01T16:51:47.299Z"
-    },
-    {
-      "id": "photo-1793551907241-0",
-      "title": "Model",
-      "desc": "Documentary capture celebrating authentic emotional moments.",
-      "alt": "Model",
-      "category": "weddings",
-      "categorySlug": "weddings",
-      "image": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551907/josh_content/llaugnixw04vckjajiog.png",
-      "src": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551907/josh_content/llaugnixw04vckjajiog.png",
-      "srcLarge": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551907/josh_content/llaugnixw04vckjajiog.png",
-      "num": "07",
-      "order": 103,
-      "published": true,
-      "createdAt": "2026-11-01T16:51:47.241Z",
       "updatedAt": "2026-11-01T16:51:47.299Z"
     }
   ]

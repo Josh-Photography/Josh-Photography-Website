@@ -63,10 +63,14 @@ router.post('/upload', authenticateToken, upload.single('image'), async (req, re
     if (!req.file) {
       return res.status(400).json({ error: 'No image file uploaded' })
     }
-    const folder = req.body.folder || (req.body.category ? `josh_portfolio/${req.body.category}` : 'josh_content')
-    const result = await processImageUpload(req.file, { folder })
-    logActivity(`Uploaded content asset: ${req.file.originalname}`)
-    res.json({ url: result.url, filename: result.filename, provider: result.provider })
+    const cat = req.body.category || req.headers['x-category']
+    let folder = req.body.folder
+    if (!folder) {
+      folder = cat ? `josh_portfolio/${cat}` : 'josh_content'
+    }
+    const result = await processImageUpload(req.file, { folder, category: cat })
+    logActivity(`Uploaded asset: ${req.file.originalname} into ${folder}`)
+    res.json({ url: result.url, filename: result.filename, provider: result.provider, folder })
   } catch (error) {
     console.error('Content upload error:', error)
     res.status(500).json({ error: 'Failed to upload image' })

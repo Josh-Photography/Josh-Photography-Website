@@ -62,7 +62,7 @@ export async function processImageUpload(file, options = {}) {
   if (cloudName && ((apiKey && apiSecret) || uploadPreset)) {
     try {
       const timestamp = Math.round(Date.now() / 1000)
-      const folder = options.folder || 'josh_photography'
+      const folder = options.folder || (options.category ? `josh_portfolio/${options.category}` : 'josh_content')
 
       const formData = new FormData()
       const fileBuffer = file.buffer || (file.path && existsSync(file.path) ? readFileSync(file.path) : null)
@@ -73,11 +73,18 @@ export async function processImageUpload(file, options = {}) {
       formData.append('file', blob, file.originalname)
       formData.append('timestamp', String(timestamp))
       formData.append('folder', folder)
+      formData.append('asset_folder', folder)
 
       if (apiKey && apiSecret) {
         formData.append('api_key', apiKey)
-        const signatureString = `folder=${folder}&timestamp=${timestamp}${apiSecret}`
-        const signature = crypto.createHash('sha1').update(signatureString).digest('hex')
+        const signParams = {
+          asset_folder: folder,
+          folder: folder,
+          timestamp: timestamp
+        }
+        const sortedKeys = Object.keys(signParams).sort()
+        const toSign = sortedKeys.map((k) => `${k}=${signParams[k]}`).join('&') + apiSecret
+        const signature = crypto.createHash('sha1').update(toSign).digest('hex')
         formData.append('signature', signature)
       } else if (uploadPreset) {
         formData.append('upload_preset', uploadPreset)

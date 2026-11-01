@@ -42,8 +42,13 @@ async function uploadImageFile(file, token, folderOrCategory) {
     const formData = new FormData()
     formData.append('image', file)
     if (folderOrCategory) {
-      const folderPath = folderOrCategory.startsWith('josh_') ? folderOrCategory : `josh_portfolio/${folderOrCategory}`
+      const isExplicitFolder = folderOrCategory.startsWith('josh_') || folderOrCategory.includes('/')
+      const normCat = isExplicitFolder ? '' : normalizeCategoryKey(folderOrCategory)
+      const folderPath = isExplicitFolder ? folderOrCategory : `josh_portfolio/${normCat}`
       formData.append('folder', folderPath)
+      if (normCat) {
+        formData.append('category', normCat)
+      }
     }
     const res = await fetch(`${API_URL}/content/upload`, {
       method: 'POST',
@@ -336,7 +341,7 @@ function StudioEditor({ data, onSave, saving, token }) {
 
   const handlePreviewFileUpload = async (index, file) => {
     if (!file) return
-    const url = await uploadImageFile(file, token)
+    const url = await uploadImageFile(file, token, 'josh_content/hero_slides')
     if (url) {
       handlePreviewImageChange(index, 'src', url)
     }
@@ -673,7 +678,7 @@ function DeFabStudioEditor({ data, onSave, saving, token }) {
     if (!file) return
     setUploadingPoster(true)
     try {
-      const url = await uploadImageFile(file, token)
+      const url = await uploadImageFile(file, token, 'josh_content/studio')
       if (url) {
         setFormData((prev) => ({ ...prev, posterImage: url }))
       }
@@ -977,7 +982,7 @@ function HeroEditor({ data, onSave, saving, token }) {
 
   const handleSlideUpload = async (index, file) => {
     if (!file) return
-    const url = await uploadImageFile(file, token)
+    const url = await uploadImageFile(file, token, 'josh_content/another_studio')
     if (url) {
       updateSlide(index, 'image', url)
     }
@@ -1181,7 +1186,7 @@ function AboutEditor({ data, onSave, saving, token }) {
 
   const handlePhotographerUpload = async (file) => {
     if (!file) return
-    const url = await uploadImageFile(file, token)
+    const url = await uploadImageFile(file, token, 'josh_content/about')
     if (url) {
       setAbout((p) => ({ ...p, photographerImage: url }))
     }
@@ -1189,7 +1194,7 @@ function AboutEditor({ data, onSave, saving, token }) {
 
   const handleStoryImageUpload = async (file) => {
     if (!file) return
-    const url = await uploadImageFile(file, token)
+    const url = await uploadImageFile(file, token, 'josh_content/about')
     if (url) {
       setAbout((p) => ({ ...p, storyImage: url }))
     }
@@ -1468,7 +1473,7 @@ function ServicesEditor({ data, onSave, saving, token }) {
 
   const handleServiceImageUpload = async (index, file) => {
     if (!file) return
-    const url = await uploadImageFile(file, token)
+    const url = await uploadImageFile(file, token, 'josh_content/services')
     if (url) {
       updateService(index, 'image', url)
     }
@@ -1657,7 +1662,7 @@ function TestimonialsEditor({ data, onSave, saving, token }) {
 
   const handleTestimonialUpload = async (index, file) => {
     if (!file) return
-    const url = await uploadImageFile(file, token)
+    const url = await uploadImageFile(file, token, 'josh_content/testimonials')
     if (url) {
       updateTestimonial(index, 'image', url)
     }
@@ -1836,7 +1841,7 @@ function CollaboratorsEditor({ data, onSave, saving, token }) {
 
   const handleMemberUpload = async (index, file) => {
     if (!file) return
-    const url = await uploadImageFile(file, token)
+    const url = await uploadImageFile(file, token, 'josh_content/team')
     if (url) {
       updateMember(index, 'image', url)
     }
@@ -2032,12 +2037,14 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
     setUploadStatus(`Uploading ${files.length} photograph(s) to ${getCategoryLabel(normCategory)}...`)
 
     const addedList = []
+    const existingCount = photos.filter((p) => isCategoryMatch(p.category || p.categorySlug, normCategory)).length
+    let maxOrder = photos.reduce((max, p) => Math.max(max, p.order || 0), 0)
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
       setUploadStatus(`Uploading photo ${i + 1} of ${files.length}: ${file.name}...`)
       try {
-        const url = await uploadImageFile(file, token)
+        const url = await uploadImageFile(file, token, normCategory)
         const cleanTitle = file.name
           .replace(/\.[^/.]+$/, '')
           .replace(/[-_]/g, ' ')
@@ -2045,7 +2052,7 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
 
         addedList.push({
           id: `photo-${Date.now()}-${i}`,
-          num: String(photos.filter((p) => isCategoryMatch(p.category, normCategory)).length + i + 1).padStart(2, '0'),
+          num: String(existingCount + addedList.length + 1).padStart(2, '0'),
           category: normCategory,
           categorySlug: normCategory,
           title: cleanTitle,
@@ -2054,7 +2061,7 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
           src: url,
           image: url,
           srcLarge: url,
-          order: photos.length + i + 1,
+          order: ++maxOrder,
           published: true,
           createdAt: new Date().toISOString()
         })
@@ -2120,7 +2127,16 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
   // Save edited photo modal
   const handleSaveEdit = async () => {
     if (!editingPhoto) return
-    const updated = photos.map((p) => (p.id === editingPhoto.id ? editingPhoto : p))
+    const normCategory = normalizeCategoryKey(editingPhoto.category)
+    const normalized = {
+      ...editingPhoto,
+      category: normCategory,
+      categorySlug: normCategory,
+      image: editingPhoto.src || editingPhoto.image,
+      src: editingPhoto.src || editingPhoto.image,
+      srcLarge: editingPhoto.srcLarge || editingPhoto.src || editingPhoto.image
+    }
+    const updated = photos.map((p) => (p.id === editingPhoto.id ? normalized : p))
     setPhotos(updated)
     await onSave(updated)
     setEditingPhoto(null)
@@ -2134,18 +2150,22 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
       return
     }
 
+    const normCategory = normalizeCategoryKey(newPhotoData.category)
+    const existingCount = photos.filter((p) => isCategoryMatch(p.category || p.categorySlug, normCategory)).length
+    const maxOrder = photos.reduce((max, p) => Math.max(max, p.order || 0), 0)
+
     const newPhoto = {
       id: `photo-${Date.now()}`,
-      num: String(photos.filter((p) => p.category === newPhotoData.category).length + 1).padStart(2, '0'),
+      num: String(existingCount + 1).padStart(2, '0'),
       title: newPhotoData.title || 'Untitled Photograph',
-      category: newPhotoData.category,
-      categorySlug: newPhotoData.category,
+      category: normCategory,
+      categorySlug: normCategory,
       desc: newPhotoData.desc || '',
       alt: newPhotoData.alt || newPhotoData.title || 'Josh Photography showcase',
       src: newPhotoData.src,
       image: newPhotoData.src,
       srcLarge: newPhotoData.src,
-      order: photos.length + 1,
+      order: maxOrder + 1,
       published: newPhotoData.published !== false,
       createdAt: new Date().toISOString()
     }
@@ -2156,7 +2176,7 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
     setNewPhotoModal(false)
     setNewPhotoData({
       title: '',
-      category: 'weddings',
+      category: normCategory,
       desc: '',
       alt: '',
       src: '',
@@ -2176,7 +2196,18 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
             <button
               type="button"
               className="admin-btn admin-btn--primary"
-              onClick={() => setNewPhotoModal(true)}
+              onClick={() => {
+                const activeCat = selectedCategory !== 'all' ? selectedCategory : uploadCategory
+                setNewPhotoData({
+                  title: '',
+                  category: activeCat,
+                  desc: '',
+                  alt: '',
+                  src: '',
+                  published: true
+                })
+                setNewPhotoModal(true)
+              }}
             >
               + Add Single Photo
             </button>
@@ -2194,7 +2225,10 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
             <span style={{ fontSize: '0.8rem', color: 'var(--admin-text-muted)' }}>Target Category:</span>
             <select
               value={uploadCategory}
-              onChange={(e) => setUploadCategory(e.target.value)}
+              onChange={(e) => {
+                setUploadCategory(e.target.value)
+                setSelectedCategory(e.target.value)
+              }}
               style={{ padding: '0.4rem 0.75rem', background: '#111', border: '1px solid var(--admin-border)', color: '#fff', borderRadius: '4px' }}
             >
               {PHOTOGRAPHY_CATEGORIES.map((c) => (
@@ -2249,7 +2283,10 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
               key={cat.id}
               type="button"
               className={`admin-pill ${isActive ? 'admin-pill--active' : ''}`}
-              onClick={() => setSelectedCategory(cat.id)}
+              onClick={() => {
+                setSelectedCategory(cat.id)
+                setUploadCategory(cat.id)
+              }}
             >
               {cat.label} ({count})
             </button>
@@ -2527,7 +2564,7 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
                     onChange={async (e) => {
                       const file = e.target.files?.[0]
                       if (file) {
-                        const targetCategory = editingPhoto.category || selectedCategory
+                        const targetCategory = normalizeCategoryKey(editingPhoto.category || (selectedCategory !== 'all' ? selectedCategory : 'weddings'))
                         const url = await uploadImageFile(file, token, targetCategory)
                         if (url) {
                           setEditingPhoto({ ...editingPhoto, src: url, image: url, srcLarge: url })
@@ -2658,10 +2695,10 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
                       onChange={async (e) => {
                         const file = e.target.files?.[0]
                         if (file) {
-                          const targetCategory = newPhotoData.category || selectedCategory
+                          const targetCategory = normalizeCategoryKey(newPhotoData.category || (selectedCategory !== 'all' ? selectedCategory : uploadCategory))
                           const url = await uploadImageFile(file, token, targetCategory)
                           if (url) {
-                            setNewPhotoData((p) => ({ ...p, src: url }))
+                            setNewPhotoData((p) => ({ ...p, src: url, image: url, srcLarge: url }))
                           }
                         }
                       }}
@@ -2794,7 +2831,7 @@ function SettingsEditor({ data, onSave, saving, token }) {
 
   const handleLogoUpload = async (file) => {
     if (!file) return
-    const url = await uploadImageFile(file, token)
+    const url = await uploadImageFile(file, token, 'josh_content/brand')
     if (url) {
       setSettings((p) => ({ ...p, logo: url, lightLogo: url }))
     }
@@ -3227,7 +3264,7 @@ function OffersEditor({ token, showToast }) {
           return
         }
       }
-      const fallbackUrl = await uploadImageFile(file, token)
+      const fallbackUrl = await uploadImageFile(file, token, 'josh_content/offers')
       setEditingOffer((p) => ({ ...p, bannerImage: fallbackUrl }))
       showToast('Promotional banner image attached!')
     } catch (err) {
