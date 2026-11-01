@@ -8,8 +8,7 @@ import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 import crypto from 'crypto'
 
-const appFilePath = fileURLToPath(import.meta.url)
-const appDirPath = dirname(appFilePath)
+const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
 const publicUploadsPath = join(appDirPath, '../../public/uploads')
 const serverUploadsPath = join(appDirPath, '../uploads')
 

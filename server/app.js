@@ -13,8 +13,7 @@ import overviewRoutes from './routes/overview.js'
 import chatRoutes from './routes/chat.js'
 import offerRoutes from './routes/offers.js'
 
-const appFilePath = fileURLToPath(import.meta.url)
-const appDirPath = dirname(appFilePath)
+const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
 
 // Automatically load .env file into process.env if present
 try {

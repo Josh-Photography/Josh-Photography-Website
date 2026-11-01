@@ -5,8 +5,7 @@ import { dirname, join } from 'path'
 import { authenticateToken } from '../middleware/auth.js'
 
 const router = express.Router()
-const appFilePath = fileURLToPath(import.meta.url)
-const appDirPath = dirname(appFilePath)
+const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
 
 function readJsonSafe(filename, defaultVal) {
   try {

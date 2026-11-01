@@ -11,8 +11,7 @@ import Photo from '../models/Photo.js'
 import { isMongoConnected, getCached, setCached, clearCache } from '../utils/db.js'
 
 const router = express.Router()
-const appFilePath = fileURLToPath(import.meta.url)
-const appDirPath = dirname(appFilePath)
+const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
 const photosPath = join(appDirPath, '../data/photos.json')
 const uploadsPath = join(appDirPath, '../uploads')
 const publicUploadsPath = join(appDirPath, '../../public/uploads')

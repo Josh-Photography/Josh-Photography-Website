@@ -2,8 +2,7 @@ import { readFileSync, existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 
-const appFilePath = fileURLToPath(import.meta.url)
-const appDirPath = dirname(appFilePath)
+const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
 
 const contentPath = join(appDirPath, '../data/content.json')
 const photosPath = join(appDirPath, '../data/photos.json')
