@@ -157,7 +157,7 @@ function Login({ onLogin }) {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="joshyjose282@gmail.com"
+              placeholder="Enter email ID or username"
               autoComplete="username"
               required
             />
@@ -169,7 +169,7 @@ function Login({ onLogin }) {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder="Enter password"
               autoComplete="current-password"
               required
             />
