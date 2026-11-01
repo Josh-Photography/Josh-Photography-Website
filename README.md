@@ -2,7 +2,7 @@
 
 A high-performance, minimalist photography studio website with premium Apple-style design, built using React, Framer Motion, and GSAP. Features a complete admin panel for content management.
 
-![Fused Lens Studio](https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=1200&q=80)
+![Fused Lens Studio]
 
 ## ✨ Features
 
