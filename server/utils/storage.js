@@ -3,7 +3,7 @@
 // Supports Cloudinary CDN & persistent local file mirroring
 // ============================================================
 
-import { copyFileSync, existsSync, mkdirSync, unlinkSync, createReadStream } from 'fs'
+import { copyFileSync, existsSync, mkdirSync, unlinkSync, createReadStream, readFileSync } from 'fs'
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 import crypto from 'crypto'
@@ -33,6 +33,26 @@ export async function processImageUpload(file, options = {}) {
     throw new Error('No file provided for storage')
   }
 
+  // Dynamically load/refresh .env configuration
+  try {
+    const rootEnvPath = join(__dirname, '../../.env')
+    if (existsSync(rootEnvPath)) {
+      const lines = readFileSync(rootEnvPath, 'utf8').split(/\r?\n/)
+      for (const line of lines) {
+        const trimmed = line.trim()
+        if (!trimmed || trimmed.startsWith('#')) continue
+        const eqIdx = trimmed.indexOf('=')
+        if (eqIdx !== -1) {
+          const key = trimmed.slice(0, eqIdx).trim()
+          const val = trimmed.slice(eqIdx + 1).trim().replace(/^['"](.*)['"]$/, '$1')
+          if (key) {
+            process.env[key] = val
+          }
+        }
+      }
+    }
+  } catch (_) {}
+
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME || process.env.CLOUDINARY_NAME
   const apiKey = process.env.CLOUDINARY_API_KEY
   const apiSecret = process.env.CLOUDINARY_API_SECRET
@@ -45,19 +65,22 @@ export async function processImageUpload(file, options = {}) {
       const folder = options.folder || 'josh_photography'
 
       const formData = new FormData()
-      const blob = new Blob([file.buffer || require('fs').readFileSync(file.path)], { type: file.mimetype })
+      const fileBuffer = file.buffer || (file.path && existsSync(file.path) ? readFileSync(file.path) : null)
+      if (!fileBuffer) {
+        throw new Error('File buffer is empty or file not found on disk')
+      }
+      const blob = new Blob([fileBuffer], { type: file.mimetype })
       formData.append('file', blob, file.originalname)
       formData.append('timestamp', String(timestamp))
       formData.append('folder', folder)
 
-      if (uploadPreset) {
-        formData.append('upload_preset', uploadPreset)
-      } else {
+      if (apiKey && apiSecret) {
         formData.append('api_key', apiKey)
-        // Generate signature
         const signatureString = `folder=${folder}&timestamp=${timestamp}${apiSecret}`
         const signature = crypto.createHash('sha1').update(signatureString).digest('hex')
         formData.append('signature', signature)
+      } else if (uploadPreset) {
+        formData.append('upload_preset', uploadPreset)
       }
 
       const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {

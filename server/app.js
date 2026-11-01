@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import { readFileSync, existsSync } from 'fs'
 import authRoutes from './routes/auth.js'
 import contentRoutes from './routes/content.js'
 import photoRoutes from './routes/photos.js'
@@ -13,6 +14,26 @@ import offerRoutes from './routes/offers.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+
+// Automatically load .env file into process.env if present
+try {
+  const rootEnvPath = join(__dirname, '../.env')
+  if (existsSync(rootEnvPath)) {
+    const lines = readFileSync(rootEnvPath, 'utf8').split(/\r?\n/)
+    for (const line of lines) {
+      const trimmed = line.trim()
+      if (!trimmed || trimmed.startsWith('#')) continue
+      const eqIdx = trimmed.indexOf('=')
+      if (eqIdx !== -1) {
+        const key = trimmed.slice(0, eqIdx).trim()
+        const val = trimmed.slice(eqIdx + 1).trim().replace(/^['"](.*)['"]$/, '$1')
+        if (key && !process.env[key]) {
+          process.env[key] = val
+        }
+      }
+    }
+  }
+} catch (_) {}
 
 const app = express()
 
@@ -49,16 +70,12 @@ app.use('/api/*', (req, res) => {
 
 // Global error-handling middleware (guarantees JSON error response)
 app.use((err, req, res, next) => {
-  console.error('Unhandled server error:', err)
-  if (res.headersSent) {
-    return next(err)
-  }
+  console.error('API Error:', err.message || err)
   res.status(err.status || 500).json({
-    error: err.message || 'Internal Server Error',
-    code: err.code || 'SERVER_ERROR',
+    error: err.message || 'Internal server error',
+    path: req.originalUrl,
   })
 })
 
-export default app
 export { app }
-
+export default app
