@@ -59,6 +59,16 @@ app.use('/api/overview', overviewRoutes)
 app.use('/api/chat', chatRoutes)
 app.use('/api/offers', offerRoutes)
 
+// Also mount direct routes without /api prefix for Netlify serverless function compatibility
+app.use('/auth', authRoutes)
+app.use('/content', contentRoutes)
+app.use('/photos', photoRoutes)
+app.use('/contact', contactRoutes)
+app.use('/comments', commentRoutes)
+app.use('/overview', overviewRoutes)
+app.use('/chat', chatRoutes)
+app.use('/offers', offerRoutes)
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({
