@@ -7,6 +7,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { authenticateToken } from '../middleware/auth.js'
 import { logActivity } from '../utils/activity.js'
 import { processImageUpload, removeLocalUpload, deleteMediaAsset } from '../utils/storage.js'
+import Photo from '../models/Photo.js'
+import { isMongoConnected, getCached, setCached, clearCache } from '../utils/db.js'
 
 const router = express.Router()
 const __filename = fileURLToPath(import.meta.url)
@@ -82,12 +84,89 @@ function normalizeCategory(cat) {
 }
 
 // Get all photos (public or admin with query filters)
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
+    const { category, search, published, sort, page, limit } = req.query
+    const cacheKey = `photos_${category || 'all'}_${search || ''}_${published || ''}_${sort || ''}_${page || ''}_${limit || ''}`
+
+    // In-Memory Fast Cache for Sub-millisecond SEO Page Load Speeds
+    const cached = getCached(cacheKey)
+    if (cached) {
+      return res.json(cached)
+    }
+
+    if (isMongoConnected()) {
+      let query = {}
+      if (published === 'true') {
+        query.published = true
+      } else if (published === 'false') {
+        query.published = false
+      }
+
+      if (category && category !== 'all') {
+        const targetCat = normalizeCategory(category)
+        query.$or = [
+          { category: targetCat },
+          { categorySlug: targetCat }
+        ]
+      }
+
+      if (search) {
+        const q = new RegExp(search.trim(), 'i')
+        const searchCondition = [
+          { title: q },
+          { desc: q },
+          { alt: q }
+        ]
+        if (query.$or) {
+          query = { $and: [{ $or: query.$or }, { $or: searchCondition }] }
+        } else {
+          query.$or = searchCondition
+        }
+      }
+
+      let sortOptions = { order: 1, createdAt: -1 }
+      if (sort === 'newest') {
+        sortOptions = { createdAt: -1 }
+      } else if (sort === 'title') {
+        sortOptions = { title: 1 }
+      } else {
+        sortOptions = { order: 1 }
+      }
+
+      const total = await Photo.countDocuments(query)
+      const data = readPhotos()
+      const categories = data.categories || []
+
+      let photosQuery = Photo.find(query).sort(sortOptions).lean()
+      if (page && limit) {
+        const pageNum = parseInt(page, 10) || 1
+        const limitNum = parseInt(limit, 10) || 12
+        const startIndex = (pageNum - 1) * limitNum
+        const photos = await photosQuery.skip(startIndex).limit(limitNum)
+        const responseData = {
+          categories,
+          photos,
+          total,
+          page: pageNum,
+          totalPages: Math.ceil(total / limitNum),
+        }
+        setCached(cacheKey, responseData)
+        return res.json(responseData)
+      }
+
+      const photos = await photosQuery
+      const responseData = {
+        categories,
+        photos,
+        total,
+      }
+      setCached(cacheKey, responseData)
+      return res.json(responseData)
+    }
+
     const data = readPhotos()
     let photos = [...data.photos]
-
-    const { category, search, published, sort, page, limit } = req.query
 
     // Filter by category
     if (category && category !== 'all') {
@@ -134,20 +213,24 @@ router.get('/', (req, res) => {
       const limitNum = parseInt(limit, 10) || 12
       const startIndex = (pageNum - 1) * limitNum
       photos = photos.slice(startIndex, startIndex + limitNum)
-      return res.json({
+      const responseData = {
         categories: data.categories,
         photos,
         total,
         page: pageNum,
         totalPages: Math.ceil(total / limitNum),
-      })
+      }
+      setCached(cacheKey, responseData)
+      return res.json(responseData)
     }
 
-    res.json({
+    const responseData = {
       categories: data.categories,
       photos,
       total,
-    })
+    }
+    setCached(cacheKey, responseData)
+    res.json(responseData)
   } catch (error) {
     console.error('Error loading photos:', error)
     res.status(500).json({ error: 'Failed to load photos' })
@@ -155,12 +238,30 @@ router.get('/', (req, res) => {
 })
 
 // Get photos by category (public)
-router.get('/category/:category', (req, res) => {
+router.get('/category/:category', async (req, res) => {
   try {
-    const data = readPhotos()
     const { category } = req.params
-
     const targetCat = normalizeCategory(category)
+    const cacheKey = `photos_cat_${targetCat}`
+
+    const cached = getCached(cacheKey)
+    if (cached) {
+      return res.json(cached)
+    }
+
+    if (isMongoConnected()) {
+      const query = category === 'all'
+        ? { published: true }
+        : {
+            $or: [{ category: targetCat }, { categorySlug: targetCat }],
+            published: true,
+          }
+      const photos = await Photo.find(query).sort({ order: 1, createdAt: -1 }).lean()
+      setCached(cacheKey, photos)
+      return res.json(photos)
+    }
+
+    const data = readPhotos()
     const filtered =
       category === 'all'
         ? data.photos.filter((p) => p.published !== false)
@@ -171,7 +272,9 @@ router.get('/category/:category', (req, res) => {
               p.published !== false
           )
 
-    res.json(filtered.sort((a, b) => (a.order || 0) - (b.order || 0)))
+    const result = filtered.sort((a, b) => (a.order || 0) - (b.order || 0))
+    setCached(cacheKey, result)
+    res.json(result)
   } catch (error) {
     res.status(500).json({ error: 'Failed to load photos' })
   }
@@ -262,6 +365,23 @@ router.post(
       }
 
       writePhotos(data)
+
+      // Sync into MongoDB Atlas if connected
+      if (isMongoConnected()) {
+        try {
+          for (const newP of createdPhotos) {
+            await Photo.findOneAndUpdate(
+              { id: newP.id },
+              newP,
+              { upsert: true, new: true }
+            )
+          }
+        } catch (dbErr) {
+          console.error('[Database] Failed to sync new photo to MongoDB:', dbErr.message)
+        }
+      }
+      clearCache('photos')
+
       logActivity(
         `Uploaded ${createdPhotos.length} photograph(s) to ${targetCategory}`
       )
@@ -277,7 +397,7 @@ router.post(
 )
 
 // Synchronize all portfolio photos in batch (protected)
-router.put('/', authenticateToken, (req, res) => {
+router.put('/', authenticateToken, async (req, res) => {
   try {
     const data = readPhotos()
     const incomingPhotos = Array.isArray(req.body)
@@ -313,6 +433,19 @@ router.put('/', authenticateToken, (req, res) => {
 
     data.photos = normalizedPhotos
     writePhotos(data)
+
+    // Sync into MongoDB Atlas if connected
+    if (isMongoConnected()) {
+      try {
+        for (const p of normalizedPhotos) {
+          await Photo.findOneAndUpdate({ id: p.id }, p, { upsert: true, new: true })
+        }
+      } catch (dbErr) {
+        console.error('[Database] MongoDB sync error:', dbErr.message)
+      }
+    }
+    clearCache('photos')
+
     logActivity(`Synchronized ${normalizedPhotos.length} portfolio photograph(s) across categories`)
 
     res.json({
@@ -329,7 +462,7 @@ router.put('/', authenticateToken, (req, res) => {
 })
 
 // Update photo metadata or replace image (protected)
-router.put('/:id', authenticateToken, upload.single('photo'), (req, res) => {
+router.put('/:id', authenticateToken, upload.single('photo'), async (req, res) => {
   try {
     const data = readPhotos()
     const { id } = req.params
@@ -373,13 +506,25 @@ router.put('/:id', authenticateToken, upload.single('photo'), (req, res) => {
       updates.categorySlug = normalizeCategory(updates.category)
     }
 
-    data.photos[index] = {
+    const updatedPhoto = {
       ...existing,
       ...updates,
       updatedAt: new Date().toISOString(),
     }
 
+    data.photos[index] = updatedPhoto
     writePhotos(data)
+
+    // Sync into MongoDB Atlas if connected
+    if (isMongoConnected()) {
+      try {
+        await Photo.findOneAndUpdate({ id }, { $set: updatedPhoto }, { upsert: true, new: true })
+      } catch (dbErr) {
+        console.error('[Database] Failed to update photo in MongoDB:', dbErr.message)
+      }
+    }
+    clearCache('photos')
+
     logActivity(`Updated photo "${data.photos[index].title}" in ${data.photos[index].category}`)
 
     res.json(data.photos[index])
@@ -390,7 +535,7 @@ router.put('/:id', authenticateToken, upload.single('photo'), (req, res) => {
 })
 
 // Toggle publish status (protected)
-router.patch('/:id/toggle-publish', authenticateToken, (req, res) => {
+router.patch('/:id/toggle-publish', authenticateToken, async (req, res) => {
   try {
     const data = readPhotos()
     const { id } = req.params
@@ -402,6 +547,17 @@ router.patch('/:id/toggle-publish', authenticateToken, (req, res) => {
 
     photo.published = !photo.published
     writePhotos(data)
+
+    // Sync into MongoDB Atlas if connected
+    if (isMongoConnected()) {
+      try {
+        await Photo.findOneAndUpdate({ id }, { $set: { published: photo.published } })
+      } catch (dbErr) {
+        console.error('[Database] Failed to toggle photo in MongoDB:', dbErr.message)
+      }
+    }
+    clearCache('photos')
+
     logActivity(
       `${photo.published ? 'Published' : 'Unpublished'} photo "${photo.title}"`
     )
@@ -431,6 +587,17 @@ router.delete('/:id', authenticateToken, async (req, res) => {
 
     data.photos.splice(index, 1)
     writePhotos(data)
+
+    // Remove from MongoDB Atlas if connected
+    if (isMongoConnected()) {
+      try {
+        await Photo.findOneAndDelete({ id })
+      } catch (dbErr) {
+        console.error('[Database] Failed to delete photo in MongoDB:', dbErr.message)
+      }
+    }
+    clearCache('photos')
+
     logActivity(`Deleted photo "${photo.title}" from ${photo.category} (Cloudinary: ${delResult.cloudinary ? 'removed' : 'skipped/local'})`)
 
     res.json({ message: 'Photo deleted successfully', id, cloudinaryRemoved: delResult.cloudinary })
@@ -441,7 +608,7 @@ router.delete('/:id', authenticateToken, async (req, res) => {
 })
 
 // Reorder photos batch (protected)
-router.put('/reorder/batch', authenticateToken, (req, res) => {
+router.put('/reorder/batch', authenticateToken, async (req, res) => {
   try {
     const data = readPhotos()
     const { order } = req.body // Array of { id, order }
@@ -454,6 +621,25 @@ router.put('/reorder/batch', authenticateToken, (req, res) => {
         }
       })
       writePhotos(data)
+
+      // Sync into MongoDB Atlas if connected
+      if (isMongoConnected()) {
+        try {
+          const bulkOps = order.map((item) => ({
+            updateOne: {
+              filter: { id: item.id },
+              update: { $set: { order: item.order } },
+            },
+          }))
+          if (bulkOps.length > 0) {
+            await Photo.bulkWrite(bulkOps)
+          }
+        } catch (dbErr) {
+          console.error('[Database] Failed to bulk reorder in MongoDB:', dbErr.message)
+        }
+      }
+      clearCache('photos')
+
       logActivity('Reordered portfolio photographs')
     }
 

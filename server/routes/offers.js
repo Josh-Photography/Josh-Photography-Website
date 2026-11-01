@@ -7,6 +7,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { authenticateToken } from '../middleware/auth.js'
 import { logActivity } from '../utils/activity.js'
 import { processImageUpload } from '../utils/storage.js'
+import Offer from '../models/Offer.js'
+import { isMongoConnected, getCached, setCached, clearCache } from '../utils/db.js'
 
 const router = express.Router()
 const __filename = fileURLToPath(import.meta.url)
@@ -115,38 +117,61 @@ function computeOfferStatus(offer) {
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. Public API: Get Active Published Offers for Special Offers Page
 // ─────────────────────────────────────────────────────────────────────────────
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
     res.set('Pragma', 'no-cache')
     res.set('Expires', '0')
-    const data = readOffersData()
-    const settings = data.sectionSettings || { enabled: true }
+
+    const cached = getCached('public_offers')
+    if (cached) return res.json(cached)
+
+    let allOffers = []
+    let settings = { enabled: true }
+
+    if (isMongoConnected()) {
+      try {
+        allOffers = await Offer.find({ published: true }).sort({ order: 1 }).lean()
+      } catch (e) {
+        console.warn('[Database] Offers Mongo fetch error:', e.message)
+      }
+    }
+
+    if (!allOffers.length) {
+      const data = readOffersData()
+      settings = data.sectionSettings || { enabled: true }
+      allOffers = Array.isArray(data.offers) ? data.offers : []
+    } else {
+      const data = readOffersData()
+      settings = data.sectionSettings || { enabled: true }
+    }
 
     // If whole section/page is disabled by admin, return empty list
     if (settings.enabled === false) {
-      return res.json({
+      const emptyRes = {
         enabled: false,
         eyebrow: settings.eyebrow || 'SPECIAL OFFERS & SEASONAL PROMOTIONS',
         title: settings.title || 'Limited-Time Photography Promotions',
         subtitle: settings.subtitle || '',
         offers: [],
-      })
+      }
+      setCached('public_offers', emptyRes)
+      return res.json(emptyRes)
     }
 
-    // Filter ONLY active, published (published !== false) offers within valid date range
-    const allOffers = Array.isArray(data.offers) ? data.offers : []
     const validOffers = allOffers
       .filter((offer) => computeOfferStatus(offer) === 'active')
       .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0))
 
-    res.json({
+    const result = {
       enabled: true,
       eyebrow: settings.eyebrow || 'SPECIAL OFFERS & SEASONAL PROMOTIONS',
       title: settings.title || 'Limited-Time Photography Promotions',
       subtitle: settings.subtitle || '',
       offers: validOffers,
-    })
+    }
+    setCached('public_offers', result)
+    res.json(result)
   } catch (error) {
     console.error('Error fetching public offers:', error)
     res.status(500).json({ error: 'Failed to load promotional offers' })
@@ -156,13 +181,26 @@ router.get('/', (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────────
 // 2. Admin API: Get All Offers (including drafts, expired, upcoming, hidden)
 // ─────────────────────────────────────────────────────────────────────────────
-router.get('/admin', authenticateToken, (req, res) => {
+router.get('/admin', authenticateToken, async (req, res) => {
   try {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
     res.set('Pragma', 'no-cache')
     res.set('Expires', '0')
+
+    let allOffers = []
     const data = readOffersData()
-    const allOffers = Array.isArray(data.offers) ? data.offers : []
+
+    if (isMongoConnected()) {
+      try {
+        allOffers = await Offer.find({}).sort({ order: 1 }).lean()
+      } catch (e) {
+        console.warn('[Database] Admin offers Mongo fetch error:', e.message)
+      }
+    }
+
+    if (!allOffers.length) {
+      allOffers = Array.isArray(data.offers) ? data.offers : []
+    }
 
     const decoratedOffers = allOffers.map((offer) => ({
       ...offer,
@@ -218,7 +256,7 @@ router.post('/upload', authenticateToken, upload.single('image'), async (req, re
 // ─────────────────────────────────────────────────────────────────────────────
 // 5. Admin API: Create New Campaign
 // ─────────────────────────────────────────────────────────────────────────────
-router.post('/', authenticateToken, (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
     const data = readOffersData()
     const {
@@ -277,6 +315,15 @@ router.post('/', authenticateToken, (req, res) => {
     data.offers.push(newOffer)
     writeOffersData(data)
 
+    if (isMongoConnected()) {
+      try {
+        await Offer.findOneAndUpdate({ id: newOffer.id }, newOffer, { upsert: true, new: true })
+      } catch (dbErr) {
+        console.error('[Database] Failed to save offer to MongoDB:', dbErr.message)
+      }
+    }
+    clearCache('offers')
+
     logActivity(`Created seasonal offer: "${newOffer.title}" (${discountNum}% off)`)
     res.status(201).json(newOffer)
   } catch (error) {
@@ -288,7 +335,7 @@ router.post('/', authenticateToken, (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────────
 // 6. Admin API: Update Existing Campaign
 // ─────────────────────────────────────────────────────────────────────────────
-router.put('/:id', authenticateToken, (req, res) => {
+router.put('/:id', authenticateToken, async (req, res) => {
   try {
     const data = readOffersData()
     const { id } = req.params
@@ -339,6 +386,15 @@ router.put('/:id', authenticateToken, (req, res) => {
     data.offers[index] = updated
     writeOffersData(data)
 
+    if (isMongoConnected()) {
+      try {
+        await Offer.findOneAndUpdate({ id }, { $set: updated }, { upsert: true, new: true })
+      } catch (dbErr) {
+        console.error('[Database] Failed to update offer in MongoDB:', dbErr.message)
+      }
+    }
+    clearCache('offers')
+
     logActivity(`Updated promotional offer: "${updated.title}"`)
     res.json(updated)
   } catch (error) {
@@ -350,7 +406,7 @@ router.put('/:id', authenticateToken, (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────────
 // 7. Admin API: Delete Campaign
 // ─────────────────────────────────────────────────────────────────────────────
-router.delete('/:id', authenticateToken, (req, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     const data = readOffersData()
     const { id } = req.params
@@ -364,6 +420,16 @@ router.delete('/:id', authenticateToken, (req, res) => {
     }
 
     writeOffersData(data)
+
+    if (isMongoConnected()) {
+      try {
+        await Offer.findOneAndDelete({ id })
+      } catch (dbErr) {
+        console.error('[Database] Failed to delete offer from MongoDB:', dbErr.message)
+      }
+    }
+    clearCache('offers')
+
     logActivity(`Deleted promotional offer: "${deletedItem?.title || id}"`)
     res.json({ message: 'Offer deleted successfully', id })
   } catch (error) {

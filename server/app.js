@@ -3,6 +3,7 @@ import cors from 'cors'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import { readFileSync, existsSync } from 'fs'
+import { connectDB } from './utils/db.js'
 import authRoutes from './routes/auth.js'
 import contentRoutes from './routes/content.js'
 import photoRoutes from './routes/photos.js'
@@ -34,6 +35,11 @@ try {
     }
   }
 } catch (_) {}
+
+// Connect to MongoDB Atlas (non-blocking)
+connectDB().catch((err) => {
+  console.warn('[Database] Initial connection:', err.message)
+})
 
 const app = express()
 

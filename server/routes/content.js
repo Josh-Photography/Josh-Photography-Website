@@ -7,6 +7,8 @@ import { v4 as uuidv4 } from 'uuid'
 import { authenticateToken } from '../middleware/auth.js'
 import { logActivity } from '../utils/activity.js'
 import { processImageUpload, deleteMediaAsset } from '../utils/storage.js'
+import Content from '../models/Content.js'
+import { isMongoConnected, getCached, setCached, clearCache } from '../utils/db.js'
 
 const router = express.Router()
 const __filename = fileURLToPath(import.meta.url)
@@ -57,6 +59,43 @@ function writeContent(data) {
   writeFileSync(contentPath, JSON.stringify(data, null, 2))
 }
 
+async function getFullContent() {
+  const cached = getCached('main_content')
+  if (cached) return cached
+
+  if (isMongoConnected()) {
+    try {
+      const doc = await Content.findOne({ key: 'main_content' }).lean()
+      if (doc) {
+        setCached('main_content', doc)
+        return doc
+      }
+    } catch (e) {
+      console.warn('[Database] Error fetching content from MongoDB:', e.message)
+    }
+  }
+
+  const local = readContent()
+  setCached('main_content', local)
+  return local
+}
+
+async function persistContent(content) {
+  writeContent(content)
+  clearCache('main_content')
+  if (isMongoConnected()) {
+    try {
+      await Content.findOneAndUpdate(
+        { key: 'main_content' },
+        { ...content, key: 'main_content' },
+        { upsert: true, new: true }
+      )
+    } catch (e) {
+      console.error('[Database] Failed to save content to MongoDB:', e.message)
+    }
+  }
+}
+
 // Upload endpoint for any content image (protected)
 router.post('/upload', authenticateToken, upload.single('image'), async (req, res) => {
   try {
@@ -94,9 +133,9 @@ router.post('/delete-media', authenticateToken, async (req, res) => {
 })
 
 // Get all content (public)
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     res.json(content)
   } catch (error) {
     console.error('Error reading content:', error)
@@ -105,9 +144,9 @@ router.get('/', (req, res) => {
 })
 
 // Get studio info (public)
-router.get('/studio', (req, res) => {
+router.get('/studio', async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     res.json({
       ...content.studio,
       social: content.social,
@@ -119,9 +158,9 @@ router.get('/studio', (req, res) => {
 })
 
 // Update studio info (protected)
-router.put('/studio', authenticateToken, (req, res) => {
+router.put('/studio', authenticateToken, async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     content.studio = {
       ...content.studio,
       ...req.body,
@@ -130,7 +169,7 @@ router.put('/studio', authenticateToken, (req, res) => {
       content.settings.studioName = req.body.name
       content.settings.siteName = req.body.name
     }
-    writeContent(content)
+    await persistContent(content)
     logActivity('Updated Studio Information & Facilities')
     res.json(content.studio)
   } catch (error) {
@@ -140,23 +179,23 @@ router.put('/studio', authenticateToken, (req, res) => {
 })
 
 // Get/Update about (public / protected)
-router.get('/about', (req, res) => {
+router.get('/about', async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     res.json(content.about)
   } catch (error) {
     res.status(500).json({ error: 'Failed to load about' })
   }
 })
 
-router.put('/about', authenticateToken, (req, res) => {
+router.put('/about', authenticateToken, async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     content.about = {
       ...content.about,
       ...req.body,
     }
-    writeContent(content)
+    await persistContent(content)
     logActivity('Updated About Page Story, Photographer Profile & Stats')
     res.json(content.about)
   } catch (error) {
@@ -165,20 +204,20 @@ router.put('/about', authenticateToken, (req, res) => {
 })
 
 // Get/Update hero slides
-router.get('/hero', (req, res) => {
+router.get('/hero', async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     res.json(content.heroSlides || [])
   } catch (error) {
     res.status(500).json({ error: 'Failed to load hero slides' })
   }
 })
 
-router.put('/hero', authenticateToken, (req, res) => {
+router.put('/hero', authenticateToken, async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     content.heroSlides = req.body.slides || req.body.heroSlides || req.body
-    writeContent(content)
+    await persistContent(content)
     logActivity('Updated Hero Section Slideshow')
     res.json(content.heroSlides)
   } catch (error) {
@@ -187,20 +226,20 @@ router.put('/hero', authenticateToken, (req, res) => {
 })
 
 // Get/Update services
-router.get('/services', (req, res) => {
+router.get('/services', async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     res.json(content.services || [])
   } catch (error) {
     res.status(500).json({ error: 'Failed to load services' })
   }
 })
 
-router.put('/services', authenticateToken, (req, res) => {
+router.put('/services', authenticateToken, async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     content.services = req.body.services || req.body
-    writeContent(content)
+    await persistContent(content)
     logActivity('Updated Photography Services & Collections')
     res.json(content.services)
   } catch (error) {
@@ -209,20 +248,20 @@ router.put('/services', authenticateToken, (req, res) => {
 })
 
 // Get/Update testimonials
-router.get('/testimonials', (req, res) => {
+router.get('/testimonials', async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     res.json(content.testimonials || [])
   } catch (error) {
     res.status(500).json({ error: 'Failed to load testimonials' })
   }
 })
 
-router.put('/testimonials', authenticateToken, (req, res) => {
+router.put('/testimonials', authenticateToken, async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     content.testimonials = req.body.testimonials || req.body
-    writeContent(content)
+    await persistContent(content)
     logActivity('Updated Client Testimonials & Reviews')
     res.json(content.testimonials)
   } catch (error) {
@@ -231,20 +270,20 @@ router.put('/testimonials', authenticateToken, (req, res) => {
 })
 
 // Get/Update collaborators / team
-router.get('/collaborators', (req, res) => {
+router.get('/collaborators', async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     res.json(content.collaborators || [])
   } catch (error) {
     res.status(500).json({ error: 'Failed to load collaborators' })
   }
 })
 
-router.put('/collaborators', authenticateToken, (req, res) => {
+router.put('/collaborators', authenticateToken, async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     content.collaborators = req.body.collaborators || req.body
-    writeContent(content)
+    await persistContent(content)
     logActivity('Updated Team Members & Biographies')
     res.json(content.collaborators)
   } catch (error) {
@@ -253,20 +292,20 @@ router.put('/collaborators', authenticateToken, (req, res) => {
 })
 
 // Get/Update social links
-router.get('/social', (req, res) => {
+router.get('/social', async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     res.json(content.social || {})
   } catch (error) {
     res.status(500).json({ error: 'Failed to load social links' })
   }
 })
 
-router.put('/social', authenticateToken, (req, res) => {
+router.put('/social', authenticateToken, async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     content.social = { ...content.social, ...req.body }
-    writeContent(content)
+    await persistContent(content)
     logActivity('Updated Social Media Platforms & Links')
     res.json(content.social)
   } catch (error) {
@@ -275,18 +314,18 @@ router.put('/social', authenticateToken, (req, res) => {
 })
 
 // Get/Update settings
-router.get('/settings', (req, res) => {
+router.get('/settings', async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     res.json(content.settings || {})
   } catch (error) {
     res.status(500).json({ error: 'Failed to load settings' })
   }
 })
 
-router.put('/settings', authenticateToken, (req, res) => {
+router.put('/settings', authenticateToken, async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     content.settings = { ...content.settings, ...req.body }
     if (req.body.bookingButtonText) {
       content.settings.ctaButtonText = req.body.bookingButtonText
@@ -301,7 +340,7 @@ router.put('/settings', authenticateToken, (req, res) => {
       content.settings.studioName = req.body.siteName
       if (content.studio) content.studio.name = req.body.siteName
     }
-    writeContent(content)
+    await persistContent(content)
     logActivity('Updated General Website Settings & SEO')
     res.json(content.settings)
   } catch (error) {
@@ -310,21 +349,21 @@ router.put('/settings', authenticateToken, (req, res) => {
 })
 
 // Get/Update stats
-router.get('/stats', (req, res) => {
+router.get('/stats', async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     res.json(content.about?.stats || content.stats || [])
   } catch (error) {
     res.status(500).json({ error: 'Failed to load stats' })
   }
 })
 
-router.put('/stats', authenticateToken, (req, res) => {
+router.put('/stats', authenticateToken, async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     if (!content.about) content.about = {}
     content.about.stats = req.body.stats || req.body
-    writeContent(content)
+    await persistContent(content)
     logActivity('Updated Experience Statistics')
     res.json(content.about.stats)
   } catch (error) {
@@ -333,23 +372,23 @@ router.put('/stats', authenticateToken, (req, res) => {
 })
 
 // Get/Update another studio (De Fab Studio)
-router.get('/another-studio', (req, res) => {
+router.get('/another-studio', async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     res.json(content.anotherStudio || {})
   } catch (error) {
     res.status(500).json({ error: 'Failed to load another studio info' })
   }
 })
 
-router.put('/another-studio', authenticateToken, (req, res) => {
+router.put('/another-studio', authenticateToken, async (req, res) => {
   try {
-    const content = readContent()
+    const content = await getFullContent()
     content.anotherStudio = {
       ...content.anotherStudio,
       ...req.body,
     }
-    writeContent(content)
+    await persistContent(content)
     logActivity('Updated De Fab Studio Section & Content')
     res.json(content.anotherStudio)
   } catch (error) {
