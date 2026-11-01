@@ -89,3 +89,4 @@ photoSchema.index({ published: 1, order: 1 })
 
 export const Photo = mongoose.models.Photo || mongoose.model('Photo', photoSchema)
 export default Photo
+

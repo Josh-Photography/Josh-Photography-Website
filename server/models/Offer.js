@@ -103,3 +103,4 @@ offerSchema.index({ category: 1, published: 1, order: 1 })
 
 export const Offer = mongoose.models.Offer || mongoose.model('Offer', offerSchema)
 export default Offer
+
