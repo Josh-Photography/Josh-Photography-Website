@@ -1,5 +1,41 @@
 [
   {
+    "id": "act-1793562871128",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T19:54:31.128Z"
+  },
+  {
+    "id": "act-1793562871074",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T19:54:31.074Z"
+  },
+  {
+    "id": "act-1793562871016",
+    "action": "Deleted photo \"Model\" from sports-photography",
+    "user": "Admin",
+    "timestamp": "2026-11-01T19:54:31.016Z"
+  },
+  {
+    "id": "act-1793560314987",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T19:11:54.987Z"
+  },
+  {
+    "id": "act-1793560314962",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T19:11:54.962Z"
+  },
+  {
+    "id": "act-1793560314905",
+    "action": "Uploaded asset: model.png into josh_portfolio/sports-photography",
+    "user": "Admin",
+    "timestamp": "2026-11-01T19:11:54.905Z"
+  },
+  {
     "id": "act-1793551907304",
     "action": "Synchronized 103 portfolio photograph(s) across categories",
     "user": "Admin",
@@ -262,41 +298,5 @@
     "action": "New inquiry received from Hirthick (Wedding)",
     "user": "System",
     "timestamp": "2026-10-31T01:40:51.997Z"
-  },
-  {
-    "id": "act-1793410452764",
-    "action": "New inquiry received from Hirthick (Wedding)",
-    "user": "System",
-    "timestamp": "2026-10-31T01:34:12.764Z"
-  },
-  {
-    "id": "act-1793410200454",
-    "action": "New inquiry received from Hirthick (Personal / Executive Portrait)",
-    "user": "System",
-    "timestamp": "2026-10-31T01:30:00.455Z"
-  },
-  {
-    "id": "act-1793407629192",
-    "action": "Updated promotional offer: \"Birthday Jubilees & Milestone Celebrations\"",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:47:09.192Z"
-  },
-  {
-    "id": "act-1793407626927",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:47:06.927Z"
-  },
-  {
-    "id": "act-1793407620170",
-    "action": "Updated promotional offer: \"Birthday Jubilees & Milestone Celebrations\"",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:47:00.170Z"
-  },
-  {
-    "id": "act-1793407618064",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:46:58.064Z"
   }
 ]

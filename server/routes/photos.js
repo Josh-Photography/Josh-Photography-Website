@@ -6,7 +6,7 @@ import { dirname, join, extname } from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import { authenticateToken } from '../middleware/auth.js'
 import { logActivity } from '../utils/activity.js'
-import { processImageUpload, removeLocalUpload } from '../utils/storage.js'
+import { processImageUpload, removeLocalUpload, deleteMediaAsset } from '../utils/storage.js'
 
 const router = express.Router()
 const __filename = fileURLToPath(import.meta.url)
@@ -413,7 +413,7 @@ router.patch('/:id/toggle-publish', authenticateToken, (req, res) => {
 })
 
 // Delete photo (protected)
-router.delete('/:id', authenticateToken, (req, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     const data = readPhotos()
     const { id } = req.params
@@ -424,15 +424,16 @@ router.delete('/:id', authenticateToken, (req, res) => {
     }
 
     const photo = data.photos[index]
+    const photoUrl = photo.src || photo.image || photo.srcLarge
 
-    // Delete local file if in /uploads/
-    removeLocalUpload(photo.src || photo.image)
+    // Permanently remove from Cloudinary CDN and local storage
+    const delResult = await deleteMediaAsset(photoUrl, photo.publicId)
 
     data.photos.splice(index, 1)
     writePhotos(data)
-    logActivity(`Deleted photo "${photo.title}" from ${photo.category}`)
+    logActivity(`Deleted photo "${photo.title}" from ${photo.category} (Cloudinary: ${delResult.cloudinary ? 'removed' : 'skipped/local'})`)
 
-    res.json({ message: 'Photo deleted successfully', id })
+    res.json({ message: 'Photo deleted successfully', id, cloudinaryRemoved: delResult.cloudinary })
   } catch (error) {
     console.error('Error deleting photo:', error)
     res.status(500).json({ error: 'Failed to delete photo' })

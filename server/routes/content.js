@@ -6,7 +6,7 @@ import { dirname, join, extname } from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import { authenticateToken } from '../middleware/auth.js'
 import { logActivity } from '../utils/activity.js'
-import { processImageUpload } from '../utils/storage.js'
+import { processImageUpload, deleteMediaAsset } from '../utils/storage.js'
 
 const router = express.Router()
 const __filename = fileURLToPath(import.meta.url)
@@ -74,6 +74,22 @@ router.post('/upload', authenticateToken, upload.single('image'), async (req, re
   } catch (error) {
     console.error('Content upload error:', error)
     res.status(500).json({ error: 'Failed to upload image' })
+  }
+})
+
+// Delete media asset from Cloudinary CDN and local storage (protected)
+router.post('/delete-media', authenticateToken, async (req, res) => {
+  try {
+    const { url, publicId } = req.body
+    if (!url && !publicId) {
+      return res.status(400).json({ error: 'url or publicId required' })
+    }
+    const result = await deleteMediaAsset(url, publicId)
+    logActivity(`Deleted media asset from Cloudinary/storage: ${publicId || url}`)
+    res.json({ success: true, result })
+  } catch (error) {
+    console.error('Delete media error:', error)
+    res.status(500).json({ error: 'Failed to delete media asset' })
   }
 })
 
