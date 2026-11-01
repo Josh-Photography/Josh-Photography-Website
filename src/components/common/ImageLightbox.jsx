@@ -1,6 +1,7 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, MapPin, Tag } from 'lucide-react'
+import { getLightboxImageUrl, FALLBACK_IMAGE } from '../../utils/cloudinary'
 
 export default function ImageLightbox({ image, images = [], onClose, onNavigate }) {
   const currentIndex = images.findIndex((img) => img?.id === image?.id)
@@ -54,7 +55,8 @@ export default function ImageLightbox({ image, images = [], onClose, onNavigate 
 
   if (!image) return null
 
-  const imgSrc = image.srcLarge || image.src
+  const rawSrc = image.srcLarge || image.src || image.image
+  const imgSrc = getLightboxImageUrl(rawSrc, 1800)
 
   return (
     <AnimatePresence>

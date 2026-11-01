@@ -29,6 +29,11 @@ Thumbs.db
 # Uploaded files (user content)
 server/uploads/*
 !server/uploads/.gitkeep
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Cloned subfolders or backup directories
+Josh-Photography-Website/
 
 # Local data that might have sensitive info
 # Keep the structure but not actual passwords

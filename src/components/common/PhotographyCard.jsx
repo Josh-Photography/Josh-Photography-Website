@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Check, Calendar, Sparkles } from 'lucide-react'
 import ImageLightbox from './ImageLightbox'
 import { useWebsiteData } from '../../hooks/useWebsiteData'
+import { getCardImageUrl, FALLBACK_IMAGE } from '../../utils/cloudinary'
 
 /**
  * PhotographyCard component
@@ -49,6 +50,14 @@ export function PhotographyCard({
   }
 
   const focalPosition = getFocalPosition(image, objectPosition)
+  const optimizedUrl = getCardImageUrl(image, 800)
+  const [currentSrc, setCurrentSrc] = useState(optimizedUrl)
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  useEffect(() => {
+    setCurrentSrc(getCardImageUrl(image, 800))
+    setIsLoaded(false)
+  }, [image])
 
   return (
     <article
@@ -59,12 +68,25 @@ export function PhotographyCard({
         className={`relative ${aspectRatio} overflow-hidden bg-[#EADECF] cursor-pointer`}
         onClick={onImageClick}
       >
+        {/* Placeholder skeleton */}
+        {!isLoaded && (
+          <div className="absolute inset-0 bg-gradient-to-r from-[#EADECF] via-[#F5EEE3] to-[#EADECF] animate-pulse" />
+        )}
+
         <img
-          src={image}
+          src={currentSrc || FALLBACK_IMAGE}
           alt={alt || title}
           loading="lazy"
+          onLoad={() => setIsLoaded(true)}
+          onError={() => {
+            if (currentSrc !== FALLBACK_IMAGE) {
+              setCurrentSrc(FALLBACK_IMAGE)
+            }
+          }}
           style={{ objectPosition: focalPosition }}
-          className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105"
+          className={`w-full h-full object-cover transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105 ${
+            isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          }`}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1A1715]/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>

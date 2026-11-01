@@ -13,7 +13,7 @@
       "categories": [
         "weddings"
       ],
-      "bannerImage": "/images/hero-church-wedding.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551376/josh_portfolio/weddings/lpnwhhn5m2uqomy1tnha.jpg",
       "discountPercent": 20,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -39,7 +39,7 @@
       "categories": [
         "birthdays"
       ],
-      "bannerImage": "/images/birthday_01.png",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551381/josh_portfolio/birthdays/sd81moqhpuswtii8apk1.jpg",
       "discountPercent": 25,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -65,7 +65,7 @@
       "categories": [
         "engagement"
       ],
-      "bannerImage": "/images/engagement-img-1.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551386/josh_portfolio/engagement/gaghyrpbsaocxdpadeu3.png",
       "discountPercent": 20,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -88,7 +88,7 @@
       "categories": [
         "anniversary"
       ],
-      "bannerImage": "/images/Anniversary-img-2.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551392/josh_portfolio/anniversary/t2b52nd18iyq0gi4tnch.jpg",
       "discountPercent": 20,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -111,7 +111,7 @@
       "categories": [
         "baby-family"
       ],
-      "bannerImage": "/images/baby-family-img-3.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551398/josh_portfolio/baby-family/oq9lurwmmfelkqmxdidr.jpg",
       "discountPercent": 25,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -134,7 +134,7 @@
       "categories": [
         "festivals"
       ],
-      "bannerImage": "/images/christmas-festival.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551403/josh_portfolio/festivals/piy4erpcxxqsw5aemtod.jpg",
       "discountPercent": 20,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -157,7 +157,7 @@
       "categories": [
         "mothers-day"
       ],
-      "bannerImage": "/images/mothersday-img-2.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551410/josh_portfolio/mothers-day/e4xfqcwfelrzhirmtjtz.jpg",
       "discountPercent": 30,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -180,7 +180,7 @@
       "categories": [
         "fathers-day"
       ],
-      "bannerImage": "/images/fatherday-img-3.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551415/josh_portfolio/fathers-day/wowxmi14cosmzxpvqbfq.jpg",
       "discountPercent": 25,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -203,7 +203,7 @@
       "categories": [
         "corporate-events"
       ],
-      "bannerImage": "/images/corporate-img-1.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551422/josh_portfolio/corporate-events/wcr44uziyhttpcqkqnpo.jpg",
       "discountPercent": 15,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -226,7 +226,7 @@
       "categories": [
         "family"
       ],
-      "bannerImage": "/images/family-photography-img-5.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551428/josh_portfolio/family/cjyuw4kupisnssic7w2b.jpg",
       "discountPercent": 20,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -249,7 +249,7 @@
       "categories": [
         "maternity"
       ],
-      "bannerImage": "/images/maternity-editorial-portrait.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551433/josh_portfolio/maternity/ieg0n81rmbzotv4q8y4o.jpg",
       "discountPercent": 25,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -272,7 +272,7 @@
       "categories": [
         "graduations"
       ],
-      "bannerImage": "/images/Graduation-Photography-img-1.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551439/josh_portfolio/graduations/fxmhfcnikuif1ezrdq1w.png",
       "discountPercent": 15,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -291,11 +291,11 @@
     {
       "id": "offer-sports-shoot",
       "title": "High-Performance Sports & Athletic Portraits",
-      "category": "sports-shoot",
+      "category": "sports-photography",
       "categories": [
-        "sports-shoot"
+        "sports-photography"
       ],
-      "bannerImage": "/images/sports_shoot_1.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551445/josh_portfolio/sports-photography/mga3kl2cihoeiizx67op.jpg",
       "discountPercent": 20,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -314,12 +314,12 @@
     {
       "id": "offer-product-shoot",
       "title": "Commercial Product & E-Commerce Showcase",
-      "category": "product-shoot",
+      "category": "product-photography",
       "categories": [
-        "product-shoot",
+        "product-photography",
         "product-photography"
       ],
-      "bannerImage": "/images/product_shoot_1.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551451/josh_portfolio/product-photography/mv9kdioquamuhuvxakce.png",
       "discountPercent": 15,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -338,12 +338,12 @@
     {
       "id": "offer-car-shoot",
       "title": "Automotive Precision & Supercar Editorial",
-      "category": "car-shoot",
+      "category": "car-photography",
       "categories": [
-        "car-shoot",
+        "car-photography",
         "car-photography"
       ],
-      "bannerImage": "/images/car_shoot_1.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551456/josh_portfolio/car-photography/ppzgpblnbk0eawqmdjze.png",
       "discountPercent": 20,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -362,12 +362,12 @@
     {
       "id": "offer-reels-shoot",
       "title": "Cinematic Social Reels & Video Highlights",
-      "category": "reels-shoot",
+      "category": "reels-shoots",
       "categories": [
-        "reels-shoot",
+        "reels-shoots",
         "reels-shoots"
       ],
-      "bannerImage": "/images/reel_shoot_1.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551463/josh_portfolio/reels-shoots/rwbg8slt6hitnhdw57mm.png",
       "discountPercent": 25,
       "badgeText": "OFF",
       "badgeStyle": "starburst",
@@ -386,12 +386,12 @@
     {
       "id": "offer-model-shoot",
       "title": "Editorial Fashion & Professional Model Portfolios",
-      "category": "model-shoot",
+      "category": "model-photography",
       "categories": [
-        "model-shoot",
+        "model-photography",
         "model-photography"
       ],
-      "bannerImage": "/images/model_shoot_1.jpg",
+      "bannerImage": "https://res.cloudinary.com/y5l55yxi/image/upload/v1793551470/josh_portfolio/model-photography/wnpg2b9kyck3xegqo0yl.png",
       "discountPercent": 20,
       "badgeText": "OFF",
       "badgeStyle": "starburst",

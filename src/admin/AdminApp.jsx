@@ -13,6 +13,7 @@ import {
   isCategoryMatch,
 } from '../utils/categoryUtils'
 import PromotionalBadge, { SpecialOfferSticker } from '../components/common/PromotionalBadge'
+import { uploadToCloudinaryDirect } from '../utils/cloudinary'
 
 const API_URL = '/api'
 export { PHOTOGRAPHY_CATEGORIES }
@@ -34,11 +35,13 @@ const convertGoogleDriveLink = (url) => {
   return url
 }
 
-// Upload a single file to backend with base64 data URL fallback
+// Upload a single file: first tries backend API; if on standalone Netlify, uploads directly to Cloudinary
 async function uploadImageFile(file, token, folderOrCategory) {
   if (!file) return null
+
+  // 1. First attempt: Dedicated backend API (for local server or hosted Node.js API)
   try {
-    const authToken = token || (typeof window !== 'undefined' ? localStorage.getItem('adminToken') : '')
+    const authToken = token || (typeof window !== 'undefined' ? (sessionStorage.getItem('adminToken') || localStorage.getItem('adminToken')) : '')
     const formData = new FormData()
     formData.append('image', file)
     if (folderOrCategory) {
@@ -62,9 +65,18 @@ async function uploadImageFile(file, token, folderOrCategory) {
       if (data.url) return data.url
     }
   } catch (err) {
-    console.warn('Backend upload unavailable, using base64 fallback:', err)
+    console.warn('Backend upload endpoint unavailable, switching to direct Cloudinary unsigned upload:', err.message)
   }
 
+  // 2. Second attempt: Direct Cloudinary Unsigned Upload (for Netlify production static deployment)
+  try {
+    const directUrl = await uploadToCloudinaryDirect(file, folderOrCategory)
+    if (directUrl) return directUrl
+  } catch (cloudErr) {
+    console.warn('Direct Cloudinary upload failed, falling back to local base64:', cloudErr.message)
+  }
+
+  // 3. Fallback: Base64 Data URL (offline survival)
   return new Promise((resolve) => {
     const reader = new FileReader()
     reader.onload = (e) => resolve(e.target.result)

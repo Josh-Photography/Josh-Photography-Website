@@ -1,5 +1,77 @@
 [
   {
+    "id": "act-1793564451317",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T20:20:51.317Z"
+  },
+  {
+    "id": "act-1793564451281",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T20:20:51.281Z"
+  },
+  {
+    "id": "act-1793564451238",
+    "action": "Deleted photo \"Model\" from graduations (Cloudinary: removed)",
+    "user": "Admin",
+    "timestamp": "2026-11-01T20:20:51.238Z"
+  },
+  {
+    "id": "act-1793564253091",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T20:17:33.091Z"
+  },
+  {
+    "id": "act-1793564253050",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T20:17:33.050Z"
+  },
+  {
+    "id": "act-1793564252995",
+    "action": "Uploaded asset: model.png into josh_portfolio/graduations",
+    "user": "Admin",
+    "timestamp": "2026-11-01T20:17:32.995Z"
+  },
+  {
+    "id": "act-1793563594602",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T20:06:34.602Z"
+  },
+  {
+    "id": "act-1793563594543",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T20:06:34.543Z"
+  },
+  {
+    "id": "act-1793563594473",
+    "action": "Deleted photo \"Model\" from car-photography (Cloudinary: removed)",
+    "user": "Admin",
+    "timestamp": "2026-11-01T20:06:34.473Z"
+  },
+  {
+    "id": "act-1793563566298",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T20:06:06.298Z"
+  },
+  {
+    "id": "act-1793563566264",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T20:06:06.265Z"
+  },
+  {
+    "id": "act-1793563566202",
+    "action": "Uploaded asset: model.png into josh_portfolio/car-photography",
+    "user": "Admin",
+    "timestamp": "2026-11-01T20:06:06.202Z"
+  },
+  {
     "id": "act-1793562871128",
     "action": "Synchronized 102 portfolio photograph(s) across categories",
     "user": "Admin",
@@ -226,77 +298,5 @@
     "action": "Deleted message #50e63146-e6a9-4e24-8b13-7158f54a1d90",
     "user": "Admin",
     "timestamp": "2026-11-01T14:59:10.224Z"
-  },
-  {
-    "id": "act-1793545148608",
-    "action": "Deleted message #c3e6b27c-542c-4b61-b86f-bbe7da49378c",
-    "user": "Admin",
-    "timestamp": "2026-11-01T14:59:08.608Z"
-  },
-  {
-    "id": "act-1793545147025",
-    "action": "Deleted message #e2e41dfa-ca39-4c35-977b-ee909d37a7a3",
-    "user": "Admin",
-    "timestamp": "2026-11-01T14:59:07.025Z"
-  },
-  {
-    "id": "act-1793545145123",
-    "action": "Deleted message #ac7cc180-993d-4110-979e-1f4f7e93a42c",
-    "user": "Admin",
-    "timestamp": "2026-11-01T14:59:05.123Z"
-  },
-  {
-    "id": "act-1793545143448",
-    "action": "Deleted message #b6350d8a-63ef-40bd-a8c3-2541273239a7",
-    "user": "Admin",
-    "timestamp": "2026-11-01T14:59:03.448Z"
-  },
-  {
-    "id": "act-1793545141323",
-    "action": "Deleted message #05fb0782-adba-44a6-a6ca-a83cb6b3c543",
-    "user": "Admin",
-    "timestamp": "2026-11-01T14:59:01.323Z"
-  },
-  {
-    "id": "act-1793477301964",
-    "action": "New inquiry received from Hirthick (Wedding Ceremony & Reception)",
-    "user": "System",
-    "timestamp": "2026-10-31T20:08:21.964Z"
-  },
-  {
-    "id": "act-1793410966623",
-    "action": "Synchronized 102 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-31T01:42:46.623Z"
-  },
-  {
-    "id": "act-1793410966580",
-    "action": "Synchronized 102 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-31T01:42:46.580Z"
-  },
-  {
-    "id": "act-1793410966533",
-    "action": "Deleted photo \"Model\" from reels-shoots",
-    "user": "Admin",
-    "timestamp": "2026-10-31T01:42:46.533Z"
-  },
-  {
-    "id": "act-1793410898031",
-    "action": "New inquiry received from Hirthick (Wedding)",
-    "user": "System",
-    "timestamp": "2026-10-31T01:41:38.031Z"
-  },
-  {
-    "id": "act-1793410879880",
-    "action": "New inquiry received from Hirthick (Wedding Ceremony & Reception)",
-    "user": "System",
-    "timestamp": "2026-10-31T01:41:19.880Z"
-  },
-  {
-    "id": "act-1793410851997",
-    "action": "New inquiry received from Hirthick (Wedding)",
-    "user": "System",
-    "timestamp": "2026-10-31T01:40:51.997Z"
   }
 ]
