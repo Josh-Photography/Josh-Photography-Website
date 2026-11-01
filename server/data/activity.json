@@ -1,5 +1,227 @@
 [
   {
+    "id": "act-1793551907304",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:51:47.304Z"
+  },
+  {
+    "id": "act-1793551907255",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:51:47.255Z"
+  },
+  {
+    "id": "act-1793551907227",
+    "action": "Uploaded content asset: model.png",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:51:47.227Z"
+  },
+  {
+    "id": "act-1793551868918",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:51:08.918Z"
+  },
+  {
+    "id": "act-1793551868886",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:51:08.886Z"
+  },
+  {
+    "id": "act-1793551868852",
+    "action": "Deleted photo \"Model\" from weddings",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:51:08.852Z"
+  },
+  {
+    "id": "act-1793551775436",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:49:35.436Z"
+  },
+  {
+    "id": "act-1793551775406",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:49:35.406Z"
+  },
+  {
+    "id": "act-1793551775377",
+    "action": "Uploaded content asset: model.png",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:49:35.377Z"
+  },
+  {
+    "id": "act-1793551695905",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:48:15.905Z"
+  },
+  {
+    "id": "act-1793551695873",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:48:15.873Z"
+  },
+  {
+    "id": "act-1793551695831",
+    "action": "Deleted photo \"Model\" from weddings",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:48:15.831Z"
+  },
+  {
+    "id": "act-1793550789340",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:33:09.340Z"
+  },
+  {
+    "id": "act-1793550789314",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:33:09.314Z"
+  },
+  {
+    "id": "act-1793550789279",
+    "action": "Uploaded content asset: model.png",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:33:09.279Z"
+  },
+  {
+    "id": "act-1793550777740",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:32:57.740Z"
+  },
+  {
+    "id": "act-1793550777724",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:32:57.724Z"
+  },
+  {
+    "id": "act-1793550777689",
+    "action": "Deleted photo \"Model\" from weddings",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:32:57.689Z"
+  },
+  {
+    "id": "act-1793549394170",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:09:54.170Z"
+  },
+  {
+    "id": "act-1793549394134",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:09:54.134Z"
+  },
+  {
+    "id": "act-1793549394087",
+    "action": "Uploaded content asset: model.png",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:09:54.087Z"
+  },
+  {
+    "id": "act-1793549210194",
+    "action": "Uploaded content asset: live-cloudinary-test.png",
+    "user": "Admin",
+    "timestamp": "2026-11-01T16:06:50.194Z"
+  },
+  {
+    "id": "act-1793548406355",
+    "action": "Uploaded content asset: live-cloudinary-test.png",
+    "user": "Admin",
+    "timestamp": "2026-11-01T15:53:26.355Z"
+  },
+  {
+    "id": "act-1793548353273",
+    "action": "Uploaded content asset: live-cloudinary-test.png",
+    "user": "Admin",
+    "timestamp": "2026-11-01T15:52:33.273Z"
+  },
+  {
+    "id": "act-1793548293957",
+    "action": "Uploaded content asset: live-cloudinary-test.png",
+    "user": "Admin",
+    "timestamp": "2026-11-01T15:51:33.957Z"
+  },
+  {
+    "id": "act-1793545186275",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T14:59:46.275Z"
+  },
+  {
+    "id": "act-1793545186212",
+    "action": "Synchronized 102 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T14:59:46.212Z"
+  },
+  {
+    "id": "act-1793545186157",
+    "action": "Deleted photo \"Model\" from sports-photography",
+    "user": "Admin",
+    "timestamp": "2026-11-01T14:59:46.157Z"
+  },
+  {
+    "id": "act-1793545168601",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T14:59:28.601Z"
+  },
+  {
+    "id": "act-1793545168437",
+    "action": "Synchronized 103 portfolio photograph(s) across categories",
+    "user": "Admin",
+    "timestamp": "2026-11-01T14:59:28.437Z"
+  },
+  {
+    "id": "act-1793545168408",
+    "action": "Uploaded content asset: model.png",
+    "user": "Admin",
+    "timestamp": "2026-11-01T14:59:28.409Z"
+  },
+  {
+    "id": "act-1793545150224",
+    "action": "Deleted message #50e63146-e6a9-4e24-8b13-7158f54a1d90",
+    "user": "Admin",
+    "timestamp": "2026-11-01T14:59:10.224Z"
+  },
+  {
+    "id": "act-1793545148608",
+    "action": "Deleted message #c3e6b27c-542c-4b61-b86f-bbe7da49378c",
+    "user": "Admin",
+    "timestamp": "2026-11-01T14:59:08.608Z"
+  },
+  {
+    "id": "act-1793545147025",
+    "action": "Deleted message #e2e41dfa-ca39-4c35-977b-ee909d37a7a3",
+    "user": "Admin",
+    "timestamp": "2026-11-01T14:59:07.025Z"
+  },
+  {
+    "id": "act-1793545145123",
+    "action": "Deleted message #ac7cc180-993d-4110-979e-1f4f7e93a42c",
+    "user": "Admin",
+    "timestamp": "2026-11-01T14:59:05.123Z"
+  },
+  {
+    "id": "act-1793545143448",
+    "action": "Deleted message #b6350d8a-63ef-40bd-a8c3-2541273239a7",
+    "user": "Admin",
+    "timestamp": "2026-11-01T14:59:03.448Z"
+  },
+  {
+    "id": "act-1793545141323",
+    "action": "Deleted message #05fb0782-adba-44a6-a6ca-a83cb6b3c543",
+    "user": "Admin",
+    "timestamp": "2026-11-01T14:59:01.323Z"
+  },
+  {
     "id": "act-1793477301964",
     "action": "New inquiry received from Hirthick (Wedding Ceremony & Reception)",
     "user": "System",
@@ -76,227 +298,5 @@
     "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
     "user": "Admin",
     "timestamp": "2026-10-31T00:46:58.064Z"
-  },
-  {
-    "id": "act-1793407615567",
-    "action": "Updated Special Offers settings (Enabled)",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:46:55.567Z"
-  },
-  {
-    "id": "act-1793407613112",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:46:53.112Z"
-  },
-  {
-    "id": "act-1793407609428",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:46:49.428Z"
-  },
-  {
-    "id": "act-1793407582792",
-    "action": "Updated Special Offers settings (Hidden)",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:46:22.792Z"
-  },
-  {
-    "id": "act-1793407566445",
-    "action": "Updated promotional offer: \"Birthday Jubilees & Milestone Celebrations\"",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:46:06.445Z"
-  },
-  {
-    "id": "act-1793406378432",
-    "action": "Updated Studio Information & Facilities",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:26:18.432Z"
-  },
-  {
-    "id": "act-1793406377386",
-    "action": "Uploaded content asset: studo.png",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:26:17.386Z"
-  },
-  {
-    "id": "act-1793406221060",
-    "action": "Updated Studio Information & Facilities",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:23:41.060Z"
-  },
-  {
-    "id": "act-1793406213048",
-    "action": "Uploaded content asset: st.jpg",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:23:33.048Z"
-  },
-  {
-    "id": "act-1793406091701",
-    "action": "Updated Studio Information & Facilities",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:21:31.701Z"
-  },
-  {
-    "id": "act-1793406088833",
-    "action": "Uploaded content asset: stu.jpg",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:21:28.833Z"
-  },
-  {
-    "id": "act-1793406072375",
-    "action": "Updated Studio Information & Facilities",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:21:12.375Z"
-  },
-  {
-    "id": "act-1793406069081",
-    "action": "Uploaded content asset: hero-church-wedding.jpg",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:21:09.081Z"
-  },
-  {
-    "id": "act-1793405984860",
-    "action": "Updated Hero Section Slideshow",
-    "user": "Admin",
-    "timestamp": "2026-10-31T00:19:44.860Z"
-  },
-  {
-    "id": "act-1793398477577",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-30T22:14:37.577Z"
-  },
-  {
-    "id": "act-1793397408196",
-    "action": "Synchronized 103 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:56:48.196Z"
-  },
-  {
-    "id": "act-1793397408147",
-    "action": "Synchronized 103 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:56:48.147Z"
-  },
-  {
-    "id": "act-1793397408113",
-    "action": "Uploaded content asset: model.png",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:56:48.113Z"
-  },
-  {
-    "id": "act-1793397353484",
-    "action": "Updated Hero Section Slideshow",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:55:53.484Z"
-  },
-  {
-    "id": "act-1793397346624",
-    "action": "Uploaded content asset: fatherday-img-3.jpg",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:55:46.624Z"
-  },
-  {
-    "id": "act-1793397328554",
-    "action": "Synchronized 102 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:55:28.554Z"
-  },
-  {
-    "id": "act-1793397328506",
-    "action": "Synchronized 102 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:55:28.506Z"
-  },
-  {
-    "id": "act-1793397328265",
-    "action": "Deleted photo \"Model\" from car-shoot",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:55:28.265Z"
-  },
-  {
-    "id": "act-1793396237905",
-    "action": "Synchronized 103 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:37:17.905Z"
-  },
-  {
-    "id": "act-1793396237877",
-    "action": "Synchronized 103 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:37:17.877Z"
-  },
-  {
-    "id": "act-1793396237851",
-    "action": "Uploaded content asset: model.png",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:37:17.851Z"
-  },
-  {
-    "id": "act-1793396201223",
-    "action": "Synchronized 102 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:36:41.223Z"
-  },
-  {
-    "id": "act-1793396201181",
-    "action": "Synchronized 102 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:36:41.181Z"
-  },
-  {
-    "id": "act-1793396201143",
-    "action": "Deleted photo \"Model\" from weddings",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:36:41.143Z"
-  },
-  {
-    "id": "act-1793396191181",
-    "action": "Synchronized 103 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:36:31.181Z"
-  },
-  {
-    "id": "act-1793396191164",
-    "action": "Synchronized 103 portfolio photograph(s) across categories",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:36:31.164Z"
-  },
-  {
-    "id": "act-1793396169442",
-    "action": "Updated General Website Settings & SEO",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:36:09.442Z"
-  },
-  {
-    "id": "act-1793396157577",
-    "action": "Updated General Website Settings & SEO",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:35:57.577Z"
-  },
-  {
-    "id": "act-1793395966240",
-    "action": "Updated promotional offer: \"Luxury Wedding & Nuptial Season Collection\"",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:32:46.241Z"
-  },
-  {
-    "id": "act-1793395956767",
-    "action": "Updated About Page Story, Photographer Profile & Stats",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:32:36.767Z"
-  },
-  {
-    "id": "act-1793395935145",
-    "action": "Updated Hero Section Slideshow",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:32:15.145Z"
-  },
-  {
-    "id": "act-1793395933223",
-    "action": "Uploaded content asset: model.png",
-    "user": "Admin",
-    "timestamp": "2026-10-30T21:32:13.223Z"
   }
 ]
