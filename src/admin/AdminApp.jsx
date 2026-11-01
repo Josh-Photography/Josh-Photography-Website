@@ -35,12 +35,16 @@ const convertGoogleDriveLink = (url) => {
 }
 
 // Upload a single file to backend with base64 data URL fallback
-async function uploadImageFile(file, token) {
+async function uploadImageFile(file, token, folderOrCategory) {
   if (!file) return null
   try {
     const authToken = token || (typeof window !== 'undefined' ? localStorage.getItem('adminToken') : '')
     const formData = new FormData()
     formData.append('image', file)
+    if (folderOrCategory) {
+      const folderPath = folderOrCategory.startsWith('josh_') ? folderOrCategory : `josh_portfolio/${folderOrCategory}`
+      formData.append('folder', folderPath)
+    }
     const res = await fetch(`${API_URL}/content/upload`, {
       method: 'POST',
       headers: {
@@ -2523,7 +2527,8 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
                     onChange={async (e) => {
                       const file = e.target.files?.[0]
                       if (file) {
-                        const url = await uploadImageFile(file, token)
+                        const targetCategory = editingPhoto.category || selectedCategory
+                        const url = await uploadImageFile(file, token, targetCategory)
                         if (url) {
                           setEditingPhoto({ ...editingPhoto, src: url, image: url, srcLarge: url })
                         }
@@ -2653,7 +2658,8 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
                       onChange={async (e) => {
                         const file = e.target.files?.[0]
                         if (file) {
-                          const url = await uploadImageFile(file, token)
+                          const targetCategory = newPhotoData.category || selectedCategory
+                          const url = await uploadImageFile(file, token, targetCategory)
                           if (url) {
                             setNewPhotoData((p) => ({ ...p, src: url }))
                           }
