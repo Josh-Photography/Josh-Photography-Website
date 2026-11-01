@@ -147,6 +147,17 @@ export async function uploadToCloudinaryDirect(file, folderOrCategory) {
     throw new Error('Cloudinary response did not contain secure_url')
   }
 
+  // Automatically update asset_folder in Cloudinary so it shows inside the category folder in Cloudinary Media Library
+  if (data.public_id && targetFolder) {
+    try {
+      await fetch('/api/content/assign-asset-folder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ publicId: data.public_id, folder: targetFolder }),
+      })
+    } catch (_) {}
+  }
+
   return data.secure_url
 }
 

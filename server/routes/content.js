@@ -116,6 +116,38 @@ router.post('/upload', authenticateToken, upload.single('image'), async (req, re
   }
 })
 
+// Automatically update asset_folder in Cloudinary after client-side upload
+router.post('/assign-asset-folder', async (req, res) => {
+  try {
+    const { publicId, folder } = req.body
+    if (!publicId || !folder) {
+      return res.status(400).json({ error: 'publicId and folder are required' })
+    }
+    const cloudName = process.env.CLOUDINARY_CLOUD_NAME || 'y5l55yxi'
+    const apiKey = process.env.CLOUDINARY_API_KEY
+    const apiSecret = process.env.CLOUDINARY_API_SECRET
+
+    if (cloudName && apiKey && apiSecret) {
+      const auth = Buffer.from(`${apiKey}:${apiSecret}`).toString('base64')
+      const cleanId = publicId.replace(/\.[^/.]+$/, '')
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/resources/image/upload/${cleanId}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${auth}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ asset_folder: folder }),
+      })
+      const result = await response.json()
+      return res.json({ success: true, result })
+    }
+    res.json({ success: false, message: 'Cloudinary credentials not set' })
+  } catch (error) {
+    console.error('Error assigning asset folder:', error.message)
+    res.status(500).json({ error: error.message })
+  }
+})
+
 // Delete media asset from Cloudinary CDN and local storage (protected)
 router.post('/delete-media', authenticateToken, async (req, res) => {
   try {
