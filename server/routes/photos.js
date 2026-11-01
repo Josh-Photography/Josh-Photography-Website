@@ -437,8 +437,22 @@ router.put('/', authenticateToken, async (req, res) => {
     // Sync into MongoDB Atlas if connected
     if (isMongoConnected()) {
       try {
+        const incomingIds = new Set(normalizedPhotos.map((p) => String(p.id)))
         for (const p of normalizedPhotos) {
           await Photo.findOneAndUpdate({ id: p.id }, p, { upsert: true, new: true })
+        }
+        // If a full sync was sent, safely remove any photos deleted by user from MongoDB & Cloudinary
+        if (normalizedPhotos.length >= 20) {
+          const allDbPhotos = await Photo.find({}).lean()
+          for (const dbP of allDbPhotos) {
+            if (!incomingIds.has(String(dbP.id))) {
+              const url = dbP.src || dbP.image || ''
+              if (url) {
+                await deleteMediaAsset(url, dbP.publicId)
+              }
+              await Photo.findOneAndDelete({ id: dbP.id })
+            }
+          }
         }
       } catch (dbErr) {
         console.error('[Database] MongoDB sync error:', dbErr.message)
@@ -573,22 +587,47 @@ router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     const data = readPhotos()
     const { id } = req.params
-    const index = data.photos.findIndex((p) => String(p.id) === String(id))
 
-    if (index === -1) {
+    // 1. Look up in MongoDB Atlas first
+    let dbPhoto = null
+    if (isMongoConnected()) {
+      try {
+        dbPhoto = await Photo.findOne({ id }).lean()
+      } catch (dbErr) {
+        console.warn('[Database] Photo find query warning:', dbErr.message)
+      }
+    }
+
+    // 2. Look up in local photos.json
+    const index = data.photos.findIndex((p) => String(p.id) === String(id))
+    const jsonPhoto = index !== -1 ? data.photos[index] : null
+
+    // 3. Fallback to request body if sent from client
+    const photo = dbPhoto || jsonPhoto || {}
+    const photoUrl = req.body?.url || req.body?.src || photo.src || photo.image || photo.srcLarge || ''
+    const publicId = req.body?.publicId || photo.publicId || ''
+    const photoTitle = photo.title || req.body?.title || 'Photo'
+    const photoCategory = photo.category || req.body?.category || 'portfolio'
+
+    if (!dbPhoto && index === -1 && !photoUrl && !publicId) {
       return res.status(404).json({ error: 'Photo not found' })
     }
 
-    const photo = data.photos[index]
-    const photoUrl = photo.src || photo.image || photo.srcLarge
+    // 4. Permanently remove from Cloudinary CDN and local storage
+    let delResult = { cloudinary: false }
+    if (photoUrl || publicId) {
+      delResult = await deleteMediaAsset(photoUrl, publicId)
+    }
 
-    // Permanently remove from Cloudinary CDN and local storage
-    const delResult = await deleteMediaAsset(photoUrl, photo.publicId)
+    // 5. Remove from photos.json if present
+    if (index !== -1) {
+      data.photos.splice(index, 1)
+      try {
+        writePhotos(data)
+      } catch (_) {}
+    }
 
-    data.photos.splice(index, 1)
-    writePhotos(data)
-
-    // Remove from MongoDB Atlas if connected
+    // 6. Remove from MongoDB Atlas if connected
     if (isMongoConnected()) {
       try {
         await Photo.findOneAndDelete({ id })
@@ -598,9 +637,14 @@ router.delete('/:id', authenticateToken, async (req, res) => {
     }
     clearCache('photos')
 
-    logActivity(`Deleted photo "${photo.title}" from ${photo.category} (Cloudinary: ${delResult.cloudinary ? 'removed' : 'skipped/local'})`)
+    logActivity(`Deleted photo "${photoTitle}" from ${photoCategory} (Cloudinary: ${delResult.cloudinary ? 'removed' : 'skipped/local'})`)
 
-    res.json({ message: 'Photo deleted successfully', id, cloudinaryRemoved: delResult.cloudinary })
+    res.json({
+      success: true,
+      message: 'Photo deleted permanently from Cloudinary and database',
+      id,
+      cloudinaryRemoved: delResult.cloudinary
+    })
   } catch (error) {
     console.error('Error deleting photo:', error)
     res.status(500).json({ error: 'Failed to delete photo' })

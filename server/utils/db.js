@@ -70,7 +70,11 @@ export function getMongoUri() {
     }
   } catch (_) {}
 
-  return process.env.MONGODB_URI || process.env.MONGO_URI || ''
+  return (
+    process.env.MONGODB_URI ||
+    process.env.MONGO_URI ||
+    'mongodb+srv://devbethu_db_user:13GDodzYUix1sDQE@cluster0.sbqtgd9.mongodb.net/josh_photography?retryWrites=true&w=majority'
+  )
 }
 
 /**

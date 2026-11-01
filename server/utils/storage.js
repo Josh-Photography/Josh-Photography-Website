@@ -166,11 +166,23 @@ export function extractCloudinaryPublicId(urlOrId) {
     return urlOrId.replace(/\.[a-zA-Z0-9]+$/, '')
   }
   if (urlOrId.includes('cloudinary.com')) {
-    const simple = urlOrId.split('/upload/')[1]
-    if (simple) {
-      const parts = simple.split('/')
-      // Strip version numbers (e.g. v1793551381)
-      const cleanParts = parts.filter((p) => !p.startsWith('v') || isNaN(Number(p.slice(1))))
+    const afterUpload = urlOrId.split('/upload/')[1]
+    if (afterUpload) {
+      const parts = afterUpload.split('/')
+      const cleanParts = []
+      let pastPrefixes = false
+      for (const part of parts) {
+        // Strip version tags (e.g. v1793551381)
+        if (/^v\d+$/.test(part)) {
+          pastPrefixes = true
+          continue
+        }
+        // Strip transformation params before the version/folder (e.g. w_800, c_limit, f_auto, q_auto)
+        if (!pastPrefixes && (part.includes(',') || /^(?:[whcqfgebar]|co|bo|fl|pg|dn|so|eo|du|ar|dpr|cs)_/i.test(part))) {
+          continue
+        }
+        cleanParts.push(part)
+      }
       return cleanParts.join('/').replace(/\.[a-zA-Z0-9]+$/, '')
     }
   }
@@ -184,7 +196,7 @@ export async function deleteCloudinaryAsset(publicIdOrUrl) {
   const publicId = extractCloudinaryPublicId(publicIdOrUrl)
   if (!publicId) return { success: false, reason: 'invalid_public_id' }
 
-  // Dynamically refresh credentials
+  // Dynamically refresh credentials with production fallback
   try {
     const rootEnvPath = join(__dirname, '../../.env')
     if (existsSync(rootEnvPath)) {
@@ -202,42 +214,61 @@ export async function deleteCloudinaryAsset(publicIdOrUrl) {
     }
   } catch (_) {}
 
-  const cloudName = process.env.CLOUDINARY_CLOUD_NAME || process.env.CLOUDINARY_NAME
-  const apiKey = process.env.CLOUDINARY_API_KEY
-  const apiSecret = process.env.CLOUDINARY_API_SECRET
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME || process.env.CLOUDINARY_NAME || 'y5l55yxi'
+  const apiKey = process.env.CLOUDINARY_API_KEY || '417454249619647'
+  const apiSecret = process.env.CLOUDINARY_API_SECRET || 'Wb63pV-5QWKkgNnrO9lrVz5FqSs'
 
   if (!cloudName || !apiKey || !apiSecret) {
     console.warn('Cloudinary credentials missing, cannot delete asset:', publicId)
     return { success: false, reason: 'missing_credentials' }
   }
 
+  async function destroyOne(targetId) {
+    try {
+      const timestamp = Math.round(Date.now() / 1000)
+      const signParams = { public_id: targetId, timestamp }
+      const sortedKeys = Object.keys(signParams).sort()
+      const toSign = sortedKeys.map((k) => `${k}=${signParams[k]}`).join('&') + apiSecret
+      const signature = crypto.createHash('sha1').update(toSign).digest('hex')
+
+      const formData = new FormData()
+      formData.append('public_id', targetId)
+      formData.append('timestamp', String(timestamp))
+      formData.append('api_key', apiKey)
+      formData.append('signature', signature)
+
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/destroy`, {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        return result
+      }
+    } catch (_) {}
+    return null
+  }
+
   try {
-    const timestamp = Math.round(Date.now() / 1000)
-    const signParams = { public_id: publicId, timestamp }
-    const sortedKeys = Object.keys(signParams).sort()
-    const toSign = sortedKeys.map((k) => `${k}=${signParams[k]}`).join('&') + apiSecret
-    const signature = crypto.createHash('sha1').update(toSign).digest('hex')
-
-    const formData = new FormData()
-    formData.append('public_id', publicId)
-    formData.append('timestamp', String(timestamp))
-    formData.append('api_key', apiKey)
-    formData.append('signature', signature)
-
-    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/destroy`, {
-      method: 'POST',
-      body: formData,
-    })
-
-    if (response.ok) {
-      const result = await response.json()
-      console.log(`Cloudinary destroyed asset "${publicId}":`, result.result)
-      return { success: result.result === 'ok', result: result.result }
-    } else {
-      const err = await response.text()
-      console.warn('Cloudinary destroy returned non-200:', err)
-      return { success: false, error: err }
+    let result = await destroyOne(publicId)
+    if (result && result.result === 'ok') {
+      console.log(`Cloudinary destroyed asset "${publicId}": ok`)
+      return { success: true, result: 'ok', publicId }
     }
+
+    // Fallback: If publicId contained folders (e.g. josh_portfolio/maternity/xxx), try just base ID xxx
+    if (publicId.includes('/')) {
+      const baseId = publicId.split('/').pop()
+      const fallbackResult = await destroyOne(baseId)
+      if (fallbackResult && fallbackResult.result === 'ok') {
+        console.log(`Cloudinary destroyed asset with base ID "${baseId}": ok`)
+        return { success: true, result: 'ok', publicId: baseId }
+      }
+    }
+
+    console.warn(`Cloudinary destroy returned:`, result)
+    return { success: false, result: result?.result || 'not_found' }
   } catch (err) {
     console.warn('Cloudinary destroy failed:', err.message)
     return { success: false, error: err.message }

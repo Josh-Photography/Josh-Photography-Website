@@ -2103,17 +2103,21 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
   const confirmDeletePhoto = async (photoId) => {
     setDeletingId(photoId)
     try {
+      const targetPhoto = photoToDelete || photos.find((p) => String(p.id) === String(photoId))
       if (onDelete) {
-        await onDelete(photoId)
+        await onDelete(photoId, targetPhoto)
       } else {
         const authToken = token || (typeof window !== 'undefined' ? localStorage.getItem('adminToken') : '')
+        const photoUrl = targetPhoto?.src || targetPhoto?.image || ''
+        const publicId = targetPhoto?.publicId || ''
         try {
           await fetch(`${API_URL}/photos/${encodeURIComponent(photoId)}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
               ...(authToken ? { Authorization: `Bearer ${authToken}` } : {})
-            }
+            },
+            body: JSON.stringify({ url: photoUrl, publicId, id: photoId })
           })
         } catch (e) { }
 
@@ -4270,27 +4274,35 @@ function Dashboard({ token, onLogout }) {
   }
 
   // Delete single photo handler
-  const deletePortfolioPhoto = async (photoId) => {
+  const deletePortfolioPhoto = async (photoId, photoObj = null) => {
     setSaving(true)
     try {
-      // 1. Direct DELETE to backend
+      const currentList = data.photos?.photos || (Array.isArray(data.photos) ? data.photos : [])
+      const targetPhoto = photoObj || currentList.find((p) => String(p.id) === String(photoId))
+      const photoUrl = targetPhoto?.src || targetPhoto?.image || targetPhoto?.srcLarge || ''
+      const publicId = targetPhoto?.publicId || ''
+
+      // 1. Direct DELETE to backend with image URL so Cloudinary destroys the asset immediately
       try {
         await fetch(`${API_URL}/photos/${encodeURIComponent(photoId)}`, {
           method: 'DELETE',
-          headers: authHeaders
+          headers: {
+            ...authHeaders,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ url: photoUrl, publicId, id: photoId })
         })
       } catch (e) {
         console.warn('Backend DELETE error:', e)
       }
 
       // 2. Filter list
-      const currentList = data.photos?.photos || (Array.isArray(data.photos) ? data.photos : [])
       const updatedList = currentList.filter((p) => String(p.id) !== String(photoId))
 
       // 3. Update dataService & localStorage
       await dataService.updatePhotos(updatedList, authHeaders)
 
-      // 4. PUT updated list to backend to guarantee disk synchronization
+      // 4. PUT updated list to backend to guarantee disk and database synchronization
       try {
         await fetch(`${API_URL}/photos`, {
           method: 'PUT',

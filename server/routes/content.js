@@ -124,8 +124,8 @@ router.post('/assign-asset-folder', async (req, res) => {
       return res.status(400).json({ error: 'publicId and folder are required' })
     }
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME || 'y5l55yxi'
-    const apiKey = process.env.CLOUDINARY_API_KEY
-    const apiSecret = process.env.CLOUDINARY_API_SECRET
+    const apiKey = process.env.CLOUDINARY_API_KEY || '417454249619647'
+    const apiSecret = process.env.CLOUDINARY_API_SECRET || 'Wb63pV-5QWKkgNnrO9lrVz5FqSs'
 
     if (cloudName && apiKey && apiSecret) {
       const auth = Buffer.from(`${apiKey}:${apiSecret}`).toString('base64')
