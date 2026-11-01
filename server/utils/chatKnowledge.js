@@ -2,12 +2,12 @@ import { readFileSync, existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const appFilePath = fileURLToPath(import.meta.url)
+const appDirPath = dirname(appFilePath)
 
-const contentPath = join(__dirname, '../data/content.json')
-const photosPath = join(__dirname, '../data/photos.json')
-const offersPath = join(__dirname, '../data/offers.json')
+const contentPath = join(appDirPath, '../data/content.json')
+const photosPath = join(appDirPath, '../data/photos.json')
+const offersPath = join(appDirPath, '../data/offers.json')
 
 // Official Packages and Pricing for Josh Photography
 export const OFFICIAL_PACKAGES = [

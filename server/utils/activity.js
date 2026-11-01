@@ -2,9 +2,9 @@ import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const activityPath = join(__dirname, '../data/activity.json')
+const appFilePath = fileURLToPath(import.meta.url)
+const appDirPath = dirname(appFilePath)
+const activityPath = join(appDirPath, '../data/activity.json')
 
 export function logActivity(action, user = 'Admin') {
   try {

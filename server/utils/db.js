@@ -8,8 +8,8 @@ import { readFileSync, existsSync } from 'fs'
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const appFilePath = fileURLToPath(import.meta.url)
+const appDirPath = dirname(appFilePath)
 
 let isConnected = false
 let connectionPromise = null
@@ -52,7 +52,7 @@ export function clearCache(pattern = null) {
  */
 export function getMongoUri() {
   try {
-    const rootEnvPath = join(__dirname, '../../.env')
+    const rootEnvPath = join(appDirPath, '../../.env')
     if (existsSync(rootEnvPath)) {
       const lines = readFileSync(rootEnvPath, 'utf8').split(/\r?\n/)
       for (const line of lines) {

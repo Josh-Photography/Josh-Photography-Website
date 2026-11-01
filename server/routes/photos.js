@@ -11,11 +11,11 @@ import Photo from '../models/Photo.js'
 import { isMongoConnected, getCached, setCached, clearCache } from '../utils/db.js'
 
 const router = express.Router()
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const photosPath = join(__dirname, '../data/photos.json')
-const uploadsPath = join(__dirname, '../uploads')
-const publicUploadsPath = join(__dirname, '../../public/uploads')
+const appFilePath = fileURLToPath(import.meta.url)
+const appDirPath = dirname(appFilePath)
+const photosPath = join(appDirPath, '../data/photos.json')
+const uploadsPath = join(appDirPath, '../uploads')
+const publicUploadsPath = join(appDirPath, '../../public/uploads')
 
 // Ensure uploads directory exists
 if (!existsSync(uploadsPath)) {
@@ -493,7 +493,7 @@ router.put('/:id', authenticateToken, upload.single('photo'), async (req, res) =
     if (req.file) {
       // Remove old file if stored locally in uploads
       if (existing.src && existing.src.startsWith('/uploads/')) {
-        const oldPath = join(__dirname, '..', existing.src)
+        const oldPath = join(appDirPath, '..', existing.src)
         if (existsSync(oldPath)) {
           try {
             unlinkSync(oldPath)

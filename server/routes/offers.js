@@ -11,11 +11,11 @@ import Offer from '../models/Offer.js'
 import { isMongoConnected, getCached, setCached, clearCache } from '../utils/db.js'
 
 const router = express.Router()
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const offersPath = join(__dirname, '../data/offers.json')
-const uploadsPath = join(__dirname, '../uploads')
-const publicUploadsPath = join(__dirname, '../../public/uploads')
+const appFilePath = fileURLToPath(import.meta.url)
+const appDirPath = dirname(appFilePath)
+const offersPath = join(appDirPath, '../data/offers.json')
+const uploadsPath = join(appDirPath, '../uploads')
+const publicUploadsPath = join(appDirPath, '../../public/uploads')
 
 if (!existsSync(uploadsPath)) {
   mkdirSync(uploadsPath, { recursive: true })

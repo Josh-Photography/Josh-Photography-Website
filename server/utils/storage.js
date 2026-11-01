@@ -8,10 +8,10 @@ import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 import crypto from 'crypto'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const publicUploadsPath = join(__dirname, '../../public/uploads')
-const serverUploadsPath = join(__dirname, '../uploads')
+const appFilePath = fileURLToPath(import.meta.url)
+const appDirPath = dirname(appFilePath)
+const publicUploadsPath = join(appDirPath, '../../public/uploads')
+const serverUploadsPath = join(appDirPath, '../uploads')
 
 if (!existsSync(publicUploadsPath)) {
   mkdirSync(publicUploadsPath, { recursive: true })
@@ -35,7 +35,7 @@ export async function processImageUpload(file, options = {}) {
 
   // Dynamically load/refresh .env configuration
   try {
-    const rootEnvPath = join(__dirname, '../../.env')
+    const rootEnvPath = join(appDirPath, '../../.env')
     if (existsSync(rootEnvPath)) {
       const lines = readFileSync(rootEnvPath, 'utf8').split(/\r?\n/)
       for (const line of lines) {
@@ -198,7 +198,7 @@ export async function deleteCloudinaryAsset(publicIdOrUrl) {
 
   // Dynamically refresh credentials with production fallback
   try {
-    const rootEnvPath = join(__dirname, '../../.env')
+    const rootEnvPath = join(appDirPath, '../../.env')
     if (existsSync(rootEnvPath)) {
       const lines = readFileSync(rootEnvPath, 'utf8').split(/\r?\n/)
       for (const line of lines) {

@@ -13,12 +13,12 @@ import overviewRoutes from './routes/overview.js'
 import chatRoutes from './routes/chat.js'
 import offerRoutes from './routes/offers.js'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const appFilePath = fileURLToPath(import.meta.url)
+const appDirPath = dirname(appFilePath)
 
 // Automatically load .env file into process.env if present
 try {
-  const rootEnvPath = join(__dirname, '../.env')
+  const rootEnvPath = join(appDirPath, '../.env')
   if (existsSync(rootEnvPath)) {
     const lines = readFileSync(rootEnvPath, 'utf8').split(/\r?\n/)
     for (const line of lines) {
@@ -47,7 +47,7 @@ const app = express()
 app.use(cors())
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ extended: true, limit: '50mb' }))
-app.use('/uploads', express.static(join(__dirname, 'uploads')))
+app.use('/uploads', express.static(join(appDirPath, 'uploads')))
 
 // Routes
 app.use('/api/auth', authRoutes)

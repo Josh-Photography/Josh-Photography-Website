@@ -11,11 +11,11 @@ import Content from '../models/Content.js'
 import { isMongoConnected, getCached, setCached, clearCache } from '../utils/db.js'
 
 const router = express.Router()
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const contentPath = join(__dirname, '../data/content.json')
-const uploadsPath = join(__dirname, '../uploads')
-const publicUploadsPath = join(__dirname, '../../public/uploads')
+const appFilePath = fileURLToPath(import.meta.url)
+const appDirPath = dirname(appFilePath)
+const contentPath = join(appDirPath, '../data/content.json')
+const uploadsPath = join(appDirPath, '../uploads')
+const publicUploadsPath = join(appDirPath, '../../public/uploads')
 
 if (!existsSync(uploadsPath)) {
   mkdirSync(uploadsPath, { recursive: true })

@@ -7,9 +7,9 @@ import { authenticateToken } from '../middleware/auth.js'
 import { logActivity } from '../utils/activity.js'
 
 const router = express.Router()
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const contactsPath = join(__dirname, '../data/contacts.json')
+const appFilePath = fileURLToPath(import.meta.url)
+const appDirPath = dirname(appFilePath)
+const contactsPath = join(appDirPath, '../data/contacts.json')
 
 function readContacts() {
   if (!existsSync(contactsPath)) {

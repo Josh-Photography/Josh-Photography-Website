@@ -6,9 +6,9 @@ import { dirname, join } from 'path'
 import { generateToken, authenticateToken } from '../middleware/auth.js'
 
 const router = express.Router()
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-const adminPath = join(__dirname, '../data/admin.json')
+const appFilePath = fileURLToPath(import.meta.url)
+const appDirPath = dirname(appFilePath)
+const adminPath = join(appDirPath, '../data/admin.json')
 
 // Initialize admin if not exists
 function initAdmin() {

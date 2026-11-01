@@ -5,12 +5,12 @@ import { dirname, join } from 'path'
 import { authenticateToken } from '../middleware/auth.js'
 
 const router = express.Router()
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const appFilePath = fileURLToPath(import.meta.url)
+const appDirPath = dirname(appFilePath)
 
 function readJsonSafe(filename, defaultVal) {
   try {
-    const p = join(__dirname, '../data', filename)
+    const p = join(appDirPath, '../data', filename)
     if (existsSync(p)) {
       return JSON.parse(readFileSync(p, 'utf8'))
     }
