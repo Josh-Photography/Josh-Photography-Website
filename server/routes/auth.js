@@ -1,9 +1,10 @@
 import express from 'express'
 import bcrypt from 'bcryptjs'
-import { readFileSync, writeFileSync, existsSync } from 'fs'
+import { existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import { generateToken, authenticateToken } from '../middleware/auth.js'
+import { readJsonData, writeJsonData } from '../utils/jsonData.js'
 
 const router = express.Router()
 const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
@@ -18,7 +19,7 @@ function getAdminPath() {
 }
 
 // Initialize admin if not exists
-function initAdmin() {
+async function initAdmin() {
   const defaultAdmin = {
     admin: {
       username: 'joshyjose282@gmail.com',
@@ -27,33 +28,15 @@ function initAdmin() {
     }
   }
 
-  try {
-    const adminPath = getAdminPath()
-    if (!existsSync(adminPath)) {
-      try {
-        writeFileSync(adminPath, JSON.stringify(defaultAdmin, null, 2))
-      } catch (_) {}
-      return defaultAdmin
-    }
+  const data = await readJsonData('admin', getAdminPath(), defaultAdmin)
+  if (!data?.admin?.password) return defaultAdmin
 
-    const data = JSON.parse(readFileSync(adminPath, 'utf8'))
-    if (!data?.admin?.password) return defaultAdmin
-    
-    // Hash password if not already hashed
-    if (!data.admin.password.startsWith('$2a$') && !data.admin.password.startsWith('$2b$')) {
-      data.admin.password = bcrypt.hashSync(data.admin.password || 'joshyjose@studio123', 10)
-      try {
-        writeFileSync(adminPath, JSON.stringify(data, null, 2))
-      } catch (_) {}
-    }
-    return data
-  } catch (error) {
-    return defaultAdmin
+  if (!data.admin.password.startsWith('$2a$') && !data.admin.password.startsWith('$2b$')) {
+    data.admin.password = bcrypt.hashSync(data.admin.password || 'joshyjose@studio123', 10)
+    await writeJsonData('admin', getAdminPath(), data)
   }
+  return data
 }
-
-// Initialize on load
-initAdmin()
 
 // Login
 router.post('/login', async (req, res) => {
@@ -64,7 +47,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Username or email and password required' })
     }
 
-    const data = initAdmin()
+    const data = await initAdmin()
     const cleanUser = String(username).toLowerCase().trim()
     const storedUser = String(data.admin.username).toLowerCase().trim()
     const storedEmail = String(data.admin.email || '').toLowerCase().trim()
@@ -107,7 +90,7 @@ router.post('/change-password', authenticateToken, async (req, res) => {
       return res.status(400).json({ error: 'Current and new password required' })
     }
 
-    const data = initAdmin()
+    const data = await initAdmin()
     const validPassword = await bcrypt.compare(currentPassword, data.admin.password)
     
     if (!validPassword) {
@@ -115,9 +98,7 @@ router.post('/change-password', authenticateToken, async (req, res) => {
     }
 
     data.admin.password = await bcrypt.hash(newPassword, 10)
-    try {
-      writeFileSync(getAdminPath(), JSON.stringify(data, null, 2))
-    } catch (_) {}
+    await writeJsonData('admin', getAdminPath(), data)
     
     res.json({ message: 'Password updated successfully' })
   } catch (error) {

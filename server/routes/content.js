@@ -61,9 +61,9 @@ function readContent() {
 }
 
 function writeContent(data) {
-  try {
+  if (!isMongoConnected()) {
     writeFileSync(getContentPath(), JSON.stringify(data, null, 2))
-  } catch (_) {}
+  }
 }
 
 async function getFullContent() {
@@ -88,18 +88,15 @@ async function getFullContent() {
 }
 
 async function persistContent(content) {
-  writeContent(content)
   clearCache('main_content')
   if (isMongoConnected()) {
-    try {
-      await Content.findOneAndUpdate(
-        { key: 'main_content' },
-        { ...content, key: 'main_content' },
-        { upsert: true, new: true }
-      )
-    } catch (e) {
-      console.error('[Database] Failed to save content to MongoDB:', e.message)
-    }
+    await Content.findOneAndUpdate(
+      { key: 'main_content' },
+      { ...content, key: 'main_content' },
+      { upsert: true, new: true }
+    )
+  } else {
+    writeContent(content)
   }
 }
 

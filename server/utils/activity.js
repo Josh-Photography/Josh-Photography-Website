@@ -1,6 +1,7 @@
-import { readFileSync, writeFileSync, existsSync } from 'fs'
+import { existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import { readJsonData, writeJsonData } from './jsonData.js'
 
 const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
 function getActivityPath() {
@@ -12,13 +13,10 @@ function getActivityPath() {
   return candidates.find((p) => existsSync(p)) || candidates[0]
 }
 
-export function logActivity(action, user = 'Admin') {
+export async function logActivity(action, user = 'Admin') {
   try {
     const actPath = getActivityPath()
-    let list = []
-    if (existsSync(actPath)) {
-      list = JSON.parse(readFileSync(actPath, 'utf8'))
-    }
+    let list = await readJsonData('activity', actPath, [])
     list.unshift({
       id: 'act-' + Date.now(),
       action,
@@ -28,9 +26,7 @@ export function logActivity(action, user = 'Admin') {
     if (list.length > 50) {
       list = list.slice(0, 50)
     }
-    try {
-      writeFileSync(actPath, JSON.stringify(list, null, 2))
-    } catch (_) {}
+    await writeJsonData('activity', actPath, list)
   } catch (err) {
     console.error('Failed to log activity:', err)
   }

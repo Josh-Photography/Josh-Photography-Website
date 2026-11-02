@@ -1,34 +1,27 @@
 import express from 'express'
-import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import { authenticateToken } from '../middleware/auth.js'
 import { logActivity } from '../utils/activity.js'
+import { readJsonData, writeJsonData } from '../utils/jsonData.js'
 
 const router = express.Router()
 const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
 const contactsPath = join(appDirPath, '../data/contacts.json')
 
 function readContacts() {
-  if (!existsSync(contactsPath)) {
-    return []
-  }
-  try {
-    return JSON.parse(readFileSync(contactsPath, 'utf8'))
-  } catch (e) {
-    return []
-  }
+  return readJsonData('contacts', contactsPath, [])
 }
 
 function writeContacts(data) {
-  writeFileSync(contactsPath, JSON.stringify(data, null, 2))
+  return writeJsonData('contacts', contactsPath, data)
 }
 
 // Get all contacts (admin only)
-router.get('/', authenticateToken, (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
-    const contacts = readContacts()
+    const contacts = await readContacts()
     contacts.sort((a, b) => new Date(b.submittedAt || 0) - new Date(a.submittedAt || 0))
     res.json(contacts)
   } catch (error) {
@@ -38,7 +31,7 @@ router.get('/', authenticateToken, (req, res) => {
 })
 
 // Submit contact / booking inquiry (public)
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { name, email, phone, service, eventDate, location, message } = req.body
 
@@ -50,7 +43,7 @@ router.post('/', (req, res) => {
       return res.status(400).json({ error: 'Invalid email format' })
     }
 
-    const contacts = readContacts()
+    const contacts = await readContacts()
 
     const newContact = {
       id: uuidv4(),
@@ -66,7 +59,7 @@ router.post('/', (req, res) => {
     }
 
     contacts.unshift(newContact)
-    writeContacts(contacts)
+    await writeContacts(contacts)
     logActivity(`New inquiry received from ${newContact.name} (${newContact.service})`, 'System')
 
     res.status(201).json({
@@ -80,9 +73,9 @@ router.post('/', (req, res) => {
 })
 
 // Update message status (unread / read) (protected)
-router.put('/:id', authenticateToken, (req, res) => {
+router.put('/:id', authenticateToken, async (req, res) => {
   try {
-    const contacts = readContacts()
+    const contacts = await readContacts()
     const { id } = req.params
     const index = contacts.findIndex((c) => c.id === id)
 
@@ -92,7 +85,7 @@ router.put('/:id', authenticateToken, (req, res) => {
 
     const { status } = req.body
     contacts[index].status = status || (contacts[index].status === 'unread' ? 'read' : 'unread')
-    writeContacts(contacts)
+    await writeContacts(contacts)
 
     res.json(contacts[index])
   } catch (error) {
@@ -101,9 +94,9 @@ router.put('/:id', authenticateToken, (req, res) => {
 })
 
 // Delete contact message (protected)
-router.delete('/:id', authenticateToken, (req, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
   try {
-    const contacts = readContacts()
+    const contacts = await readContacts()
     const { id } = req.params
     const filtered = contacts.filter((c) => c.id !== id)
 
@@ -111,7 +104,7 @@ router.delete('/:id', authenticateToken, (req, res) => {
       return res.status(404).json({ error: 'Message not found' })
     }
 
-    writeContacts(filtered)
+    await writeContacts(filtered)
     logActivity(`Deleted message #${id}`)
     res.json({ message: 'Message deleted successfully', id })
   } catch (error) {

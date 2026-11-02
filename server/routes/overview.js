@@ -6,6 +6,7 @@ import { authenticateToken } from '../middleware/auth.js'
 import Photo from '../models/Photo.js'
 import Content from '../models/Content.js'
 import { isMongoConnected } from '../utils/db.js'
+import { readJsonData } from '../utils/jsonData.js'
 
 const router = express.Router()
 const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
@@ -27,11 +28,20 @@ function readJsonSafe(filename, defaultVal) {
   return defaultVal
 }
 
+function getJsonPath(filename) {
+  const candidates = [
+    join(appDirPath, '../data', filename),
+    join(process.cwd(), 'server/data', filename),
+    join(process.cwd(), 'data', filename),
+  ]
+  return candidates.find((candidate) => existsSync(candidate)) || candidates[0]
+}
+
 router.get('/', authenticateToken, async (req, res) => {
   try {
-    const contacts = readJsonSafe('contacts.json', [])
-    const comments = readJsonSafe('comments.json', [])
-    const activity = readJsonSafe('activity.json', [])
+    const contacts = await readJsonData('contacts', getJsonPath('contacts.json'), [])
+    const comments = await readJsonData('comments', getJsonPath('comments.json'), [])
+    const activity = await readJsonData('activity', getJsonPath('activity.json'), [])
 
     let photos = []
     let content = {}

@@ -1,6 +1,6 @@
 import express from 'express'
 import multer from 'multer'
-import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync } from 'fs'
+import { existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join, extname } from 'path'
 import { v4 as uuidv4 } from 'uuid'
@@ -8,6 +8,7 @@ import { authenticateToken } from '../middleware/auth.js'
 import { logActivity } from '../utils/activity.js'
 import { processImageUpload } from '../utils/storage.js'
 import Offer from '../models/Offer.js'
+import { readJsonData, writeJsonData } from '../utils/jsonData.js'
 import { isMongoConnected, getCached, setCached, clearCache } from '../utils/db.js'
 
 const router = express.Router()
@@ -21,33 +22,8 @@ function getOffersPath() {
   return candidates.find((p) => existsSync(p)) || candidates[0]
 }
 
-const uploadsPath = join(appDirPath, '../uploads')
-const publicUploadsPath = join(appDirPath, '../../public/uploads')
-
-try {
-  if (!existsSync(uploadsPath)) {
-    mkdirSync(uploadsPath, { recursive: true })
-  }
-} catch (_) {}
-try {
-  if (!existsSync(publicUploadsPath)) {
-    mkdirSync(publicUploadsPath, { recursive: true })
-  }
-} catch (_) {}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsPath)
-  },
-  filename: (req, file, cb) => {
-    const cleanName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_')
-    const uniqueName = `offer-${Date.now()}-${uuidv4().slice(0, 8)}${extname(cleanName)}`
-    cb(null, uniqueName)
-  },
-})
-
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 15 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
@@ -59,53 +35,30 @@ const upload = multer({
   },
 })
 
-function readOffersData() {
-  const p = getOffersPath()
-  if (!existsSync(p)) {
-    return {
-      sectionSettings: {
-        enabled: true,
-        eyebrow: 'SPECIAL OFFERS & SEASONAL PROMOTIONS',
-        title: 'Limited-Time Photography Promotions',
-        subtitle: 'Discover our bespoke seasonal collections, featuring generous inclusions, complimentary keepsake upgrades, and preferential calendar priority.',
-      },
-      offers: [],
-    }
+async function readOffersData() {
+  const data = await readJsonData('offers', getOffersPath(), {
+    sectionSettings: {
+      enabled: true,
+      eyebrow: 'SPECIAL OFFERS & SEASONAL PROMOTIONS',
+      title: 'Limited-Time Photography Promotions',
+      subtitle: 'Discover our bespoke seasonal collections, featuring generous inclusions, complimentary keepsake upgrades, and preferential calendar priority.',
+    },
+    offers: [],
+  })
+
+  if (isMongoConnected()) {
+    const storedOffers = await Offer.find({}).sort({ order: 1 }).lean()
+    if (storedOffers.length) data.offers = storedOffers
   }
-  try {
-    const raw = readFileSync(p, 'utf8')
-    if (!raw.trim()) {
-      return { sectionSettings: { enabled: true }, offers: [] }
-    }
-    const parsed = JSON.parse(raw)
-    return {
-      sectionSettings: parsed.sectionSettings || { enabled: true },
-      offers: Array.isArray(parsed.offers) ? parsed.offers : [],
-    }
-  } catch (err) {
-    console.error('Error parsing offers.json:', err)
-    return { sectionSettings: { enabled: true }, offers: [] }
+
+  return {
+    sectionSettings: data.sectionSettings || { enabled: true },
+    offers: Array.isArray(data.offers) ? data.offers : [],
   }
 }
 
-function writeOffersData(data) {
-  const serialized = JSON.stringify(data, null, 2)
-  try {
-    writeFileSync(getOffersPath(), serialized, 'utf8')
-  } catch (err) {
-    if (err.code === 'EBUSY' || err.code === 'EPERM') {
-      try {
-        const tempPath = `${offersPath}.${Date.now()}.tmp`
-        writeFileSync(tempPath, serialized, 'utf8')
-        writeFileSync(offersPath, serialized, 'utf8')
-      } catch (inner) {
-        console.error('Fatal offers write error:', inner)
-        throw inner
-      }
-    } else {
-      throw err
-    }
-  }
+async function writeOffersData(data) {
+  await writeJsonData('offers', getOffersPath(), data)
 }
 
 function computeOfferStatus(offer) {
@@ -150,11 +103,11 @@ router.get('/', async (req, res) => {
     }
 
     if (!allOffers.length) {
-      const data = readOffersData()
+      const data = await readOffersData()
       settings = data.sectionSettings || { enabled: true }
       allOffers = Array.isArray(data.offers) ? data.offers : []
     } else {
-      const data = readOffersData()
+      const data = await readOffersData()
       settings = data.sectionSettings || { enabled: true }
     }
 
@@ -200,7 +153,7 @@ router.get('/admin', authenticateToken, async (req, res) => {
     res.set('Expires', '0')
 
     let allOffers = []
-    const data = readOffersData()
+    const data = await readOffersData()
 
     if (isMongoConnected()) {
       try {
@@ -232,14 +185,14 @@ router.get('/admin', authenticateToken, async (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────────
 // 3. Admin API: Update Section Settings (Global Toggle & Header)
 // ─────────────────────────────────────────────────────────────────────────────
-router.put('/settings', authenticateToken, (req, res) => {
+router.put('/settings', authenticateToken, async (req, res) => {
   try {
-    const data = readOffersData()
+    const data = await readOffersData()
     data.sectionSettings = {
       ...data.sectionSettings,
       ...req.body,
     }
-    writeOffersData(data)
+    await writeOffersData(data)
     logActivity(`Updated Special Offers settings (${data.sectionSettings.enabled ? 'Enabled' : 'Hidden'})`)
     res.json(data.sectionSettings)
   } catch (error) {
@@ -256,6 +209,8 @@ router.post('/upload', authenticateToken, upload.single('image'), async (req, re
     if (!req.file) {
       return res.status(400).json({ error: 'No promotional image file uploaded' })
     }
+    const cleanName = req.file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_')
+    req.file.filename = `offer-${Date.now()}-${uuidv4().slice(0, 8)}${extname(cleanName)}`
     const result = await processImageUpload(req.file, { folder: 'josh_offers' })
     logActivity(`Uploaded promotional banner: ${req.file.originalname}`)
     res.json({ url: result.url, filename: result.filename, provider: result.provider })
@@ -270,7 +225,7 @@ router.post('/upload', authenticateToken, upload.single('image'), async (req, re
 // ─────────────────────────────────────────────────────────────────────────────
 router.post('/', authenticateToken, async (req, res) => {
   try {
-    const data = readOffersData()
+    const data = await readOffersData()
     const {
       title,
       tagline,
@@ -325,15 +280,11 @@ router.post('/', authenticateToken, async (req, res) => {
 
     data.offers = data.offers || []
     data.offers.push(newOffer)
-    writeOffersData(data)
 
     if (isMongoConnected()) {
-      try {
-        await Offer.findOneAndUpdate({ id: newOffer.id }, newOffer, { upsert: true, new: true })
-      } catch (dbErr) {
-        console.error('[Database] Failed to save offer to MongoDB:', dbErr.message)
-      }
+      await Offer.findOneAndUpdate({ id: newOffer.id }, newOffer, { upsert: true, new: true })
     }
+    await writeOffersData(data)
     clearCache('offers')
 
     logActivity(`Created seasonal offer: "${newOffer.title}" (${discountNum}% off)`)
@@ -349,7 +300,7 @@ router.post('/', authenticateToken, async (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────────
 router.put('/:id', authenticateToken, async (req, res) => {
   try {
-    const data = readOffersData()
+    const data = await readOffersData()
     const { id } = req.params
     const index = (data.offers || []).findIndex((o) => String(o.id) === String(id))
 
@@ -396,15 +347,11 @@ router.put('/:id', authenticateToken, async (req, res) => {
     updated.computedStatus = computeOfferStatus(updated)
 
     data.offers[index] = updated
-    writeOffersData(data)
 
     if (isMongoConnected()) {
-      try {
-        await Offer.findOneAndUpdate({ id }, { $set: updated }, { upsert: true, new: true })
-      } catch (dbErr) {
-        console.error('[Database] Failed to update offer in MongoDB:', dbErr.message)
-      }
+      await Offer.findOneAndUpdate({ id }, { $set: updated }, { upsert: true, new: true })
     }
+    await writeOffersData(data)
     clearCache('offers')
 
     logActivity(`Updated promotional offer: "${updated.title}"`)
@@ -420,7 +367,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────────
 router.delete('/:id', authenticateToken, async (req, res) => {
   try {
-    const data = readOffersData()
+    const data = await readOffersData()
     const { id } = req.params
     const beforeCount = (data.offers || []).length
     const deletedItem = (data.offers || []).find((o) => String(o.id) === String(id))
@@ -431,15 +378,10 @@ router.delete('/:id', authenticateToken, async (req, res) => {
       return res.status(404).json({ error: 'Offer not found' })
     }
 
-    writeOffersData(data)
-
     if (isMongoConnected()) {
-      try {
-        await Offer.findOneAndDelete({ id })
-      } catch (dbErr) {
-        console.error('[Database] Failed to delete offer from MongoDB:', dbErr.message)
-      }
+      await Offer.findOneAndDelete({ id })
     }
+    await writeOffersData(data)
     clearCache('offers')
 
     logActivity(`Deleted promotional offer: "${deletedItem?.title || id}"`)

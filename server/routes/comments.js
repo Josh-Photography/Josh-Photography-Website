@@ -1,34 +1,27 @@
 import express from 'express'
-import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import { v4 as uuidv4 } from 'uuid'
 import { authenticateToken } from '../middleware/auth.js'
 import { logActivity } from '../utils/activity.js'
+import { readJsonData, writeJsonData } from '../utils/jsonData.js'
 
 const router = express.Router()
 const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
 const commentsPath = join(appDirPath, '../data/comments.json')
 
 function readComments() {
-  if (!existsSync(commentsPath)) {
-    return []
-  }
-  try {
-    return JSON.parse(readFileSync(commentsPath, 'utf8'))
-  } catch (e) {
-    return []
-  }
+  return readJsonData('comments', commentsPath, [])
 }
 
 function writeComments(data) {
-  writeFileSync(commentsPath, JSON.stringify(data, null, 2))
+  return writeJsonData('comments', commentsPath, data)
 }
 
 // Get all comments (admin auth or public approved)
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const comments = readComments()
+    const comments = await readComments()
     // If not authenticated, return only approved
     const isPublic = !req.headers.authorization
     const result = isPublic ? comments.filter((c) => c.approved) : comments
@@ -41,9 +34,9 @@ router.get('/', (req, res) => {
 })
 
 // Get comments for specific photo
-router.get('/photo/:photoId', (req, res) => {
+router.get('/photo/:photoId', async (req, res) => {
   try {
-    const comments = readComments()
+    const comments = await readComments()
     const photoComments = comments.filter(
       (c) => c.photoId === req.params.photoId && c.approved
     )
@@ -54,7 +47,7 @@ router.get('/photo/:photoId', (req, res) => {
 })
 
 // Add comment (public)
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { photoId, name, email, comment } = req.body
 
@@ -62,7 +55,7 @@ router.post('/', (req, res) => {
       return res.status(400).json({ error: 'Name and comment are required' })
     }
 
-    const comments = readComments()
+    const comments = await readComments()
 
     const newComment = {
       id: uuidv4(),
@@ -75,7 +68,7 @@ router.post('/', (req, res) => {
     }
 
     comments.unshift(newComment)
-    writeComments(comments)
+    await writeComments(comments)
     logActivity(`New comment submitted by ${newComment.name} (pending approval)`, 'System')
 
     res.status(201).json(newComment)
@@ -86,9 +79,9 @@ router.post('/', (req, res) => {
 })
 
 // Approve / moderate comment (protected)
-router.put('/:id', authenticateToken, (req, res) => {
+router.put('/:id', authenticateToken, async (req, res) => {
   try {
-    const comments = readComments()
+    const comments = await readComments()
     const { id } = req.params
     const index = comments.findIndex((c) => c.id === id)
 
@@ -98,7 +91,7 @@ router.put('/:id', authenticateToken, (req, res) => {
 
     const { approved } = req.body
     comments[index].approved = approved !== undefined ? approved : !comments[index].approved
-    writeComments(comments)
+    await writeComments(comments)
     logActivity(`${comments[index].approved ? 'Approved' : 'Unapproved'} comment #${id}`)
 
     res.json(comments[index])
@@ -108,9 +101,9 @@ router.put('/:id', authenticateToken, (req, res) => {
 })
 
 // Delete comment (protected)
-router.delete('/:id', authenticateToken, (req, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
   try {
-    const comments = readComments()
+    const comments = await readComments()
     const { id } = req.params
     const filtered = comments.filter((c) => c.id !== id)
 
@@ -118,7 +111,7 @@ router.delete('/:id', authenticateToken, (req, res) => {
       return res.status(404).json({ error: 'Comment not found' })
     }
 
-    writeComments(filtered)
+    await writeComments(filtered)
     logActivity(`Deleted comment #${id}`)
     res.json({ message: 'Comment deleted successfully', id })
   } catch (error) {

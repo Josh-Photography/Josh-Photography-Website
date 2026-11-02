@@ -65,6 +65,7 @@ function readPhotos() {
 }
 
 function writePhotos(data) {
+  if (isMongoConnected()) return
   try {
     writeFileSync(getPhotosPath(), JSON.stringify(data, null, 2))
   } catch (_) {}
