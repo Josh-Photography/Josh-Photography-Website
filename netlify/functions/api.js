@@ -5,6 +5,11 @@ import { connectDB } from '../../server/utils/db.js'
 const serverlessHandler = serverless(app)
 
 export const handler = async (event, context) => {
+  // Prevent Lambda from waiting for open event loop / connection pool
+  if (context) {
+    context.callbackWaitsForEmptyEventLoop = false
+  }
+
   // Ensure MongoDB is connected before handling any request (critical for cold starts)
   try {
     await connectDB()

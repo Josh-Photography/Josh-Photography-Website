@@ -4255,16 +4255,29 @@ function Dashboard({ token, onLogout }) {
           overviewRes,
           offersRes
         ] = await Promise.all([
-          fetch(`${API_URL}/content`).catch(() => null),
-          fetch(`${API_URL}/photos`).catch(() => null),
-          fetch(`${API_URL}/contact`, { headers: authHeaders }).catch(() => null),
-          fetch(`${API_URL}/comments`, { headers: authHeaders }).catch(() => null),
-          fetch(`${API_URL}/overview`, { headers: authHeaders }).catch(() => null),
-          fetch(`${API_URL}/offers/admin`, { headers: authHeaders }).catch(() => null)
+          fetch(`${API_URL}/content?_t=${Date.now()}`, { headers: { ...authHeaders, 'Cache-Control': 'no-cache' } }).catch(() => null),
+          fetch(`${API_URL}/photos?_t=${Date.now()}`, { headers: { ...authHeaders, 'Cache-Control': 'no-cache' } }).catch(() => null),
+          fetch(`${API_URL}/contact?_t=${Date.now()}`, { headers: authHeaders }).catch(() => null),
+          fetch(`${API_URL}/comments?_t=${Date.now()}`, { headers: authHeaders }).catch(() => null),
+          fetch(`${API_URL}/overview?_t=${Date.now()}`, { headers: authHeaders }).catch(() => null),
+          fetch(`${API_URL}/offers/admin?_t=${Date.now()}`, { headers: authHeaders }).catch(() => null)
         ])
 
         if (contentRes && contentRes.ok) live.content = await contentRes.json()
-        if (photosRes && photosRes.ok) live.photos = await photosRes.json()
+        if (photosRes && photosRes.ok) {
+          live.photos = await photosRes.json()
+          const photoArray = live.photos.photos || (Array.isArray(live.photos) ? live.photos : null)
+          if (photoArray && photoArray.length > 0) {
+            try {
+              const currentStore = dataService.getAllDataSync()
+              const updatedStore = { ...currentStore, photos: photoArray }
+              dataService.memoryCache = updatedStore
+              if (typeof window !== 'undefined') {
+                localStorage.setItem('josh_photography_cms_data_v2', JSON.stringify(updatedStore))
+              }
+            } catch (_) {}
+          }
+        }
         if (contactsRes && contactsRes.ok) live.contacts = await contactsRes.json()
         if (commentsRes && commentsRes.ok) live.comments = await commentsRes.json()
         if (offersRes && offersRes.ok) live.offers = await offersRes.json()

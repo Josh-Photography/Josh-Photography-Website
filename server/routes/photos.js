@@ -95,13 +95,19 @@ function normalizeCategory(cat) {
 // Get all photos (public or admin with query filters)
 router.get('/', async (req, res) => {
   try {
-    const { category, search, published, sort, page, limit } = req.query
+    // Ensure MongoDB connection
+    await connectDB().catch(() => {})
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+
+    const { category, search, published, sort, page, limit, t, _t, nocache } = req.query
+    const bypassCache = t || _t || nocache || req.headers.authorization || req.headers['cache-control']?.includes('no-cache')
     const cacheKey = `photos_${category || 'all'}_${search || ''}_${published || ''}_${sort || ''}_${page || ''}_${limit || ''}`
 
-    // In-Memory Fast Cache for Sub-millisecond SEO Page Load Speeds
-    const cached = getCached(cacheKey)
-    if (cached) {
-      return res.json(cached)
+    if (!bypassCache) {
+      const cached = getCached(cacheKey)
+      if (cached) {
+        return res.json(cached)
+      }
     }
 
     if (isMongoConnected()) {
@@ -249,13 +255,21 @@ router.get('/', async (req, res) => {
 // Get photos by category (public)
 router.get('/category/:category', async (req, res) => {
   try {
+    // Ensure MongoDB connection
+    await connectDB().catch(() => {})
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+
     const { category } = req.params
     const targetCat = normalizeCategory(category)
+    const { t, _t, nocache } = req.query
+    const bypassCache = t || _t || nocache || req.headers['cache-control']?.includes('no-cache')
     const cacheKey = `photos_cat_${targetCat}`
 
-    const cached = getCached(cacheKey)
-    if (cached) {
-      return res.json(cached)
+    if (!bypassCache) {
+      const cached = getCached(cacheKey)
+      if (cached) {
+        return res.json(cached)
+      }
     }
 
     if (isMongoConnected()) {
