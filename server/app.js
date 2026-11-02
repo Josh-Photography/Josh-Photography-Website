@@ -46,6 +46,12 @@ const app = express()
 app.use(cors())
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ extended: true, limit: '50mb' }))
+
+// Re-ensure MongoDB on every request to handle Netlify cold-starts
+app.use(async (req, res, next) => {
+  try { await connectDB() } catch (_) {}
+  next()
+})
 app.use('/uploads', express.static(join(appDirPath, 'uploads')))
 
 // Routes

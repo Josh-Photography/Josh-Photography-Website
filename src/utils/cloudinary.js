@@ -110,7 +110,7 @@ export function getLightboxImageUrl(url, width = 1800) {
  *
  * @param {File|Blob} file - The image file to upload
  * @param {string} [folderOrCategory] - Optional category or subfolder
- * @returns {Promise<string>} Direct HTTPS Cloudinary secure URL
+ * @returns {Promise<{ url: string, publicId: string }>} Upload result with secure URL and public_id
  */
 export async function uploadToCloudinaryDirect(file, folderOrCategory) {
   if (!file) throw new Error('No file provided for upload')
@@ -158,6 +158,6 @@ export async function uploadToCloudinaryDirect(file, folderOrCategory) {
     } catch (_) {}
   }
 
-  return data.secure_url
+  return { url: data.secure_url, publicId: data.public_id || '' }
 }
 

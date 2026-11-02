@@ -36,6 +36,7 @@ const convertGoogleDriveLink = (url) => {
 }
 
 // Upload a single file: first tries backend API; if on standalone Netlify, uploads directly to Cloudinary
+// Returns { url, publicId } on success
 async function uploadImageFile(file, token, folderOrCategory) {
   if (!file) return null
 
@@ -62,7 +63,7 @@ async function uploadImageFile(file, token, folderOrCategory) {
     })
     if (res.ok) {
       const data = await res.json()
-      if (data.url) return data.url
+      if (data.url) return { url: data.url, publicId: data.publicId || data.public_id || '' }
     }
   } catch (err) {
     console.warn('Backend upload endpoint unavailable, switching to direct Cloudinary unsigned upload:', err.message)
@@ -70,8 +71,13 @@ async function uploadImageFile(file, token, folderOrCategory) {
 
   // 2. Second attempt: Direct Cloudinary Unsigned Upload (for Netlify production static deployment)
   try {
-    const directUrl = await uploadToCloudinaryDirect(file, folderOrCategory)
-    if (directUrl) return directUrl
+    const result = await uploadToCloudinaryDirect(file, folderOrCategory)
+    if (result) {
+      // uploadToCloudinaryDirect now returns { url, publicId }
+      if (typeof result === 'object' && result.url) return result
+      // Legacy string fallback
+      return { url: result, publicId: '' }
+    }
   } catch (cloudErr) {
     console.warn('Direct Cloudinary upload failed, falling back to local base64:', cloudErr.message)
   }
@@ -79,7 +85,7 @@ async function uploadImageFile(file, token, folderOrCategory) {
   // 3. Fallback: Base64 Data URL (offline survival)
   return new Promise((resolve) => {
     const reader = new FileReader()
-    reader.onload = (e) => resolve(e.target.result)
+    reader.onload = (e) => resolve({ url: e.target.result, publicId: '' })
     reader.readAsDataURL(file)
   })
 }
@@ -2071,17 +2077,27 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
     const existingCount = photos.filter((p) => isCategoryMatch(p.category || p.categorySlug, normCategory)).length
     let maxOrder = photos.reduce((max, p) => Math.max(max, p.order || 0), 0)
 
+    const authToken = token || (typeof window !== 'undefined' ? (sessionStorage.getItem('adminToken') || localStorage.getItem('adminToken')) : '')
+    const authHeaders = {
+      'Content-Type': 'application/json',
+      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {})
+    }
+
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
       setUploadStatus(`Uploading photo ${i + 1} of ${files.length}: ${file.name}...`)
       try {
-        const url = await uploadImageFile(file, token, normCategory)
+        const uploadResult = await uploadImageFile(file, authToken, normCategory)
+        // Handle both { url, publicId } object and legacy string return
+        const photoUrl = (uploadResult && typeof uploadResult === 'object') ? uploadResult.url : uploadResult
+        const photoPublicId = (uploadResult && typeof uploadResult === 'object') ? (uploadResult.publicId || '') : ''
+
         const cleanTitle = file.name
           .replace(/\.[^/.]+$/, '')
           .replace(/[-_]/g, ' ')
           .replace(/\b\w/g, (l) => l.toUpperCase())
 
-        addedList.push({
+        const newPhoto = {
           id: `photo-${Date.now()}-${i}`,
           num: String(existingCount + addedList.length + 1).padStart(2, '0'),
           category: normCategory,
@@ -2089,13 +2105,39 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
           title: cleanTitle,
           desc: `Documentary capture celebrating authentic emotional moments.`,
           alt: cleanTitle,
-          src: url,
-          image: url,
-          srcLarge: url,
+          src: photoUrl,
+          image: photoUrl,
+          srcLarge: photoUrl,
+          publicId: photoPublicId,
           order: ++maxOrder,
           published: true,
           createdAt: new Date().toISOString()
-        })
+        }
+
+        // Immediately POST new photo directly to backend (persists to MongoDB Atlas)
+        try {
+          const postRes = await fetch(`${API_URL}/photos`, {
+            method: 'POST',
+            headers: authHeaders,
+            body: JSON.stringify({
+              src: photoUrl,
+              title: cleanTitle,
+              category: normCategory,
+              published: true,
+              id: newPhoto.id,
+              publicId: photoPublicId,
+            })
+          })
+          if (postRes.ok) {
+            const saved = await postRes.json()
+            // Use backend-assigned ID if returned
+            if (saved.id) newPhoto.id = saved.id
+          }
+        } catch (postErr) {
+          console.warn('Direct POST to backend failed, will sync via PUT:', postErr.message)
+        }
+
+        addedList.push(newPhoto)
       } catch (err) {
         console.error('File upload failed:', err)
       }
@@ -2107,6 +2149,8 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
     setIsUploading(false)
     setUploadStatus(`Successfully uploaded ${addedList.length} photograph(s)!`)
     setTimeout(() => setUploadStatus(''), 4000)
+    // Force reload from backend to confirm persistence
+    if (onReload) setTimeout(onReload, 1500)
   }
 
   // Toggle Publish

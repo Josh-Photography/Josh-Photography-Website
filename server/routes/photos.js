@@ -8,7 +8,7 @@ import { authenticateToken } from '../middleware/auth.js'
 import { logActivity } from '../utils/activity.js'
 import { processImageUpload, removeLocalUpload, deleteMediaAsset } from '../utils/storage.js'
 import Photo from '../models/Photo.js'
-import { isMongoConnected, getCached, setCached, clearCache } from '../utils/db.js'
+import { isMongoConnected, getCached, setCached, clearCache, connectDB } from '../utils/db.js'
 
 const router = express.Router()
 const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
@@ -312,11 +312,18 @@ router.get('/categories', (req, res) => {
 router.post(
   '/',
   authenticateToken,
-  upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'photos', maxCount: 20 }]),
+  (req, res, next) => {
+    // Only run multer for multipart/form-data requests; skip for JSON (src-only uploads)
+    const contentType = req.headers['content-type'] || ''
+    if (contentType.includes('multipart/form-data')) {
+      return upload.fields([{ name: 'photo', maxCount: 1 }, { name: 'photos', maxCount: 20 }])(req, res, next)
+    }
+    next()
+  },
   async (req, res) => {
     try {
       const data = readPhotos()
-      const { title, desc, alt, category, order, published, src } = req.body
+      const { title, desc, alt, category, order, published, src, id: bodyId, publicId: bodyPublicId } = req.body
 
       const uploadedFiles = []
       if (req.files && req.files.photo) uploadedFiles.push(...req.files.photo)
@@ -362,7 +369,7 @@ router.post(
       } else if (src) {
         const photoTitle = title || 'New Photograph'
         const newPhoto = {
-          id: uuidv4(),
+          id: bodyId || uuidv4(),
           title: photoTitle,
           desc: desc || '',
           alt: alt || photoTitle,
@@ -371,6 +378,7 @@ router.post(
           image: src,
           src: src,
           srcLarge: src,
+          publicId: bodyPublicId || '',
           num: String(nextNum).padStart(2, '0'),
           order: order ? parseInt(order, 10) : ++maxOrder,
           published: published !== 'false' && published !== false,
