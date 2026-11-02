@@ -115,7 +115,7 @@ export default function About() {
 
   const photographerBadge = about.photographerBadge || '02 — MEET THE PHOTOGRAPHER'
   const photographerHeadline = about.photographerHeadline || 'A Passion for Authentic Storytelling'
-  const photographerName = about.photographerName || 'Josh'
+  const photographerName = about.photographerName || 'Joshy Jose'
   const photographerRole = about.photographerRole || 'Lead Photographer & Founder'
   const photographerImage = about.photographerImage || '/Fonder.jpeg'
   const photographerBio1 = about.photographerBio1 || 'Hello, I am Josh. As a photographer, my goal is simple: to document your most meaningful milestones so faithfully that every time you revisit your photographs, you are instantly transported back to how the moment truly felt.'
@@ -170,6 +170,37 @@ export default function About() {
           >
             {heroDescription}
           </motion.p>
+
+          {/* Personal Sign-off: Photographer Portrait, Name & Tag */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="mt-8 pt-6 border-t border-[#D8B77A]/25 max-w-md mx-auto flex items-center justify-center gap-4"
+          >
+            <div className="relative flex-shrink-0">
+              <img
+                src={photographerImage}
+                alt={photographerName}
+                className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-[#E5BA78] shadow-[0_4px_16px_rgba(0,0,0,0.5)]"
+                onError={(e) => {
+                  e.target.src = '/logo.png'
+                }}
+              />
+              <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-white/20" />
+            </div>
+            <div className="text-left">
+              <div className="font-serif text-lg sm:text-xl text-[#FAF4EA] font-medium tracking-wide">
+                {photographerName}
+              </div>
+              <div className="text-xs sm:text-sm text-[#E5BA78] font-sans tracking-wider uppercase font-medium">
+                {photographerRole}
+              </div>
+              <div className="text-[11px] text-[#FAF4EA]/60 font-sans tracking-wide">
+                Josh Photography
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
