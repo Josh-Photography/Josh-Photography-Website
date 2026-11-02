@@ -12,12 +12,16 @@ const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? di
 const publicUploadsPath = join(appDirPath, '../../public/uploads')
 const serverUploadsPath = join(appDirPath, '../uploads')
 
-if (!existsSync(publicUploadsPath)) {
-  mkdirSync(publicUploadsPath, { recursive: true })
-}
-if (!existsSync(serverUploadsPath)) {
-  mkdirSync(serverUploadsPath, { recursive: true })
-}
+try {
+  if (!existsSync(publicUploadsPath)) {
+    mkdirSync(publicUploadsPath, { recursive: true })
+  }
+} catch (_) {}
+try {
+  if (!existsSync(serverUploadsPath)) {
+    mkdirSync(serverUploadsPath, { recursive: true })
+  }
+} catch (_) {}
 
 /**
  * Uploads a file to Cloudinary if credentials exist; otherwise mirrors locally.
