@@ -12,16 +12,28 @@ import { isMongoConnected, getCached, setCached, clearCache } from '../utils/db.
 
 const router = express.Router()
 const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
-const contentPath = join(appDirPath, '../data/content.json')
+function getContentPath() {
+  const candidates = [
+    join(appDirPath, '../data/content.json'),
+    join(process.cwd(), 'server/data/content.json'),
+    join(process.cwd(), 'data/content.json'),
+  ]
+  return candidates.find((p) => existsSync(p)) || candidates[0]
+}
+
 const uploadsPath = join(appDirPath, '../uploads')
 const publicUploadsPath = join(appDirPath, '../../public/uploads')
 
-if (!existsSync(uploadsPath)) {
-  mkdirSync(uploadsPath, { recursive: true })
-}
-if (!existsSync(publicUploadsPath)) {
-  mkdirSync(publicUploadsPath, { recursive: true })
-}
+try {
+  if (!existsSync(uploadsPath)) {
+    mkdirSync(uploadsPath, { recursive: true })
+  }
+} catch (_) {}
+try {
+  if (!existsSync(publicUploadsPath)) {
+    mkdirSync(publicUploadsPath, { recursive: true })
+  }
+} catch (_) {}
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -48,14 +60,19 @@ const upload = multer({
 })
 
 function readContent() {
-  if (!existsSync(contentPath)) {
+  try {
+    const p = getContentPath()
+    if (!existsSync(p)) return {}
+    return JSON.parse(readFileSync(p, 'utf8'))
+  } catch (_) {
     return {}
   }
-  return JSON.parse(readFileSync(contentPath, 'utf8'))
 }
 
 function writeContent(data) {
-  writeFileSync(contentPath, JSON.stringify(data, null, 2))
+  try {
+    writeFileSync(getContentPath(), JSON.stringify(data, null, 2))
+  } catch (_) {}
 }
 
 async function getFullContent() {

@@ -7,42 +7,47 @@ import { generateToken, authenticateToken } from '../middleware/auth.js'
 
 const router = express.Router()
 const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
-const adminPath = join(appDirPath, '../data/admin.json')
+
+function getAdminPath() {
+  const candidates = [
+    join(appDirPath, '../data/admin.json'),
+    join(process.cwd(), 'server/data/admin.json'),
+    join(process.cwd(), 'data/admin.json'),
+  ]
+  return candidates.find((p) => existsSync(p)) || candidates[0]
+}
 
 // Initialize admin if not exists
 function initAdmin() {
+  const defaultAdmin = {
+    admin: {
+      username: 'joshyjose282@gmail.com',
+      email: 'joshyjose282@gmail.com',
+      password: bcrypt.hashSync('joshyjose@studio123', 10)
+    }
+  }
+
   try {
-    // Check if file exists
+    const adminPath = getAdminPath()
     if (!existsSync(adminPath)) {
-      const defaultAdmin = {
-        admin: {
-          username: 'joshyjose282@gmail.com',
-          email: 'joshyjose282@gmail.com',
-          password: bcrypt.hashSync('joshyjose@studio123', 10)
-        }
-      }
-      writeFileSync(adminPath, JSON.stringify(defaultAdmin, null, 2))
+      try {
+        writeFileSync(adminPath, JSON.stringify(defaultAdmin, null, 2))
+      } catch (_) {}
       return defaultAdmin
     }
 
     const data = JSON.parse(readFileSync(adminPath, 'utf8'))
+    if (!data?.admin?.password) return defaultAdmin
     
     // Hash password if not already hashed
     if (!data.admin.password.startsWith('$2a$') && !data.admin.password.startsWith('$2b$')) {
       data.admin.password = bcrypt.hashSync(data.admin.password || 'joshyjose@studio123', 10)
-      writeFileSync(adminPath, JSON.stringify(data, null, 2))
+      try {
+        writeFileSync(adminPath, JSON.stringify(data, null, 2))
+      } catch (_) {}
     }
     return data
   } catch (error) {
-    console.error('Error initializing admin:', error)
-    const defaultAdmin = {
-      admin: {
-        username: 'joshyjose282@gmail.com',
-        email: 'joshyjose282@gmail.com',
-        password: bcrypt.hashSync('joshyjose@studio123', 10)
-      }
-    }
-    writeFileSync(adminPath, JSON.stringify(defaultAdmin, null, 2))
     return defaultAdmin
   }
 }
@@ -110,7 +115,9 @@ router.post('/change-password', authenticateToken, async (req, res) => {
     }
 
     data.admin.password = await bcrypt.hash(newPassword, 10)
-    writeFileSync(adminPath, JSON.stringify(data, null, 2))
+    try {
+      writeFileSync(getAdminPath(), JSON.stringify(data, null, 2))
+    } catch (_) {}
     
     res.json({ message: 'Password updated successfully' })
   } catch (error) {

@@ -12,17 +12,29 @@ import { isMongoConnected, getCached, setCached, clearCache } from '../utils/db.
 
 const router = express.Router()
 const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
-const photosPath = join(appDirPath, '../data/photos.json')
+function getPhotosPath() {
+  const candidates = [
+    join(appDirPath, '../data/photos.json'),
+    join(process.cwd(), 'server/data/photos.json'),
+    join(process.cwd(), 'data/photos.json'),
+  ]
+  return candidates.find((p) => existsSync(p)) || candidates[0]
+}
+
 const uploadsPath = join(appDirPath, '../uploads')
 const publicUploadsPath = join(appDirPath, '../../public/uploads')
 
-// Ensure uploads directory exists
-if (!existsSync(uploadsPath)) {
-  mkdirSync(uploadsPath, { recursive: true })
-}
-if (!existsSync(publicUploadsPath)) {
-  mkdirSync(publicUploadsPath, { recursive: true })
-}
+// Ensure uploads directory exists safely
+try {
+  if (!existsSync(uploadsPath)) {
+    mkdirSync(uploadsPath, { recursive: true })
+  }
+} catch (_) {}
+try {
+  if (!existsSync(publicUploadsPath)) {
+    mkdirSync(publicUploadsPath, { recursive: true })
+  }
+} catch (_) {}
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -50,14 +62,21 @@ const upload = multer({
 })
 
 function readPhotos() {
-  if (!existsSync(photosPath)) {
+  try {
+    const p = getPhotosPath()
+    if (!existsSync(p)) {
+      return { categories: [], photos: [] }
+    }
+    return JSON.parse(readFileSync(p, 'utf8'))
+  } catch (_) {
     return { categories: [], photos: [] }
   }
-  return JSON.parse(readFileSync(photosPath, 'utf8'))
 }
 
 function writePhotos(data) {
-  writeFileSync(photosPath, JSON.stringify(data, null, 2))
+  try {
+    writeFileSync(getPhotosPath(), JSON.stringify(data, null, 2))
+  } catch (_) {}
 }
 
 function normalizeCategory(cat) {

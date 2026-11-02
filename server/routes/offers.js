@@ -12,16 +12,28 @@ import { isMongoConnected, getCached, setCached, clearCache } from '../utils/db.
 
 const router = express.Router()
 const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? dirname(fileURLToPath(import.meta.url)) : (typeof __dirname !== 'undefined' ? __dirname : process.cwd())
-const offersPath = join(appDirPath, '../data/offers.json')
+function getOffersPath() {
+  const candidates = [
+    join(appDirPath, '../data/offers.json'),
+    join(process.cwd(), 'server/data/offers.json'),
+    join(process.cwd(), 'data/offers.json'),
+  ]
+  return candidates.find((p) => existsSync(p)) || candidates[0]
+}
+
 const uploadsPath = join(appDirPath, '../uploads')
 const publicUploadsPath = join(appDirPath, '../../public/uploads')
 
-if (!existsSync(uploadsPath)) {
-  mkdirSync(uploadsPath, { recursive: true })
-}
-if (!existsSync(publicUploadsPath)) {
-  mkdirSync(publicUploadsPath, { recursive: true })
-}
+try {
+  if (!existsSync(uploadsPath)) {
+    mkdirSync(uploadsPath, { recursive: true })
+  }
+} catch (_) {}
+try {
+  if (!existsSync(publicUploadsPath)) {
+    mkdirSync(publicUploadsPath, { recursive: true })
+  }
+} catch (_) {}
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -48,7 +60,8 @@ const upload = multer({
 })
 
 function readOffersData() {
-  if (!existsSync(offersPath)) {
+  const p = getOffersPath()
+  if (!existsSync(p)) {
     return {
       sectionSettings: {
         enabled: true,
@@ -60,7 +73,7 @@ function readOffersData() {
     }
   }
   try {
-    const raw = readFileSync(offersPath, 'utf8')
+    const raw = readFileSync(p, 'utf8')
     if (!raw.trim()) {
       return { sectionSettings: { enabled: true }, offers: [] }
     }
@@ -78,7 +91,7 @@ function readOffersData() {
 function writeOffersData(data) {
   const serialized = JSON.stringify(data, null, 2)
   try {
-    writeFileSync(offersPath, serialized, 'utf8')
+    writeFileSync(getOffersPath(), serialized, 'utf8')
   } catch (err) {
     if (err.code === 'EBUSY' || err.code === 'EPERM') {
       try {
