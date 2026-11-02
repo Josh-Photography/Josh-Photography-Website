@@ -176,27 +176,28 @@ export default function About() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-8 pt-6 border-t border-[#D8B77A]/25 max-w-md mx-auto flex items-center justify-center gap-4"
+            className="mt-8 pt-6 border-t border-[#D8B77A]/25 max-w-lg mx-auto flex items-center justify-center gap-4 sm:gap-5 px-3"
           >
-            <div className="relative flex-shrink-0">
+            <div className="relative flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-[#E5BA78] shadow-[0_4px_16px_rgba(0,0,0,0.5)] bg-[#2B170E]">
               <img
                 src={photographerImage}
                 alt={photographerName}
-                className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-[#E5BA78] shadow-[0_4px_16px_rgba(0,0,0,0.5)]"
+                className="w-full h-full object-cover"
+                style={{ objectPosition: 'center 0%' }}
                 onError={(e) => {
                   e.target.src = '/logo.png'
                 }}
               />
-              <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-white/20" />
+              <div className="absolute inset-0 rounded-full ring-1 ring-inset ring-white/20 pointer-events-none" />
             </div>
             <div className="text-left">
-              <div className="font-serif text-lg sm:text-xl text-[#FAF4EA] font-medium tracking-wide">
+              <div className="font-serif text-xl sm:text-2xl text-[#FAF4EA] font-medium tracking-wide">
                 {photographerName}
               </div>
-              <div className="text-xs sm:text-sm text-[#E5BA78] font-sans tracking-wider uppercase font-medium">
+              <div className="text-xs sm:text-sm text-[#E5BA78] font-sans tracking-wider uppercase font-semibold">
                 {photographerRole}
               </div>
-              <div className="text-[11px] text-[#FAF4EA]/60 font-sans tracking-wide">
+              <div className="text-xs text-[#FAF4EA]/60 font-sans tracking-wide mt-0.5">
                 Josh Photography
               </div>
             </div>
