@@ -13,7 +13,7 @@ import {
   isCategoryMatch,
 } from '../utils/categoryUtils'
 import PromotionalBadge, { SpecialOfferSticker } from '../components/common/PromotionalBadge'
-import { uploadToCloudinaryDirect } from '../utils/cloudinary'
+import { uploadToCloudinaryDirect, extractCloudinaryPublicId } from '../utils/cloudinary'
 
 const API_URL = '/api'
 export { PHOTOGRAPHY_CATEGORIES }
@@ -36,7 +36,7 @@ const convertGoogleDriveLink = (url) => {
 }
 
 // Upload a single file: first tries backend API; if on standalone Netlify, uploads directly to Cloudinary
-// Returns { url, publicId } on success
+// Always returns a string URL for 100% component compatibility
 async function uploadImageFile(file, token, folderOrCategory) {
   if (!file) return null
 
@@ -63,7 +63,7 @@ async function uploadImageFile(file, token, folderOrCategory) {
     })
     if (res.ok) {
       const data = await res.json()
-      if (data.url) return { url: data.url, publicId: data.publicId || data.public_id || '' }
+      if (data.url) return typeof data.url === 'string' ? data.url : data.url.url
     }
   } catch (err) {
     console.warn('Backend upload endpoint unavailable, switching to direct Cloudinary unsigned upload:', err.message)
@@ -71,13 +71,8 @@ async function uploadImageFile(file, token, folderOrCategory) {
 
   // 2. Second attempt: Direct Cloudinary Unsigned Upload (for Netlify production static deployment)
   try {
-    const result = await uploadToCloudinaryDirect(file, folderOrCategory)
-    if (result) {
-      // uploadToCloudinaryDirect now returns { url, publicId }
-      if (typeof result === 'object' && result.url) return result
-      // Legacy string fallback
-      return { url: result, publicId: '' }
-    }
+    const directUrl = await uploadToCloudinaryDirect(file, folderOrCategory)
+    if (directUrl) return typeof directUrl === 'string' ? directUrl : directUrl.url
   } catch (cloudErr) {
     console.warn('Direct Cloudinary upload failed, falling back to local base64:', cloudErr.message)
   }
@@ -85,7 +80,7 @@ async function uploadImageFile(file, token, folderOrCategory) {
   // 3. Fallback: Base64 Data URL (offline survival)
   return new Promise((resolve) => {
     const reader = new FileReader()
-    reader.onload = (e) => resolve({ url: e.target.result, publicId: '' })
+    reader.onload = (e) => resolve(e.target.result)
     reader.readAsDataURL(file)
   })
 }
@@ -2088,9 +2083,8 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
       setUploadStatus(`Uploading photo ${i + 1} of ${files.length}: ${file.name}...`)
       try {
         const uploadResult = await uploadImageFile(file, authToken, normCategory)
-        // Handle both { url, publicId } object and legacy string return
-        const photoUrl = (uploadResult && typeof uploadResult === 'object') ? uploadResult.url : uploadResult
-        const photoPublicId = (uploadResult && typeof uploadResult === 'object') ? (uploadResult.publicId || '') : ''
+        const photoUrl = typeof uploadResult === 'string' ? uploadResult : (uploadResult?.url || '')
+        const photoPublicId = (uploadResult && uploadResult.publicId) ? uploadResult.publicId : extractCloudinaryPublicId(photoUrl)
 
         const cleanTitle = file.name
           .replace(/\.[^/.]+$/, '')
@@ -2172,7 +2166,7 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
       } else {
         const authToken = token || (typeof window !== 'undefined' ? localStorage.getItem('adminToken') : '')
         const photoUrl = targetPhoto?.src || targetPhoto?.image || ''
-        const publicId = targetPhoto?.publicId || ''
+        const publicId = targetPhoto?.publicId || extractCloudinaryPublicId(photoUrl)
         try {
           await fetch(`${API_URL}/photos/${encodeURIComponent(photoId)}`, {
             method: 'DELETE',
@@ -2224,7 +2218,8 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
   // Add single photo modal submit
   const handleCreatePhoto = async (e) => {
     e.preventDefault()
-    if (!newPhotoData.src) {
+    const imgSrc = typeof newPhotoData.src === 'string' ? newPhotoData.src : (newPhotoData.src?.url || '')
+    if (!imgSrc) {
       alert('Please provide an image URL or upload a file')
       return
     }
@@ -2232,6 +2227,7 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
     const normCategory = normalizeCategoryKey(newPhotoData.category)
     const existingCount = photos.filter((p) => isCategoryMatch(p.category || p.categorySlug, normCategory)).length
     const maxOrder = photos.reduce((max, p) => Math.max(max, p.order || 0), 0)
+    const photoPublicId = extractCloudinaryPublicId(imgSrc)
 
     const newPhoto = {
       id: `photo-${Date.now()}`,
@@ -2241,12 +2237,41 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
       categorySlug: normCategory,
       desc: newPhotoData.desc || '',
       alt: newPhotoData.alt || newPhotoData.title || 'Josh Photography showcase',
-      src: newPhotoData.src,
-      image: newPhotoData.src,
-      srcLarge: newPhotoData.src,
+      src: imgSrc,
+      image: imgSrc,
+      srcLarge: imgSrc,
+      publicId: photoPublicId,
       order: maxOrder + 1,
       published: newPhotoData.published !== false,
       createdAt: new Date().toISOString()
+    }
+
+    const authToken = token || (typeof window !== 'undefined' ? (sessionStorage.getItem('adminToken') || localStorage.getItem('adminToken')) : '')
+    const authHeaders = {
+      'Content-Type': 'application/json',
+      ...(authToken ? { Authorization: `Bearer ${authToken}` } : {})
+    }
+
+    // Immediately POST new photo directly to backend (persists to MongoDB Atlas)
+    try {
+      const postRes = await fetch(`${API_URL}/photos`, {
+        method: 'POST',
+        headers: authHeaders,
+        body: JSON.stringify({
+          src: imgSrc,
+          title: newPhoto.title,
+          category: normCategory,
+          published: newPhoto.published,
+          id: newPhoto.id,
+          publicId: photoPublicId,
+        })
+      })
+      if (postRes.ok) {
+        const saved = await postRes.json()
+        if (saved.id) newPhoto.id = saved.id
+      }
+    } catch (postErr) {
+      console.warn('Direct POST to backend failed:', postErr.message)
     }
 
     const updated = [...photos, newPhoto]
@@ -2261,6 +2286,7 @@ function PhotosEditor({ data, onSave, onDelete, saving, token, onReload, loading
       src: '',
       published: true
     })
+    if (onReload) setTimeout(onReload, 1500)
   }
 
   return (
@@ -4343,7 +4369,7 @@ function Dashboard({ token, onLogout }) {
       const currentList = data.photos?.photos || (Array.isArray(data.photos) ? data.photos : [])
       const targetPhoto = photoObj || currentList.find((p) => String(p.id) === String(photoId))
       const photoUrl = targetPhoto?.src || targetPhoto?.image || targetPhoto?.srcLarge || ''
-      const publicId = targetPhoto?.publicId || ''
+      const publicId = targetPhoto?.publicId || extractCloudinaryPublicId(photoUrl)
 
       // 1. Direct DELETE to backend with image URL so Cloudinary destroys the asset immediately
       try {

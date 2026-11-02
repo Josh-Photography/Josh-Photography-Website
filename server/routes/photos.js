@@ -37,16 +37,7 @@ try {
 } catch (_) {}
 
 // Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsPath)
-  },
-  filename: (req, file, cb) => {
-    const cleanName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_')
-    const uniqueName = `${Date.now()}-${uuidv4().slice(0, 8)}${extname(cleanName)}`
-    cb(null, uniqueName)
-  },
-})
+const storage = multer.memoryStorage()
 
 const upload = multer({
   storage,
@@ -463,22 +454,8 @@ router.put('/', authenticateToken, async (req, res) => {
     // Sync into MongoDB Atlas if connected
     if (isMongoConnected()) {
       try {
-        const incomingIds = new Set(normalizedPhotos.map((p) => String(p.id)))
         for (const p of normalizedPhotos) {
           await Photo.findOneAndUpdate({ id: p.id }, p, { upsert: true, new: true })
-        }
-        // If a full sync was sent, safely remove any photos deleted by user from MongoDB & Cloudinary
-        if (normalizedPhotos.length >= 20) {
-          const allDbPhotos = await Photo.find({}).lean()
-          for (const dbP of allDbPhotos) {
-            if (!incomingIds.has(String(dbP.id))) {
-              const url = dbP.src || dbP.image || ''
-              if (url) {
-                await deleteMediaAsset(url, dbP.publicId)
-              }
-              await Photo.findOneAndDelete({ id: dbP.id })
-            }
-          }
         }
       } catch (dbErr) {
         console.error('[Database] MongoDB sync error:', dbErr.message)

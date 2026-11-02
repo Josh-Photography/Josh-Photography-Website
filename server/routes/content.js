@@ -35,16 +35,7 @@ try {
   }
 } catch (_) {}
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadsPath)
-  },
-  filename: (req, file, cb) => {
-    const cleanName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_')
-    const uniqueName = `content-${Date.now()}-${uuidv4().slice(0, 8)}${extname(cleanName)}`
-    cb(null, uniqueName)
-  },
-})
+const storage = multer.memoryStorage()
 
 const upload = multer({
   storage,

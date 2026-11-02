@@ -105,14 +105,54 @@ export function getLightboxImageUrl(url, width = 1800) {
 }
 
 /**
+ * Extracts a Cloudinary public_id from a URL or raw ID string.
+ * Example input:  https://res.cloudinary.com/y5l55yxi/image/upload/v1793575561/josh_portfolio/maternity/difqddwwhtrsvxg4c4jq.jpg
+ * Output:         josh_portfolio/maternity/difqddwwhtrsvxg4c4jq
+ */
+export function extractCloudinaryPublicId(urlOrId) {
+  if (!urlOrId || typeof urlOrId !== 'string') return ''
+  if (!urlOrId.startsWith('http://') && !urlOrId.startsWith('https://')) {
+    return urlOrId.replace(/\.[a-zA-Z0-9]+$/, '')
+  }
+  if (urlOrId.includes('cloudinary.com')) {
+    const afterUpload = urlOrId.split('/upload/')[1]
+    if (afterUpload) {
+      const parts = afterUpload.split('/')
+      const cleanParts = []
+      let pastPrefixes = false
+      for (const part of parts) {
+        if (/^v\d+$/.test(part)) {
+          pastPrefixes = true
+          continue
+        }
+        if (!pastPrefixes && (part.includes(',') || /^(?:[whcqfgebar]|co|bo|fl|pg|dn|so|eo|du|ar|dpr|cs)_/i.test(part))) {
+          continue
+        }
+        cleanParts.push(part)
+      }
+      return cleanParts.join('/').replace(/\.[a-zA-Z0-9]+$/, '')
+    }
+  }
+  return ''
+}
+
+/**
  * Direct client-side unsigned upload to Cloudinary.
  * Used for Netlify standalone deployment where no backend server is available.
  *
  * @param {File|Blob} file - The image file to upload
  * @param {string} [folderOrCategory] - Optional category or subfolder
- * @returns {Promise<{ url: string, publicId: string }>} Upload result with secure URL and public_id
+ * @returns {Promise<string>} Direct HTTPS Cloudinary secure URL
  */
 export async function uploadToCloudinaryDirect(file, folderOrCategory) {
+  const result = await uploadToCloudinaryDirectFull(file, folderOrCategory)
+  return result.url
+}
+
+/**
+ * Direct client-side unsigned upload to Cloudinary returning both URL and publicId.
+ */
+export async function uploadToCloudinaryDirectFull(file, folderOrCategory) {
   if (!file) throw new Error('No file provided for upload')
 
   const cloudName = CLOUDINARY_CLOUD_NAME
