@@ -100,13 +100,6 @@ export default function Hero() {
   const nextSlide = useCallback(() => paginate(1), [paginate])
   const prevSlide = useCallback(() => paginate(-1), [paginate])
 
-  const goToSlide = useCallback((targetIndex) => {
-    setPage(([prevPage]) => {
-      const newDirection = targetIndex >= prevPage ? 1 : -1
-      return [targetIndex, newDirection]
-    })
-  }, [])
-
   // Preload next and previous slide images for instant, buttery-smooth sliding
   useEffect(() => {
     const nextIdx = (safeCurrent + 1) % heroSlides.length
@@ -230,33 +223,6 @@ export default function Hero() {
 
       {/* Permanently Static Hero Content (Never re-renders or changes on slide switch) */}
       <StaticHeroContent />
-
-      {/* Interactive Pagination Indicators */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
-        {heroSlides.map((_, idx) => {
-          const isActive = idx === safeCurrent
-          return (
-            <button
-              key={`dot-${idx}`}
-              onClick={() => goToSlide(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-500 ${
-                isActive
-                  ? 'w-7 bg-[#D8B77A] shadow-[0_0_8px_rgba(216,183,122,0.6)]'
-                  : 'w-1.5 bg-white/30 hover:bg-white/60'
-              }`}
-            />
-          )
-        })}
-      </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pointer-events-none z-20 text-ivory/50">
-        <span className="text-[8px] uppercase tracking-[0.25em] font-nav font-medium">
-          SCROLL TO EXPLORE
-        </span>
-        <div className="w-[1px] h-3 bg-gradient-to-b from-[#D8B77A] to-transparent animate-pulse" />
-      </div>
 
       {/* Decorative Corner Accents */}
       <div className="hidden md:block absolute top-8 left-8 w-16 h-16 border-l border-t border-ivory/20 pointer-events-none z-10" />
