@@ -25,7 +25,7 @@ export const siteConfig = {
     titleTemplate: '%s | Josh Photography',
     defaultDescription:
       'Premium wedding, celebration, family, and event photography. Warm cream aesthetics, elegant typography, and authentic storytelling.',
-    siteUrl: 'https://joshphotography.co.uk',
+    siteUrl: 'https://joshyphotography.co.uk',
     ogImage: '/images/hero-church-wedding.jpg',
   },
 }

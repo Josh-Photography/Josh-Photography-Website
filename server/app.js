@@ -86,15 +86,16 @@ app.use('/overview', overviewRoutes)
 app.use('/chat', chatRoutes)
 app.use('/offers', offerRoutes)
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    message: 'Josh Photography Unified CMS API is running on port 3000',
-    version: '2.0.0',
-    timestamp: new Date().toISOString(),
-  })
+// Health checks
+const healthPayload = () => ({
+  status: 'ok',
+  message: 'Josh Photography Unified CMS API is running',
+  version: '2.0.0',
+  timestamp: new Date().toISOString(),
 })
+app.get('/api/health', (req, res) => res.json(healthPayload()))
+app.get('/health', (req, res) => res.json(healthPayload()))
+app.get('/api', (req, res) => res.json(healthPayload()))
 
 // 404 handler for API routes ONLY
 app.use('/api/*', (req, res) => {

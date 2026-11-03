@@ -12,6 +12,8 @@ const appDirPath = (typeof import.meta !== 'undefined' && import.meta?.url) ? di
 
 let isConnected = false
 let connectionPromise = null
+let lastFailTime = 0
+const COOLDOWN_MS = 20000 // 20s cooldown before retrying failed connection
 
 // In-Memory Fast Cache for Sub-millisecond SEO Page Load Speeds
 const cacheStore = new Map()
@@ -82,6 +84,11 @@ export function getMongoUri() {
 export async function connectDB() {
   if (isConnected) return mongoose.connection
 
+  // If recent connection failed within cooldown, return null fast without blocking
+  if (Date.now() - lastFailTime < COOLDOWN_MS) {
+    return null
+  }
+
   const uri = getMongoUri()
   if (!uri) {
     console.log('[Database] MONGODB_URI not set. Using local JSON files as high-availability storage.')
@@ -98,22 +105,25 @@ export async function connectDB() {
 
       const conn = await mongoose.connect(uri, {
         maxPoolSize: 10,
-        serverSelectionTimeoutMS: 5000,
-        socketTimeoutMS: 45000,
+        serverSelectionTimeoutMS: 2500,
+        socketTimeoutMS: 30000,
       })
 
       isConnected = true
+      lastFailTime = 0
       console.log(`[Database] MongoDB Atlas Connected: ${conn.connection.host}/${conn.connection.name}`)
 
       mongoose.connection.on('error', (err) => {
         console.error('[Database] MongoDB connection error:', err.message)
         isConnected = false
+        lastFailTime = Date.now()
       })
 
       mongoose.connection.on('disconnected', () => {
         console.warn('[Database] MongoDB disconnected. Reconnection will be attempted on next request.')
         isConnected = false
         connectionPromise = null
+        lastFailTime = Date.now()
       })
 
       return conn.connection
@@ -121,6 +131,7 @@ export async function connectDB() {
       console.error('[Database] MongoDB Atlas connection failed:', err.message)
       isConnected = false
       connectionPromise = null
+      lastFailTime = Date.now()
       return null
     }
   })()

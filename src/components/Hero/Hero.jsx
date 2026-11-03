@@ -4,8 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, ArrowRight, Sparkles } from 'lucide-react'
 import { heroSlides as staticHeroSlides } from '../../data/stories'
 import { useWebsiteData } from '../../hooks/useWebsiteData'
+import { getOptimizedCloudinaryUrl } from '../../utils/cloudinary'
 
-const SLIDE_DURATION = 4500 // Automatically changes every 4.5 seconds
+const SLIDE_DURATION = 5500 // 5.5 seconds per slide for a calm, luxury rhythm
 
 export default function Hero() {
   const { heroSlides: dynamicSlides, settings = {} } = useWebsiteData()
@@ -16,12 +17,12 @@ export default function Hero() {
   const safeCurrent = (current < heroSlides.length && current >= 0) ? current : 0
   const slide = heroSlides[safeCurrent] || heroSlides[0] || {}
 
-  // Preload all slideshow images on mount and whenever slides change
+  // Preload all slideshow images with optimized dimensions
   useEffect(() => {
     heroSlides.forEach((s) => {
       if (s && s.image) {
         const img = new Image()
-        img.src = s.image
+        img.src = getOptimizedCloudinaryUrl(s.image, { width: 1920, quality: 'auto', format: 'auto' })
       }
     })
   }, [heroSlides])
@@ -63,44 +64,53 @@ export default function Hero() {
     touchStartX.current = null
   }
 
+  const optimizedSlideUrl = getOptimizedCloudinaryUrl(slide.image, {
+    width: 1920,
+    quality: 'auto',
+    format: 'auto',
+  })
+
   return (
     <section
       id="hero"
-      className="relative h-screen w-full overflow-hidden select-none bg-deep-black"
+      className="relative h-screen w-full overflow-hidden select-none bg-[#140E0A]"
       aria-label="Hero Showcase Automatic Slideshow"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Background Stack with Continuous Automatic Crossfade */}
-      <div className="absolute inset-0 pointer-events-none">
-        {heroSlides.map((s, index) => {
-          const isActive = index === safeCurrent
-          return (
-            <motion.div
-              key={s.id || `slide-${index}`}
-              initial={false}
-              animate={{
-                opacity: isActive ? 1 : 0,
-                scale: isActive ? 1.05 : 1,
-              }}
-              transition={{
-                opacity: { duration: 1.2, ease: [0.4, 0, 0.2, 1] },
-                scale: { duration: 5.5, ease: 'easeOut' },
-              }}
-              className="absolute inset-0 overflow-hidden"
+      {/* Background with Hardware-Accelerated Crossfade (Eliminates Safari Ghosting) */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden bg-[#140E0A]">
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={slide.id || `slide-${safeCurrent}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: 0.7,
+              ease: [0.25, 0.1, 0.25, 1],
+            }}
+            className="absolute inset-0 overflow-hidden"
+            style={{
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              transform: 'translate3d(0, 0, 0)',
+              willChange: 'opacity',
+            }}
+          >
+            <img
+              src={optimizedSlideUrl}
+              alt={slide.alt || slide.title || 'Josh Photography showcase'}
+              className="w-full h-full object-cover object-center"
+              loading="eager"
+              decoding="async"
               style={{
-                zIndex: isActive ? 2 : 1,
+                WebkitBackfaceVisibility: 'hidden',
+                backfaceVisibility: 'hidden',
               }}
-            >
-              <img
-                src={s.image}
-                alt={s.alt || s.title || 'Josh Photography showcase'}
-                className="w-full h-full object-cover object-center"
-                loading="eager"
-              />
-            </motion.div>
-          )
-        })}
+            />
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Luxury Cinematic Gradient Overlay */}
@@ -108,7 +118,7 @@ export default function Hero() {
         className="absolute inset-0 pointer-events-none z-10"
         style={{
           background:
-            'linear-gradient(180deg, rgba(20, 14, 10, 0.35) 0%, rgba(20, 14, 10, 0.12) 40%, rgba(15, 10, 8, 0.65) 100%)',
+            'linear-gradient(180deg, rgba(20, 14, 10, 0.38) 0%, rgba(20, 14, 10, 0.15) 40%, rgba(15, 10, 8, 0.72) 100%)',
         }}
       />
 
@@ -129,65 +139,40 @@ export default function Hero() {
         <ChevronRight className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-0.5" />
       </button>
 
-      {/* Main Content Area */}
-      <div className="relative h-full flex flex-col items-center justify-center text-center px-6 z-20">
+      {/* Main Content Area - Fast, seamless transition without blank gaps */}
+      <div className="relative h-full flex flex-col items-center justify-center text-center px-6 z-20 pointer-events-none">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={`content-${slide.id || safeCurrent}`}
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
-            className="w-full max-w-4xl mx-auto px-2 sm:px-4"
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.35, ease: 'easeOut' }}
+            className="w-full max-w-4xl mx-auto px-2 sm:px-4 pointer-events-auto"
           >
             {/* Category / Badge */}
             {slide.badge && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 mb-5 sm:mb-6 rounded-full bg-deep-charcoal/65 backdrop-blur-md border border-champagne/40 text-champagne text-[11px] sm:text-xs font-nav font-semibold tracking-[0.22em] uppercase shadow-md"
-              >
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 sm:mb-6 rounded-full bg-deep-charcoal/70 backdrop-blur-md border border-champagne/40 text-champagne text-[11px] sm:text-xs font-nav font-semibold tracking-[0.22em] uppercase shadow-md">
                 <Sparkles className="w-3.5 h-3.5 text-champagne" />
                 <span>{slide.badge}</span>
-              </motion.div>
+              </div>
             )}
 
             {/* Decorative Gold Accent Line */}
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: '4.5rem' }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-              className="h-[1.5px] bg-[#D8B77A] mx-auto mb-5 sm:mb-7"
-            />
+            <div className="w-16 h-[1.5px] bg-[#D8B77A] mx-auto mb-4 sm:mb-6" />
 
             {/* Slide Title */}
-            <motion.h1
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="font-serif text-[2rem] sm:text-5xl md:text-6xl lg:text-7xl font-light text-ivory tracking-wide leading-[1.18] mb-4 sm:mb-6 max-w-3xl mx-auto break-words drop-shadow-[0_2px_14px_rgba(0,0,0,0.7)]"
-            >
+            <h1 className="font-serif text-[2.1rem] sm:text-5xl md:text-6xl lg:text-7xl font-light text-ivory tracking-wide leading-[1.18] mb-3 sm:mb-5 max-w-3xl mx-auto break-words drop-shadow-[0_2px_14px_rgba(0,0,0,0.8)]">
               {slide.title}
-            </motion.h1>
+            </h1>
 
             {/* Subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="font-sans text-xs sm:text-sm md:text-base text-ivory/95 tracking-[0.14em] sm:tracking-[0.2em] uppercase font-light mb-8 sm:mb-10 max-w-2xl mx-auto drop-shadow-[0_1px_8px_rgba(0,0,0,0.7)]"
-            >
+            <p className="font-sans text-xs sm:text-sm md:text-base text-ivory/95 tracking-[0.14em] sm:tracking-[0.2em] uppercase font-light mb-6 sm:mb-9 max-w-2xl mx-auto drop-shadow-[0_1px_8px_rgba(0,0,0,0.8)]">
               {slide.subtitle}
-            </motion.p>
+            </p>
 
             {/* Call To Actions */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full max-w-md sm:max-w-none mx-auto"
-            >
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full max-w-md sm:max-w-none mx-auto">
               <Link
                 to={slide.primaryButtonLink || settings.ctaButtonLink || settings.bookingButtonLink || '/check-availability'}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 bg-muted-gold text-deep-black font-nav text-xs uppercase tracking-[0.16em] font-semibold hover:bg-gold-light hover:-translate-y-0.5 transition-all duration-300 shadow-md border border-champagne/40"
@@ -201,7 +186,7 @@ export default function Hero() {
               >
                 {slide.exploreText || 'Explore Photography'}
               </Link>
-            </motion.div>
+            </div>
           </motion.div>
         </AnimatePresence>
       </div>
