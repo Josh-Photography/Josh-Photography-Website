@@ -6,26 +6,30 @@ import { heroSlides as staticHeroSlides } from '../../data/stories'
 import { useWebsiteData } from '../../hooks/useWebsiteData'
 import { getOptimizedCloudinaryUrl } from '../../utils/cloudinary'
 
-const SLIDE_DURATION = 5500 // 5.5 seconds per slide for a calm, luxury rhythm
+const SLIDE_DURATION = 6000 // 6 seconds per slide for a calm, luxury rhythm
 
 export default function Hero() {
   const { heroSlides: dynamicSlides, settings = {} } = useWebsiteData()
   const heroSlides = (Array.isArray(dynamicSlides) && dynamicSlides.length > 0) ? dynamicSlides : staticHeroSlides
   const [current, setCurrent] = useState(0)
   const touchStartX = useRef(null)
+  const touchStartY = useRef(null)
 
   const safeCurrent = (current < heroSlides.length && current >= 0) ? current : 0
   const slide = heroSlides[safeCurrent] || heroSlides[0] || {}
 
-  // Preload all slideshow images with optimized dimensions
+  // Preload next and previous slide images for instant transitions
   useEffect(() => {
-    heroSlides.forEach((s) => {
-      if (s && s.image) {
+    const nextIdx = (safeCurrent + 1) % heroSlides.length
+    const prevIdx = (safeCurrent - 1 + heroSlides.length) % heroSlides.length
+    ;[safeCurrent, nextIdx, prevIdx].forEach((idx) => {
+      const s = heroSlides[idx]
+      if (s?.image) {
         const img = new Image()
         img.src = getOptimizedCloudinaryUrl(s.image, { width: 1920, quality: 'auto', format: 'auto' })
       }
     })
-  }, [heroSlides])
+  }, [safeCurrent, heroSlides])
 
   const nextSlide = useCallback(() => {
     setCurrent((prev) => (prev + 1) % heroSlides.length)
@@ -45,16 +49,21 @@ export default function Hero() {
     return () => clearInterval(timer)
   }, [nextSlide, heroSlides.length])
 
-  // Mobile Touch Swipe Handling
+  // Mobile Touch Swipe Handling (Strictly horizontal to never interrupt vertical scrolling)
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX
+    touchStartY.current = e.touches[0].clientY
   }
 
   const handleTouchEnd = (e) => {
-    if (touchStartX.current === null) return
+    if (touchStartX.current === null || touchStartY.current === null) return
     const touchEndX = e.changedTouches[0].clientX
+    const touchEndY = e.changedTouches[0].clientY
     const diffX = touchStartX.current - touchEndX
-    if (Math.abs(diffX) > 40) {
+    const diffY = touchStartY.current - touchEndY
+
+    // Only swipe if horizontal movement is significantly greater than vertical movement
+    if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
       if (diffX > 0) {
         nextSlide()
       } else {
@@ -62,6 +71,7 @@ export default function Hero() {
       }
     }
     touchStartX.current = null
+    touchStartY.current = null
   }
 
   const optimizedSlideUrl = getOptimizedCloudinaryUrl(slide.image, {
@@ -78,16 +88,20 @@ export default function Hero() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Background with Hardware-Accelerated Crossfade (Eliminates Safari Ghosting) */}
+      {/* Background Container - Prevents Ghosting by keeping outgoing slide solid until new slide fully arrives */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden bg-[#140E0A]">
         <AnimatePresence initial={false}>
           <motion.div
             key={slide.id || `slide-${safeCurrent}`}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            animate={{ opacity: 1, zIndex: 2 }}
+            exit={{
+              opacity: 0,
+              zIndex: 1,
+              transition: { duration: 0.2, delay: 0.5 }, // Delays exit so incoming slide covers it completely
+            }}
             transition={{
-              duration: 0.7,
+              duration: 0.6,
               ease: [0.25, 0.1, 0.25, 1],
             }}
             className="absolute inset-0 overflow-hidden"
@@ -118,7 +132,7 @@ export default function Hero() {
         className="absolute inset-0 pointer-events-none z-10"
         style={{
           background:
-            'linear-gradient(180deg, rgba(20, 14, 10, 0.38) 0%, rgba(20, 14, 10, 0.15) 40%, rgba(15, 10, 8, 0.72) 100%)',
+            'linear-gradient(180deg, rgba(20, 14, 10, 0.42) 0%, rgba(20, 14, 10, 0.18) 40%, rgba(15, 10, 8, 0.78) 100%)',
         }}
       />
 
