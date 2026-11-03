@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import React, { useState, useEffect, useCallback, useRef, memo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, ArrowRight, Sparkles } from 'lucide-react'
@@ -8,17 +8,106 @@ import { getOptimizedCloudinaryUrl } from '../../utils/cloudinary'
 
 const SLIDE_DURATION = 6000 // 6 seconds per slide for a calm, luxury rhythm
 
+// Physical horizontal slide variants - 100% opaque, zero ghosting/transparency blending
+const slideVariants = {
+  enter: (direction) => ({
+    x: direction >= 0 ? '100%' : '-100%',
+    zIndex: 2,
+  }),
+  center: {
+    x: 0,
+    zIndex: 2,
+    transition: {
+      x: { duration: 0.65, ease: [0.25, 1, 0.5, 1] },
+    },
+  },
+  exit: (direction) => ({
+    x: direction >= 0 ? '-100%' : '100%',
+    zIndex: 1,
+    transition: {
+      x: { duration: 0.65, ease: [0.25, 1, 0.5, 1] },
+    },
+  }),
+}
+
+// Completely static, memoized hero content that NEVER re-renders or flickers on slide changes
+const StaticHeroContent = memo(function StaticHeroContent() {
+  return (
+    <div className="relative h-full flex flex-col items-center justify-center text-center px-6 z-20 pointer-events-none">
+      <div className="w-full max-w-4xl mx-auto px-2 sm:px-4 pointer-events-auto">
+        {/* Small Label */}
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 sm:mb-6 rounded-full bg-deep-charcoal/80 backdrop-blur-md border border-champagne/40 text-champagne text-[11px] sm:text-xs font-nav font-semibold tracking-[0.22em] uppercase shadow-md">
+          <Sparkles className="w-3.5 h-3.5 text-champagne" />
+          <span>JOSH PHOTOGRAPHY | CREATING TIMELESS MEMORIES</span>
+        </div>
+
+        {/* Decorative Gold Accent Line */}
+        <div className="w-16 h-[1.5px] bg-[#D8B77A] mx-auto mb-4 sm:mb-6" />
+
+        {/* Main Heading */}
+        <h1 className="font-serif text-[2.25rem] sm:text-5xl md:text-6xl lg:text-7xl font-light text-ivory tracking-wide leading-[1.18] mb-3 sm:mb-5 max-w-3xl mx-auto break-words drop-shadow-[0_2px_16px_rgba(0,0,0,0.85)]">
+          Capturing Moments, Creating Memories
+        </h1>
+
+        {/* Subtitle */}
+        <p className="font-sans text-xs sm:text-sm md:text-base text-ivory/95 tracking-[0.14em] sm:tracking-[0.18em] uppercase font-light mb-6 sm:mb-9 max-w-2xl mx-auto drop-shadow-[0_1px_8px_rgba(0,0,0,0.85)]">
+          Every Picture Tells a Story. Every Moment Becomes a Timeless Memory.
+        </p>
+
+        {/* Both Golden Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full max-w-md sm:max-w-none mx-auto">
+          {/* Button 1: Check Availability */}
+          <Link
+            to="/check-availability"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 bg-muted-gold text-deep-black font-nav text-xs uppercase tracking-[0.16em] font-semibold hover:bg-gold-light hover:-translate-y-0.5 transition-all duration-300 shadow-md border border-champagne/40"
+          >
+            <span>CHECK AVAILABILITY</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+
+          {/* Button 2: Explore Photography */}
+          <Link
+            to="/portfolio"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 bg-muted-gold text-deep-black font-nav text-xs uppercase tracking-[0.16em] font-semibold hover:bg-gold-light hover:-translate-y-0.5 transition-all duration-300 shadow-md border border-champagne/40"
+          >
+            <span>EXPLORE PHOTOGRAPHY</span>
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+})
+
 export default function Hero() {
-  const { heroSlides: dynamicSlides, settings = {} } = useWebsiteData()
+  const { heroSlides: dynamicSlides } = useWebsiteData()
   const heroSlides = (Array.isArray(dynamicSlides) && dynamicSlides.length > 0) ? dynamicSlides : staticHeroSlides
-  const [current, setCurrent] = useState(0)
+  const [[page, direction], setPage] = useState([0, 0])
   const touchStartX = useRef(null)
   const touchStartY = useRef(null)
 
-  const safeCurrent = (current < heroSlides.length && current >= 0) ? current : 0
+  const safeCurrent = (page < heroSlides.length && page >= 0) ? page : 0
   const slide = heroSlides[safeCurrent] || heroSlides[0] || {}
 
-  // Preload next and previous slide images for instant transitions
+  const paginate = useCallback((newDirection) => {
+    setPage(([prevPage]) => {
+      let nextPage = prevPage + newDirection
+      if (nextPage < 0) nextPage = heroSlides.length - 1
+      if (nextPage >= heroSlides.length) nextPage = 0
+      return [nextPage, newDirection]
+    })
+  }, [heroSlides.length])
+
+  const nextSlide = useCallback(() => paginate(1), [paginate])
+  const prevSlide = useCallback(() => paginate(-1), [paginate])
+
+  const goToSlide = useCallback((targetIndex) => {
+    setPage(([prevPage]) => {
+      const newDirection = targetIndex >= prevPage ? 1 : -1
+      return [targetIndex, newDirection]
+    })
+  }, [])
+
+  // Preload next and previous slide images for instant, buttery-smooth sliding
   useEffect(() => {
     const nextIdx = (safeCurrent + 1) % heroSlides.length
     const prevIdx = (safeCurrent - 1 + heroSlides.length) % heroSlides.length
@@ -31,15 +120,7 @@ export default function Hero() {
     })
   }, [safeCurrent, heroSlides])
 
-  const nextSlide = useCallback(() => {
-    setCurrent((prev) => (prev + 1) % heroSlides.length)
-  }, [heroSlides.length])
-
-  const prevSlide = useCallback(() => {
-    setCurrent((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)
-  }, [heroSlides.length])
-
-  // Continuous automatic slideshow loop
+  // Continuous automatic horizontal slideshow loop
   useEffect(() => {
     if (heroSlides.length <= 1) return
     const timer = setInterval(() => {
@@ -63,7 +144,7 @@ export default function Hero() {
     const diffY = touchStartY.current - touchEndY
 
     // Only swipe if horizontal movement is significantly greater than vertical movement
-    if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+    if (Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
       if (diffX > 0) {
         nextSlide()
       } else {
@@ -84,32 +165,26 @@ export default function Hero() {
     <section
       id="hero"
       className="relative h-screen w-full overflow-hidden select-none bg-[#140E0A]"
-      aria-label="Hero Showcase Automatic Slideshow"
+      aria-label="Hero Showcase Carousel Slideshow"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Background Container - Prevents Ghosting by keeping outgoing slide solid until new slide fully arrives */}
+      {/* Horizontal Sliding Image Reel (100% Solid - Zero Ghosting / Zero Double-Exposure) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden bg-[#140E0A]">
-        <AnimatePresence initial={false}>
+        <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={slide.id || `slide-${safeCurrent}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, zIndex: 2 }}
-            exit={{
-              opacity: 0,
-              zIndex: 1,
-              transition: { duration: 0.2, delay: 0.5 }, // Delays exit so incoming slide covers it completely
-            }}
-            transition={{
-              duration: 0.6,
-              ease: [0.25, 0.1, 0.25, 1],
-            }}
-            className="absolute inset-0 overflow-hidden"
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            className="absolute inset-0 w-full h-full overflow-hidden"
             style={{
               WebkitBackfaceVisibility: 'hidden',
               backfaceVisibility: 'hidden',
               transform: 'translate3d(0, 0, 0)',
-              willChange: 'opacity',
+              willChange: 'transform',
             }}
           >
             <img
@@ -132,7 +207,7 @@ export default function Hero() {
         className="absolute inset-0 pointer-events-none z-10"
         style={{
           background:
-            'linear-gradient(180deg, rgba(20, 14, 10, 0.42) 0%, rgba(20, 14, 10, 0.18) 40%, rgba(15, 10, 8, 0.78) 100%)',
+            'linear-gradient(180deg, rgba(20, 14, 10, 0.44) 0%, rgba(20, 14, 10, 0.20) 40%, rgba(15, 10, 8, 0.82) 100%)',
         }}
       />
 
@@ -140,7 +215,7 @@ export default function Hero() {
       <button
         onClick={prevSlide}
         aria-label="Previous slide"
-        className="hidden md:flex absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full items-center justify-center bg-black/35 hover:bg-black/60 text-ivory/80 hover:text-champagne border border-champagne/30 hover:border-champagne backdrop-blur-md transition-all duration-300 shadow-luxury group"
+        className="hidden md:flex absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full items-center justify-center bg-black/40 hover:bg-black/70 text-ivory/80 hover:text-champagne border border-champagne/30 hover:border-champagne backdrop-blur-md transition-all duration-300 shadow-luxury group"
       >
         <ChevronLeft className="w-6 h-6 transition-transform duration-300 group-hover:-translate-x-0.5" />
       </button>
@@ -148,69 +223,39 @@ export default function Hero() {
       <button
         onClick={nextSlide}
         aria-label="Next slide"
-        className="hidden md:flex absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full items-center justify-center bg-black/35 hover:bg-black/60 text-ivory/80 hover:text-champagne border border-champagne/30 hover:border-champagne backdrop-blur-md transition-all duration-300 shadow-luxury group"
+        className="hidden md:flex absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full items-center justify-center bg-black/40 hover:bg-black/70 text-ivory/80 hover:text-champagne border border-champagne/30 hover:border-champagne backdrop-blur-md transition-all duration-300 shadow-luxury group"
       >
         <ChevronRight className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-0.5" />
       </button>
 
-      {/* Main Content Area - Fast, seamless transition without blank gaps */}
-      <div className="relative h-full flex flex-col items-center justify-center text-center px-6 z-20 pointer-events-none">
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={`content-${slide.id || safeCurrent}`}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="w-full max-w-4xl mx-auto px-2 sm:px-4 pointer-events-auto"
-          >
-            {/* Category / Badge */}
-            {slide.badge && (
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-4 sm:mb-6 rounded-full bg-deep-charcoal/70 backdrop-blur-md border border-champagne/40 text-champagne text-[11px] sm:text-xs font-nav font-semibold tracking-[0.22em] uppercase shadow-md">
-                <Sparkles className="w-3.5 h-3.5 text-champagne" />
-                <span>{slide.badge}</span>
-              </div>
-            )}
+      {/* Permanently Static Hero Content (Never re-renders or changes on slide switch) */}
+      <StaticHeroContent />
 
-            {/* Decorative Gold Accent Line */}
-            <div className="w-16 h-[1.5px] bg-[#D8B77A] mx-auto mb-4 sm:mb-6" />
-
-            {/* Slide Title */}
-            <h1 className="font-serif text-[2.1rem] sm:text-5xl md:text-6xl lg:text-7xl font-light text-ivory tracking-wide leading-[1.18] mb-3 sm:mb-5 max-w-3xl mx-auto break-words drop-shadow-[0_2px_14px_rgba(0,0,0,0.8)]">
-              {slide.title}
-            </h1>
-
-            {/* Subtitle */}
-            <p className="font-sans text-xs sm:text-sm md:text-base text-ivory/95 tracking-[0.14em] sm:tracking-[0.2em] uppercase font-light mb-6 sm:mb-9 max-w-2xl mx-auto drop-shadow-[0_1px_8px_rgba(0,0,0,0.8)]">
-              {slide.subtitle}
-            </p>
-
-            {/* Call To Actions */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 w-full max-w-md sm:max-w-none mx-auto">
-              <Link
-                to={slide.primaryButtonLink || settings.ctaButtonLink || settings.bookingButtonLink || '/check-availability'}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 bg-muted-gold text-deep-black font-nav text-xs uppercase tracking-[0.16em] font-semibold hover:bg-gold-light hover:-translate-y-0.5 transition-all duration-300 shadow-md border border-champagne/40"
-              >
-                <span>{slide.primaryButtonText || settings.ctaButtonText || settings.bookingButtonText || 'Check Date Availability'}</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                to={slide.explorePath || '/portfolio'}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-ivory/80 text-ivory font-nav text-xs uppercase tracking-[0.16em] font-semibold hover:bg-ivory/20 hover:border-ivory transition-all duration-300 backdrop-blur-sm"
-              >
-                {slide.exploreText || 'Explore Photography'}
-              </Link>
-            </div>
-          </motion.div>
-        </AnimatePresence>
+      {/* Interactive Pagination Indicators */}
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+        {heroSlides.map((_, idx) => {
+          const isActive = idx === safeCurrent
+          return (
+            <button
+              key={`dot-${idx}`}
+              onClick={() => goToSlide(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+              className={`h-1.5 rounded-full transition-all duration-500 ${
+                isActive
+                  ? 'w-7 bg-[#D8B77A] shadow-[0_0_8px_rgba(216,183,122,0.6)]'
+                  : 'w-1.5 bg-white/30 hover:bg-white/60'
+              }`}
+            />
+          )
+        })}
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pointer-events-none z-20 text-ivory/50">
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 pointer-events-none z-20 text-ivory/50">
         <span className="text-[8px] uppercase tracking-[0.25em] font-nav font-medium">
           SCROLL TO EXPLORE
         </span>
-        <div className="w-[1px] h-4 bg-gradient-to-b from-[#D8B77A] to-transparent animate-pulse" />
+        <div className="w-[1px] h-3 bg-gradient-to-b from-[#D8B77A] to-transparent animate-pulse" />
       </div>
 
       {/* Decorative Corner Accents */}
