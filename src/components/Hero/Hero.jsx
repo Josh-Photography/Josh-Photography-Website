@@ -6,7 +6,7 @@ import { heroSlides as staticHeroSlides } from '../../data/stories'
 import { useWebsiteData } from '../../hooks/useWebsiteData'
 import { getOptimizedCloudinaryUrl } from '../../utils/cloudinary'
 
-const SLIDE_DURATION = 6000 // 6 seconds per slide for a calm, luxury rhythm
+const SLIDE_DURATION = 10000 // 10 seconds per slide for an elegant, relaxed viewing experience
 
 // Physical horizontal slide variants - 100% opaque, zero ghosting/transparency blending
 const slideVariants = {
