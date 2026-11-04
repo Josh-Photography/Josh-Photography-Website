@@ -25,6 +25,7 @@ function joshUnifiedApiPlugin() {
 }
 
 export default defineConfig({
+  base: './',
   plugins: [react(), joshUnifiedApiPlugin()],
   server: {
     port: 3000,
