@@ -45,9 +45,18 @@ function PageLoader() {
   )
 }
 
+function getBasename() {
+  if (typeof window !== 'undefined') {
+    const path = window.location.pathname
+    if (path.startsWith('/joshphotography.co.uk')) return '/joshphotography.co.uk'
+    if (path.startsWith('/Josh-Photography-Website')) return '/Josh-Photography-Website'
+  }
+  return ''
+}
+
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={getBasename()}>
       <CursorGlow />
       <Suspense fallback={<PageLoader />}>
         <Routes>

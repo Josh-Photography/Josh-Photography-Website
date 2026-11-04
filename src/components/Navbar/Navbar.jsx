@@ -47,8 +47,9 @@ const DARK_HERO_ROUTES = [
 export default function Navbar() {
   const { studio = {}, settings = {} } = useWebsiteData()
   const studioName = settings.siteName || studio.name || siteConfig.studioName
-  const lightLogo = settings.logoBlack || "/logo-black.png"
-  const darkLogo = settings.logo || "/logo.png"
+  const baseUrl = import.meta.env.BASE_URL || "./"
+  const lightLogo = settings.logoBlack || `${baseUrl}logo-black.png`
+  const darkLogo = settings.logo || `${baseUrl}logo.png`
   const ctaText = settings.ctaButtonText || settings.bookingButtonText || 'Check Availability'
   const ctaLink = settings.ctaButtonLink || settings.bookingButtonLink || '/check-availability' 
   const whatsappMobileUrl = getWhatsAppUrl(studio.whatsapp || siteConfig.whatsapp, `Hello ${studioName || 'Josh Photography'}! I would like to inquire about your photography services.`)
