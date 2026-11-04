@@ -33,8 +33,10 @@ jobs:
       - name: Build production bundle
         run: npm run build
 
-      - name: Copy index.html to 404.html for SPA client-side routing
-        run: cp dist/index.html dist/404.html
+      - name: Clean up unused screenshot files and create 404.html
+        run: |
+          rm -f dist/screenshot_* dist/another_studio.png dist/de-fab-studio.png
+          cp dist/index.html dist/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -51,4 +53,6 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          timeout: 1200000
 
